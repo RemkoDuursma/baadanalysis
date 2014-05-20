@@ -8,16 +8,9 @@
 
 
 <<load, echo=FALSE, message=FALSE>>=
-setwd("..//")
-dat <- readRDS("cache/allomdata_post.rds")
-
-library(smatr)
-#library(tables)
-library(magicaxis)
-library(scales)
-#library(Hmisc)
-#library(MIfuns)
-source("R/remko_functions.R")
+baad <- readRDS("data/baad.rds")$data
+source("R/loadPackages.R")
+source("R/analysis_utils.R")
 source("R/plotting.R")
 @
 
@@ -26,7 +19,7 @@ source("R/plotting.R")
 # Stem-leaf scaling
 
 # Select datasets that have stem, leaf biomass, and height
-x <- suppressMessages(studyWithVars(dat, c("m.st","m.lf","h.t")))
+x <- suppressMessages(studyWithVars(baad, c("m.st","m.lf","h.t")))
 x$dataset_species <- paste0(x$dataset,"_",x$species)
 
 # clean
@@ -75,7 +68,7 @@ P <- cbind(p,r)
 rownames(P) <- NULL
 
 # Add some metadata
-dfr <- dat[,c("dataset","species","pft","vegetation","growingCondition")]
+dfr <- baad[,c("dataset","species","pft","vegetation","growingCondition")]
 dfr$dataset_species <- with(dfr, paste0(dataset,"_",species))
 dfr <- dfr[!duplicated(dfr$dataset_species),]
 P <- merge(P, dfr)
