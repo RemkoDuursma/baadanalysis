@@ -14,7 +14,7 @@ Contents
 --------
 
 * metadata summaries, tables
-* MAP, MAT from WorldClim
-* stem-leaf scaling
+* MAP, MAT from WorldClim (tba)
+* stem-leaf scaling (tba)
 * etc.
 
