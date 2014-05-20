@@ -1,0 +1,7 @@
+suppressPackageStartupMessages(library(maps))
+suppressPackageStartupMessages(library(mapdata))
+suppressPackageStartupMessages(library(gdata))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(smatr))
+suppressPackageStartupMessages(library(scales))
+suppressPackageStartupMessages(library(xtable))
