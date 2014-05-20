@@ -11,6 +11,7 @@ knitFromHere <- function(fn){
   pdfname <- knit2pdf(newfn)   
   file.copy(pdfname, "output/pdf", overwrite=TRUE)
   unlink(paste0(base,".",exts))
+  unlink("figure", recursive=TRUE)
 }
 
 
