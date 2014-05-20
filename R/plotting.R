@@ -1,8 +1,3 @@
-suppressPackageStartupMessages(library(maps))
-suppressPackageStartupMessages(library(mapdata))
-suppressPackageStartupMessages(library(gdata))
-suppressPackageStartupMessages(library(smatr))
-
 
 to.pdf <- function(expr, filename, ..., verbose=TRUE) {
   if ( verbose )
@@ -60,10 +55,16 @@ makePlotPanel<-function(data, study, dir="report-per-study", col="grey", pdf=TRU
     dev.off()
 }
 
-getLabel<-function(xvar){
-  i<-which(mashrDetail("var.def")$Variable==xvar)
-  paste0(mashrDetail("var.def")[i, "label"], " (", mashrDetail("var.def")[i, "Units"], ")")
+# getLabel<-function(xvar){
+#   i<-which(mashrDetail("var.def")$Variable==xvar)
+#   paste0(mashrDetail("var.def")[i, "label"], " (", mashrDetail("var.def")[i, "Units"], ")")
+# }
+
+getLabel <- function(xvar){
+  i <- which(cfg$Variable == xvar)
+  paste0(cfg$label[i], " (", cfg$Units[i], ")")
 }
+
 
 highlightStudies <- function(data, xvar, yvar, group, studies, col = niceColors(length(studies)), type='b', pch=1){
   
@@ -80,7 +81,9 @@ highlightStudies <- function(data, xvar, yvar, group, studies, col = niceColors(
   invisible(leg)
 }
 
-bivarPlotColorBy <- function(data, xvar, yvar, group, type='b', col=niceColors(1), pch=1, add = FALSE, legend=FALSE, from=NA, to=NA,...){
+bivarPlotColorBy <- function(data, xvar, yvar, group, type='b', 
+                             col=niceColors(1), pch=1, add = FALSE, 
+                             legend=FALSE, from=NA, to=NA,...){
   
   colorBy <- data[[group]]
   
@@ -96,7 +99,9 @@ bivarPlotColorBy <- function(data, xvar, yvar, group, type='b', col=niceColors(1
   
   i <- order(colorBy, decreasing = TRUE)
   
-  bivarPlot(data[i,], xvar, yvar, xlab =getLabel(xvar), ylab = getLabel(yvar), col= colours[i], add=add, type=type, pch=pch, ...)
+  bivarPlot(data[i,], xvar, yvar, xlab =getLabel(xvar), 
+            ylab = getLabel(yvar), col= colours[i], 
+            add=add, type=type, pch=pch, ...)
   
   #Return color by group, in order
   i <- !duplicated(colorBy)
@@ -108,7 +113,8 @@ bivarPlotColorBy <- function(data, xvar, yvar, group, type='b', col=niceColors(1
   
   fit <- NA
   if(type %in% c("o","b", "l"))
-     fit <- add.sma(data, xvar, yvar, colorBy, col=out$col, from=from, to=to,add=TRUE,...)
+     fit <- add.sma(data, xvar, yvar, colorBy, 
+                    col=out$col, from=from, to=to,add=TRUE,...)
   
   invisible(list(colours=out, fit=fit))
 }    
@@ -121,8 +127,10 @@ add.sma <-function (data, xvar, yvar, colorBy, col, from=NA, to=NA,...){
   invisible(fit)
 } 
 
-bivarPlot.Legend <- function(tmp, location="topleft", text.col = "black", lwd=0, bty ="n"){
-  legend(location, tmp$group , col = tmp$col, text.col = text.col,  merge = TRUE, lwd=lwd, bty =bty, pch=19)  
+bivarPlot.Legend <- function(tmp, location="topleft", text.col = "black", 
+                             lwd=0, bty ="n"){
+  legend(location, tmp$group , col = tmp$col, text.col = text.col,  
+         merge = TRUE, lwd=lwd, bty =bty, pch=19)  
 }
 
 findPositive<-function(data, xvar, yvar){
@@ -136,10 +144,13 @@ findPositive<-function(data, xvar, yvar){
   keep
 }
 
-bivarPlot <- function(data, xvar, yvar, xlab=xvar, ylab=yvar, type='p', col= make.transparent("grey", 0.5), pch=1, add = FALSE, zeroWarning = FALSE, ...){
+bivarPlot <- function(data, xvar, yvar, xlab=xvar, ylab=yvar, 
+                      type='p', col= make.transparent("grey", 0.5), 
+                      pch=1, add = FALSE, zeroWarning = FALSE, ...){
   
   if(!add){
-    plot(data[,xvar], data[,yvar],  type= 'n', log="xy", las=1, yaxt="n", xaxt="n", xlab=xlab, ylab=ylab,  ...)
+    plot(data[,xvar], data[,yvar],  type= 'n', log="xy", las=1, 
+         yaxt="n", xaxt="n", xlab=xlab, ylab=ylab,  ...)
     #add nice log axes
     axis.log10(1) 
     axis.log10(2)    
@@ -436,3 +447,24 @@ getExpression<-function(units){
          kg.m3 = "kg m^-3",                                                                                                                                                                                                                
          kg.kg = "kg.kg")   
 }
+
+
+# returns up to 80 nice colors, generated using
+# http://tools.medialab.sciences-po.fr/iwanthue/
+niceColors <- function(n = 80) {
+  cols <- c("#75954F", "#D455E9", "#E34423", "#4CAAE1", "#451431", "#5DE737", "#DC9B94",
+            "#DC3788", "#E0A732", "#67D4C1", "#5F75E2", "#1A3125", "#65E689", "#A8313C",
+            "#8D6F96", "#5F3819", "#D8CFE4", "#BDE640", "#DAD799", "#D981DD", "#61AD34",
+            "#B8784B", "#892870", "#445662", "#493670", "#3CA374", "#E56C7F", "#5F978F",
+            "#BAE684", "#DB732A", "#7148A8", "#867927", "#918C68", "#98A730", "#DDA5D2",
+            "#456C9C", "#2B5024", "#E4D742", "#D3CAB6", "#946661", "#9B66E3", "#AA3BA2",
+            "#A98FE1", "#9AD3E8", "#5F8FE0", "#DF3565", "#D5AC81", "#6AE4AE", "#652326",
+            "#575640", "#2D6659", "#26294A", "#DA66AB", "#E24849", "#4A58A3", "#9F3A59",
+            "#71E764", "#CF7A99", "#3B7A24", "#AA9FA9", "#DD39C0", "#604458", "#C7C568",
+            "#98A6DA", "#DDAB5F", "#96341B", "#AED9A8", "#55DBE7", "#57B15C", "#B9E0D5",
+            "#638294", "#D16F5E", "#504E1A", "#342724", "#64916A", "#975EA8", "#9D641E",
+            "#59A2BB", "#7A3660", "#64C32A")
+  cols[1:n]
+}
+
+
