@@ -65,7 +65,7 @@ addWorldClimMAPMAT <- function(data, usecache=TRUE){
     
   }
   data$latlong <- paste(data$latitude,data$longitude)
-  data <- merge(data, df, by="latlong", all=TRUE)
+  data <- merge(data, df[,c("latlong","MAP","MAT")], by="latlong", all=TRUE)
   data$latlong <- NULL
   
   # Move next to mat, map
