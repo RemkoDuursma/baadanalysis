@@ -59,3 +59,7 @@ myfigure <- function(data){
 
 cfg <- read.csv("data/variableDefinitions.csv")
 to.pdf(myfigure(baad),"output/figures/pipe.pdf", height= 8, width =12)
+
+
+
+

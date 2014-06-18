@@ -56,7 +56,7 @@ studyWithVars <- function(allom, hasVars, returnwhat=c("dataframe","list"),
     message("No datasets have values in all those columns.")
     return(NA)
   } else {
-    message("Your query returned ",sum(ihasvars)," studies.")
+    message("Your query returned ",sum(ihasvars)," studies with n=",sum(sapply(l[ihasvars],nrow))," observations.")
     if(returnwhat=="list"){
       if(complete.cases)warning("complete.cases=TRUE ignored when list is returned.")
       return(l[ihasvars])

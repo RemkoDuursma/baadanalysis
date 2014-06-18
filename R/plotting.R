@@ -196,6 +196,8 @@ prepMapInfo<-function(data, study=NA){
   data  
 }  
 
+
+
 drawWorldPlot  <-  function(data, horlines=TRUE, sizebyn=FALSE, add=FALSE, 
                             pchcol="red", 
                             legend=TRUE){
@@ -215,7 +217,8 @@ drawWorldPlot  <-  function(data, horlines=TRUE, sizebyn=FALSE, add=FALSE,
   lat <- data$latitude[!duplicated(latlon)]
   lon <- data$longitude[!duplicated(latlon)]
   
-  j  <-  !is.na(lat) & !is.na(lon)  
+  j  <-  !is.na(lat) & !is.na(lon)
+  
   # Location only sometimes missing - but lat/lon can still be in dataset anyway.
   # & data$loc != "NA" | is.na(data$loc)
   
@@ -225,7 +228,7 @@ drawWorldPlot  <-  function(data, horlines=TRUE, sizebyn=FALSE, add=FALSE,
   } else {
     
     if(!sizebyn){
-      points(lon,lat, pch=19, col=pchcol, bg=pchcol, cex=0.6)
+      points(lon,lat, pch=19, col=alpha("blue",0.5), cex=1.6)
     } else {
       n <- table(latlon)
       symbols(lon,lat, circles=log10(n), inches=0.1, fg="black", bg=pchcol, add=TRUE)
@@ -246,6 +249,8 @@ drawWorldPlot  <-  function(data, horlines=TRUE, sizebyn=FALSE, add=FALSE,
   }
   
 }
+
+
 
 
 repMissingInfo  <-  function(data){
