@@ -4,11 +4,13 @@ source("load.R")
 # Reports, scripts, etc.
 
 # Meta data summaries, tables, world map
-knitFromHere("Rnw/metadata_tables.Rnw")
+knitRnwFromHere("Rnw/metadata_tables.Rnw")
 
 # stem-leaf scaling
-knitFromHere("Rnw/stem_leaf_scaling.Rnw")
+knitRnwFromHere("Rnw/stem_leaf_scaling.Rnw")
 
+# several allometries; by dataset/species and colored by pft
+knitRmdFromHere("Rmd/allombypft.Rmd")
 
 # pipe model plot from Daniel
 source("R/pipe.R")

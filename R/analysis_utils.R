@@ -1,4 +1,4 @@
-knitFromHere <- function(fn){
+knitRnwFromHere <- function(fn){
   
   require(tools)
   newfn <- basename(fn)
@@ -9,11 +9,31 @@ knitFromHere <- function(fn){
   f <- file.copy(fn,g)
   if(!f)stop("File copy did not succeed.")
   pdfname <- knit2pdf(newfn)   
+  if(!file.exists("output/pdf"))dir.create("output/pdf")
   file.copy(pdfname, "output/pdf", overwrite=TRUE)
   unlink(paste0(base,".",exts))
   unlink("figure", recursive=TRUE)
 }
 
+
+knitRmdFromHere <- function(fn){
+  
+  require(tools)
+  g <- getwd()
+  f <- file.copy(fn,g)
+  newfn <- basename(fn)
+  on.exit(unlink(newfn))
+  if(!f)stop("File copy did not succeed.")
+  #htmlname <- knit2html(newfn)  
+  htmlname <- render(newfn, envir=new.env())
+  if(!file.exists("output/html"))dir.create("output/html")
+  file.copy(htmlname, "output/html", overwrite=TRUE)
+  base <- file_path_sans_ext(newfn)
+  
+  exts <- c("md","html")
+  unlink(paste0(base,".",exts))
+  unlink("figure", recursive=TRUE)
+}
 
 removeNAcols <- function(dfr){
   
