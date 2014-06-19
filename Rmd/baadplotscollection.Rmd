@@ -33,14 +33,14 @@ datl <- studyWithVars(baad, c("a.stbh", "a.lf","m.lf"), returnwhat="list")
 dat <- rbind_all(datl)
 
 # Roth2007 massive outlier, remove here
-dat <- subset(dat, dataset != "Roth2007")
+dat <- subset(dat, studyName != "Roth2007")
 
 # remove DG; there is only one species which makes it confusing
 dat <- subset(dat, pft != "DG")
 
 
 
-pipe_bh <- summarize(group_by(dat, dataset, species), 
+pipe_bh <- summarize(group_by(dat, studyName, species), 
            alf_stbh=mean(a.lf / a.stbh, na.rm=TRUE),
            mlf_stbh=mean(m.lf / a.stbh, na.rm=TRUE),
            sla = mean(a.lf / m.lf, na.rm=TRUE),
@@ -54,7 +54,7 @@ pipe_bh <- summarize(group_by(dat, dataset, species),
 datl <- studyWithVars(baad, c("a.stba", "a.lf","m.lf"), returnwhat="list")
 dat <- rbind_all(datl)
 
-pipe_ba <- summarize(group_by(dat, dataset, species), 
+pipe_ba <- summarize(group_by(dat, studyName, species), 
                      alf_stba=mean(a.lf / a.stba, na.rm=TRUE),
                      mlf_stba=mean(m.lf / a.stba, na.rm=TRUE),
                      pft=first(pft),
@@ -138,7 +138,7 @@ The following figures use a subset of data, including only field-grown plants, a
 ```{r echo=FALSE}
 
 # baad2 : discard pot-grown plants
-baad$Group <- paste(baad$dataset, baad$speciesMatched)
+baad$Group <- paste(baad$studyName, baad$speciesMatched)
 baad2 <- subset(baad, growingCondition %in% c("FW","PM","PU","FE"))
 baad2$pft <- as.factor(baad2$pft)
 
@@ -150,18 +150,18 @@ dba[baad2$h.t < 1.5] <- NA
 baad2$d.ba[is.na(baad2$d.ba)] <- dba[is.na(baad2$d.ba)]
 
 
-allombygroupandpftplot <- function(xvar, yvar, dataset, xlab=AxisLabels[[xvar]], 
+allombygroupandpftplot <- function(xvar, yvar, studyName, xlab=AxisLabels[[xvar]], 
                                    ylab=AxisLabels[[yvar]], 
                                    slopecomp=1, n_min=20,legend=FALSE,
                                    pftcols=list(EA="red", EG="hotpink", DA="blue")){
 
-  dataset$X <- dataset[,xvar]
-  dataset$Y <- dataset[,yvar]
+  studyName$X <- studyName[,xvar]
+  studyName$Y <- studyName[,yvar]
   
-  smfitsEA <- sma(Y ~ X*Group, data=subset(dataset,pft=="EA"), log='xy', n_min=n_min, quiet=TRUE)
-  smfitsEG <- sma(Y ~ X*Group, data=subset(dataset,pft=="EG"), log='xy', n_min=n_min, quiet=TRUE)
-  smfitsDA <- sma(Y ~ X*Group, data=subset(dataset,pft=="DA"), log='xy', n_min=n_min, quiet=TRUE)
-  smfits <- sma(Y ~ X*Group, data=dataset, log='xy', n_min=n_min, quiet=TRUE)
+  smfitsEA <- sma(Y ~ X*Group, data=subset(studyName,pft=="EA"), log='xy', n_min=n_min, quiet=TRUE)
+  smfitsEG <- sma(Y ~ X*Group, data=subset(studyName,pft=="EG"), log='xy', n_min=n_min, quiet=TRUE)
+  smfitsDA <- sma(Y ~ X*Group, data=subset(studyName,pft=="DA"), log='xy', n_min=n_min, quiet=TRUE)
+  smfits <- sma(Y ~ X*Group, data=studyName, log='xy', n_min=n_min, quiet=TRUE)
   
   plot(smfits, col="black", type='n', axes=FALSE,
        xlab=xlab,
@@ -251,7 +251,7 @@ allombygroupandpftplot("m.lf", "m.rf", baad2, legend=T)
 
 ### Leaf mass ratio (LMR) by plant functional type
 
-The following uses only dataset/species combinations that have at least 20 observations. Using `sma`, I fit leaf mass vs. plant height, and stem mass vs. plant height. From the coefficients of the fits we can calculate the size-dependent LMR relationship, which is not a log-log relationship (math will follow here).
+The following uses only studyName/species combinations that have at least 20 observations. Using `sma`, I fit leaf mass vs. plant height, and stem mass vs. plant height. From the coefficients of the fits we can calculate the size-dependent LMR relationship, which is not a log-log relationship (math will follow here).
 
 We conclude that
 
@@ -264,7 +264,7 @@ We conclude that
 
 # Select datasets that have stem, leaf biomass, and height
 x <- studyWithVars(baad, c("m.st","m.lf","h.t"))
-x$dataset_species <- paste0(x$dataset,"_",x$species)
+x$dataset_species <- paste0(x$studyName,"_",x$species)
 
 # clean
 x <- subset(x, m.lf > 0 & m.st > 0 & !is.na(m.lf) & !is.na(m.st) & !is.na(h.t))
@@ -299,14 +299,13 @@ P <- cbind(p,r)
 rownames(P) <- NULL
 
 # Add some metadata
-dfr <- baad[,c("dataset","species","pft","vegetation","growingCondition")]
-dfr$dataset_species <- with(dfr, paste0(dataset,"_",species))
+dfr <- baad[,c("studyName","species","pft","vegetation","growingCondition")]
+dfr$dataset_species <- with(dfr, paste0(studyName,"_",species))
 dfr <- dfr[!duplicated(dfr$dataset_species),]
 P <- merge(P, dfr)
 P$pft <- as.factor(P$pft)
 P$vegetation[is.na(P$vegetation)] <- "GH"
 P$vegetation <- as.factor(P$vegetation)
-
 
 # Plot : save predictions in a list
 l <- lapply(1:nrow(P), function(i){
@@ -321,7 +320,7 @@ l <- lapply(1:nrow(P), function(i){
   return(data.frame(h=h,wfrel=wfrel,mlf=mlf,mst=mst))
 })
 
-# nonfield <- union(which(P$vegetation == "GH"), which(P$dataset == "Poorter1999"))
+
 nonfield <- which(P$growingCondition %in% c("CG","GH"))
 field <- setdiff(1:nrow(P), nonfield)
 
@@ -443,7 +442,7 @@ abline(0,1)
 ```{r warning=FALSE, message=FALSE, echo=FALSE}
 getAttributeByStudy <- function(data, var, studies){
   i <- !is.na(data[[var]])
-  data[c("dataset", var)][!duplicated(paste( data[["dataset"]], data[[var]])),]
+  data[c("studyName", var)][!duplicated(paste( data[["studyName"]], data[[var]])),]
 }
 
 addIsoclines <- function(A= seq(-10,10),...){

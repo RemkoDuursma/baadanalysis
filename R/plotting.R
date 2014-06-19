@@ -22,7 +22,7 @@ makePlotPanel<-function(data, study, dir="report-per-study", col="grey", pdf=TRU
     pdf(file=paste0(path,"/", study,".pdf"))
   }
   
-  dat        <-  data[data$dataset==study,]
+  dat        <-  data[data$studyName==study,]
   plot.vars  <-  mashrDetail("var.def")$Variable[mashrDetail("var.def")$Group=="tree"]
   plot.vars  <-  plot.vars[plot.vars %in% c("growingCondition","status","light") == FALSE]
   available  <-  dat[,names(dat) %in% plot.vars]   
@@ -72,7 +72,7 @@ highlightStudies <- function(data, xvar, yvar, group, studies, col = niceColors(
                    legend= FALSE, type = 'p', pch=pch)
   
   for(i  in seq_len(length(studies))){
-    ii <- data$dataset==studies[i]
+    ii <- data$studyName==studies[i]
     if(sum(ii) > 0)
       bivarPlotColorBy(data[ii,], xvar, yvar, group = group, add = TRUE, 
                        legend = FALSE, col=col[i], type=type, pch=pch)  
@@ -165,7 +165,7 @@ bivarPlot <- function(data, xvar, yvar, xlab=xvar, ylab=yvar,
 }  
 
 whichStudies <- function(alldata, var, value){
-  unique(alldata$data$dataset[alldata$data[[var]] == value])  
+  unique(alldata$data$studyName[alldata$data[[var]] == value])  
 }
 
 makePlot <-function(data, subset, xvar, yvar, xlab, ylab, main="", maincol=make.transparent("grey", 0.5), studycol = "red",pch=19){
@@ -183,12 +183,12 @@ makePlot <-function(data, subset, xvar, yvar, xlab, ylab, main="", maincol=make.
 prepMapInfo<-function(data, study=NA){
   
   if(!is.na(study))
-    data   <-  data[data$dataset %in% study,]
+    data   <-  data[data$studyName %in% study,]
   
   #Remove duplicate locations
-  keep <- c("dataset", "latitude", "longitude", "location") 
+  keep <- c("studyName", "latitude", "longitude", "location") 
   
-  data <- data[!duplicated(paste0(data$dataset,";", data$latitude,";", data$longitude, ";", data$location)), keep]
+  data <- data[!duplicated(paste0(data$studyName,";", data$latitude,";", data$longitude, ";", data$location)), keep]
   
   i <- !is.na(data$latitude) | !is.na(data$longitude)
   if(any(i)){
@@ -427,8 +427,8 @@ comparePlots<-function(alldata, dir="plot-report", col="grey", pdf=TRUE){
         }
         
         z  <- 0
-        for(g in as.character(unique(alldata$dataset))){
-          subdata  <-  available[alldata$dataset==g,]
+        for(g in as.character(unique(alldata$studyName))){
+          subdata  <-  available[alldata$studyName==g,]
           testNa   <-  subdata[,j]+subdata[,k]
           if(length(testNa[!is.na(testNa)]) != 0){
             z  <-  z + 1

@@ -48,7 +48,7 @@ studyWithVars <- function(allom, hasVars, returnwhat=c("dataframe","list"),
   r <- require(plyr)
   if(!r)stop("Install plyr package first.")
   returnwhat <- match.arg(returnwhat)
-  l <- split(allom, allom$dataset)
+  l <- split(allom, allom$studyName)
   l <- lapply(l, removeNAcols)
   ihasvars <- sapply(l, function(x) all(hasVars %in% names(x)))
     

@@ -1,6 +1,6 @@
 getAttributeByStudy <- function(data, var, studies){
   i <- !is.na(data[[var]])
-  data[c("dataset", var)][!duplicated(paste( data[["dataset"]], data[[var]])),]
+  data[c("studyName", var)][!duplicated(paste( data[["studyName"]], data[[var]])),]
 }
 
 addIsoclines <- function(A= seq(-10,10),...){
