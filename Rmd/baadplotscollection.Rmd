@@ -4,7 +4,6 @@ output: html_document
 ---
 
 ```{r echo=FALSE}
-
 source("load.R")
 
 ```
@@ -42,9 +41,9 @@ dat <- subset(dat, pft != "DG")
 
 
 pipe_bh <- summarize(group_by(dat, dataset, species), 
-           alf_stbh=mean(a.lf / a.stbh),
-           mlf_stbh=mean(m.lf / a.stbh),
-           sla = mean(a.lf / m.lf),
+           alf_stbh=mean(a.lf / a.stbh, na.rm=TRUE),
+           mlf_stbh=mean(m.lf / a.stbh, na.rm=TRUE),
+           sla = mean(a.lf / m.lf, na.rm=TRUE),
            pft=first(pft),
            MAP=mean(MAP),
            MAT=mean(MAT),
@@ -53,13 +52,11 @@ pipe_bh <- summarize(group_by(dat, dataset, species),
            
 # Basal pipemodel relationships
 datl <- studyWithVars(baad, c("a.stba", "a.lf","m.lf"), returnwhat="list")
-
-dat$pft <- as.factor(dat$pft)
-pipe_bh$pft <- as.factor(pipe_bh$pft)
+dat <- rbind_all(datl)
 
 pipe_ba <- summarize(group_by(dat, dataset, species), 
-                     alf_stba=mean(a.lf / a.stba),
-                     mlf_stba=mean(m.lf / a.stba),
+                     alf_stba=mean(a.lf / a.stba, na.rm=TRUE),
+                     mlf_stba=mean(m.lf / a.stba, na.rm=TRUE),
                      pft=first(pft),
                      MAP=mean(MAP),
                      MAT=mean(MAT),
@@ -67,16 +64,21 @@ pipe_ba <- summarize(group_by(dat, dataset, species),
                      vegetation=first(vegetation))
 
 
+dat$pft <- as.factor(dat$pft)
+pipe_bh$pft <- as.factor(pipe_bh$pft)
+pipe_ba$pft <- as.factor(pipe_ba$pft)
+
 
 BARplot <- function(x,y,ymult=1.2,...){
   
-  N <- table(x)
+  N <- table(x[!is.na(x)])
   tap <- tapply(y,x,mean,na.rm=T)
   Ylim <- c(0, max(tap)*ymult)
   b <- bargraph.CI(x,y,ylim=Ylim,err.width=0.04,...)
   
   d <- 0.3
-  text(c(0.3, b$xvals+d), max(tap)*(1.1/1.2)*ymult, labels=c("N =", as.character(unname(N))))
+  text(c(0.3, b$xvals+d), max(tap)*(1.1/1.2)*ymult, 
+       labels=c("N =", as.character(unname(N))))
   
   return(invisible(b))
 }
@@ -93,15 +95,18 @@ with(pipe_bh, BARplot(pft,mlf_stbh, xlab="Plant functional type",
                        ylab=expression(M[F]/A[W]~breast~height~~(kg~m^-2)),
                        col=Cols
                        ))
+
 with(pipe_ba, BARplot(pft,alf_stba, xlab="Plant functional type", 
                           ylab=expression(A[L]/A[W]~base~~(m^2~m^-2)),
                           col=Cols))
-b <- with(pipe_ba, BARplot(pft,mlf_stba, xlab="Plant functional type",
+with(pipe_ba, BARplot(pft,mlf_stba, xlab="Plant functional type",
                           ylab=expression(M[F]/A[W]~base~~(kg~m^-2)),
                           col=Cols,ymult=1.3
 ))
 
 
+
+par(mfrow=c(1,1))
 
 with(pipe_bh, plot(sla, alf_stbh, pch=19, col=pft, xlim=c(0,50),
                    xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
@@ -145,7 +150,8 @@ dba[baad2$h.t < 1.5] <- NA
 baad2$d.ba[is.na(baad2$d.ba)] <- dba[is.na(baad2$d.ba)]
 
 
-allombygroupandpftplot <- function(xvar, yvar, dataset, xlab=AxisLabels[[xvar]], ylab=AxisLabels[[yvar]], 
+allombygroupandpftplot <- function(xvar, yvar, dataset, xlab=AxisLabels[[xvar]], 
+                                   ylab=AxisLabels[[yvar]], 
                                    slopecomp=1, n_min=20,legend=FALSE,
                                    pftcols=list(EA="red", EG="hotpink", DA="blue")){
 
@@ -167,6 +173,9 @@ allombygroupandpftplot <- function(xvar, yvar, dataset, xlab=AxisLabels[[xvar]],
   plot(smfitsEA, add=TRUE, type='l', col=pftcols$EA)
   plot(smfitsEG, add=TRUE, type='l', col=pftcols$EG)
   plot(smfitsDA, add=TRUE, type='l', col=pftcols$DA)
+  
+  legend("bottomright", as.expression(bquote(Slope==.(slopecomp))),
+         bty="n", col="grey", cex=0.7)
   
   if(legend)legend("topleft", c("Evergreen Angio.","Evergreen Gymno", "Deciduous Angio."), 
                    fill=unlist(pftcols), cex=0.9)  
@@ -198,14 +207,17 @@ AxisLabels <- list(m.to = "Total plant mass (kg)",
 ```{r echo=FALSE, warning=FALSE}
               
 par(cex.lab=1.2, mar=c(5,5,2,2))
-allombygroupandpftplot("m.to", "m.lf", baad2, legend=T)
-allombygroupandpftplot("m.to", "a.lf", baad2)
+allombygroupandpftplot("m.to", "m.lf", baad2, legend=T, slopecomp=3/4)
+allombygroupandpftplot("m.to", "a.lf", baad2, slopecomp=3/4)
 
-allombygroupandpftplot("m.so", "m.lf", baad2)
-allombygroupandpftplot("m.so", "a.lf", baad2)
+allombygroupandpftplot("m.so", "m.lf", baad2, slopecomp=3/4)
+allombygroupandpftplot("m.so", "a.lf", baad2, slopecomp=3/4)
 
-allombygroupandpftplot("a.stbh", "m.lf", baad2)
-allombygroupandpftplot("a.stba", "m.lf", baad2)
+allombygroupandpftplot("a.stbh", "m.lf", baad2, slopecomp=1)
+allombygroupandpftplot("a.stba", "m.lf", baad2, slopecomp=1)
+
+allombygroupandpftplot("d.bh", "h.t", baad2, slopecomp=1)
+allombygroupandpftplot("d.ba", "h.t", baad2, slopecomp=1)
 
 allombygroupandpftplot("h.t", "m.so", baad2, slopecomp=2, legend=T)
 
@@ -215,13 +227,25 @@ allombygroupandpftplot("h.t", "a.lf", baad2, slopecomp=2, legend=T)
 allombygroupandpftplot("d.bh", "m.so", baad2, slopecomp=2, legend=T)
 allombygroupandpftplot("d.ba", "m.so", baad2, slopecomp=2, legend=T)
 
-allombygroupandpftplot("m.so", "m.rt", baad2, legend=T)
-allombygroupandpftplot("m.lf", "m.rf", baad2, legend=T)
-
-allombygroupandpftplot("c.d", "m.lf", baad2, legend=T)
-allombygroupandpftplot("c.d", "d.cr", baad2, legend=T)
+allombygroupandpftplot("c.d", "m.lf", baad2, legend=T, slopecomp=1)
+allombygroupandpftplot("c.d", "d.cr", baad2, legend=T, slopecomp=1)
 
 ```
+
+
+### Root-shoot ratios
+
+Functional balance assumption : does fine root mass scale with leaf mass?
+Total root-shoot ratio; would be nice if we find approximate isometry.
+
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+allombygroupandpftplot("m.so", "m.rt", baad2, legend=T)
+allombygroupandpftplot("m.lf", "m.rf", baad2, legend=T)
+```
+
+
 
 
 
@@ -343,6 +367,53 @@ legend("bottomleft", c("Deciduous angiosperm","Deciduous gymnosperm",
 ```
 
 
+### Tropical vs. temperate evergreens
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ii <- which(P$pft == "EA" & P$vegetation %in% c("TempF","TempRF","TropRF","TropSF"))
+l <- l[ii]
+P <- P[ii,]
+
+P$TempTrop <- as.factor(ifelse(P$vegetation %in% c("TempF","TempRF"), "Temp", "Trop"))
+palette(c("blue","red"))
+
+
+# log-log scale
+plot(1, xlim=c(-3,2), ylim=c(0,1), type='n',
+     xlab="Plant height (m)", ylab="Leaf mass / aboveground mass (-)",
+     axes=FALSE)
+addlogaxes(10^-3, 10^2, 10^-3, 10^0, tck1=-0.03, tck2=-0.015,addY=F)
+axis(2)
+for(i in 1:length(l)){
+  points(log10(l[[i]]$h), l[[i]]$wfrel, type='l',
+         col=P$TempTrop[i])
+}
+legend("bottomleft", c("Temperate evergreen angiosperm",
+                       "Tropical evergreen angiosperm"), fill=palette())
+       
+
+plot(1, xlim=c(-3,2), ylim=c(-7,5), type='n',
+     xlab="Plant height (m)", ylab="Leaf mass (kg)",
+     axes=FALSE)
+magaxis(side=1:2, unlog='xy',box=TRUE)
+for(i in 1:length(l))points(log10(l[[i]]$h), log10(l[[i]]$mlf), type='l',
+                            col=P$TempTrop[i])
+legend("topleft", c("Temperate evergreen angiosperm",
+                       "Tropical evergreen angiosperm"), fill=palette(),inset=0.03)
+
+plot(1, xlim=c(-3,2), ylim=c(-7,5), type='n',
+     xlab="Plant height (m)", ylab="Above-ground woody mass (kg)",
+     axes=FALSE)
+magaxis(side=1:2, unlog='xy',box=TRUE)
+for(i in 1:length(l))points(log10(l[[i]]$h), log10(l[[i]]$mst), type='l',
+                            col=P$TempTrop[i])
+legend("topleft", c("Temperate evergreen angiosperm",
+                       "Tropical evergreen angiosperm"), fill=palette(),inset=0.03)
+
+```
+
+
 ### MAT and MAP
 
 Comparison between user-supplied and estimates from WorldClim of mean annual temperature (MAT) and mean annual precipitation (MAP). 
@@ -429,6 +500,99 @@ myfigure <- function(data){
   mtext("Sapwood", side=4)
 }
 myfigure(baad)
+```
+
+### Plots of all data
+
+Something like this for first Figure in manuscript.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data <- baad
+
+## Fill sapwood area. Let basal=breast height where only data at breast height exists.
+# For small plants treat total stem cross section as sapwood
+data[["sap"]] <- data[["a.ssba"]]
+i <- is.na(data[["sap"]])
+data[["sap"]][i] <- data[["a.ssbh"]][i]
+i <- is.na(data[["sap"]]) & !is.na(data[["a.stba"]]) & !is.na(data[["h.t"]]) & data[["h.t"]] < 2
+data[["sap"]][i] <- data[["a.stba"]][i]
+
+
+addIsoclines <- function(A= seq(-10,10),b=1,...){
+  for(a in A) abline(a,b,lty="dotted",...)
+}
+
+
+add.sma.by.group <-function (data, xvar, yvar, smagroup, colorBygroup, col.table,nmin=10,...){
+  if(sum(!is.na(data[[yvar]]*data[[xvar]]))>nmin){
+		col=colour.by.category(data[[colorBygroup]][1],col.table)
+		fit <- sma(data[[yvar]]~data[[xvar]]*data[[smagroup]], log="xy",quiet=TRUE)
+		plot(fit, type='l',col=col,p.lines.transparent=0.1,add=TRUE,...)
+		invisible(fit)
+	}
+}
+
+make.color.table <- function(names){
+	col.table <- niceColors(length(names))
+	names(col.table) <- names
+	col.table
+}
+
+# make a plot, fits lines to each within each group, applyiong same colour within that group
+plot_with_sma_by_var_within_group <- function(data, xvar,yvar,group="vegetation",location=NULL, isoclines=NULL,...){
+
+	plot(data[[xvar]], data[[yvar]],  type= 'n', log="xy", las=1, yaxt="n", xaxt="n",...)
+	axis.log10(1)
+	axis.log10(2)
+
+	if(!is.null(isoclines))
+		addIsoclines(b=isoclines)
+
+	points(data[[xvar]], data[[yvar]],  type= 'p', col = make.transparent("grey", 0.4), pch=16)
+
+	col.table <- make.color.table(unique(data[[group]]))
+
+	fits <- dlply(data, group, add.sma.by.group, xvar=xvar, yvar=yvar, col.table=col.table,
+		smagroup="species",colorBygroup=group)
+
+
+	get.significant.groups <- function(fit, p=0.1){
+		if(is.null(fit)) return(FALSE)
+		any(fit$groupsummary$pval < p)
+	}
+
+	tmp <- laply(fits, get.significant.groups)
+	lab <- sort(names(tmp)[tmp])
+
+	if(!is.null(location))
+		legend(location, legend = tolower(lab), bty = "n", pch=16, col=colour.by.category(lab,col.table), cex=0.5)
+	fits
+}
+
+
+myfigure <- function(){
+# 	par(mfrow = c(1,3))
+	fits<-plot_with_sma_by_var_within_group(data,"a.lf", "h.t", "vegetation",
+                                          ylim=c(0.005, 120), xlim=c(1E-5, 1E3), 
+                                          ylab="Height (m)", 
+                                          xlab="",location="topleft", isoclines=0.5, main="a) Architecture")
+	legend("bottomright", legend = "Slope = 0.5", bty = "n", cex=1)
+
+	plot_with_sma_by_var_within_group(data,"a.lf", "sap", "vegetation",xlim=c(1E-5, 1E3), ylim=c(1E-8, 1E0), 
+                                    ylab=expression(paste("Sapwood area (",m^2,")")), 
+                                    xlab=expression(paste("Leaf area (",m^2,")")),location="topleft", 
+                                    isoclines=1, "b) Pipe Model")
+	legend("bottomright", legend = "Slope = 1", bty = "n", cex=1)
+
+	plot_with_sma_by_var_within_group(data,"a.lf", "m.rt", "vegetation",xlim=c(1E-5, 1E3), ylim=c(1E-8, 400), 
+                                    ylab="mass root (kg)", 
+                                    xlab="",location="topleft", isoclines=1, main="c) Roots")
+	legend("bottomright", legend = "Slope = 1", bty = "n", cex=1)
+
+}
+
+
+myfigure()
 ```
 
    

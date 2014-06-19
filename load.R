@@ -2,6 +2,7 @@
 source("R/analysis_utils.R")
 source("R/loadPackages.R")
 source("R/plotting.R")
+source("R/plot-utils.R")
 source("R/worldclim_functions.R")
 
 # Load BAAD

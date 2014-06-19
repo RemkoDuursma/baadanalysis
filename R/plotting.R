@@ -68,12 +68,14 @@ getLabel <- function(xvar){
 
 highlightStudies <- function(data, xvar, yvar, group, studies, col = niceColors(length(studies)), type='b', pch=1){
   
-  bivarPlotColorBy(data, xvar, yvar, group =group, col=make.transparent("grey", 0.5), legend= FALSE, type = 'p', pch=pch)
+  bivarPlotColorBy(data, xvar, yvar, group =group, col=make.transparent("grey", 0.5), 
+                   legend= FALSE, type = 'p', pch=pch)
   
   for(i  in seq_len(length(studies))){
     ii <- data$dataset==studies[i]
     if(sum(ii) > 0)
-      bivarPlotColorBy(data[ii,], xvar, yvar, group = group, add = TRUE, legend = FALSE, col=col[i], type=type, pch=pch)  
+      bivarPlotColorBy(data[ii,], xvar, yvar, group = group, add = TRUE, 
+                       legend = FALSE, col=col[i], type=type, pch=pch)  
   }
   
   leg <- data.frame(group = studies, col = col, stringsAsFactors=FALSE)
@@ -99,6 +101,7 @@ bivarPlotColorBy <- function(data, xvar, yvar, group, type='b',
   
   i <- order(colorBy, decreasing = TRUE)
   
+  
   bivarPlot(data[i,], xvar, yvar, xlab =getLabel(xvar), 
             ylab = getLabel(yvar), col= colours[i], 
             add=add, type=type, pch=pch, ...)
@@ -116,13 +119,13 @@ bivarPlotColorBy <- function(data, xvar, yvar, group, type='b',
      fit <- add.sma(data, xvar, yvar, colorBy, 
                     col=out$col, from=from, to=to,add=TRUE,...)
   
-  invisible(list(colours=out, fit=fit))
+  return(invisible(list(colours=out, fit=fit)))
 }    
 
 add.sma <-function (data, xvar, yvar, colorBy, col, from=NA, to=NA,...){
 
   i <- findPositive(data, xvar, yvar)
-  fit <- sma(data[i,yvar]~data[i,xvar]*colorBy[i], log="xy")
+  fit <- sma(data[i,yvar]~data[i,xvar]*colorBy[i], log="xy", quiet=TRUE)
   plot(fit, type='l',col=col,p.lines.transparent=0.1,...)
   invisible(fit)
 } 
