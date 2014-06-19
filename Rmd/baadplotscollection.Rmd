@@ -38,8 +38,6 @@ dat <- subset(dat, studyName != "Roth2007")
 # remove DG; there is only one species which makes it confusing
 dat <- subset(dat, pft != "DG")
 
-
-
 pipe_bh <- summarize(group_by(dat, studyName, species), 
            alf_stbh=mean(a.lf / a.stbh, na.rm=TRUE),
            mlf_stbh=mean(m.lf / a.stbh, na.rm=TRUE),
@@ -62,7 +60,6 @@ pipe_ba <- summarize(group_by(dat, studyName, species),
                      MAT=mean(MAT),
                      growingCondition=first(growingCondition),
                      vegetation=first(vegetation))
-
 
 dat$pft <- as.factor(dat$pft)
 pipe_bh$pft <- as.factor(pipe_bh$pft)
@@ -103,23 +100,32 @@ with(pipe_ba, BARplot(pft,mlf_stba, xlab="Plant functional type",
                           ylab=expression(M[F]/A[W]~base~~(kg~m^-2)),
                           col=Cols,ymult=1.3
 ))
+```
 
 
 
+It seems that *across* PFT's, leaf area to stem cross-sectional area ('area pipe ratio') is more conserved than the leaf mass per unit cross-sectional area ('mass pipe ratio'). Conifers have a much higher leaf mass supported, but end up with similar leaf area.
+
+Within PFT's, the area pipe model ratio is correlated with SLA, but not for the mass pipe ratio.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 par(mfrow=c(1,1))
+smfit <- sma(alf_stbh ~ sla*pft, log="xy", data=pipe_bh, quiet=TRUE)
 
-with(pipe_bh, plot(sla, alf_stbh, pch=19, col=pft, xlim=c(0,50),
-                   xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
-                   ylab=expression(A[L]/A[W]~breast~height~~(m^2~m^-2))))
-legend("topright", levels(pipe_bh$pft), col=palette(), pch=19)
-
-
-with(pipe_bh, plot(sla, mlf_stbh, pch=19, col=pft, xlim=c(0,50),
-                   xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
-                   ylab=expression(M[F]/A[W]~breast~height~~(m^2~m^-2))))
-legend("topright", levels(pipe_bh$pft), col=palette(), pch=19)
+plot(smfit,  type='o', pch=19, axes=F,
+     xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
+     ylab=expression(A[L]/A[W]~breast~height~~(m^2~m^-2)))
+magaxis(side=1:2, unlog=1:2)
+legend("topleft", levels(pipe_bh$pft), col=palette(), pch=19)
 
 
+smfit2 <- sma(mlf_stbh ~ sla*pft, log="xy", data=pipe_bh, quiet=TRUE)
+plot(smfit2,  type='p', pch=19, axes=F,
+     xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
+     ylab=expression(M[F]/A[W]~breast~height~~(m^2~m^-2)))
+magaxis(side=1:2, unlog=1:2)
+legend("bottomleft", levels(pipe_bh$pft), col=palette(), pch=19)
 ```
 
 
@@ -158,9 +164,12 @@ allombygroupandpftplot <- function(xvar, yvar, studyName, xlab=AxisLabels[[xvar]
   studyName$X <- studyName[,xvar]
   studyName$Y <- studyName[,yvar]
   
-  smfitsEA <- sma(Y ~ X*Group, data=subset(studyName,pft=="EA"), log='xy', n_min=n_min, quiet=TRUE)
-  smfitsEG <- sma(Y ~ X*Group, data=subset(studyName,pft=="EG"), log='xy', n_min=n_min, quiet=TRUE)
-  smfitsDA <- sma(Y ~ X*Group, data=subset(studyName,pft=="DA"), log='xy', n_min=n_min, quiet=TRUE)
+  smfitsEA <- sma(Y ~ X*Group, data=subset(studyName,pft=="EA"), 
+                  log='xy', n_min=n_min, quiet=TRUE)
+  smfitsEG <- sma(Y ~ X*Group, data=subset(studyName,pft=="EG"), 
+                  log='xy', n_min=n_min, quiet=TRUE)
+  smfitsDA <- sma(Y ~ X*Group, data=subset(studyName,pft=="DA"), 
+                  log='xy', n_min=n_min, quiet=TRUE)
   smfits <- sma(Y ~ X*Group, data=studyName, log='xy', n_min=n_min, quiet=TRUE)
   
   plot(smfits, col="black", type='n', axes=FALSE,
@@ -175,10 +184,12 @@ allombygroupandpftplot <- function(xvar, yvar, studyName, xlab=AxisLabels[[xvar]
   plot(smfitsDA, add=TRUE, type='l', col=pftcols$DA)
   
   legend("bottomright", as.expression(bquote(Slope==.(slopecomp))),
-         bty="n", col="grey", cex=0.7)
+         col="grey", cex=0.7)
   
-  if(legend)legend("topleft", c("Evergreen Angio.","Evergreen Gymno", "Deciduous Angio."), 
-                   fill=unlist(pftcols), cex=0.9)  
+  if(legend)legend("topleft", 
+                   c("Evergreen Angio.","Evergreen Gymno", "Deciduous Angio."), 
+                   fill=unlist(pftcols), cex=0.9,
+                   , bg="white", box.col="white", inset=0.01)
 return(invisible(smfits))
 }
 
