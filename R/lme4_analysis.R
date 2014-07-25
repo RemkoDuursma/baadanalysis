@@ -21,6 +21,8 @@ pftcols <- list(EA="red", EG="hotpink", DA="blue")
 
 dataset <- subset(dataset, !is.na(MAT) & !is.na(pft))
 
+dataset <- subset(dataset, studyName != "Roth2007")
+
 # Nothing
 fit0 <- lmer(log10(m.lf) ~ log10(a.stbh) + (log10(a.stbh)|Group),
              data=dataset)
@@ -73,16 +75,31 @@ fit5 <- lmer(lmlf_astbh ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
 
 
 
-Hs <- c(2, 15)
+plotPredBarplot <- function(model, ylab="", Hs=c(2,15), nboot=100){
+
+  newdat <- with(dataset, expand.grid(pft=unique(dataset$pft), 
+                                      lh.t=log10(Hs)))
+  P <- bootMer(model, nsim=nboot, FUN=function(.)predict(., newdat, re.form=NA))
+  sims <-  10^as.data.frame(P)
+  
+  newdat$ypred <- 10^predict(model, newdat, re.form=NA)
+  
+  m <- matrix(newdat$ypred, ncol=3, byrow=TRUE)
+  colnames(m) <- unique(dataset$pft)
+  
+  qu <- apply(sims, 2, quantile, probs=c(0.025,0.975))
+  
+  b <- barplot(m, beside=TRUE, ylim=c(0,max(qu[2,])))
+  f <- function(x)as.vector(matrix(x,ncol=3,byrow=T))
+  arrows(x0=as.vector(b),
+         y0=f(qu[1,]),
+         y1=f(qu[2,]),
+         angle=90,code=3,length=0.1)
+}
 
 
-newdat <- with(dataset, expand.grid(pft=unique(dataset$pft), 
-                                    lh.t=log10(Hs)))
-P <- bootMer(fit5, nsim=999, FUN=function(.)predict(., newdat, re.form=NA))
-sims <-  as.data.frame(P)
-
-newdat$mlf_astbh <- 10^predict(fit5, newdat, re.form=NA)
-
+plotPredBarplot(fit5, ylab="m.lf / a.stbh")
+plotPredBarplot(fit6, ylab="a.lf / a.stbh")
 
 
 #-----------------------------------------------------------------------------#
