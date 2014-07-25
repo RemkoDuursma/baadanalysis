@@ -42,13 +42,14 @@ removeNAcols <- function(dfr){
 } 
 
 
-studyWithVars <- function(allom, hasVars, returnwhat=c("dataframe","list"),
+studyWithVars <- function(allom, hasVars, groupname="studyName",
+                          returnwhat=c("dataframe","list"),  
                           complete.cases=FALSE){
   
   r <- require(plyr)
   if(!r)stop("Install plyr package first.")
   returnwhat <- match.arg(returnwhat)
-  l <- split(allom, allom$studyName)
+  l <- split(allom, allom[[groupname]])
   l <- lapply(l, removeNAcols)
   ihasvars <- sapply(l, function(x) all(hasVars %in% names(x)))
     

@@ -6,6 +6,7 @@ source("R/plot-utils.R")
 source("R/worldclim_functions.R")
 
 # Load BAAD
+# file.copy("c:/repos/baad/output/baad.rds","data/baad.rds",overwrite=T)
 baad <- readRDS("data/baad.rds")$data
 
 # Add Worldclim MAP and MAT
