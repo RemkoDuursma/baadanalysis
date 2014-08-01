@@ -66,6 +66,7 @@ visreg(fit6, "lh.t", by="pft", overlay=T)
 
 fit5 <- lmer(lmlf_astbh ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
 
+
 #-----------------------------------------------------------------------------#
 
 # prediction barplots.
@@ -75,7 +76,7 @@ fit5 <- lmer(lmlf_astbh ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
 
 
 
-plotPredBarplot <- function(model, ylab="", Hs=c(2,15), nboot=100){
+plotPredBarplot <- function(model, ylab="", Hs=c(2,15), nboot=100,...){
 
   newdat <- with(dataset, expand.grid(pft=unique(dataset$pft), 
                                       lh.t=log10(Hs)))
@@ -89,7 +90,7 @@ plotPredBarplot <- function(model, ylab="", Hs=c(2,15), nboot=100){
   
   qu <- apply(sims, 2, quantile, probs=c(0.025,0.975))
   
-  b <- barplot(m, beside=TRUE, ylim=c(0,max(qu[2,])))
+  b <- barplot(m, beside=TRUE, ylim=c(0,max(qu[2,])),ylab=ylab,...)
   f <- function(x)as.vector(matrix(x,ncol=3,byrow=T))
   arrows(x0=as.vector(b),
          y0=f(qu[1,]),
@@ -98,11 +99,57 @@ plotPredBarplot <- function(model, ylab="", Hs=c(2,15), nboot=100){
 }
 
 
+dataset <- subset(dataset, !is.na(MAT) & !is.na(pft))
+dataset <- subset(dataset, studyName != "Roth2007")
+dataset$lmlf_astbh <- with(dataset, log10(m.lf/a.stbh))
+dataset$lalf_astbh <- with(dataset, log10(a.lf/a.stbh))
+dataset$lh.t <- with(dataset, log10(h.t))
+dataset$lmlf_mso <- with(dataset, log10(m.lf / m.so))
+dataset$lalf_mso <- with(dataset, log10(a.lf / m.so))
+dataset$lmrt_mso <- with(dataset, log10(m.rt / m.so))
+
+
+fit5 <- lmer(lmlf_astbh ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
 plotPredBarplot(fit5, ylab="m.lf / a.stbh")
+
+fit6 <- lmer(lalf_astbh ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
 plotPredBarplot(fit6, ylab="a.lf / a.stbh")
 
+fit8 <- lmer(lmlf_mso ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
+plotPredBarplot(fit8, ylab="m.lf / m.so")
 
-#-----------------------------------------------------------------------------#
+fit9 <- lmer(lalf_mso ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
+plotPredBarplot(fit9, ylab="a.lf / m.so")
+
+
+fit10 <- lmer(lmrt_mso ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
+plotPredBarplot(fit10, ylab="m.rt / m.so")
+
+
+# For ones like this, need log10 Y scale.
+dataset$la.lf <- log10(dataset$a.lf)
+fit7 <- lmer(la.lf ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
+plotPredBarplot(fit7, ylab="a.lf")
+
+
+#- boxplots of variation between species, instead of just fixed effects variances.
+#- hoping that this would still show obvious differences between groups, but with overlap.
+
+
+Hs <- c(2,15)
+model <- fit5
+
+newdat <- with(dataset, expand.grid(pft=unique(pft), 
+                                    Group=rownames(ranef(model)$Group),
+                                    lh.t=log10(Hs)))
+
+P <- bootMer(fit5, nsim=25, FUN=function(.)predict(., newdat, re.form=~(1|Group)))
+sims <-  10^as.data.frame(P)
+newdat$ypred <- 10^predict(model, newdat, re.form=NULL)
+
+
+#-----------------------------------------------------------------------------------------------#
+
 runit <- function(xvar,yvar){
 
   fitit <- function(xvar, yvar){
