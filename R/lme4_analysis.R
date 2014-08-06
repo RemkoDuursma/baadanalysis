@@ -132,6 +132,15 @@ fit7 <- lmer(la.lf ~ pft + lh.t + pft:lh.t + (1|Group), data=dataset)
 plotPredBarplot(fit7, ylab="a.lf")
 
 
+
+
+
+
+
+#-----------------------------------------------------------------------------------------------#
+
+
+
 #- boxplots of variation between species, instead of just fixed effects variances.
 #- hoping that this would still show obvious differences between groups, but with overlap.
 
@@ -143,9 +152,74 @@ newdat <- with(dataset, expand.grid(pft=unique(pft),
                                     Group=rownames(ranef(model)$Group),
                                     lh.t=log10(Hs)))
 
-P <- bootMer(fit5, nsim=25, FUN=function(.)predict(., newdat, re.form=~(1|Group)))
-sims <-  10^as.data.frame(P)
-newdat$ypred <- 10^predict(model, newdat, re.form=NULL)
+# P <- bootMer(fit5, nsim=25, FUN=function(.)predict(., newdat, re.form=~(1|Group)))
+# sims <-  10^as.data.frame(P)
+
+
+predictit <- function(model, varname, dataset){
+  
+  m <- dataset[,c("Group","pft")]
+  m <- m[!duplicated(m),]
+  
+  newdat <- with(dataset, expand.grid(Group=rownames(ranef(model)$Group),
+                                      lh.t=log10(10)))
+  newdat <- merge(newdat, m, by="Group", all=FALSE)
+  y <- 10^predict(model, newdat, re.form=NULL)
+  newdat[,varname] <- y
+return(newdat)
+}
+
+
+fit1 <- lmer(lalf_astbh ~ pft + lh.t + pft:lh.t + (lh.t|Group), data=dataset)
+fit1b <- lmer(lmlf_astbh ~ pft + lh.t + pft:lh.t + (lh.t|Group), data=dataset)
+fit2 <- lmer(log10(a.lf/m.lf) ~ pft + lh.t + pft:lh.t + (lh.t|Group), data=dataset)
+
+df1 <- predictit(fit1, "alf_astbh", dataset)
+df2 <- predictit(fit2, "sla", dataset)[,c("Group","sla")]
+df <- merge(df1, df2, by="Group")
+df3 <- predictit(fit1b, "mlf_astbh", dataset)[,c("Group","mlf_astbh")]
+df <- merge(df, df3, by="Group")
+
+smfit <- sma(alf_astbh ~ sla*pft, log="xy", data=df, quiet=TRUE)
+smfit2 <- sma(mlf_astbh ~ sla*pft, log="xy", data=df, quiet=TRUE)
+
+Cols <- c("blue","red","darkorange")
+palette(Cols)
+
+plot(smfit,  type='o', pch=19, axes=F,
+     ylim=c(100,15000),xlim=c(1,50),
+     xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
+     ylab=expression(A[L]/A[W]~breast~height~~(m^2~m^-2)))
+magaxis(side=1:2, unlog=1:2)
+legend("topleft", levels(df$pft), col=palette(), pch=19, cex=0.8, bty='n')
+
+plot(smfit2,  type='p', pch=19, axes=F,
+     ylim=c(10, 1000),xlim=c(1,50),
+     xlab=expression(Specific~leaf~area~~(m^2~kg^-1)),
+     ylab=expression(M[L]/A[W]~breast~height~~(kg~m^-2)))
+magaxis(side=1:2, unlog=1:2)
+abline(lm(log10(mlf_astbh) ~ log10(sla), data=df))
+legend("bottomleft", levels(df$pft), col=palette(), pch=19, bty='n', cex=0.8)
+
+
+
+#-----------------------------------------------------------------------------------------------#
+
+glop <- read.csv("data/nature02403-s2.csv", stringsAsFactors=TRUE)
+
+glop <- subset(glop, GF %in% c("S","T"))
+
+glop$pft <- with(glop, paste(Decid.E.green,Needle.Broad.lf))
+
+glop$turnover <- 1/(10^glop$log.LL)
+glop$SLA <- 1/(10^glop$log.LMA)
+
+
+smfit <- sma(turnover ~ SLA + Decid.E.green, data=glop, log="xy")
+plot(smfit)
+
+#
+coef(smfit)
 
 
 #-----------------------------------------------------------------------------------------------#
