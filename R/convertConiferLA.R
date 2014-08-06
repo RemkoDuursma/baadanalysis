@@ -1,6 +1,6 @@
 
 # Convert conifer leaf area to projected leaf area
-convertConiferLA <- function(dat){
+convertConiferLA <- function(baad){
   
   # One sided total leaf area (half total surface area)
   # to projjected area. Average of non-pinus species in Barclay & Goodman 2000
@@ -44,22 +44,12 @@ convertConiferLA <- function(dat){
   }
   conv <- Vectorize(convf)
 
+  alfmeth <- baad$methods[,c("studyName","a.lf")]
+  alfmeth$method_alf <- str_extract(alfmeth$a.lf,"r[0-9]{0,1}")
+  alfmeth$method_alf[is.na(alfmeth$method_alf)] <- ""
+  baad$data <- merge(baad$data, alfmeth[,c("studyName","method_alf")],all=T)
   
-  # Strip method out of methods_a.lf
+  newla <- with(baad$data, conv(a.lf, method_alf, speciesMatched, pft))
   
-  
-  
-return
+return(newla)
 }
-
-baad <- readRDS("output/baad.rds")
-
-alfmeth <- baad$methods[,c("studyName","a.lf")]
-alfmeth$method_alf <- str_extract(alfmeth$a.lf,"r[0-9]{0,1}")
-alfmeth$method_alf[is.na(alfmeth$method_alf)] <- ""
-baad$data z <- merge(baad$data, alfmeth[,c("studyName","method_alf")],all=T)
-
-
-  
-  
-  
