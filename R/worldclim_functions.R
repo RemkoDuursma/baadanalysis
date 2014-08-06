@@ -81,7 +81,8 @@ addWorldClimMAPMAT <- function(data, usecache=TRUE){
   }
   data <- movenextto("map","MAP",data)
   data <- movenextto("mat","MAT",data)
-    
+
+  data <- subset(data, !is.na(studyName))
   
   return(data)
 }
