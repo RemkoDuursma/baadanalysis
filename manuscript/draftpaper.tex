@@ -13,7 +13,7 @@
 
 
 
-\title{Biomass allocation, plant functional types and leaf area vs. mass}
+\title{Leaf to stem biomass partitioning is explained by specific leaf area}
 
 \author{Remko Duursma, Daniel Falster and BAAD data contributors}
 
@@ -25,17 +25,25 @@
 \section{Main text}
 
 \begin{enumerate}
-  \item Importance of biomass allocation in earth system models, feedback on fluxes of CO2, lifetime of C in the system.
-  \item Lots of approaches to model biomass allocation, these models tend to settle on very simple algorithms.
-  \item Little is known about differences between plant functional types, which are accounted for in many ways in these models already, especially via physiology etc. etc. 
-  \item We now have a dataset that we can use to evaluate differences between plant functional types.
-  \item Important constraints on allocation are a) leaf mass and leaf area fraction, b) root-shoot ratio and c) leaf mass and area per unit sapwood area.
-  \item Many models allocate some percentage of NPP to each biomass pool, and then multiply this by SLA to get leaf area, which is the area relevant for fluxes of CO2, H2O and light interception.
-  \item Because PFTs differ so much in SLA, and little is known about fNPP to each pool by pft, this would lead to \emph{certain pft differences}.
-  \item Here we show that, in fact, it is far more likely that trees vary allocation to end up with a given leaf area / sapwood area ratio, or equivalently, a given leaf area ratio. These fractions, when expressed as mass fraction were far more variable between pft's.
-  \item These results major implications evaluation and development of allocation models employed in earth system models.
+  \item Importance of biomass allocation in global vegetation models, feedback on fluxes of CO2, lifetime of C in the system. 
+  \item Close relationship to allometric scaling models, which provide an important constraint on the allocation of biomass into the various plant compartments (roots, leaves and stems).
+  \item Previous theoretical work on allometric scaling has predominantly focused on the universal nature of size-biomass relationships in plants. This side-steps the known difference in biomass fractions at a given plant size between plant functional types (Enquist, Poorter).
+  \item There is no shortage of theoretical developments in understanding biomass allocation (Franklin). Other theoretical work focusing on optimal partitioning theory is promising but is yet to lead to operational models for dynamic global vegetation models.
+  \item These DGVMs typically are parameterized by plant functional type (of woody vegetation types that we here allude to include deciduous, evergreen, angiosperm, gymnosperm), current knowledge of allometry differences between pfts is very weak.
+  \item Whatever the way forward in allocation, what is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes.
+  \item Here we use such a database (Falster et al.) to evaluate whether important differences exist in biomass partitioning between four major woody plant functional types.
+  \item We find that specific leaf area is the major determinant of the partitioning of biomass between leaves and stems. After correcting for important size effects, the ratio of leaf mass to total aboveground biomass is varied in such a way to keep the ratio of leaf area to aboveground biomass invariable between plant functional types.
+  \item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. This follows because aboveground woody biomass scales closely with stem cross-sectional area and plant height, in a way that was found to not vary between pft's (*****). 
+
+
 \end{enumerate}
 
+
+
+
+
+
+\section{Lit notes}
 
 Friend et al. (2014) showed that 30\% of the uncertainty in global vegetation carbon simulated with seven vegetation models is due to the residence time of carbon in vegetation. This residence time depends on turnover rates of the various plant pools, and hence also on the distribution of biomass between these pools. For example, vegetation with a higher leaf mass fraction will have a lower overall residence time of carbon.
 
@@ -46,7 +54,7 @@ Poorter et al. (2012) found a slightly larger LMF in gymnosperms, but the differ
 Serious lack of biomass data to constrain models. Studies like Wolf et al. (2011) resort to studying individual tree allometry based on dividing stand biomass by stand density. Wolf et al. (2010) did not find any differences in biomass fractions (root,stem,leaf) between angiosperms and gymnosperms (but again this was based on stand biomass data, but still this is strange!).
 
 
-\section{Results}
+\section{Results and Discussion}
 (this will not be separate in the manuscript, just temporary notes here)
 
 Figure (figure\_mlfastbh\_sla\_pft.pdf) shows that across plant functional types (pfts) (but not within pfts), the ratio of leaf mass to stem cross-sectional area is negatively correlated with specific leaf area. This means that pfts with larger SLA display less leaf mass per unit stem area (and hence per unit aboveground biomass), in a way so that leaf area per stem cross sectional area does not differ by pft (figure\_alfastbh\_sla\_pft.pdf). The convergent trait, independent of plant functional type, is then the ratio of leaf area to stem area.
@@ -66,16 +74,11 @@ Fixed allocation fraction models would get the distribution of biomass right if 
 
 
 
-
-
-
-
-
-
-
-
-
 \section{Methods}
+
+
+
+
 
 
 
