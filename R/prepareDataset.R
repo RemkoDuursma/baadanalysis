@@ -28,3 +28,25 @@ dataset$lmrt_mso <- with(dataset, log10(m.rt / m.so))
 # Colours
 pftcols <- list(EA="red", EG="hotpink", DA="blue", DG = "skyblue2")
 
+
+# Dataset with simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes.
+dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")))
+
+sw <- function(type){
+  switch(type,
+                               BorF = "boreal",
+                               TempF = "temperate",
+                               TempRF = "temperate",
+                               TropRF = "tropical",
+                               TropSF = "tropical"
+                               )
+}
+dataset2$bortemptrop <- as.vector(sapply(dataset2$vegetation, sw))
+
+
+
+
+
+
+
+
