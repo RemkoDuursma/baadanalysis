@@ -13,7 +13,7 @@
 
 
 
-\title{Leaf to stem biomass partitioning is explained by specific leaf area}
+\title{Specific leaf area explains difference in biomass partitioning between woody plant functional types}
 
 \author{Remko Duursma, Daniel Falster and BAAD data contributors}
 
@@ -67,6 +67,20 @@ Fixed allocation fraction models would get the distribution of biomass right if 
 
 
 
+\section{Analyses}
+
+A list of analyses to be included, either in the main text or as supporting information. We need to show all these bits to support the storyline.
+
+\begin{enumerate}
+  \item Leaf mass vs. aboveground biomass; line per species/studyName, colored by pft.
+  \item Leaf mass / aboveground biomass vs. plant height; line per species/studyName, colored by pft.
+  \item Barplot leaf mass / aboveground biomass at reference height with bootstrap CI, by pft (and vegetation type)
+  \item Barplot leaf area / aboveground biomass at reference height with bootstrap CI, by pft (and vegetation type)
+  \item Same ones but for leaf mass or leaf area vs. stem area (at BH or base).
+  \item Ratio mass / stem area vs. SLA, ratio area / stem area vs. SLA, as estimated from random effects of fitted lme model.
+  \item Root - shoot ratio, and barplots of pft/vegetation averages with bootstrap CI.
+  \item Histogram of estimated effects at a reference height, by plant functional type, showing the variation between species. 
+\end{enumerate}
 
 
 
@@ -76,7 +90,9 @@ Fixed allocation fraction models would get the distribution of biomass right if 
 
 \section{Methods}
 
-
+\begin{itemize}
+  \item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. We did not attempt here to include SLA from another database (* although we can do this, we need to decide!).
+\end{itemize}
 
 
 
