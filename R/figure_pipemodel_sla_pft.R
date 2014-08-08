@@ -63,7 +63,6 @@ to.pdf({
 
 
 # Histograms of SLA, and pipe model ratios by pft.
-library(epade)
 to.pdf({
   par(mfrow=c(2,2), fg="black")
   with(df, histogram.ade(sla, pft, density=NA, freq=F, norm=F, bars=TRUE,tcol="black",bgcol="black",

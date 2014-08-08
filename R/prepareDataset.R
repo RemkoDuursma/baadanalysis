@@ -24,6 +24,7 @@ dataset$lmlf_mso <- with(dataset, log10(m.lf / m.so))
 dataset$lalf_mso <- with(dataset, log10(a.lf / m.so))
 dataset$lmrt_mso <- with(dataset, log10(m.rt / m.so))
 
+dataset$lsla <- with(dataset, log10(a.lf / m.lf))
 
 # Colours
 pftcols <- list(EA="red", EG="hotpink", DA="blue", DG = "skyblue2")
@@ -41,7 +42,7 @@ sw <- function(type){
                                TropSF = "tropical"
                                )
 }
-dataset2$bortemptrop <- as.vector(sapply(dataset2$vegetation, sw))
+dataset2$bortemptrop <- as.factor(as.vector(sapply(dataset2$vegetation, sw)))
 
 
 
