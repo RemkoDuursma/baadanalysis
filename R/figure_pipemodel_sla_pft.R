@@ -34,6 +34,11 @@ df <- merge(df1, df2, by="Group", all=TRUE)
 df3 <- predictit(fit1b, "mlf_astbh", dataset)[,c("Group","mlf_astbh", "pft")]
 df <- merge(df, df3, by=c("Group","pft"), all=TRUE)
 
+# Add MAT and MAP
+library(doBy)
+matmap <- summaryBy(MAT + MAP ~ Group, data=dataset, FUN=mean, keep.names=T)
+df <- merge(df, matmap)
+
 smfit <- sma(alf_astbh ~ sla*pft, log="xy", data=df, quiet=TRUE)
 smfit2 <- sma(mlf_astbh ~ sla*pft, log="xy", data=df, quiet=TRUE)
 
