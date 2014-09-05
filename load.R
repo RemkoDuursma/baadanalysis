@@ -5,6 +5,7 @@ source("R/plotting.R")
 source("R/plot-utils.R")
 source("R/worldclim_functions.R")
 source("R/convertConiferLA.R")
+source("R/ablinepiece.R")
 
 # Load BAAD
 # file.copy("c:/repos/baad/output/baad.rds","data/baad.rds",overwrite=T)
