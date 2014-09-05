@@ -10,6 +10,7 @@ library(lme4)
 library(lmerTest)
 library(visreg)
 library(LMERConvenienceFunctions)
+library(gplots)
 
 dataset <- baad
 dataset$Group <- paste(dataset$studyName, dataset$speciesMatched)
@@ -23,6 +24,7 @@ dataset$lh.t <- with(dataset, log10(h.t))
 dataset$lmlf_mso <- with(dataset, log10(m.lf / m.so))
 dataset$lalf_mso <- with(dataset, log10(a.lf / m.so))
 dataset$lmrt_mso <- with(dataset, log10(m.rt / m.so))
+dataset$lmso <- with(dataset, log10(m.so))
 
 dataset$lsla <- with(dataset, log10(a.lf / m.lf))
 
@@ -44,7 +46,7 @@ sw <- function(type){
 }
 dataset2$bortemptrop <- as.factor(as.vector(sapply(dataset2$vegetation, sw)))
 
-
+dataset2$pftlong <- as.factor(with(dataset2, paste(pft, bortemptrop, sep='-')))
 
 
 
