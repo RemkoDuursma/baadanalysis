@@ -1,0 +1,283 @@
+---
+title: "LMR with gam"
+author: "Remko Duursma"
+date: "Friday, September 05, 2014"
+output: html_document
+---
+
+
+```{r init, echo=FALSE}
+library(knitr)
+opts_knit$set(root.dir=normalizePath('../'))
+opts_chunk$set(echo=FALSE, warning=FALSE, error=FALSE, message=FALSE)
+```
+
+
+```{r load}
+
+library(mgcv)
+library(plantecophys)
+library(reshape2)
+
+source("load.R")
+source("R/prepareDataset.R")
+```
+
+
+```{r eval=FALSE}
+# Make quick pdf of gam by pftlong.
+pdf("msowithpftandgam.pdf")
+for(i in 1:nlevels(dat$pftlong)){
+  d <- subset(dat, pftlong == levels(pftlong)[i])
+  with(d, plot(lh.t, lmso, pch=19, col="dimgrey",main=levels(pftlong)[i]))
+  gamplot("lh.t", "lmso", dfr=d, add=TRUE)
+  
+}
+dev.off()
+
+pdf("slawithpftandgam.pdf")
+for(i in 1:nlevels(dat$pftlong)){
+  d <- subset(dat, pftlong == levels(pftlong)[i])
+  if(all(is.na(d$lsla)))next
+  with(d, plot(lh.t, lsla, pch=19, col="dimgrey",main=levels(pftlong)[i]))
+  gamplot("lh.t", "lsla", dfr=d, add=TRUE)
+  
+}
+dev.off()
+
+```
+
+```{r functions}
+
+fitgam <- function(X,Y,dfr, k=-1, model=1){
+  dfr$Y <- dfr[,Y]
+  dfr$X <- dfr[,X]
+  dfr <- droplevels(dfr)
+  g<- gam(Y ~ s(X, k=k), data=dfr)
+
+  return(g)
+}
+addpoly <- function(x,y1,y2,col=alpha("lightgrey",0.8),...){
+  ii <- order(x)
+  y1 <- y1[ii]
+  y2 <- y2[ii]
+  x <- x[ii]
+  polygon(c(x,rev(x)), c(y1, rev(y2)), col=col, border=NA,...)
+}
+
+
+gamplotandpred <- function(dat, pftvar, yvar, Hs = c(1,10)){
+
+  o <- par()
+  dat$PFT <- dat[,pftvar]
+  dat$Y <- dat[,yvar]
+  dat <- droplevels(subset(dat, !is.na(lh.t) & !is.na(Y)))
+
+  d <- split(dat, dat$PFT)
+
+  hran <- lapply(d, function(x)range(x$lh.t, na.rm=TRUE))
+  fits <- lapply(d, function(x)fitgam("lh.t","Y",x, k=4))
+  pred <- lapply(fits, function(x)predict(x, newdata=data.frame(X=log10(Hs)), 
+                                          se.fit=TRUE))
+
+
+  palette(rainbow(nlevels(dat$PFT)))
+  
+  with(dat, plot(lh.t, Y, axes=FALSE, pch=16, col=PFT, ylab=yvar))
+  magaxis(side=1:2, unlog=1:2)
+  
+  for(i in 1:length(d)){
+    nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
+    p <- predict(fits[[i]],nd,se.fit=TRUE)
+    addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=alpha("lightgrey",0.7))
+    lines(nd$X, p$fit, col=palette()[i], lwd=2)
+  }
+  abline(v=log10(Hs), col="dimgrey", lty=5)
+  legend("bottomleft", levels(dat$PFT), fill=palette(), cex=0.7)
+
+  
+  logY <- sapply(pred, "[[", "fit")
+  se <- sapply(pred, "[[", "se.fit")
+  Y_cil <- 10^(logY - 2*se)
+  Y_ciu <- 10^(logY + 2*se)
+  Y <- 10^logY
+
+  
+  
+  par(mar=c(7,5,2,2), las=2)
+  b <- barplot2(Y[1,], beside=T, plot.ci=TRUE, ci.l=Y_cil[1,], ci.u=Y_ciu[1,],
+           main=paste0("Height = ",Hs[1],"m"), col=palette(), ylab=yvar)
+  
+  b <- barplot2(Y[2,], beside=T, plot.ci=TRUE, ci.l=Y_cil[2,], ci.u=Y_ciu[2,],
+           main=paste0("Height = ",Hs[2],"m"), col=palette(), ylab=yvar)
+  
+  df1 <- as.data.frame(Y)
+  df1$H <- Hs
+  df2 <- as.data.frame(se)
+  df2$H <- Hs
+  df1 <- melt(df1, id="H", value.name=yvar, variable.name=pftvar)
+  df2 <- melt(df2, id="H", value.name=paste0(yvar,"_SE"), variable.name=pftvar)  
+  df <- merge(df1, df2)
+  par(o)
+return(invisible(df))
+}
+  
+```
+
+### Leaf mass fraction and leaf area ratio by pft x biome
+
+#### LMF
+```{r lmf}
+gamplotandpred(dataset2, "pftlong", "lmlf_mso")
+```
+
+
+### LAR
+```{r lar}
+gamplotandpred(dataset2, "pftlong", "lalf_mso")
+```
+
+
+### Pipe model ratios by pft x biome
+
+#### Leaf mass pipe ratio
+```{r pipelmfpftlong}
+pipelongmlf <- gamplotandpred(dataset2, "pftlong", "lmlf_astbh", Hs=c(3,10))
+```
+
+#### Leaf area pipe ratio
+```{r pipeamfpftlong}
+pipelongalf <- gamplotandpred(dataset2, "pftlong", "lalf_astbh", Hs=c(3,10))
+```
+
+
+#### SLA
+```{r}
+slalong <- gamplotandpred(dataset2, "pftlong", "lsla", Hs=c(3,10))
+```
+
+
+
+
+
+### SLA and pipe model ratios across pft x biome
+
+```{r}
+
+long <- merge(slalong, pipelongmlf)
+long$lma <- 1/long$lsla
+long <- merge(long, pipelongalf)
+
+makeci <- function(dfr, v){
+  
+  y <- dfr[,v]
+  se <- dfr[,paste0(v,"_SE")]
+  
+  yl <- 10^(log10(y) - 2*se)
+  yu <- 10^(log10(y) + 2*se)
+return(data.frame(uci=yu, lci=yl))
+}
+
+addse <- function(dfr, x, y, direction, transformx=NULL){
+  
+  cix <- makeci(dfr,x)
+  ciy <- makeci(dfr,y)
+  if(!is.null(transformx)){
+    cix <- transformx(cix)
+    dfr[,x] <- transformx(dfr[,x])
+  }
+
+  arrows(x0=cix$lci, x1=cix$uci, y0=dfr[,y], y1=dfr[,y],
+         code=3, angle=90, length=0.025)
+  arrows(x0=dfr[,x], x1=dfr[,x], y0=ciy$lci, y1=ciy$uci,
+         code=3, angle=90, length=0.025)
+  
+}
+
+with(long,  plot(lma, lmlf_astbh, pch=19, col=c("grey","black")[as.factor(H)],
+                 ylim=c(0,1000), xlim=c(0,0.4), 
+                 panel.first={
+                    addse(long, "lsla", "lmlf_astbh", transformx=function(x)1/x)
+                  }))
+
+with(long,  plot(lma, lalf_astbh, pch=19, col=c("grey","black")[as.factor(H)],
+                 ylim=c(0,4500), xlim=c(0,0.4), 
+                 panel.first={
+                    addse(long, "lsla", "lalf_astbh", transformx=function(x)1/x)
+                  }))
+
+
+```
+
+
+```{r eval=FALSE}
+
+
+palette(rainbow(7))
+with(dataset2, plot(log10(a.stbh), log10(a.lf), pch=19, col=pftlong))
+
+# SLA problems!
+pinus <- dataset2[grep("Pinus", dataset2$speciesMatched),]
+pinus <- subset(pinus, !is.na(a.lf) & !is.na(m.lf))
+with(pinus, tapply(a.lf/m.lf, Group, mean))
+
+```
+
+
+
+
+```{r eval=FALSE}
+# Make sure no artefacts : any perfect R2 of m.so = f(a.stbh) ??
+dat <- subset(dataset2,!is.na(a.stbh) & !is.na(m.so))
+datsp <- split(dat, dat$Group)
+ii <- which(sapply(datsp,nrow) > 10)
+lms <- lapply(datsp[ii],
+              function(x)lm(log10(m.so) ~ log10(a.stbh), data=x))  
+getr2 <- function(x)summary(x)$adj.r.squared
+
+r2 <- sapply(lms, getr2)
+
+
+```
+
+
+```{r}
+lme1 <- lme(log10(m.so) ~ log10(a.stbh), random=~log10(a.stbh)|Group, 
+            data=dataset2, subset=pft=="EG", na.action=na.omit)
+lme2 <- lme(log10(m.so) ~ log10(a.stbh), random=~log10(a.stbh)|Group, 
+            data=dataset2, subset=pft=="EA", na.action=na.omit)
+lme3 <- lme(log10(m.so) ~ log10(a.stbh), random=~log10(a.stbh)|Group, 
+            data=dataset2, subset=pft=="DA", na.action=na.omit)
+
+datsp <- split(dataset2, dataset2$Group)
+R <- sapply(datsp, function(x)range(x$a.stbh))
+
+makedf <- function(x){
+  
+  p <- coef(x)
+  g <- rownames(p)
+  r <- R[,g]
+  df <- as.data.frame(cbind(p,t(r)))
+  names(df) <- c("a","b","xmin","xmax")
+  
+return(df)
+}
+
+p <- makedf(lme1)
+pointsp <- function(x,...){
+  for(i in 1:nrow(x)){
+    ablinepiece(x$a[i], x$b[i], from=log10(x$xmin[i]), to=log10(x$xmax[i]), ...)
+  }
+}
+with(dataset2, plot(log10(a.stbh), log10(m.so), type='n'))
+pointsp(makedf(lme1), col="red")
+pointsp(makedf(lme2), col="green3")
+pointsp(makedf(lme3), col="blue")
+
+
+```
+
+
+
+
+
