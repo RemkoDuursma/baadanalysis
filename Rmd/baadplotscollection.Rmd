@@ -3,6 +3,14 @@ title: "Collection of BAAD plots"
 output: html_document
 ---
 
+
+```{r init, echo=FALSE}
+library(knitr)
+opts_knit$set(root.dir=normalizePath('../'))
+opts_chunk$set(echo=FALSE, warning=FALSE, error=FALSE, message=FALSE)
+```
+
+
 ```{r echo=FALSE}
 source("load.R")
 
