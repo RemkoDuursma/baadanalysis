@@ -13,6 +13,22 @@ library(LMERConvenienceFunctions)
 library(gplots)
 
 dataset <- baad
+
+# Recalculate m.so as it is prone with errors (esp. Japanese studies)
+fixmso <- function(d){
+  
+  ii <- which(with(d, abs(m.st+m.lf-m.so) > 0.05))
+  set0 <- function(x){
+    x[is.na(x)] <- 0
+    return(x)
+  }
+  
+  d$m.so[ii] <- set0(d$m.lf[ii]) + set0(d$m.br[ii]) + set0(d$m.st[ii])
+  
+return(d)
+}
+
+
 dataset$Group <- paste(dataset$studyName, dataset$speciesMatched)
 dataset <- droplevels(subset(dataset, growingCondition %in% c("FW","PM","PU","FE") & pft != "DG"))
 dataset$pft <- as.factor(dataset$pft)
@@ -20,6 +36,10 @@ dataset$pft <- as.factor(dataset$pft)
 # dataset <- subset(dataset, studyName != "Roth2007")
 dataset$lmlf_astbh <- with(dataset, log10(m.lf/a.stbh))
 dataset$lalf_astbh <- with(dataset, log10(a.lf/a.stbh))
+
+dataset$lmlf_astba <- with(dataset, log10(m.lf/a.stba))
+dataset$lalf_astba <- with(dataset, log10(a.lf/a.stba))
+
 dataset$lh.t <- with(dataset, log10(h.t))
 dataset$lmlf_mso <- with(dataset, log10(m.lf / m.so))
 dataset$lalf_mso <- with(dataset, log10(a.lf / m.so))
