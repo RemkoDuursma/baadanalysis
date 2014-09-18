@@ -230,20 +230,20 @@ to.pdf({
 
 
 
-
-windows(4,9)
-par(mfrow=c(7,1), mar=c(0,0,0,0), oma=c(5,5,2,2))
-
-
-for(p in unique(dataset2$pftlong)){
-  lmfplot(p, xlim=log10(c(0.05,105)), ylim=c(-6,6),axes=F, cex=0.5)
-  magaxis(side=1, unlog=1, labels=FALSE)
-  magaxis(side=2, unlog=2, labels=TRUE)
-  box()
-  legend("topleft", p, bty='n')
+mstmlf_ht <- function(){
+  #windows(4,9)
+  par(mfrow=c(7,1), mar=c(0,0,0,0), oma=c(5,5,2,2))
+  
+  for(p in unique(dataset2$pftlong)){
+    lmfplot(p, xlim=log10(c(0.05,105)), ylim=c(-6,6),axes=F, cex=0.5)
+    magaxis(side=1, unlog=1, labels=FALSE)
+    magaxis(side=2, unlog=2, labels=TRUE)
+    box()
+    legend("topleft", p, bty='n')
+  }
+  magaxis(side=1, unlog=1, labels=TRUE)
+  mtext(side=1, text="Plant height (m)", line=3, outer=TRUE)
+  mtext(side=2, text="Leaf or woody biomass (kg)", line=3, outer=TRUE)
 }
-magaxis(side=1, unlog=1, labels=TRUE)
-mtext(side=1, text="Plant height (m)", line=3, outer=TRUE)
-mtext(side=2, text="Leaf or woody biomass (kg)", line=3, outer=TRUE)
-
-
+to.pdf(mstmlf_ht(), width=4, height=9,
+       filename="output/figures/mlfmst_byht_pftlong.pdf")
