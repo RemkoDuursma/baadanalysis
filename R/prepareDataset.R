@@ -48,6 +48,18 @@ dataset$lmso <- with(dataset, log10(m.so))
 
 dataset$lsla <- with(dataset, log10(a.lf / m.lf))
 
+# Predicted basal diameter. See R/predict_dba...R
+test <- subset(baad, !is.na(d.ba) & !is.na(d.bh) & !is.na(h.t) & !is.na(h.bh) & h.t > h.bh)
+fit <- nls(d.ba ~ d.bh * h.t^(a*h.t^b) /(h.t - h.bh)^(a*h.t^b), start=list(a=0.9, b=1),
+           data=test)
+dataset$d.ba2 <- predict(fit, dataset)
+dataset$d.ba2[dataset$h.bh >= dataset$h.t] <- NA
+dataset$d.ba2[!is.na(dataset$d.ba)] <- dataset$d.ba[!is.na(dataset$d.ba)]
+
+dataset$lmlf_astba2 <- with(dataset, log10(m.lf/((pi/4)*d.ba2^2)))
+dataset$lalf_astba2 <- with(dataset, log10(a.lf/((pi/4)*d.ba2^2)))
+
+
 # Colours
 pftcols <- list(EA="red", EG="hotpink", DA="blue", DG = "skyblue2")
 
