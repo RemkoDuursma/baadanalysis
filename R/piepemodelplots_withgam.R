@@ -1,17 +1,19 @@
 
+source("load.R")
+source("R/prepareDataset.R")
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
                             linecols=c("deepskyblue3","red","chartreuse3"), ...){
 
-  dat$X <- eval(substitute(x),data)
-  dat$Y <- eval(substitute(y),data)
+  data$X <- eval(substitute(x),data)
+  data$Y <- eval(substitute(y),data)
   
-  d <- split(dat, dat$pft)
+  d <- split(data, data$pft)
   
   hran <- lapply(d, function(x)range(x$X, na.rm=TRUE))
   fits <- lapply(d, function(x)fitgam("X","Y",x, k=4))
   
-  with(dat, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft], ...)) 
+  with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft], ...)) 
   magaxis(side=1:2, unlog=1:2)
     
   for(i in 1:length(d)){
