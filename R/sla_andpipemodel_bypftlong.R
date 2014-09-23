@@ -5,15 +5,16 @@ source("R/meansbypft.R")
 
   
 windows(8,4)
-par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.2)
+par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
 dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
 meansbypft("lmlf_astba2","lalf_astba2", "pft", 
                xvar="llma",setpar=FALSE,
                legend.where="topleft",
+               legend.cex=0.6,
                legend.text=c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno."),
-              panel1.expr={axis(1);axis(2)},
-              panel2.expr={axis(1);axis(2)},
-              Cols=c("blue","red","forestgreen"),
+               panel1.expr={axis(1);axis(2)},
+               panel2.expr={axis(1);axis(2)},
+               Cols=c("blue","red","forestgreen"),
                xlab=expression("Specific leaf mass"~~(kg~m^-2)),
                ylab2=expression(A[L]/A["Sba,est"]~~(m^2~m^-2)),
                ylab1=expression(M[L]/A["Sba,est"]~~(kg~m^-2)), 
@@ -21,6 +22,28 @@ meansbypft("lmlf_astba2","lalf_astba2", "pft",
                xlim=c(0,0.2),
                ylim1=c(0,250),ylim2=c(0,2000))
 dev.copy2pdf(file="output/figures/mlf_alf_astbaest_pftmeans.pdf")
+
+
+windows(8,4)
+par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
+dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
+meansbypft("lmlf_astba2","lalf_astba2", "pftlong", 
+           xvar="llma",setpar=FALSE,
+           legend.where="topleft",
+           legend.cex=0.6,
+           legend.text=c("Temp. Decid. Angio.","Temp. Evergr. Angio.",
+                         "Trop. Evergr. Angio.","Boreal Evergr. Gymno.",
+                         "Temp. Evergr. Gymno."),
+           panel1.expr={axis(1);axis(2)},
+           panel2.expr={axis(1);axis(2)},
+           Cols=rainbow(5),
+           xlab=expression("Specific leaf mass"~~(kg~m^-2)),
+           ylab2=expression(A[L]/A["Sba,est"]~~(m^2~m^-2)),
+           ylab1=expression(M[L]/A["Sba,est"]~~(kg~m^-2)), 
+           dataset=dataset2, #subset(dataset2, h.t > 1.3),
+           xlim=c(0,0.2),
+           ylim1=c(0,250),ylim2=c(0,2000))
+dev.copy2pdf(file="output/figures/mlf_alf_astbaest_pftlongmeans.pdf")
 
 
 #::: need fixing
@@ -88,49 +111,27 @@ d <- split(dat, dat$pftlong)
 
 
 
-histbypftlong <- function(yvar, dataset, nbin=100, log=TRUE, col=1:5,
-                          xlab=NULL, ylab="Nr. individuals", meanline=TRUE, openwin=FALSE){
-  
-  
-  yall <- eval(substitute(yvar), dataset)
-  mn <- min(yall,na.rm=T)
-  mx <- max(yall,na.rm=T)
-  br <- seq(mn - 0.01*(mx-mn),mx + 0.01*(mx-mn),length=nbin)
-  w <- br[2]-br[1]
-  
-  d <- split(dataset, dataset$pftlong)
-  
-  if(openwin)windows(4,7)
-  par(mfrow=c(5,1), mar=c(0,0,0,0), oma=c(5,5,2,2))
-  for(i in 1:5){
-  
-    x <- d[[i]]
-    Y <- eval(substitute(yvar),x)
-    Y <- Y[!is.na(Y)]
-    
-    h <- hist(Y, breaks=br, plot=FALSE)
-  
-    plot(br, br, ylim=c(0,max(h$counts)), axes=FALSE, type='n')
-    for(j in 1:length(h$counts)){
-      n <- h$counts[j]
-      m <- h$mids[j]
-      if(n == 0)next
-      rect(xleft=m-w/2, xright=m+w/2, ybottom=0, ytop=n,  border=NA,col=col[i])
-    }
-    if(log)
-        magaxis(side=1, unlog=1, tcl=-0.4)
-    else
-        axis(1)
-    
-    axis(2)
-    
-    legend("left", names(d)[i],fill=palette()[i], cex=0.7,bty='n')
-    if(meanline)abline(v=mean(Y), lwd=2)
-  }
 
-mtext(side=2, line=3, text=ylab, outer=T)
-mtext(side=1, line=3, text=xlab, outer=T)
-}
+palette(c("red","blue","forestgreen"))
+
+windows(4,8)
+par(mfrow=c(3,1), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
+histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,
+          xlab=expression("Leaf area / basal stem area"~(m^2~m^-2)),
+          legend.text=c("Decid. Angio.",
+                        "Evergr. Angio.",
+                        "Evergr. Gymno."))
+
+windows(4,8)
+par(mfrow=c(3,1), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
+histbypft(lmlf_astba2, pft, dataset2, xaxis=3,legend.cex=1,
+          xlab=expression("Leaf mass / basal stem area"~(m^2~m^-2)),
+          legend.text=c("Decid. Angio.",
+                        "Evergr. Angio.",
+                        "Evergr. Gymno."))
+
+
+
 
 
 palette(rainbow(5))
@@ -139,6 +140,7 @@ dat <- droplevels(subset(dataset2, pftlong %in%
                              "EG-temperate")))
 
 to.pdf({
+par(mfrow=c(5,1), mar=c(0,0,0,0), oma=c(5,5,2,2))  
 histbypftlong(lalf_astbh, subset(dat, h.t>1.3), xlab=expression(A[L]/A[Sbh]~~(m^2~m^-2)))
 histbypftlong(lmlf_astbh, subset(dat, h.t>1.3), xlab=expression(M[F]/A[Sbh]~~(m^2~m^-2)))
 }, width=4, height=7, filename="output/figures/piperatio_bh_hist_bypftlong.pdf")

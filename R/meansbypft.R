@@ -7,6 +7,7 @@ meansbypft <- function(yvar1, yvar2, pftvar,
                            Cols=NULL,
                            legend.text=NULL,
                            legend.where="topright",
+                           legend.cex=0.7,
                            xlab=expression(Specific~leaf~area~(m^2~kg^-1)), 
                            xlim=c(0,25),main="",
                            ylab1=NULL, ylab2=NULL, addtrend=c(FALSE,FALSE),
@@ -73,7 +74,7 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   if(!is.null(panel1.expr))eval(panel1.expr)
   
   if(is.null(legend.text))legend.text <- rownames(sla)
-  legend(legend.where, legend.text,pch=19,col=Cols, cex=0.7,pt.cex=1.2)
+  legend(legend.where, legend.text,pch=19,col=Cols, cex=legend.cex,pt.cex=1.2)
   plot(sla$y, alfastbh$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
        ylim=ylim2,xlab=xlab, ylab=ylab2,
        panel.first={
