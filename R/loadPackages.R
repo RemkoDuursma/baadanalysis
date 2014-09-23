@@ -15,4 +15,5 @@ suppressPackageStartupMessages(library(multcomp))
 suppressPackageStartupMessages(library(doBy))
 suppressPackageStartupMessages(library(mgcv))
 suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(lme4))
 
