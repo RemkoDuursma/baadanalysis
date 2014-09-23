@@ -1,101 +1,40 @@
 
 source("load.R")
 source("R/preparedataset.R")
+source("R/meansbypft.R")
+
+  
+windows(8,4)
+par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.2)
+dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
+meansbypft("lmlf_astba2","lalf_astba2", "pft", 
+               xvar="llma",setpar=FALSE,
+               legend.where="topleft",
+               legend.text=c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno."),
+              panel1.expr={axis(1);axis(2)},
+              panel2.expr={axis(1);axis(2)},
+              Cols=c("blue","red","forestgreen"),
+               xlab=expression("Specific leaf mass"~~(kg~m^-2)),
+               ylab2=expression(A[L]/A["Sba,est"]~~(m^2~m^-2)),
+               ylab1=expression(M[L]/A["Sba,est"]~~(kg~m^-2)), 
+               dataset=dataset2, #subset(dataset2, h.t > 1.3),
+               xlim=c(0,0.2),
+               ylim1=c(0,250),ylim2=c(0,2000))
+dev.copy2pdf(file="output/figures/mlf_alf_astbaest_pftmeans.pdf")
 
 
-meansbypftlong <- function(yvar1, yvar2, pftvar, xlab=expression(Specific~leaf~area~(m^2~kg^-1)), 
-                           xlim=c(0,25),main="",
-                           ylab1=NULL, ylab2=NULL, addtrend=c(FALSE,FALSE),
-                           ylim1=NULL, ylim2=NULL, dataset){
-  
-  if(pftvar == "pftlong"){
-    dat <- droplevels(subset(dataset, pftlong %in% 
-                             c("DA-temperate","EA-temperate","EA-tropical","EG-boreal",
-                               "EG-temperate")))
-  } else {
-    dat <- dataset
-  }
-  
-  dat$Y1 <- dat[,yvar1]
-  dat$Y2 <- dat[,yvar2]
-  dat$P <- dat[,pftvar]
-  
-  mixmean <- function(yvar, dataset=dat){
-    
-    dataset$Y <- dataset[,yvar]
-    f <- lmer(Y ~ P - 1 + (1|Group), data=dataset)
-    
-    ci <- suppressMessages(confint(f)[-c(1,2),])
-    ci <- as.data.frame(cbind(10^fixef(f),10^ci))
-    rownames(ci) <- gsub("P","", rownames(ci))
-    names(ci) <- c("y","lci","uci")
-    return(ci)
-  }
-  
-  sla <- mixmean("lsla")
-  mlfastbh <- mixmean(yvar1)
-  alfastbh <- mixmean(yvar2)
-  
-  palette(rainbow(length(unique(dat$P))))
-  
-  # SHOULD be updated
-  lmfit1 <- lm(mlfastbh$y ~ sla$y)
-  lmfit2 <- lm(alfastbh$y ~ sla$y)
-  
-  # model fit for multiple comparisons
-  f1 <- lmer(Y1 ~ P - 1 + (1|Group), data=dat)
-  f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
-  
-  # Same results, much faster.
-  lets1 <- cld(glht(f1, linfct=mcp(P="Tukey")))$mcletters$Letters
-  lets2 <- cld(glht(f2, linfct=mcp(P="Tukey")))$mcletters$Letters
-
-  #lets1 <- lets1[order(sla$y)]
-  #lets2 <- lets2[order(sla$y)]
-  
-  #windows(4,7)
-  par(mfrow=c(2,1), oma=c(5,5,2,2), mar=c(0,0,0,0))
-  plot(sla$y, mlfastbh$y, xlim=xlim,axes=FALSE, pch=19, col=1:5, cex=1.3,
-       ylim=ylim1,
-       panel.first={
-         arrows(x0=sla$lci, x1=sla$uci, y0=mlfastbh$y, y1=mlfastbh$y,code=3,angle=90,length=0.025,col=1:5)
-         arrows(x0=sla$y, x1=sla$y, y0=mlfastbh$lci, y1=mlfastbh$uci,code=3,angle=90,length=0.025,col=1:5)
-         if(addtrend[1])ablinepiece(lmfit1)
-       })
-  axis(2)
-  box()
-  u <- par()$usr
-  text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets1, pos=3, cex=0.9)
-  axis(1,labels=FALSE)
-  legend("topright", rownames(sla),pch=19,col=palette(), cex=0.7,pt.cex=1.2)
-  plot(sla$y, alfastbh$y, xlim=xlim,pch=19, col=1:5, cex=1.3,
-       ylim=ylim2,
-       panel.first={
-         arrows(x0=sla$lci, x1=sla$uci, y0=alfastbh$y, y1=alfastbh$y,code=3,angle=90,length=0.025,col=1:5)
-         arrows(x0=sla$y, x1=sla$y, y0=alfastbh$lci, y1=alfastbh$uci,code=3,angle=90,length=0.025,col=1:5)
-         if(addtrend[2])ablinepiece(lmfit2)
-       })
-  u <- par()$usr
-  text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
-  mtext(side=1, text=xlab, line=3, outer=T)
-  mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
-  mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T)
-
-  mtext(side=4, text=main, line=2, outer=TRUE)
-  
-}
-  
+#::: need fixing
 
 # Pipe model, breast height
 to.pdf(
-  meansbypftlong("lmlf_astbh","lalf_astbh", "pftlong", ylab2=expression(A[L]/A[Sbh]~~(m^2~m^-2)),
+  meansbypft("lmlf_astbh","lalf_astbh", "pftlong", ylab2=expression(A[L]/A[Sbh]~~(m^2~m^-2)),
     ylab1=expression(M[L]/A[Sbh]~~(kg~m^-2)), dataset=subset(dataset2, h.t > 1.3),
     ylim1=c(0,500),ylim2=c(0,4500)),width=4, height=7,
   filename="output/figures/piperatios_bypftlong_bh.pdf")
 
 # Pipe model, basal height
 to.pdf(
-meansbypftlong("lmlf_astba","lalf_astba", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-2)),
+meansbypft("lmlf_astba","lalf_astba", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-2)),
                ylim1=c(0,400), ylim2=c(0,3000),dataset=dataset2, #subset(dataset2, h.t > 1.3),
                ylab1=expression(M[L]/A[Sba]~~(kg~m^-2))),width=4, height=7,
   filename="output/figures/piperatios_bypftlong_ba.pdf")
@@ -103,7 +42,7 @@ meansbypftlong("lmlf_astba","lalf_astba", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-
 
 # Pipe model, estimated and measured basal height
 to.pdf(
-  meansbypftlong("lmlf_astba2","lalf_astba2", ylab2=expression(A[L]/A[Sba~est]~~(m^2~m^-2)),
+  meansbypft("lmlf_astba2","lalf_astba2", ylab2=expression(A[L]/A[Sba~est]~~(m^2~m^-2)),
                  ylim1=c(0,400), ylim2=c(0,3000),dataset=subset(dataset2, h.t > 1.3),
                  ylab1=expression(M[L]/A[Sba~est]~~(kg~m^-2))),width=4, height=7,
   filename="output/figures/piperatios_bypftlong_ba_est.pdf")
@@ -111,7 +50,7 @@ to.pdf(
 
 # Basal diameter, small plants only
 to.pdf(
-  meansbypftlong("lmlf_astba","lalf_astba", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-2)),
+  meansbypft("lmlf_astba","lalf_astba", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-2)),
                  ylim1=c(0,400), ylim2=c(0,3000),xlim=c(0,40),
                  dataset=subset(dataset2, h.t < 1.3),
                  ylab1=expression(M[L]/A[Sba]~~(kg~m^-2))),width=4, height=7,
@@ -120,7 +59,7 @@ to.pdf(
 
 # Root mass fraction, leaf mass fraction
 to.pdf(
-meansbypftlong("lmrt_mso","lmlf_mso", addtrend=c(F,F),dataset=subset(dataset2, h.t > 1.3),
+meansbypft("lmrt_mso","lmlf_mso", addtrend=c(F,F),dataset=subset(dataset2, h.t > 1.3),
                ylab1=expression(M[R]/(M[F] + M[W])~~(kg~kg^-1)),ylim1=c(0,0.5),
                ylab2=expression(M[F]/M[W]~~(kg~kg^-1)),ylim2=c(0,0.25)),width=4, height=7,
   filename="output/figures/RMF_LMF_bypftlong.pdf")
@@ -130,11 +69,11 @@ meansbypftlong("lmrt_mso","lmlf_mso", addtrend=c(F,F),dataset=subset(dataset2, h
 
 
 to.pdf({
-meansbypftlong("lmlf_astbh","lalf_astbh", "pft", ylab2=expression(A[L]/A[Sbh]~~(m^2~m^-2)),
+meansbypft("lmlf_astbh","lalf_astbh", "pft", ylab2=expression(A[L]/A[Sbh]~~(m^2~m^-2)),
                ylab1=expression(M[L]/A[Sbh]~~(kg~m^-2)), dataset=subset(dataset2, h.t > 1.3),
                ylim1=c(0,500),ylim2=c(0,4000))
 
-meansbypftlong("lmlf_astba","lalf_astba", "pft", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-2)),
+meansbypft("lmlf_astba","lalf_astba", "pft", ylab2=expression(A[L]/A[Sba]~~(m^2~m^-2)),
                ylab1=expression(M[L]/A[Sbh]~~(kg~m^-2)), dataset=subset(dataset2, h.t > 1.3),
                ylim1=c(0,500),ylim2=c(0,4000))
 }
