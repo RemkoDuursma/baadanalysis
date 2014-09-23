@@ -4,13 +4,6 @@
 # - add some log-transformed variables (need these for bootstrap to not choke)
 # - add 'Group', interaction of species and studyName (i.e. species in different datasets are assumed to be independent,
 # not entirely a fair assumption but will account for large environmental differences.)
-source("load.R")
-
-library(lme4)
-library(lmerTest)
-library(visreg)
-library(LMERConvenienceFunctions)
-library(gplots)
 
 dataset <- baad
 
