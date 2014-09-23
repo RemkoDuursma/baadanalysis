@@ -1,9 +1,7 @@
 
 source("load.R")
 source("R/preparedataset.R")
-source("R/meansbypft.R")
-source("R/gam_functions.R")
-source("R/histbypft.R")
+source("R/functions-figures.R")
 
 pointcols <- alpha(c("blue","red","forestgreen"),0.4)
 linecols <- c("blue","red","forestgreen")
@@ -102,4 +100,28 @@ histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,
                         "Evergr. Gymno."))
 }, filename="output/figures/lalf_astba2_hist_bypft.pdf", width=4, height=8)
   
+
+
+
+# pipe model plots
+Legend2 <- function(){
+  legend("topleft", c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno."),
+         pch=19, col=c("blue","red","forestgreen"), bty='n', cex=1.1, pt.cex=1)
+}
+
+to.pdf({
+  par(mar=c(5,5,2,2), cex.lab=1.2)
+  smoothplotbypft(log10(a.stba2), log10(m.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
+                  ylab=expression(Plant~leaf~mass~(kg)), cex=0.6)
+  Legend2()
+}, filename="output/figures/mlf_astba2_bypft.pdf", width=6, height=5)
+  
+to.pdf({
+  par(mar=c(5,5,2,2), cex.lab=1.2)
+  smoothplotbypft(log10(a.stba2), log10(a.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
+                  ylab=expression(Plant~leaf~area~(m^2)), cex=0.6)
+  Legend2()
+}, filename="output/figures/alf_astba2_bypft.pdf", width=6, height=5)
+
+
 
