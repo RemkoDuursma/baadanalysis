@@ -56,6 +56,7 @@ dataset$d.ba2 <- predict(fit, dataset)
 dataset$d.ba2[dataset$h.bh >= dataset$h.t] <- NA
 dataset$d.ba2[!is.na(dataset$d.ba)] <- dataset$d.ba[!is.na(dataset$d.ba)]
 
+dataset$a.stba2 <- (pi/4)*dataset$d.ba2^2
 dataset$lmlf_astba2 <- with(dataset, log10(m.lf/((pi/4)*d.ba2^2)))
 dataset$lalf_astba2 <- with(dataset, log10(a.lf/((pi/4)*d.ba2^2)))
 
