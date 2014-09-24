@@ -3,9 +3,10 @@ source("load.R")
 source("R/preparedataset.R")
 source("R/functions-figures.R")
 
-pointcols <- alpha(c("blue","red","forestgreen"),0.4)
-linecols <- c("blue","red","forestgreen")
-palette(linecols)
+Cols <- c("blue","red","forestgreen")
+transCols <- alpha(Cols,0.4)
+linecols <- c("deepskyblue3","firebrick2","chartreuse3")
+palette(Cols)
 
 
 # Pipe model
@@ -19,7 +20,7 @@ meansbypft("lmlf_astba2","lalf_astba2", "pft",
            legend.text=c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno."),
            panel1.expr={axis(1);axis(2)},
            panel2.expr={axis(1);axis(2)},
-           Cols=c("blue","red","forestgreen"),
+           Cols=Cols,
            xlab=expression("Specific leaf mass"~~(kg~m^-2)),
            ylab2=expression(A[L]/A["Sba,est"]~~(m^2~m^-2)),
            ylab1=expression(M[L]/A["Sba,est"]~~(kg~m^-2)), 
@@ -46,7 +47,7 @@ meansbypft("lmlf_astba2","lalf_astba2", "pftlong",
            ylab2=expression(A[L]/A["Sba,est"]~~(m^2~m^-2)),
            ylab1=expression(M[L]/A["Sba,est"]~~(kg~m^-2)), 
            dataset=dataset2, #subset(dataset2, h.t > 1.3),
-           xlim=c(0,0.2),
+           xlim=c(0,0.3),
            ylim1=c(0,250),ylim2=c(0,2000))
 }, filename="output/figures/mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
 
@@ -55,14 +56,15 @@ meansbypft("lmlf_astba2","lalf_astba2", "pftlong",
 # LMF and LAR plot
 Legend <- function(){
   legend("bottomleft", c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno."),
-         pch=19, col=linecols, bty='n', cex=1.3, pt.cex=1.2)
+         pch=19, col=Cols, bty='n', cex=1, pt.cex=1)
 }
 
 
 # LMF
 to.pdf({
+  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
   gamplotandpred(dataset2, "pft", "lmlf_mso", plotwhich=1, 
-                 lineCols=linecols, pointCols=pointcols,vlines=FALSE,legend=FALSE,
+                 lineCols=linecols, pointCols=transCols,vlines=FALSE,legend=FALSE,
                  xlab="Plant height (m)",
                  ylab=expression("Leaf mass / aboveground biomass"~~(kg~kg^-1)))
   Legend()
@@ -71,8 +73,9 @@ to.pdf({
 
 # LAR
 to.pdf({
+  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
   gamplotandpred(dataset2, "pft", "lalf_mso", plotwhich=1, 
-                 lineCols=linecols, pointCols=pointcols,vlines=FALSE,legend=FALSE,
+                 lineCols=linecols, pointCols=transCols,vlines=FALSE,legend=FALSE,
                  xlab="Plant height (m)",
                  ylab=expression("Leaf area / aboveground biomass"~~(m^2~kg^-1)))
   Legend()
@@ -82,7 +85,7 @@ to.pdf({
 # Leaf mass / stem area
 to.pdf({
   par(mfrow=c(3,1), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
-  histbypft(lmlf_astba2, pft, dataset2, xaxis=3,legend.cex=1,
+  histbypft(lmlf_astba2, pft, dataset2, xaxis=3,legend.cex=1,col=Cols,
             xlab=expression("Leaf mass / basal stem area"~(m^2~m^-2)),
             legend.text=c("Decid. Angio.",
                           "Evergr. Angio.",
@@ -93,7 +96,7 @@ to.pdf({
 # Leaf area / stem area
 to.pdf({
   par(mfrow=c(3,1), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
-histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,
+histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,col=Cols,
           xlab=expression("Leaf area / basal stem area"~(m^2~m^-2)),
           legend.text=c("Decid. Angio.",
                         "Evergr. Angio.",
@@ -106,19 +109,20 @@ histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,
 # pipe model plots
 Legend2 <- function(){
   legend("topleft", c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno."),
-         pch=19, col=c("blue","red","forestgreen"), bty='n', cex=1.1, pt.cex=1)
+         pch=19, col=Cols, bty='n', cex=1.1, pt.cex=1)
 }
 
 to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.2)
   smoothplotbypft(log10(a.stba2), log10(m.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
-                  ylab=expression(Plant~leaf~mass~(kg)), cex=0.6)
+                  ylab=expression(Plant~leaf~mass~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend2()
 }, filename="output/figures/mlf_astba2_bypft.pdf", width=6, height=5)
   
 to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.2)
   smoothplotbypft(log10(a.stba2), log10(a.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
+                  linecols=linecols, pointcols=transCols,
                   ylab=expression(Plant~leaf~area~(m^2)), cex=0.6)
   Legend2()
 }, filename="output/figures/alf_astba2_bypft.pdf", width=6, height=5)

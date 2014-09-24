@@ -4,9 +4,9 @@ convertConiferLA <- function(baad){
   
   # One sided total leaf area (half total surface area)
   # to projjected area. Average of species in Barclay & Goodman 2000
-  # lambda1 <- c(0.873, 0.92, 0.879, 0.864, 0.839); mean(1/lambda1) # B & G
-  # For Pinus this is typically assumed to equal pi/2 (following Grace 1987 NZ J For)
-  ola_pla <- 1.14
+  # For Pinus we use the value for lodgepole pine (see below)
+  lambda1 <- c(0.873, 0.92, 0.879, 0.864, 0.839)
+  ola_pla <- mean(1/lambda1)
   
   conv_pine <- function(x, method){
     if(method %in% c("","?","ax"))
@@ -14,10 +14,10 @@ convertConiferLA <- function(baad){
     
     cv <- 1/0.778
     switch(method, 
-           a4 = x,
-           a5 = x/(2 * cv),
-           a6 = x/ cv,
-           a7 = x/(2 * cv),
+           a4 = x * cv,
+           a5 = x/2,
+           a6 = x,
+           a7 = x/2,
            unknown = x
            )
   }
@@ -26,10 +26,10 @@ convertConiferLA <- function(baad){
       method <- "unknown"
     
     switch(method, 
-           a4 = x,
-           a5 = x/(2 * ola_pla),
-           a6 = x/ola_pla, 
-           a7 = x/(2 * ola_pla),
+           a4 = x * ola_pla,
+           a5 = x/2,
+           a6 = x, 
+           a7 = x/2,
            unknown = x
     )
   }
