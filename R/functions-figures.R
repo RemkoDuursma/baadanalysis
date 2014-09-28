@@ -1,4 +1,20 @@
 
+mixmean <- function(yvar, g, dataset=dat){
+  
+  dataset$P <- dataset[,g]
+  dataset$Y <- dataset[,yvar]
+  
+  f <- lmer(Y ~ P - 1 + (1|Group), data=dataset)
+  
+  ci <- suppressMessages(confint(f)[-c(1,2),])
+  ci <- as.data.frame(cbind(10^fixef(f),10^ci))
+  rownames(ci) <- gsub("P","", rownames(ci))
+  names(ci) <- c("y","lci","uci")
+  return(ci)
+}
+
+
+
 meansbypft <- function(yvar1, yvar2, pftvar, 
                            xvar="lsla",
                            panel1.expr=NULL,
@@ -24,23 +40,11 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   
   dat$Y1 <- dat[,yvar1]
   dat$Y2 <- dat[,yvar2]
-  dat$P <- dat[,pftvar]
+  dat$P <- dat[,pftvar]  
   
-  mixmean <- function(yvar, dataset=dat){
-    
-    dataset$Y <- dataset[,yvar]
-    f <- lmer(Y ~ P - 1 + (1|Group), data=dataset)
-    
-    ci <- suppressMessages(confint(f)[-c(1,2),])
-    ci <- as.data.frame(cbind(10^fixef(f),10^ci))
-    rownames(ci) <- gsub("P","", rownames(ci))
-    names(ci) <- c("y","lci","uci")
-    return(ci)
-  }
-  
-  sla <- mixmean(xvar)
-  mlfastbh <- mixmean(yvar1)
-  alfastbh <- mixmean(yvar2)
+  sla <- mixmean(xvar,pftvar)
+  mlfastbh <- mixmean(yvar1,pftvar)
+  alfastbh <- mixmean(yvar2,pftvar)
   
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
@@ -53,7 +57,7 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   f1 <- lmer(Y1 ~ P - 1 + (1|Group), data=dat)
   f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
   
-  # Same results, much faster.
+  # Multiple comparison letters.
   lets1 <- cld(glht(f1, linfct=mcp(P="Tukey")))$mcletters$Letters
   lets2 <- cld(glht(f2, linfct=mcp(P="Tukey")))$mcletters$Letters
   
@@ -257,6 +261,31 @@ gamplotandpred <- function(dat, pftvar, yvar,
   df <- merge(df1, df2)
   par(o)
   return(invisible(df))
+}
+
+plotg <- function(g, which, ...){
+  
+  if(which == 1)
+    which <- 1:3
+  else
+    which <- 4:6
+  
+  dataset2$llma <- log10(1/(10^dataset2$lsla))
+  lma <- mixmean("llma", "pft", dataset2)
+  g$y <- g[,3]
+  g$lci <- g[,3] - 2*g[,4]
+  g$uci <- g[,3] + 2*g[,4]
+  
+  plot(lma$y, g$y[which], col=Cols, cex=1.3, pch=19,
+       axes=FALSE,
+       panel.first={
+         arrows(x0=lma$lci, x1=lma$uci, y0=g$y[which], y1=g$y[which],code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=lma$y, x1=lma$y, y0=g$lci[which], y1=g$uci[which],code=3,angle=90,length=0.025,col=Cols)
+       }, ... )
+  axis(1)
+  axis(2)
+  box()
+  
 }
 
 
