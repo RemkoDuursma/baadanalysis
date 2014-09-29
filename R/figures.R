@@ -117,7 +117,7 @@ to.pdf({
 mstmlf_ht <- function(){
   
   par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(5,5,2,2))
-  labels <- c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno.")
+  labels <- c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
   
   for(i in 1:3){
     p <- levels(dataset2$pft)[i]
