@@ -100,24 +100,34 @@ meansbypft <- function(yvar1, yvar2, pftvar,
 
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
-                            linecols=c("deepskyblue3","red","chartreuse3"), ...){
+                            linecols=c("deepskyblue3","red","chartreuse3"), 
+                            xlab=NULL, ylab=NULL,
+                            ...){
   
+  data$pft <- as.factor(data$pft)
+  data <- droplevels(data)
   data$X <- eval(substitute(x),data)
   data$Y <- eval(substitute(y),data)
+  
+  if(is.null(xlab))xlab <- substitute(x)
+  if(is.null(ylab))ylab <- substitute(y)
   
   d <- split(data, data$pft)
   
   hran <- lapply(d, function(x)range(x$X, na.rm=TRUE))
-  fits <- lapply(d, function(x)fitgam("X","Y",x, k=4))
+  fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=4)))
   
-  with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft], ...)) 
+  with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft],
+                  xlab=xlab, ylab=ylab, ...)) 
   magaxis(side=1:2, unlog=1:2)
   
   for(i in 1:length(d)){
     nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
-    p <- predict(fits[[i]],nd,se.fit=TRUE)
-    addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=alpha("lightgrey",0.7))
-    lines(nd$X, p$fit, col=linecols[i], lwd=2)
+    if(!inherits(fits[[i]], "try-error")){
+      p <- predict(fits[[i]],nd,se.fit=TRUE)
+      addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=alpha("lightgrey",0.7))
+      lines(nd$X, p$fit, col=linecols[i], lwd=2)
+    }
   }
 }
 
