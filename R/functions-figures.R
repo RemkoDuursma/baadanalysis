@@ -101,7 +101,7 @@ meansbypft <- function(yvar1, yvar2, pftvar,
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
                             linecols=c("deepskyblue3","red","chartreuse3"), 
-                            xlab=NULL, ylab=NULL,
+                            xlab=NULL, ylab=NULL,logaxes=TRUE,
                             ...){
   
   data$pft <- as.factor(data$pft)
@@ -119,7 +119,7 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
   
   with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft],
                   xlab=xlab, ylab=ylab, ...)) 
-  magaxis(side=1:2, unlog=1:2)
+  if(logaxes)magaxis(side=1:2, unlog=1:2)
   
   for(i in 1:length(d)){
     nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
