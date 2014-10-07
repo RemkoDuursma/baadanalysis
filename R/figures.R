@@ -9,7 +9,6 @@ linecols <- c("deepskyblue3","firebrick2","chartreuse3")
 palette(Cols)
 
 
-# These need to be merged :)
 Legend <- function(where){
   legend(where, c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno."),
          pch=19, col=Cols, bty='n', cex=1, pt.cex=1)
@@ -194,4 +193,56 @@ plotg(g2,2,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
       ylab=expression(Leaf~area/Aboveground~mass~(m^2~kg^-1)),
       xlim=c(0,0.2),  ylim=c(0,1), main="Height = 10m")
 }, filename="output/figures/LAR_estfromgam_bypftandlma.pdf", width=8, height=4)
+
+
+
+# cf. Reich et al 2014. Does MAT influence LMF?
+# Here, I 'correct' for size by estimating b0 in MF = b0*MS^(3/4).
+# This is estimated with sma for each Group. MAT is averaged within Group,
+# this takes several locations per Group (not that many though!)
+# Roth2007 is highlighted.
+dat <- studyWithVars(dataset, c("m.lf","m.st","MAT"))
+sm1 <- sma(m.lf ~ m.st*Group, data=dat, log="xy", slope.test=3/4)
+
+b0 <- sapply(sm1$nullcoef, "[",1,1)
+p <- data.frame(Group=sm1$groupsummary$group, b0=b0)
+m <- dat[,c("Group","pft","MAT")]
+m <- m[!duplicated(m),]
+m <- summaryBy(MAT ~ Group, FUN=mean, id=~pft, na.rm=TRUE, keep.names=TRUE, data=m)
+h <- aggregate(h.t ~ Group, FUN=median, data=dat)
+m <- merge(m,h)
+p <- merge(p,m, all.x=TRUE, all.y=FALSE, by="Group")
+
+to.pdf({
+  par(mar=c(5,5,2,2), cex.lab=1.2)
+  smoothplotbypft(MAT, b0, p,
+                  cex=0.9,pointcols=transCols,linecols=linecols,
+                  logaxes=FALSE,xlim=c(0,30),
+                  xlab=expression(Mean~Annual~Temperature~(degree)),
+                  ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
+  with(p[grep("Roth2007",p$Group),],
+       points(MAT, b0, pch=17, col="forestgreen"))
+  axis(1, at=seq(0,30,by=5))
+  magaxis(side=2, unlog=2)
+  box()
+}, width=6, height=5, filename="output/figures/MAT_LMFscaling.pdf")
+
+
+# # MAT not significant in any way.
+# d <- droplevels(subset(dat, !is.na(m.st) & !is.na(m.lf) & !is.na(MAT)))
+# lme1 <- lme(log10(m.lf) ~ log10(m.st), random=~log10(m.st)|Group, data=d, method="ML",
+#             na.action=na.omit)
+# lme2 <- lme(log10(m.lf) ~ log10(m.st)*pft, random=~log10(m.st)|Group, data=d,method="ML",
+#             na.action=na.omit)
+# lme3 <- lme(log10(m.lf) ~ log10(m.st)*pft + MAT, random=~log10(m.st)|Group, data=d,method="ML",
+#             na.action=na.omit)
+# lme4 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAT, random=~log10(m.st)|Group, data=d,method="ML",
+#             na.action=na.omit)
+# 
+# AIC(lme1, lme2, lme3)
+# anova(lme2, lme3)
+# 
+# car::Anova(lme3)
+# car::Anova(lme4)
+
 
