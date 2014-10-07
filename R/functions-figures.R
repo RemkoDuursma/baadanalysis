@@ -42,9 +42,9 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   dat$Y2 <- dat[,yvar2]
   dat$P <- dat[,pftvar]  
   
-  sla <- mixmean(xvar,pftvar)
-  mlfastbh <- mixmean(yvar1,pftvar)
-  alfastbh <- mixmean(yvar2,pftvar)
+  sla <- mixmean(xvar,pftvar,dat)
+  mlfastbh <- mixmean(yvar1,pftvar,dat)
+  alfastbh <- mixmean(yvar2,pftvar,dat)
   
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
