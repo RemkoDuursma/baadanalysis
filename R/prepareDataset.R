@@ -23,7 +23,7 @@ return(d)
 
 
 dataset$Group <- paste(dataset$studyName, dataset$speciesMatched)
-dataset <- droplevels(subset(dataset, pft != "DG"))  #growingCondition %in% c("FW","PM","PU","FE") & 
+dataset <- droplevels(subset(dataset, pft != "DG" & growingCondition %in% c("FW","PM","PU","FE")))
 dataset$pft <- as.factor(dataset$pft)
 
 # dataset <- subset(dataset, studyName != "Roth2007")
