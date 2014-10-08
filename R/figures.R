@@ -93,9 +93,10 @@ to.pdf({
   par(mfrow=c(3,1), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
   histbypft(lmlf_astba2, pft, dataset2, xaxis=3,legend.cex=1,col=Cols,
             xlab=expression("Leaf mass / basal stem area"~(m^2~m^-2)),
-            legend.text=c("Decid. Angio.",
-                          "Evergr. Angio.",
-                          "Evergr. Gymno."))
+            Means=mixmean("lmlf_astba2","pft",dataset2),
+            legend.text=c("Deciduous Angiosperm",
+                          "Evergreen Angiosperm",
+                          "Evergreen Gymnosperm"))
 }, filename="output/figures/lmlf_astba2_hist_bypft.pdf", width=4, height=8)
 
 
@@ -104,11 +105,11 @@ to.pdf({
   par(mfrow=c(3,1), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
   histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,col=Cols,
             xlab=expression("Leaf area / basal stem area"~(m^2~m^-2)),
-            legend.text=c("Decid. Angio.",
-                          "Evergr. Angio.",
-                          "Evergr. Gymno."))
+            Means=mixmean("lalf_astba2","pft",dataset2),
+            legend.text=c("Deciduous Angiosperm",
+                          "Evergreen Angiosperm",
+                          "Evergreen Gymnosperm"))
 }, filename="output/figures/lalf_astba2_hist_bypft.pdf", width=4, height=8)
-
 
 
 # Leaf mass, woody mass
@@ -202,7 +203,7 @@ plotg(g2,2,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
 # this takes several locations per Group (not that many though!)
 # Roth2007 is highlighted.
 dat <- studyWithVars(dataset, c("m.lf","m.st","MAT"))
-sm1 <- sma(m.lf ~ m.st*Group, data=dat, log="xy", slope.test=3/4)
+sm1 <- sma(m.lf ~ m.st*Group, data=dat, log="xy", slope.test=3/4, quiet=TRUE)
 
 b0 <- sapply(sm1$nullcoef, "[",1,1)
 p <- data.frame(Group=sm1$groupsummary$group, b0=b0)

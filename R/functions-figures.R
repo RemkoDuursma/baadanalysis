@@ -141,9 +141,10 @@ histbypft <- function(yvar, pftvar, dataset,
                       legend.text=NULL,
                       legend.cex=1,
                       xaxis=NULL,
-                      meanline=TRUE){
+                      meanline=TRUE,
+                      Means=NULL){
   
-  
+  if(is.null(Means))meanline <- FALSE
   yall <- eval(substitute(yvar), dataset)
   dataset$Group <- eval(substitute(pftvar), dataset)
   mn <- min(yall,na.rm=T)
@@ -156,6 +157,7 @@ histbypft <- function(yvar, pftvar, dataset,
   
   if(is.null(xaxis))xaxis <- 1:length(d)
   
+
   for(i in 1:length(d)){
     
     x <- d[[i]]
@@ -180,8 +182,18 @@ histbypft <- function(yvar, pftvar, dataset,
     }
     axis(2)
     
-    legend("topleft", legend.text[i], cex=legend.cex,bty='n',text.font=2)
-    if(meanline)abline(v=mean(Y), lwd=2)
+    
+    u <- par()$usr
+    text(x=u[1], y=0.96*u[4], legend.text[i], cex=legend.cex,font=2,pos=4)
+    
+    if(meanline){
+      
+      rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
+           ybottom=0, ytop=max(h$counts), col=alpha("grey",0.6), border=NA)
+      segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]), 
+               y0=0, y1=max(h$counts))
+      
+    }
   }
   
   mtext(side=2, line=3, text=ylab, outer=T, las=3)
