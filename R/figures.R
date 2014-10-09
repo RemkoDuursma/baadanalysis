@@ -8,24 +8,10 @@ transCols <- alpha(Cols,0.4)
 linecols <- c("deepskyblue3","firebrick2","chartreuse3")
 palette(Cols)
 
-
 Legend <- function(where){
   legend(where, c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno."),
          pch=19, col=Cols, bty='n', cex=1, pt.cex=1)
 }
-
-
-# Root-shoot
-to.pdf({
-  par(mar=c(5,5,2,2), cex.lab=1.2)
-  smoothplotbypft(log10(m.rt), log10(m.so), dataset2, 
-                  xlab=expression(Root~mass~(kg)),
-                  ylab=expression(Aboveground~mass~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
-  
-  abline(0,1)
-  Legend("topleft")
-}, filename="output/figures/mrt_mso_bypft.pdf", width=6, height=5)
-
 
 
 # pipe model plots
@@ -34,7 +20,7 @@ to.pdf({
   smoothplotbypft(log10(a.stba2), log10(m.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
                   ylab=expression(Plant~leaf~mass~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
-}, filename="output/figures/mlf_astba2_bypft.pdf", width=6, height=5)
+}, filename="manuscript/figures/figure1_mlf_astba2_bypft.pdf", width=6, height=5)
 
 to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.2)
@@ -42,7 +28,7 @@ to.pdf({
                   linecols=linecols, pointcols=transCols,
                   ylab=expression(Plant~leaf~area~(m^2)), cex=0.6)
   Legend("topleft")
-}, filename="output/figures/alf_astba2_bypft.pdf", width=6, height=5)
+}, filename="manuscript/figures/figureSI-1_alf_astba2_bypft.pdf", width=6, height=5)
 
 
 # Pipe model
@@ -63,7 +49,7 @@ meansbypft("lmlf_astba2","lalf_astba2", "pft",
            dataset=dataset2, #subset(dataset2, h.t > 1.3),
            xlim=c(0,0.2),
            ylim1=c(0,250),ylim2=c(0,2000))
-}, filename="output/figures/mlf_alf_astbaest_pftmeans.pdf", width=8, height=4)
+}, filename="manuscript/figures/figure2_mlf_alf_astbaest_pftmeans.pdf", width=8, height=4)
 
 
 to.pdf({
@@ -85,7 +71,8 @@ meansbypft("lmlf_astba2","lalf_astba2", "pftlong",
            dataset=dataset2, #subset(dataset2, h.t > 1.3),
            xlim=c(0,0.3),
            ylim1=c(0,250),ylim2=c(0,2000))
-}, filename="output/figures/mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
+}, filename="manuscript/figures/figureSI-2_mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
+
 
 
 # Leaf mass / stem area
@@ -97,7 +84,7 @@ to.pdf({
             legend.text=c("Deciduous Angiosperm",
                           "Evergreen Angiosperm",
                           "Evergreen Gymnosperm"))
-}, filename="output/figures/lmlf_astba2_hist_bypft.pdf", width=4, height=8)
+}, filename="manuscript/figures/figureSI-3_lmlf_astba2_hist_bypft.pdf", width=4, height=8)
 
 
 # Leaf area / stem area
@@ -109,7 +96,7 @@ to.pdf({
             legend.text=c("Deciduous Angiosperm",
                           "Evergreen Angiosperm",
                           "Evergreen Gymnosperm"))
-}, filename="output/figures/lalf_astba2_hist_bypft.pdf", width=4, height=8)
+}, filename="manuscript/figures/figureSI-4_lalf_astba2_hist_bypft.pdf", width=4, height=8)
 
 
 # Leaf mass, woody mass
@@ -145,7 +132,7 @@ mstmlf_ht <- function(){
   mtext(side=2, text="Leaf or woody biomass (kg)", line=3, outer=TRUE)
 }
 to.pdf(mstmlf_ht(), width=9, height=4,
-       filename="output/figures/mlfmst_byht_pft.pdf")
+       filename="manuscript/figures/figureSI-5_mlfmst_byht_pft.pdf")
 
 
 
@@ -157,18 +144,19 @@ to.pdf({
                  xlab="Plant height (m)",
                  ylab=expression("Leaf mass / aboveground biomass"~~(kg~kg^-1)))
   Legend("bottomleft")
-}, filename="output/figures/LMF_pft_lines.pdf", width=7, height=4.5)
+}, filename="manuscript/figures/figure3_LMF_pft_lines.pdf", width=7, height=4.5)
 
-to.pdf({
-  par(mfrow=c(1,2), cex.main=0.9, mar=c(5,5,1,1))
-plotg(g,1,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
-      ylab=expression(Leaf~mass/Aboveground~mass~(kg~kg^-1)),
-      xlim=c(0,0.2), ylim=c(0,0.5), main="Height = 1m")
-      
-plotg(g,2,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
-      ylab=expression(Leaf~mass/Aboveground~mass~(kg~kg^-1)),
-      xlim=c(0,0.2), ylim=c(0,0.2), main="Height = 10m")
-}, filename="output/figures/LMF_estfromgam_bypftandlma.pdf", width=8, height=4)
+
+# to.pdf({
+#   par(mfrow=c(1,2), cex.main=0.9, mar=c(5,5,1,1))
+# plotg(g,1,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
+#       ylab=expression(Leaf~mass/Aboveground~mass~(kg~kg^-1)),
+#       xlim=c(0,0.2), ylim=c(0,0.5), main="Height = 1m")
+#       
+# plotg(g,2,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
+#       ylab=expression(Leaf~mass/Aboveground~mass~(kg~kg^-1)),
+#       xlim=c(0,0.2), ylim=c(0,0.2), main="Height = 10m")
+# }, filename="output/figures/LMF_estfromgam_bypftandlma.pdf", width=8, height=4)
 
 
 
@@ -181,19 +169,32 @@ to.pdf({
                  ylab=expression("Leaf area / aboveground biomass"~~(m^2~kg^-1)))
   Legend("bottomleft")
 
-}, filename="output/figures/LAR_pft_lines.pdf", width=7, height=4.5)
+}, filename="manuscript/figures/figure4_LAR_pft_lines.pdf", width=7, height=4.5)
 
 
+# to.pdf({
+#   par(mfrow=c(1,2), cex.main=0.9, mar=c(5,5,1,1))
+# plotg(g2,1,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
+#       ylab=expression(Leaf~area/Aboveground~mass~(m^2~kg^-1)),
+#       xlim=c(0,0.2), ylim=c(0,10),  main="Height = 1m")
+# 
+# plotg(g2,2,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
+#       ylab=expression(Leaf~area/Aboveground~mass~(m^2~kg^-1)),
+#       xlim=c(0,0.2),  ylim=c(0,1), main="Height = 10m")
+# }, filename="output/figures/LAR_estfromgam_bypftandlma.pdf", width=8, height=4)
+
+
+
+# Root-shoot
 to.pdf({
-  par(mfrow=c(1,2), cex.main=0.9, mar=c(5,5,1,1))
-plotg(g2,1,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
-      ylab=expression(Leaf~area/Aboveground~mass~(m^2~kg^-1)),
-      xlim=c(0,0.2), ylim=c(0,10),  main="Height = 1m")
-
-plotg(g2,2,xlab=expression(Specific~leaf~mass~(kg~m^-2)),
-      ylab=expression(Leaf~area/Aboveground~mass~(m^2~kg^-1)),
-      xlim=c(0,0.2),  ylim=c(0,1), main="Height = 10m")
-}, filename="output/figures/LAR_estfromgam_bypftandlma.pdf", width=8, height=4)
+  par(mar=c(5,5,2,2), cex.lab=1.2)
+  smoothplotbypft(log10(m.rt), log10(m.so), dataset2, 
+                  xlab=expression(Root~mass~(kg)),
+                  ylab=expression(Aboveground~mass~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
+  
+  abline(0,1)
+  Legend("topleft")
+}, filename="manuscript/figures/figureSI-6_mrt_mso_bypft.pdf", width=6, height=5)
 
 
 
@@ -226,7 +227,7 @@ to.pdf({
   axis(1, at=seq(0,30,by=5))
   magaxis(side=2, unlog=2)
   box()
-}, width=6, height=5, filename="output/figures/MAT_LMFscaling.pdf")
+}, width=6, height=5, filename="manuscript/figures/figureSI-7_MAT_LMFscaling.pdf")
 
 
 # # MAT not significant in any way.
