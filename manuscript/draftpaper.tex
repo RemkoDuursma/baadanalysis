@@ -7,6 +7,8 @@
 \usepackage{palatino}
 \usepackage{framed}
 \usepackage{parskip}
+\usepackage{graphicx}
+\graphicspath{ {./figures/} }
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \bibliographystyle{plain}
@@ -24,7 +26,7 @@
 
 %--------------------------------------------------------------------------------------------%
 
-\section{Main text}
+\section{Introduction}
 
 \begin{enumerate}
 \item Importance of biomass allocation in global vegetation models \cite{ise_comparison_2010}, feedback on fluxes of CO2, lifetime of C in the system \cite{friend_carbon_2014}.
@@ -40,14 +42,35 @@
   
 \item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
 
-
 \end{enumerate}
 
 
+%------------------------------------------------------------------------------------%
+\section{Methods}
+
+\begin{itemize}
+  \item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. 
+  \item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
+  \item We used a generalized additive model (GAM) to visualize the relationships. In addition, we used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages.
+\end{itemize}
+
+
+
+%------------------------------------------------------------------------------------%
+\section{Results}
 
 
 
 
+
+%------------------------------------------------------------------------------------%
+\section{Discussion}
+
+
+
+
+
+%------------------------------------------------------------------------------------%
 \section{Lit notes}
 
 \cite{friend_carbon_2014} showed that 30\% of the uncertainty in global vegetation carbon simulated with seven vegetation models is due to the residence time of carbon in vegetation. This residence time depends on turnover rates of the various plant pools, and hence also on the distribution of biomass between these pools. For example, vegetation with a higher leaf mass fraction will have a lower overall residence time of carbon.
@@ -83,7 +106,6 @@ Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest
 
 \cite{grier_notes:_1974} early study on leaf mass proportionality to sapwood area (and uses mass not area).
 
-\section{Results and Discussion}
 
 
 
@@ -91,18 +113,48 @@ Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest
 
 
 
-
-\section{Methods}
-
-\begin{itemize}
-  \item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. 
-  \item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
-  \item We used a generalized additive model (GAM) to visualize the relationships. In addition, we used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages.
-\end{itemize}
+\section{Figures}
 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics{figure1_mlf_astba2_bypft.pdf}
+    \caption{Leaf mass per unit basal stem area. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure2_mlf_alf_astbaest_pftmeans.pdf}
+    \caption{Average leaf mass per unit basal stem area (panel 1), and leaf area per unit basal stem area (panel 2) for the three major plant functional types. Error bars are 95\% confidence interval for the mean (calculated with a mixed-effects model with species within study as the random effect). Letters denote significant differences. }
+    \label{fig:figure2}
+\end{figure}
 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure3_LMF_pft_lines.pdf}
+    \caption{Leaf mass fraction (leaf mass / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure3}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure4_LAR_pft_lines.pdf}
+    \caption{Leaf area ratio (leaf area / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure4}
+\end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure4_LAR_pft_lines.pdf}
+    \caption{Leaf area ratio (leaf area / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure4}
+\end{figure}
+
+
+\clearpage
 \bibliography{allometry}
 
 \end{document}
