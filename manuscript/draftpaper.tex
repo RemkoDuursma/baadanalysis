@@ -52,6 +52,7 @@
   \item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. 
   \item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
   \item We used a generalized additive model (GAM) to visualize the relationships. In addition, we used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages.
+  \item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception (Lang 1991, Stenberg 2006).
 \end{itemize}
 
 
@@ -146,12 +147,59 @@ Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest
 \end{figure}
 
 
+
+\section{Supporting Information Figures}
+
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{figure4_LAR_pft_lines.pdf}
-    \caption{Leaf area ratio (leaf area / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
-    \label{fig:figure4}
+    \includegraphics[width=0.99\textwidth]{figureSI-1_alf_astba2_bypft.pdf}
+    \caption{Leaf area per unit basal stem area. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figureSI1}
 \end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-2_mlf_alf_astbaest_pftlongmeans.pdf}
+    \caption{Like Fig.~\ref{fig:figure2}, but for five combinations of major plant functional type and biome. Out of 9 possible biome / pft combinations, only five in the dataset had leaf area estimates (and two combo's are not in the dataset, e.g. tropical evergreen gymno). Note that within pft, vegetation is never significant (this result will also be in another figure!).}
+    \label{fig:figureSI2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figureSI-3_lmlf_astba2_hist_bypft.pdf}
+    \caption{Histograms of leaf mass per unit basal stem area grouped by the three major plant functional types. Vertical lines and shading are means with confidence intervals (same as in Fig.~\ref{fig:figure2})}
+    \label{fig:figureSI3}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figureSI-4_lalf_astba2_hist_bypft.pdf}
+    \caption{Histograms of leaf area per unit basal stem area grouped by the three major plant functional types. Vertical lines and shading are means with confidence intervals (same as in Fig.~\ref{fig:figure2})}
+    \label{fig:figureSI4}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-5_mlfmst_byht_pft.pdf}
+    \caption{Leaf and woody biomass scaling with plant height.}
+    \label{fig:figureSI5}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-6_mrt_mso_bypft.pdf}
+    \caption{Near-isometric scaling of above-ground with below-ground biomass, and no effects of plant functional type. The black line is a 1-1 line.}
+    \label{fig:figureSI6}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-7_MAT_LMFscaling.pdf}
+    \caption{For each species within study, we fit the scaling relationship of leaf mass as a function of woody biomass assuming an exponent of 3/4, using standardized major axis. The resulting coefficient (b0) is size-invariant (and thus superior to the simple ratio of leaf mass to woody biomass, which is strongly size-dependent, see Fig.~\ref{fig:figure3}). We found no effects of mean annual temperature on the coefficient. The triangles are from Roth et al. (2007), a study on Pinus eliottii with exceptionally high leaf mass per unit woody biomass.}
+    \label{fig:figureSI7}
+\end{figure}
+
+
 
 
 \clearpage
