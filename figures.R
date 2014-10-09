@@ -3,7 +3,7 @@ source("load.R")
 source("R/preparedataset.R")
 source("R/functions-figures.R")
 
-Cols <- c("blue","red","forestgreen")
+Cols <- c("blue","red","cornflowerblue")
 transCols <- alpha(Cols,0.4)
 linecols <- c("deepskyblue3","firebrick2","chartreuse3")
 palette(Cols)
