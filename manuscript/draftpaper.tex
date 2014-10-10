@@ -64,7 +64,7 @@
 
 \item Variance partitioning with R2 for linear mixed-effects models as reported by XXX.
 
-\item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception (Lang 1991, Stenberg 2006).
+\item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception  \cite{lang_application_1991, chen_defining_1992}.
 \end{itemize}
 
 
@@ -103,7 +103,9 @@ Note: stats done as well, but not yet incorporated into the manuscript.
 
 \begin{itemize}
 
-\item How do current DGVMs work? Either constant allocation fraction, target allometric equations, or optimization \cite{de2014does}. Constant allocation fraction gives constant LAR by pft if leaf lifespan is exactly proportional to SLM. Target allometric equations can be made pft-invariant by using allometry of leaf area, not leaf mass. Optimization models probably already give the right answer because normally LAI is optimized (Woodward). 
+\item We found coordination between an important leaf trait and whole-plant biomass partitioning. This has implications for global vegetation models.
+
+\item How is allocation implemented in current DGVMs? Either constant allocation fraction, target allometric equations, or optimization \cite{de2014does}. Constant allocation fraction gives constant LAR by pft if leaf lifespan is exactly proportional to SLM. Target allometric equations can be made pft-invariant by using allometry of leaf area, not leaf mass. Optimization models probably already give the right answer because normally LAI is optimized (Woodward). 
 
 \item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
 
@@ -113,40 +115,40 @@ Note: stats done as well, but not yet incorporated into the manuscript.
 
 
 %------------------------------------------------------------------------------------%
-\section{Lit notes}
-
-\cite{friend_carbon_2014} showed that 30\% of the uncertainty in global vegetation carbon simulated with seven vegetation models is due to the residence time of carbon in vegetation. This residence time depends on turnover rates of the various plant pools, and hence also on the distribution of biomass between these pools. For example, vegetation with a higher leaf mass fraction will have a lower overall residence time of carbon.
-
-\cite{de2014does} "We have shown that allocation approaches that are constrained by biomass fractions (such as functional relationships) were more successful at capturing observed trends, and were generally more robust, than approaches based on allocation coefficients."
-
-\cite{friedlingstein_toward_1999} make no mention of plant functional type differences or the need to vary allocation by pft.
-
-Givnish 2002 discusses costs and benefits of evergreen vs. deciduous habit, in terms of constructing a growth model that takes into account photosynthesis, leaf lifespan, belowground costs. However he does not consider or report on differences in allocation associated with leaf lifespan. Instead he simply states that 'leaf allocation ratio' relates to leaf lifespan, which of course is only true if total leaf mass is constant.
-
-Callaway et al 1994, example of lower leaf mass / sapwood area for desert population of PIPO vs. montane population. For pointing out small-scale climatic effects on allometry (that may not be obvious in global scale analyses).
-
-\cite{poorter_biomass_2012} found a slightly larger LMF in gymnosperms, but the difference was small and could not split between deciduous and evergreen angiosperms due to a lack of data. They argue that "most conifers retain leaves for two or more years. Thus, the higher LMF may simply be the consequence of leaf longevity rather than higher assimilate partitioning per se. In this way, conifers are able to compensate for their lower physiological activity per gram of leaf." This raises the question whether LMF differs by angiosperms and gymnosperms, or as a consequence of leaf longevity (especially deciduous vs. evergreen).
-
-\cite{enquist_global_2002} report 2.6 times higher leaf mass at given stem mass for conifers compared to angiosperms, but did not separate further, nor interpreted this difference in terms of SLA. Their interpretation is 'that conifers typically retain three cohorts of leaves that have less well-developed [...] mesophyll'. Not sure how that latter bit makes sense, and leaf lifespan interpretation is no good; because it still begs the question why would conifers not simply have 1/3 less leaf mass per cohort? 
-
-\cite{mccarthy_consistency_2007} further demonstrate large difference in LMF between angiosperms and conifers, and note that a large chunk of the residuals is correlated with SLA and LL. They interpret this rather vaguely as 'leaf morphology may constrain leaf mass distribution'. Their SLA was not on the same individuals, but they could have calculated PFT average LAR anyway, but did not.
-
-\cite{oneill_comparative_1981} reported much higher leaf biomass for gymnosperms vs. angiosperms, at a given woody biomass increment. This means (as Niklas reported) a much higher productivity per unit leaf biomass for angiosperms.
-
-Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest_2011} resort to studying individual tree allometry based on dividing stand biomass by stand density. \cite{wolf_allometric_2010} did not find any differences in biomass fractions (root,stem,leaf) between angiosperms and gymnosperms (but again this was based on stand biomass data, but still this is strange!).
-
-\cite{hui_near_2014} Isometric scaling of above vs. belowground biomass in chinese forest biomass database.
-
-\cite{sardans_tree_2013} report similiar LMF for evergreen angio. and gymnosperms, and ca. 40\% less leaf mass for decid. angio. Local study, 3000 plots in Catalonia.
-
-\cite{reich_temperature_2014} "On average, when standardized for MAT and Mstem, conifers tended to have more Mfol and less Mroot than angiosperm forests". Their Fig. 2 shows trends in LMF with MAT etc., in bins of stem size. Also allometric analysis with MAT as covariate, showing significance of MAT. For Angiosperms, our explanation would be that evergreen angio is more common at high MAT. But what about conifers?
-
-\cite{cairns_root_1997} found no difference in root-shoot ratio between gymno and angio.
-
-\cite{delucia_climate-driven_2000} LA/SA decreases with summer VPD for Pinus but not non-Pinus gymno. Also Pinus has much lower LA/SA than non-Pinus; suggesting that we should separate gymnosperms into those groups as well.
-
-
-\cite{grier_notes:_1974} early study on leaf mass proportionality to sapwood area (and uses mass not area).
+% \section{Lit notes}
+% 
+% \cite{friend_carbon_2014} showed that 30\% of the uncertainty in global vegetation carbon simulated with seven vegetation models is due to the residence time of carbon in vegetation. This residence time depends on turnover rates of the various plant pools, and hence also on the distribution of biomass between these pools. For example, vegetation with a higher leaf mass fraction will have a lower overall residence time of carbon.
+% 
+% \cite{de2014does} "We have shown that allocation approaches that are constrained by biomass fractions (such as functional relationships) were more successful at capturing observed trends, and were generally more robust, than approaches based on allocation coefficients."
+% 
+% \cite{friedlingstein_toward_1999} make no mention of plant functional type differences or the need to vary allocation by pft.
+% 
+% \cite{givnish_adaptive_2002} discusses costs and benefits of evergreen vs. deciduous habit, in terms of constructing a growth model that takes into account photosynthesis, leaf lifespan, belowground costs. However he does not consider or report on differences in allocation associated with leaf lifespan. Instead he simply states that 'leaf allocation ratio' relates to leaf lifespan, which of course is only true if total leaf mass is constant.
+% 
+% \cite{callaway_biomass_1994} example of lower leaf mass / sapwood area for desert population of PIPO vs. montane population. For pointing out small-scale climatic effects on allometry (that may not be obvious in global scale analyses).
+% 
+% \cite{poorter_biomass_2012} found a slightly larger LMF in gymnosperms, but the difference was small and could not split between deciduous and evergreen angiosperms due to a lack of data. They argue that "most conifers retain leaves for two or more years. Thus, the higher LMF may simply be the consequence of leaf longevity rather than higher assimilate partitioning per se. In this way, conifers are able to compensate for their lower physiological activity per gram of leaf." This raises the question whether LMF differs by angiosperms and gymnosperms, or as a consequence of leaf longevity (especially deciduous vs. evergreen).
+% 
+% \cite{enquist_global_2002} report 2.6 times higher leaf mass at given stem mass for conifers compared to angiosperms, but did not separate further, nor interpreted this difference in terms of SLA. Their interpretation is 'that conifers typically retain three cohorts of leaves that have less well-developed [...] mesophyll'. Not sure how that latter bit makes sense, and leaf lifespan interpretation is no good; because it still begs the question why would conifers not simply have 1/3 less leaf mass per cohort? 
+% 
+% \cite{mccarthy_consistency_2007} further demonstrate large difference in LMF between angiosperms and conifers, and note that a large chunk of the residuals is correlated with SLA and LL. They interpret this rather vaguely as 'leaf morphology may constrain leaf mass distribution'. Their SLA was not on the same individuals, but they could have calculated PFT average LAR anyway, but did not.
+% 
+% \cite{oneill_comparative_1981} reported much higher leaf biomass for gymnosperms vs. angiosperms, at a given woody biomass increment. This means (as Niklas reported) a much higher productivity per unit leaf biomass for angiosperms.
+% 
+% Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest_2011} resort to studying individual tree allometry based on dividing stand biomass by stand density. \cite{wolf_allometric_2010} did not find any differences in biomass fractions (root,stem,leaf) between angiosperms and gymnosperms (but again this was based on stand biomass data, but still this is strange!).
+% 
+% \cite{hui_near_2014} Isometric scaling of above vs. belowground biomass in chinese forest biomass database.
+% 
+% \cite{sardans_tree_2013} report similiar LMF for evergreen angio. and gymnosperms, and ca. 40\% less leaf mass for decid. angio. Local study, 3000 plots in Catalonia.
+% 
+% \cite{reich_temperature_2014} "On average, when standardized for MAT and Mstem, conifers tended to have more Mfol and less Mroot than angiosperm forests". Their Fig. 2 shows trends in LMF with MAT etc., in bins of stem size. Also allometric analysis with MAT as covariate, showing significance of MAT. For Angiosperms, our explanation would be that evergreen angio is more common at high MAT. But what about conifers?
+% 
+% \cite{cairns_root_1997} found no difference in root-shoot ratio between gymno and angio.
+% 
+% \cite{delucia_climate-driven_2000} LA/SA decreases with summer VPD for Pinus but not non-Pinus gymno. Also Pinus has much lower LA/SA than non-Pinus; suggesting that we should separate gymnosperms into those groups as well.
+% 
+% 
+% \cite{grier_notes:_1974} early study on leaf mass proportionality to sapwood area (and uses mass not area).
 
 
 
