@@ -31,15 +31,17 @@
 \begin{enumerate}
 \item Importance of biomass allocation in global vegetation models \cite{ise_comparison_2010}, feedback on fluxes of CO2, lifetime of C in the system \cite{friend_carbon_2014}.
   
-\item There is no shortage of theoretical developments in understanding biomass allocation (\cite{cannell_carbon_1994,franklin_modeling_2012}, WBE). In particular, theoretical work focusing on optimal partitioning theory is promising (e.g. \cite{valentine_modeling_2012}) but is yet to lead to operational models for dynamic global vegetation models.
-  
+\item There is no shortage of theoretical developments in understanding biomass allocation (\cite{cannell_carbon_1994,franklin_modeling_2012,enquist_land_2012}). In particular, theoretical work focusing on optimal partitioning theory is promising (e.g. \cite{valentine_modeling_2012}) but is yet to lead to operational models for dynamic global vegetation models.
+
 \item Previous syntheses on plant biomass relationships has predominantly focused on the universal nature of size-biomass relationships in plants. Little is known about differences between plant functional types (evergreen vs. deciduous, angiosperm vs. gymnosperm). Since most global models parameterize allocation submodels by PFT, it is imperative that we better understand these potential differences.
+
+\item Major plant functional types differ widely in specific leaf mass (SLM, the ratio of leaf mass to area, an index of leaf thickness) (\cite{poorter_causes_2009}), which can be expected to affect biomass partitioning in several ways. First, SLM correlates with leaf lifespan. Longer lived leaves would lead to higher plant leaf mass (MF) as long as annual production rates are similar (\cite{enquist_global_2002}). Another interpretation is that plants may target a certain leaf area display given a certain biomass investment in supporting tissues, because light interception and photosynthesis correlate with the exchange area of the plant. 
+
+\item It has been reported that gymnosperms (with higher SLM) have higher leaf mass fraction than angiosperms (with lower SLM) \cite{enquist_global_2002, mccarthy_consistency_2007, poorter_biomass_2012, sardans_tree_2013}. But a recent study reported no difference (\cite{wolf_allometric_2010}). No study to date has interpreted differences in partitioning between PFTs in terms of SLM. This would be useful because SLM is already an important parameter in DGVMs, potentially reducing parameters required for the allocation subroutine.
+
+\item What is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes. Most global efforts to date use the Cannell database of forest biomass, which is not based on individual biomass estimates. Here we use a new database (Falster et al.), the largest ever compiled for individual woody plants, to evaluate whether important differences exist in biomass partitioning woody plant functional types. We also test whether these differences are confounded (or compounded) by climate.
   
-\item Whichever is the 'right' allocation model, what is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes.
-  
-\item Here we use such a database (Falster et al.) to evaluate whether important differences exist in biomass partitioning woody plant functional types, and whether climatic differences exist.
-  
-\item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
+
 
 \end{enumerate}
 
@@ -48,10 +50,21 @@
 \section{Methods}
 
 \begin{itemize}
-  \item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. 
-  \item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
-  \item We used a generalized additive model (GAM) to visualize the relationships. In addition, we used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages.
-  \item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception (Lang 1991, Stenberg 2006).
+\item BAAD database, XXX observations etc.
+
+\item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. Also removed glasshouse and common garden studies, including only field grown woody plants (including plantations).
+
+\item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
+
+\item Stem area was measured either at breast height (ca. 1.3m) or at the base of the plant (normally for small plants). For the subset of the data where both were measured, we estimated basal stem area (Asba) from breast height area (Asbh) by fitting XXX equation. Results were similar when we used either measure of stem area (not shown).
+
+\item We used a generalized additive model (GAM) to visualize the relationships. 
+
+\item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for  PFT-specific averages.
+
+\item Variance partitioning with R2 for linear mixed-effects models as reported by XXX.
+
+\item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception (Lang 1991, Stenberg 2006).
 \end{itemize}
 
 
@@ -60,14 +73,43 @@
 %------------------------------------------------------------------------------------%
 \section{Results}
 
+Note: stats done as well, but not yet incorporated into the manuscript.
 
+
+\begin{itemize}
+
+\item We focus here only on aboveground biomass because we found no PFT differences in root-shoot scaling (Fig.~\ref{fig:figureSI6}), and approximately isometric scaling (sma slope = xxx) (consistent with other reports, \cite{hui_near_2014, cairns_root_1997}).
+
+\item We found strong correlations between basal stem area and leaf mass across the entire dataset, with a clear separation between the three major plant functional types (Fig.~\ref{fig:figure1}). We analyzed the ratio MF/Asba, and found that PFT explained by far the most variation (variables tested: plant height, biome (boreal,tropical,temperate), PFT, and all interactions).
+
+\item Because of weak plant height effects, we calculated the average MF/Asba for the three pfts; there was a ca. 3-fold difference between evergreen gymnosperms and deciduous angiosperms, with evergreen angiosperms taking an intermediate value (Fig.~\ref{fig:figure2}). These differences were approximately proportional to the average SLM for the PFT. 
+
+\item When we calculated the ratio of leaf area to basal stem area, we found no difference between PFTs (Fig.~\ref{fig:figure2}), confirming that MF/Asba is approximately proportional to SLM across PFTs. (See also Fig.~\ref{fig:figureSI1}).
+
+\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). Nonetheless, PFT explained most variation in MF/Asba (to be added). If we also included SLM in the model, PFT was no longer significant. PFT explained very little variation when we partitioned the variance in AF/Asba.
+
+\item We found similar results for the whole-plant leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}). See also Fig.~\ref{fig:figureSI5} for the raw data. For the leaf area ratio, pfts were generally closer together except for small evergreen gymnosperms (< 1m height) for unknown reasons. Variance partitioning also confirmed that the differences between PFT could be largely explained by their differences in SLM (not shown yet!).
+
+\item We found no effect of biome on the ratio MF/Asba or AF/Asba (tropical, temperate, boreal) (Fig.~\ref{fig:figureSI2}). 
+
+\item Unlike \cite{reich_temperature_2014}, we found no effect of mean annual temperature on the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI7}).
+
+
+\end{itemize}
 
 
 %------------------------------------------------------------------------------------%
 \section{Discussion}
 
+\begin{itemize}
 
+\item How do current DGVMs work? Either constant allocation fraction, target allometric equations, or optimization \cite{de2014does}. Constant allocation fraction gives constant LAR by pft if leaf lifespan is exactly proportional to SLM. Target allometric equations can be made pft-invariant by using allometry of leaf area, not leaf mass. Optimization models probably already give the right answer because normally LAI is optimized (Woodward). 
 
+\item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
+
+\item We found no effects of climate on anything. This is different from \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset.
+
+\end{itemize}
 
 
 %------------------------------------------------------------------------------------%
@@ -146,21 +188,14 @@ Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest
 \end{figure}
 
 
-
+\clearpage
 \section{Supporting Information Figures}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{figureSI-1_alf_astba2_bypft.pdf}
-    \caption{Leaf area per unit basal stem area. Each symbol is an individual plant. Lines are generalized additive model fits.}
-    \label{fig:figureSI1}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.99\textwidth]{figureSI-2_mlf_alf_astbaest_pftlongmeans.pdf}
-    \caption{Like Fig.~\ref{fig:figure2}, but for five combinations of major plant functional type and biome. Out of 9 possible biome / pft combinations, only five in the dataset had leaf area estimates (and two combo's are not in the dataset, e.g. tropical evergreen gymno). Note that within pft, vegetation is never significant (this result will also be in another figure!).}
-    \label{fig:figureSI2}
+    \includegraphics[width=0.99\textwidth]{figureSI-6_mrt_mso_bypft.pdf}
+    \caption{Near-isometric scaling of above-ground with below-ground biomass, and no effects of plant functional type. The black line is a 1-1 line.}
+    \label{fig:figureSI6}
 \end{figure}
 
 \begin{figure}[h!]
@@ -177,18 +212,27 @@ Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest
     \label{fig:figureSI4}
 \end{figure}
 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-1_alf_astba2_bypft.pdf}
+    \caption{Leaf area per unit basal stem area. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figureSI1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-2_mlf_alf_astbaest_pftlongmeans.pdf}
+    \caption{Like Fig.~\ref{fig:figure2}, but for five combinations of major plant functional type and biome. Out of 9 possible biome / pft combinations, only five in the dataset had leaf area estimates (and two combo's are not in the dataset, e.g. tropical evergreen gymno). Note that within pft, vegetation is never significant (this result will also be in another figure!).}
+    \label{fig:figureSI2}
+\end{figure}
+
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{figureSI-5_mlfmst_byht_pft.pdf}
     \caption{Leaf and woody biomass scaling with plant height.}
     \label{fig:figureSI5}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.99\textwidth]{figureSI-6_mrt_mso_bypft.pdf}
-    \caption{Near-isometric scaling of above-ground with below-ground biomass, and no effects of plant functional type. The black line is a 1-1 line.}
-    \label{fig:figureSI6}
 \end{figure}
 
 \begin{figure}[h!]
