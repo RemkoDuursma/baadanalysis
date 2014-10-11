@@ -1,0 +1,263 @@
+
+
+\documentclass[a4paper]{article}
+
+
+\usepackage{amssymb,amsmath}
+\usepackage{palatino}
+\usepackage{framed}
+\usepackage{parskip}
+\usepackage{graphicx}
+\graphicspath{ {./figures/} }
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\bibliographystyle{plain}
+
+\begin{document}
+
+
+
+\title{Specific leaf mass explains difference in biomass partitioning between woody plant functional types}
+
+\author{Remko Duursma, Daniel Falster and BAAD data contributors}
+
+\maketitle
+
+
+%--------------------------------------------------------------------------------------------%
+
+\section{Introduction}
+
+\begin{enumerate}
+\item Importance of biomass allocation in global vegetation models \cite{ise_comparison_2010}, feedback on fluxes of CO2, lifetime of C in the system \cite{friend_carbon_2014}.
+  
+\item There is no shortage of theoretical developments in understanding biomass allocation (\cite{cannell_carbon_1994,franklin_modeling_2012,enquist_land_2012}). In particular, theoretical work focusing on optimal partitioning theory is promising (e.g. \cite{valentine_modeling_2012}) but is yet to lead to operational models for dynamic global vegetation models.
+
+\item Previous syntheses on plant biomass relationships has predominantly focused on the universal nature of size-biomass relationships in plants. Little is known about differences between plant functional types (evergreen vs. deciduous, angiosperm vs. gymnosperm). Since most global models parameterize allocation submodels by PFT, it is imperative that we better understand these potential differences.
+
+\item Major plant functional types differ widely in specific leaf mass (SLM, the ratio of leaf mass to area, an index of leaf thickness) (\cite{poorter_causes_2009}), which can be expected to affect biomass partitioning in several ways. First, SLM correlates with leaf lifespan. Longer lived leaves would lead to higher plant leaf mass (MF) as long as annual production rates are similar (\cite{enquist_global_2002}). Another interpretation is that plants may target a certain leaf area display given a certain biomass investment in supporting tissues, because light interception and photosynthesis correlate with the exchange area of the plant. 
+
+\item It has been reported that gymnosperms (with higher SLM) have higher leaf mass fraction than angiosperms (with lower SLM) \cite{enquist_global_2002, mccarthy_consistency_2007, poorter_biomass_2012, sardans_tree_2013}. But a recent study reported no difference (\cite{wolf_allometric_2010}). No study to date has interpreted differences in partitioning between PFTs in terms of SLM. This would be useful because SLM is already an important parameter in DGVMs, potentially reducing parameters required for the allocation subroutine.
+
+\item What is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes. Most global efforts to date use the Cannell database of forest biomass, which is not based on individual biomass estimates. Here we use a new database (Falster et al.), the largest ever compiled for individual woody plants, to evaluate whether important differences exist in biomass partitioning woody plant functional types. We also test whether these differences are confounded (or compounded) by climate.
+  
+
+
+\end{enumerate}
+
+
+%------------------------------------------------------------------------------------%
+\section{Methods}
+
+\begin{itemize}
+\item BAAD database, XXX observations etc.
+
+\item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. Also removed glasshouse and common garden studies, including only field grown woody plants (including plantations).
+
+\item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
+
+\item Stem area was measured either at breast height (ca. 1.3m) or at the base of the plant (normally for small plants). For the subset of the data where both were measured, we estimated basal stem area (Asba) from breast height area (Asbh) by fitting XXX equation. Results were similar when we used either measure of stem area (not shown).
+
+\item We used a generalized additive model (GAM) to visualize the relationships. 
+
+\item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for  PFT-specific averages.
+
+\item Variance partitioning with R2 for linear mixed-effects models as reported by XXX.
+
+\item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception  \cite{lang_application_1991, chen_defining_1992}.
+\end{itemize}
+
+
+
+
+%------------------------------------------------------------------------------------%
+\section{Results}
+
+Note: stats done as well, but not yet incorporated into the manuscript.
+
+
+\begin{itemize}
+
+\item We focus here only on aboveground biomass because we found no PFT differences in root-shoot scaling (Fig.~\ref{fig:figureSI6}), and approximately isometric scaling (sma slope = xxx) (consistent with other reports, \cite{hui_near_2014, cairns_root_1997}).
+
+\item We found strong correlations between basal stem area and leaf mass across the entire dataset, with a clear separation between the three major plant functional types (Fig.~\ref{fig:figure1}). We analyzed the ratio MF/Asba, and found that PFT explained by far the most variation (variables tested: plant height, biome (boreal,tropical,temperate), PFT, and all interactions).
+
+\item Because of weak plant height effects, we calculated the average MF/Asba for the three pfts; there was a ca. 3-fold difference between evergreen gymnosperms and deciduous angiosperms, with evergreen angiosperms taking an intermediate value (Fig.~\ref{fig:figure2}). These differences were approximately proportional to the average SLM for the PFT. 
+
+\item When we calculated the ratio of leaf area to basal stem area, we found no difference between PFTs (Fig.~\ref{fig:figure2}), confirming that MF/Asba is approximately proportional to SLM across PFTs. (See also Fig.~\ref{fig:figureSI1}).
+
+\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). Nonetheless, PFT explained most variation in MF/Asba (to be added). If we also included SLM in the model, PFT was no longer significant. PFT explained very little variation when we partitioned the variance in AF/Asba.
+
+\item We found similar results for the whole-plant leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}). See also Fig.~\ref{fig:figureSI5} for the raw data. For the leaf area ratio, pfts were generally closer together except for small evergreen gymnosperms (< 1m height) for unknown reasons. Variance partitioning also confirmed that the differences between PFT could be largely explained by their differences in SLM (not shown yet!).
+
+\item We found no effect of biome on the ratio MF/Asba or AF/Asba (tropical, temperate, boreal) (Fig.~\ref{fig:figureSI2}). 
+
+\item Unlike \cite{reich_temperature_2014}, we found no effect of mean annual temperature on the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI7}).
+
+
+\end{itemize}
+
+
+%------------------------------------------------------------------------------------%
+\section{Discussion}
+
+\begin{itemize}
+
+\item We found coordination between an important leaf trait and whole-plant biomass partitioning. This has implications for global vegetation models.
+
+\item How is allocation implemented in current DGVMs? Either constant allocation fraction, target allometric equations, or optimization \cite{de2014does}. Constant allocation fraction gives constant LAR by pft if leaf lifespan is exactly proportional to SLM. Target allometric equations can be made pft-invariant by using allometry of leaf area, not leaf mass. Optimization models probably already give the right answer because normally LAI is optimized (Woodward). 
+
+\item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
+
+\item We found no effects of climate on anything. This is different from \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset.
+
+\end{itemize}
+
+
+%------------------------------------------------------------------------------------%
+% \section{Lit notes}
+% 
+% \cite{friend_carbon_2014} showed that 30\% of the uncertainty in global vegetation carbon simulated with seven vegetation models is due to the residence time of carbon in vegetation. This residence time depends on turnover rates of the various plant pools, and hence also on the distribution of biomass between these pools. For example, vegetation with a higher leaf mass fraction will have a lower overall residence time of carbon.
+% 
+% \cite{de2014does} "We have shown that allocation approaches that are constrained by biomass fractions (such as functional relationships) were more successful at capturing observed trends, and were generally more robust, than approaches based on allocation coefficients."
+% 
+% \cite{friedlingstein_toward_1999} make no mention of plant functional type differences or the need to vary allocation by pft.
+% 
+% \cite{givnish_adaptive_2002} discusses costs and benefits of evergreen vs. deciduous habit, in terms of constructing a growth model that takes into account photosynthesis, leaf lifespan, belowground costs. However he does not consider or report on differences in allocation associated with leaf lifespan. Instead he simply states that 'leaf allocation ratio' relates to leaf lifespan, which of course is only true if total leaf mass is constant.
+% 
+% \cite{callaway_biomass_1994} example of lower leaf mass / sapwood area for desert population of PIPO vs. montane population. For pointing out small-scale climatic effects on allometry (that may not be obvious in global scale analyses).
+% 
+% \cite{poorter_biomass_2012} found a slightly larger LMF in gymnosperms, but the difference was small and could not split between deciduous and evergreen angiosperms due to a lack of data. They argue that "most conifers retain leaves for two or more years. Thus, the higher LMF may simply be the consequence of leaf longevity rather than higher assimilate partitioning per se. In this way, conifers are able to compensate for their lower physiological activity per gram of leaf." This raises the question whether LMF differs by angiosperms and gymnosperms, or as a consequence of leaf longevity (especially deciduous vs. evergreen).
+% 
+% \cite{enquist_global_2002} report 2.6 times higher leaf mass at given stem mass for conifers compared to angiosperms, but did not separate further, nor interpreted this difference in terms of SLA. Their interpretation is 'that conifers typically retain three cohorts of leaves that have less well-developed [...] mesophyll'. Not sure how that latter bit makes sense, and leaf lifespan interpretation is no good; because it still begs the question why would conifers not simply have 1/3 less leaf mass per cohort? 
+% 
+% \cite{mccarthy_consistency_2007} further demonstrate large difference in LMF between angiosperms and conifers, and note that a large chunk of the residuals is correlated with SLA and LL. They interpret this rather vaguely as 'leaf morphology may constrain leaf mass distribution'. Their SLA was not on the same individuals, but they could have calculated PFT average LAR anyway, but did not.
+% 
+% \cite{oneill_comparative_1981} reported much higher leaf biomass for gymnosperms vs. angiosperms, at a given woody biomass increment. This means (as Niklas reported) a much higher productivity per unit leaf biomass for angiosperms.
+% 
+% Serious lack of biomass data to constrain models. Studies like \cite{wolf_forest_2011} resort to studying individual tree allometry based on dividing stand biomass by stand density. \cite{wolf_allometric_2010} did not find any differences in biomass fractions (root,stem,leaf) between angiosperms and gymnosperms (but again this was based on stand biomass data, but still this is strange!).
+% 
+% \cite{hui_near_2014} Isometric scaling of above vs. belowground biomass in chinese forest biomass database.
+% 
+% \cite{sardans_tree_2013} report similiar LMF for evergreen angio. and gymnosperms, and ca. 40\% less leaf mass for decid. angio. Local study, 3000 plots in Catalonia.
+% 
+% \cite{reich_temperature_2014} "On average, when standardized for MAT and Mstem, conifers tended to have more Mfol and less Mroot than angiosperm forests". Their Fig. 2 shows trends in LMF with MAT etc., in bins of stem size. Also allometric analysis with MAT as covariate, showing significance of MAT. For Angiosperms, our explanation would be that evergreen angio is more common at high MAT. But what about conifers?
+% 
+% \cite{cairns_root_1997} found no difference in root-shoot ratio between gymno and angio.
+% 
+% \cite{delucia_climate-driven_2000} LA/SA decreases with summer VPD for Pinus but not non-Pinus gymno. Also Pinus has much lower LA/SA than non-Pinus; suggesting that we should separate gymnosperms into those groups as well.
+% 
+% 
+% \cite{grier_notes:_1974} early study on leaf mass proportionality to sapwood area (and uses mass not area).
+
+
+
+\section{Tables}
+
+
+<<results='asis', echo=FALSE>>=
+load("Table1.RData")
+library(xtable)
+print(xtable(car::Anova(fullmodel)), floating=FALSE)
+@
+
+
+
+
+
+
+
+\section{Figures}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{figure1_mlf_astba2_bypft.pdf}
+    \caption{Leaf mass per unit basal stem area. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure2_mlf_alf_astbaest_pftmeans.pdf}
+    \caption{Average leaf mass per unit basal stem area (panel 1), and leaf area per unit basal stem area (panel 2) for the three major plant functional types. Error bars are 95\% confidence interval for the mean (calculated with a mixed-effects model with species within study as the random effect). Letters denote significant differences. }
+    \label{fig:figure2}
+\end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure3_LMF_pft_lines.pdf}
+    \caption{Leaf mass fraction (leaf mass / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure3}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure4_LAR_pft_lines.pdf}
+    \caption{Leaf area ratio (leaf area / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figure4}
+\end{figure}
+
+
+\clearpage
+\section{Supporting Information Figures}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-6_mrt_mso_bypft.pdf}
+    \caption{Near-isometric scaling of above-ground with below-ground biomass, and no effects of plant functional type. The black line is a 1-1 line.}
+    \label{fig:figureSI6}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figureSI-3_lmlf_astba2_hist_bypft.pdf}
+    \caption{Histograms of leaf mass per unit basal stem area grouped by the three major plant functional types. Vertical lines and shading are means with confidence intervals (same as in Fig.~\ref{fig:figure2})}
+    \label{fig:figureSI3}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figureSI-4_lalf_astba2_hist_bypft.pdf}
+    \caption{Histograms of leaf area per unit basal stem area grouped by the three major plant functional types. Vertical lines and shading are means with confidence intervals (same as in Fig.~\ref{fig:figure2})}
+    \label{fig:figureSI4}
+\end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-1_alf_astba2_bypft.pdf}
+    \caption{Leaf area per unit basal stem area. Each symbol is an individual plant. Lines are generalized additive model fits.}
+    \label{fig:figureSI1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-2_mlf_alf_astbaest_pftlongmeans.pdf}
+    \caption{Like Fig.~\ref{fig:figure2}, but for five combinations of major plant functional type and biome. Out of 9 possible biome / pft combinations, only five in the dataset had leaf area estimates (and two combo's are not in the dataset, e.g. tropical evergreen gymno). Note that within pft, vegetation is never significant (this result will also be in another figure!).}
+    \label{fig:figureSI2}
+\end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-5_mlfmst_byht_pft.pdf}
+    \caption{Leaf and woody biomass scaling with plant height.}
+    \label{fig:figureSI5}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-7_MAT_LMFscaling.pdf}
+    \caption{For each species within study, we fit the scaling relationship of leaf mass as a function of woody biomass assuming an exponent of 3/4, using standardized major axis. The resulting coefficient (b0) is size-invariant (and thus superior to the simple ratio of leaf mass to woody biomass, which is strongly size-dependent, see Fig.~\ref{fig:figure3}). We found no effects of mean annual temperature on the coefficient. The triangles are from Roth et al. (2007), a study on Pinus eliottii with exceptionally high leaf mass per unit woody biomass.}
+    \label{fig:figureSI7}
+\end{figure}
+
+
+
+
+\clearpage
+\bibliography{allometry}
+
+\end{document}
