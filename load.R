@@ -8,8 +8,7 @@ source("R/convertConiferLA.R")
 source("R/ablinepiece.R")
 
 # Load BAAD
-file.copy("c:/repos/baad/output/baad.rds","data/baad.rds",overwrite=T)
-baadall <- readRDS("data/baad.rds") 
+baadall <- readRDS("data/baad.rds")
 baad <- baadall$data
 
 
