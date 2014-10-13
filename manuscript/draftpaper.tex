@@ -1,6 +1,55 @@
 
 
-\documentclass[a4paper]{article}
+\documentclass[a4paper]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 
 
 \usepackage{amssymb,amsmath}
@@ -12,16 +61,22 @@
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \bibliographystyle{plain}
-
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
 
 
 \title{Specific leaf mass explains difference in biomass partitioning between woody plant functional types}
 
-\author{Remko Duursma, Daniel Falster and BAAD data contributors}
+\author{Remko Duursma, Daniel Falster and BAAD contributors}
 
 \maketitle
+
+%--------------------------------------------------------------------------------------------%
+
+
+
+
 
 
 %--------------------------------------------------------------------------------------------%
@@ -62,7 +117,7 @@
 
 \item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for  PFT-specific averages.
 
-\item Variance partitioning with R2 for linear mixed-effects models as reported by XXX.
+\item Variance partitioning with marginal (fixed effects) and conditional (fixed and random effects) R2 for linear mixed-effects models as reported by \cite{nakagawa_general_2013}.
 
 \item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception  \cite{lang_application_1991, chen_defining_1992}.
 \end{itemize}
@@ -72,8 +127,6 @@
 
 %------------------------------------------------------------------------------------%
 \section{Results}
-
-Note: stats done as well, but not yet incorporated into the manuscript.
 
 
 \begin{itemize}
@@ -86,11 +139,13 @@ Note: stats done as well, but not yet incorporated into the manuscript.
 
 \item When we calculated the ratio of leaf area to basal stem area, we found no difference between PFTs (Fig.~\ref{fig:figure2}), confirming that MF/Asba is approximately proportional to SLM across PFTs. (See also Fig.~\ref{fig:figureSI1}).
 
-\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). Nonetheless, PFT explained most variation in MF/Asba (to be added). If we also included SLM in the model, PFT was no longer significant. PFT explained very little variation when we partitioned the variance in AF/Asba.
+\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). We estimated the variance explained by PFT, plant height, and biome in MF/Asba using a linear mixed-effects model (see Table~\ref{varpartpipe}). We found that plant height and biome explained only 0.85\%, but when PFT was added to the model, the variance explained increased to 2.6\%. If we used specific leaf mass instead of PFT, the R2 was similar (29\%), showing that PFT affected MF/Asba largely through differences in SLM. Consistent with this, PFT, plant height and biome explained very little variance in ALF/Astba (Table~\ref{varpartpipe}).
 
-\item We found similar results for the whole-plant leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}). See also Fig.~\ref{fig:figureSI5} for the raw data. For the leaf area ratio, pfts were generally closer together except for small evergreen gymnosperms (< 1m height) for unknown reasons. Variance partitioning also confirmed that the differences between PFT could be largely explained by their differences in SLM (not shown yet!).
+\item We found similar results for the whole-plant leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}). See also Fig.~\ref{fig:figureSI5} for the raw data. For the leaf area ratio, pfts were generally closer together except for small evergreen gymnosperms (< 1m height) for unknown reasons. 
 
-\item We found no effect of biome on the ratio MF/Asba or AF/Asba (tropical, temperate, boreal) (Fig.~\ref{fig:figureSI2}). 
+\item Results for variance partitioning of LMF and LAR gave comparable results (Table~\ref{varpartpipe}): PFT increased the variance explained in LMF from 65 to 66\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to 75\%. The leaf area ratio, similarly to ALF/Astba, did not depend strongly on PFT or SLA.
+
+\item Although biome was a significant predictor in all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT never showed significant differences for MF/Asba or AL/Asba (for example boreal vs. temperate evergreen gymnosperm) (Fig.~\ref{fig:figureSI2}).
 
 \item Unlike \cite{reich_temperature_2014}, we found no effect of mean annual temperature on the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI7}).
 
@@ -109,7 +164,7 @@ Note: stats done as well, but not yet incorporated into the manuscript.
 
 \item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
 
-\item We found no effects of climate on anything. This is different from \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset.
+\item We found no effects of climate on anything. This is different from \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset. Are there experimental data that show temperature effects on allocation? What about water availability?
 
 \end{itemize}
 
@@ -152,11 +207,64 @@ Note: stats done as well, but not yet incorporated into the manuscript.
 
 
 
+\section{Tables}
 
 
 
 
 
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Mon Oct 13 15:43:27 2014
+\begin{table}[ht]
+\centering
+\caption{Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The marginal R2 is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type. The conditional R2 is that explained by fixed and random effects (species within study). All fixed effects were highly significant (P \textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models.} 
+\label{varpartpipe}
+\begin{tabular}{llrr}
+  \hline
+Variable & Predictors & Marginal & Conditional \\ 
+  \hline
+LMF\_ASTBA & H & 0.01 & 0.53 \\ 
+   & H, B & 0.03 & 0.55 \\ 
+   & PFT, H, B & 0.29 & 0.64 \\ 
+   & SLM, H, B & 0.31 & 0.66 \\ 
+  LAR\_ASTBA & H & 0.01 & 0.52 \\ 
+   & H, B & 0.05 & 0.53 \\ 
+   & PFT, H, B & 0.06 & 0.54 \\ 
+   & SLM, H, B & 0.12 & 0.56 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Mon Oct 13 15:43:27 2014
+\begin{table}[ht]
+\centering
+\caption{Explained variance in the leaf mass fraction (leaf mass / aboveground biomass) and leaf area ratio (leaf area / aboveground biomass). See Table~\ref{varpartpipe} for more explanation. For plant height, we also added the squared term as a fixed effect, and the interaction with PFT or SLM, because the relationship was non-linear.} 
+\label{varpartlmflar}
+\begin{tabular}{llrr}
+  \hline
+Variable & Predictors & Marginal & Conditional \\ 
+  \hline
+LMF & H & 0.65 & 0.89 \\ 
+   & H, B & 0.66 & 0.89 \\ 
+   & PFT, H, B & 0.75 & 0.88 \\ 
+   & SLM, H, B & 0.68 & 0.89 \\ 
+  LAR & H & 0.69 & 0.89 \\ 
+   & H, B & 0.73 & 0.90 \\ 
+   & PFT, H, B & 0.76 & 0.90 \\ 
+   & SLM, H, B & 0.77 & 0.92 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+\clearpage
 \section{Figures}
 
 
