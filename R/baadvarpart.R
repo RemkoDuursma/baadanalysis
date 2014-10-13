@@ -1,28 +1,28 @@
 
 
-
-
-
+# Variance partitioning to fixed and random effects 
 source("load.R")
 source("R/preparedataset.R")
 source("R/rsquaredglmm.R")
 
+library(lmerTest)
 
-
-r2stepwise <- function(m){
+# Sequential R2, backwards elimination of all fixed effects.
+# ((not used at the moment))
+r2stepwise <- function(m, data){
   
   tr <- attributes(terms(m))$term.labels
   ii <- lapply(1:length(tr), function(x)1:x)
   yvar <- rownames(attributes(terms(m))$factors)[1]
   
-  fitM <- function(i){
+  fitM <- function(i, dat){
     tr <- c(tr[i], "(1|Group)")
     f <- as.formula(paste(yvar, "~", paste(tr, collapse=" + ")))
     M <- lmer(formula=f, data=dat)
   return(M)
   }
   
-  models <- lapply(ii, fitM)
+  models <- lapply(ii, fitM, dat=data)
   rsq <- do.call(rbind, lapply(models, r.squared))
 rownames(rsq) <- tr
 return(rsq)
@@ -37,40 +37,90 @@ plotr2 <- function(x, which=c("Marginal","Conditional"),...){
 
 
 
-
 # MLF / AST
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2)))
-fullmodel <- lmer(lmlf_astba2 ~ log10(h.t)*pft*vegetation + (1|Group), data=dat)
+dat_mlf <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2)))
+dat_alf <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2)))
+
+lmer_mlf_0 <- lmer(lmlf_astba2 ~ log10(h.t) + (1|Group), data=dat_mlf)
+lmer_mlf_1 <- lmer(lmlf_astba2 ~ log10(h.t)*bortemptrop + (1|Group), data=dat_mlf)
+lmer_mlf_2 <- lmer(lmlf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group), data=dat_mlf)
+lmer_mlf_3 <- lmer(lmlf_astba2 ~ log10(h.t)*lsla*bortemptrop + (1|Group), data=dat_alf)
+
+r2_lmer_mlf_0 <- r.squared(lmer_mlf_0)
+r2_lmer_mlf_1 <- r.squared(lmer_mlf_1)
+r2_lmer_mlf_2 <- r.squared(lmer_mlf_2)
+r2_lmer_mlf_3 <- r.squared(lmer_mlf_3)
 
 # ALF / AST
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2)))
-fullmodel2 <- lmer(lalf_astba2 ~ log10(h.t)*pft*vegetation + (1|Group), data=dat)
+lmer_alf_0 <- lmer(lalf_astba2 ~ log10(h.t) + (1|Group), data=dat_alf)
+lmer_alf_1 <- lmer(lalf_astba2 ~ log10(h.t)*bortemptrop + (1|Group), data=dat_alf)
+lmer_alf_2 <- lmer(lalf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group), data=dat_alf)
+lmer_alf_3 <- lmer(lalf_astba2 ~ log10(h.t)*lsla*bortemptrop + (1|Group), data=dat_alf)
 
-# MLF / AST, SLA instead of PFT
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2) & !is.na(lsla)))
-fullmodel3 <- lmer(lmlf_astba2 ~ log10(h.t)*lsla*vegetation + (1|Group), data=dat)
-
-# ALF / AST, SLA instead of PFT
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2) & !is.na(lsla)))
-fullmodel4 <- lmer(lalf_astba2 ~ log10(h.t)*lsla*vegetation + (1|Group), data=dat)
-
-
-#
-plotr2(r2stepwise(fullmodel), "Marginal", xlim=c(0,0.5))
-plotr2(r2stepwise(fullmodel2), "Marginal", xlim=c(0,0.5))
-plotr2(r2stepwise(fullmodel2), "Marginal", xlim=c(0,0.5))
-plotr2(r2stepwise(fullmodel4), "Marginal", xlim=c(0,0.5))
+r2_lmer_alf_0 <- r.squared(lmer_alf_0)
+r2_lmer_alf_1 <- r.squared(lmer_alf_1)
+r2_lmer_alf_2 <- r.squared(lmer_alf_2)
+r2_lmer_alf_3 <- r.squared(lmer_alf_3)
 
 
 # LMF
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso)))
-m1 <- lmer(lmlf_mso ~ log10(h.t)*I(log10(h.t)^2)*pft + (1|Group), data=dat)
-plotr2(r2stepwise(m1), "Marginal")
+dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso) & !is.na(m.st)))
+dat_alfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
+
+lmer_LMF_0 <- lmer(log10(m.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group), data=dat)
+lmer_LMF_1 <- lmer(log10(m.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2)+ (1|Group), data=dat)
+lmer_LMF_2 <- lmer(log10(m.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group), data=dat)
+lmer_LMF_3 <- lmer(log10(m.lf/m.so) ~ lsla*log10(h.t)*bortemptrop +  lsla:I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
+
+r2_lmer_LMF_0 <- r.squared(lmer_LMF_0)
+r2_lmer_LMF_1 <- r.squared(lmer_LMF_1)
+r2_lmer_LMF_2 <- r.squared(lmer_LMF_2)
+r2_lmer_LMF_3 <- r.squared(lmer_LMF_3)
 
 # LAR
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
-m2 <- lmer(lalf_mso ~ log10(h.t)*I(log10(h.t)^2)*pft + (1|Group), data=dat)
-plotr2(r2stepwise(m2), "Marginal")
+lmer_LAR_0 <- lmer(log10(a.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
+lmer_LAR_1 <- lmer(log10(a.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
+lmer_LAR_2 <- lmer(log10(a.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
+lmer_LAR_3 <- lmer(log10(a.lf/m.so) ~ lsla*log10(h.t)*bortemptrop + lsla:I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
+
+r2_lmer_LAR_0 <- r.squared(lmer_LAR_0)
+r2_lmer_LAR_1 <- r.squared(lmer_LAR_1)
+r2_lmer_LAR_2 <- r.squared(lmer_LAR_2)
+r2_lmer_LAR_3 <- r.squared(lmer_LAR_3)
+
+
+makem <- function(..., variable=NULL){
+  s <- function(x)x[,c("Marginal","Conditional")]
+
+  l <- as.list(match.call())[-1]
+  l["variable"] <- NULL
+  l <- lapply(l, eval)
+  
+  m <- do.call(rbind, lapply(l,s))  
+  m <- as.data.frame(m)
+  if(!is.null(variable))m <- cbind(data.frame(Variable=c(variable,NA,NA,NA), 
+                                              Predictors=c("H", "H, B", "PFT, H, B", "SLM, H, B")),
+                                   m)
+                                              
+  
+return(m)
+}
+
+
+Table_pipemodel_varpart <- 
+      rbind(makem(r2_lmer_mlf_0,r2_lmer_mlf_1,r2_lmer_mlf_2,r2_lmer_mlf_3,variable="LMF_ASTBA"),
+            makem(r2_lmer_alf_0,r2_lmer_alf_1,r2_lmer_alf_2,r2_lmer_alf_3,variable="LAR_ASTBA"))
+
+Table_LMFLAR_varpart <- 
+      rbind(makem(r2_lmer_LMF_0,r2_lmer_LMF_1,r2_lmer_LMF_2,r2_lmer_LMF_3, variable="LMF"),
+            makem(r2_lmer_LAR_0,r2_lmer_LAR_1,r2_lmer_LAR_2,r2_lmer_LAR_3, variable="LAR"))
+
+save(Table_pipemodel_varpart, Table_LMFLAR_varpart, file="manuscript/tables/Tables_varpart.RData")
+
+
+
+
+
 
 
 
