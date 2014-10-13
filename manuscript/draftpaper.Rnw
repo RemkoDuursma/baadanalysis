@@ -183,6 +183,39 @@ print(xtable(Table_LMFLAR_varpart, label="varpartlmflar",
 @
 
 
+\clearpage
+\section{Supporting Tables}
+
+<<results='asis', echo=FALSE>>=
+load("tables/Table_counts.RData")
+print(xtable(tab_mlfastba, align="rlll|l",
+             caption="mlf/asba"
+             ), hline.after=c(0,3), caption.placement="top")
+@
+
+
+<<results='asis', echo=FALSE>>=
+print(xtable(tab_alfastba, align="rlll|l",
+             caption="alf/asba"
+             ), hline.after=c(1,3), caption.placement="top")
+@
+
+
+<<results='asis', echo=FALSE>>=
+print(xtable(tab_lmf, align="rlll|l",
+             caption="LMF"
+             ), hline.after=c(1,3), caption.placement="top")
+@
+
+
+<<results='asis', echo=FALSE>>=
+print(xtable(tab_lar, align="rlll|l",
+             caption="LAR"
+             ), hline.after=c(1,3), caption.placement="top")
+@
+
+
+
 
 
 

@@ -64,12 +64,12 @@ r2_lmer_alf_3 <- r.squared(lmer_alf_3)
 
 
 # LMF
-dat <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso) & !is.na(m.st)))
+dat_mlfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso)))
 dat_alfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
 
-lmer_LMF_0 <- lmer(log10(m.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group), data=dat)
-lmer_LMF_1 <- lmer(log10(m.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2)+ (1|Group), data=dat)
-lmer_LMF_2 <- lmer(log10(m.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group), data=dat)
+lmer_LMF_0 <- lmer(log10(m.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group), data=dat_alfmso)
+lmer_LMF_1 <- lmer(log10(m.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2)+ (1|Group), data=dat_alfmso)
+lmer_LMF_2 <- lmer(log10(m.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
 lmer_LMF_3 <- lmer(log10(m.lf/m.so) ~ lsla*log10(h.t)*bortemptrop +  lsla:I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
 
 r2_lmer_LMF_0 <- r.squared(lmer_LMF_0)
@@ -115,12 +115,42 @@ Table_LMFLAR_varpart <-
       rbind(makem(r2_lmer_LMF_0,r2_lmer_LMF_1,r2_lmer_LMF_2,r2_lmer_LMF_3, variable="LMF"),
             makem(r2_lmer_LAR_0,r2_lmer_LAR_1,r2_lmer_LAR_2,r2_lmer_LAR_3, variable="LAR"))
 
+
 save(Table_pipemodel_varpart, Table_LMFLAR_varpart, file="manuscript/tables/Tables_varpart.RData")
 
 
 
+# Count number of observations.
+tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
+  
+  x <- x[complete.cases(x[,vars]),]
+  x$pft <- x[,pftvar]
+  x$veg <- x[,vegvar]
+  
+  xt <- addmargins(xtabs( ~ pft + veg, data=x))
+  names(dimnames(xt)) <- c(pftvar,vegvar)
+
+  x <- x[!duplicated(x$species,x$pft,x$veg),]
+  xs <- addmargins(xtabs( ~ pft + veg, data=x))
+  
+  m <- matrix(paste0(xt, " (", xs, ")"), ncol=ncol(xt))
+  dimnames(m) <- dimnames(xt)
+  
+  m[m == "0 (0)"] <- NA
+  
+return(m)
+}
+
+tab_mlfastba <- tabFun(dat_mlf, c("lmlf_astba2","h.t"))
+tab_alfastba <- tabFun(dat_alf, c("lalf_astba2","h.t"))
+tab_lmf <- tabFun(dat_mlfmso, c("lmlf_mso","h.t"))
+tab_lar <- tabFun(dat_alfmso, c("lalf_mso","h.t"))
+
+save(tab_mlfastba,tab_alfastba,tab_lmf,tab_lar,
+     file="manuscript/tables/Table_counts.RData")
 
 
 
 
-
+  
+  
