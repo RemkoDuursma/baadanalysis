@@ -139,11 +139,11 @@
 
 \item When we calculated the ratio of leaf area to basal stem area, we found no difference between PFTs (Fig.~\ref{fig:figure2}), confirming that MF/Asba is approximately proportional to SLM across PFTs. (See also Fig.~\ref{fig:figureSI1}).
 
-\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). We estimated the variance explained by PFT, plant height, and biome in MF/Asba using a linear mixed-effects model (see Table~\ref{varpartpipe}). We found that plant height and biome explained only 0.85\%, but when PFT was added to the model, the variance explained increased to 2.6\%. If we used specific leaf mass instead of PFT, the R2 was similar (29\%), showing that PFT affected MF/Asba largely through differences in SLM. Consistent with this, PFT, plant height and biome explained very little variance in ALF/Astba (Table~\ref{varpartpipe}).
+\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). We estimated the variance explained by PFT, plant height, and biome in MF/Asba using a linear mixed-effects model (see Table~\ref{varpartpipe}). We found that plant height and biome explained only 0.86\%, but when PFT was added to the model, the variance explained increased to 2.6\%. If we used specific leaf mass instead of PFT, the R2 was similar (28\%), showing that PFT affected MF/Asba largely through differences in SLM. Consistent with this, PFT, plant height and biome explained very little variance in ALF/Astba (Table~\ref{varpartpipe}).
 
 \item We found similar results for the whole-plant leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}). See also Fig.~\ref{fig:figureSI5} for the raw data. For the leaf area ratio, pfts were generally closer together except for small evergreen gymnosperms (< 1m height) for unknown reasons. 
 
-\item Results for variance partitioning of LMF and LAR gave comparable results (Table~\ref{varpartpipe}): PFT increased the variance explained in LMF from 65 to 66\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to 75\%. The leaf area ratio, similarly to ALF/Astba, did not depend strongly on PFT or SLA.
+\item Results for variance partitioning of LMF and LAR gave comparable results (Table~\ref{varpartpipe}): PFT increased the variance explained in LMF from 60 to 64\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to 73\%. The leaf area ratio, similarly to ALF/Astba, did not depend strongly on PFT or SLA.
 
 \item Although biome was a significant predictor in all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT never showed significant differences for MF/Asba or AL/Asba (for example boreal vs. temperate evergreen gymnosperm) (Fig.~\ref{fig:figureSI2}).
 
@@ -214,7 +214,7 @@
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Oct 13 15:43:27 2014
+% Mon Oct 13 21:23:52 2014
 \begin{table}[ht]
 \centering
 \caption{Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The marginal R2 is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type. The conditional R2 is that explained by fixed and random effects (species within study). All fixed effects were highly significant (P \textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models.} 
@@ -224,9 +224,9 @@
 Variable & Predictors & Marginal & Conditional \\ 
   \hline
 LMF\_ASTBA & H & 0.01 & 0.53 \\ 
-   & H, B & 0.03 & 0.55 \\ 
-   & PFT, H, B & 0.29 & 0.64 \\ 
-   & SLM, H, B & 0.31 & 0.66 \\ 
+   & H, B & 0.03 & 0.54 \\ 
+   & PFT, H, B & 0.28 & 0.64 \\ 
+   & SLM, H, B & 0.31 & 0.65 \\ 
   LAR\_ASTBA & H & 0.01 & 0.52 \\ 
    & H, B & 0.05 & 0.53 \\ 
    & PFT, H, B & 0.06 & 0.54 \\ 
@@ -238,7 +238,7 @@ LMF\_ASTBA & H & 0.01 & 0.53 \\
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Mon Oct 13 15:43:27 2014
+% Mon Oct 13 21:23:52 2014
 \begin{table}[ht]
 \centering
 \caption{Explained variance in the leaf mass fraction (leaf mass / aboveground biomass) and leaf area ratio (leaf area / aboveground biomass). See Table~\ref{varpartpipe} for more explanation. For plant height, we also added the squared term as a fixed effect, and the interaction with PFT or SLM, because the relationship was non-linear.} 
@@ -247,17 +247,93 @@ LMF\_ASTBA & H & 0.01 & 0.53 \\
   \hline
 Variable & Predictors & Marginal & Conditional \\ 
   \hline
-LMF & H & 0.65 & 0.89 \\ 
-   & H, B & 0.66 & 0.89 \\ 
-   & PFT, H, B & 0.75 & 0.88 \\ 
-   & SLM, H, B & 0.68 & 0.89 \\ 
-  LAR & H & 0.69 & 0.89 \\ 
-   & H, B & 0.73 & 0.90 \\ 
+LMF & H & 0.60 & 0.88 \\ 
+   & H, B & 0.64 & 0.89 \\ 
+   & PFT, H, B & 0.73 & 0.88 \\ 
+   & SLM, H, B & 0.69 & 0.89 \\ 
+  LAR & H & 0.70 & 0.89 \\ 
+   & H, B & 0.74 & 0.90 \\ 
    & PFT, H, B & 0.76 & 0.90 \\ 
    & SLM, H, B & 0.77 & 0.92 \\ 
    \hline
 \end{tabular}
 \end{table}
+
+
+
+\clearpage
+\section{Supporting Tables}
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Mon Oct 13 21:23:52 2014
+\begin{table}[ht]
+\centering
+\caption{mlf/asba} 
+\begin{tabular}{rlll|l}
+  & boreal & temperate & tropical & Sum \\ 
+  \hline
+DA & 308 (6) & 2067 (93) & 162 (14) & 2537 (113) \\ 
+  EA &  & 1064 (58) & 1696 (173) & 2760 (231) \\ 
+  EG & 1010 (10) & 1831 (31) &  & 2841 (41) \\ 
+   \hline
+Sum & 1318 (16) & 4962 (182) & 1858 (187) & 8138 (385) \\ 
+  \end{tabular}
+\end{table}
+
+
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Mon Oct 13 21:23:52 2014
+\begin{table}[ht]
+\centering
+\caption{alf/asba} 
+\begin{tabular}{rlll|l}
+  & boreal & temperate & tropical & Sum \\ 
+ DA &  & 1572 (70) & 35 (7) & 1607 (77) \\ 
+   \hline
+EA &  & 934 (53) & 1370 (118) & 2304 (171) \\ 
+  EG & 458 (8) & 1074 (21) &  & 1532 (29) \\ 
+   \hline
+Sum & 458 (8) & 3580 (144) & 1405 (125) & 5443 (277) \\ 
+  \end{tabular}
+\end{table}
+
+
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Mon Oct 13 21:23:52 2014
+\begin{table}[ht]
+\centering
+\caption{LMF} 
+\begin{tabular}{rlll|l}
+  & boreal & temperate & tropical & Sum \\ 
+ DA & 184 (4) & 1975 (94) & 162 (14) & 2321 (112) \\ 
+   \hline
+EA &  & 1271 (68) & 1674 (169) & 2945 (237) \\ 
+  EG & 669 (7) & 1157 (24) &  & 1826 (31) \\ 
+   \hline
+Sum & 853 (11) & 4403 (186) & 1836 (183) & 7092 (380) \\ 
+  \end{tabular}
+\end{table}
+
+
+
+% latex table generated in R 3.1.1 by xtable 1.7-4 package
+% Mon Oct 13 21:23:52 2014
+\begin{table}[ht]
+\centering
+\caption{LAR} 
+\begin{tabular}{rlll|l}
+  & boreal & temperate & tropical & Sum \\ 
+ DA &  & 1452 (68) & 35 (7) & 1487 (75) \\ 
+   \hline
+EA &  & 1124 (59) & 1320 (112) & 2444 (171) \\ 
+  EG & 321 (7) & 508 (15) &  & 829 (22) \\ 
+   \hline
+Sum & 321 (7) & 3084 (142) & 1355 (119) & 4760 (268) \\ 
+  \end{tabular}
+\end{table}
+
 
 
 
