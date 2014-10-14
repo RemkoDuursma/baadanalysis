@@ -4,8 +4,7 @@
 source("load.R")
 source("R/preparedataset.R")
 source("R/rsquaredglmm.R")
-
-library(lmerTest)
+options(warn=-1)
 
 # Sequential R2, backwards elimination of all fixed effects.
 # ((not used at the moment))
@@ -148,10 +147,11 @@ tab_alfastba <- tabFun(dat_alf, c("lalf_astba2","h.t"))
 tab_lmf <- tabFun(dat_mlfmso, c("lmlf_mso","h.t"))
 tab_lar <- tabFun(dat_alfmso, c("lalf_mso","h.t"))
 
+
 save(tab_mlfastba,tab_alfastba,tab_lmf,tab_lar,
      file="manuscript/tables/Table_counts.RData")
 
-
+options(warn=0)
 
 
   

@@ -41,7 +41,7 @@ baad <- readRDS("../data/baad.rds")
 \section{Introduction}
 
 \begin{enumerate}
-\item Importance of biomass allocation in global vegetation models \cite{ise_comparison_2010}, feedback on fluxes of CO2, lifetime of C in the system \cite{friend_carbon_2014}.
+\item The importance of biomass allocation in global vegetation models \cite{ise_comparison_2010}, feedback on fluxes of CO2, lifetime of C in the system \cite{friend_carbon_2014}, which depends on partitioning of biomass into short-lived foliage vs. long-lived woody pools.
   
 \item There is no shortage of theoretical developments in understanding biomass allocation (\cite{cannell_carbon_1994,franklin_modeling_2012,enquist_land_2012}). In particular, theoretical work focusing on optimal partitioning theory is promising (e.g. \cite{valentine_modeling_2012}) but is yet to lead to operational models for dynamic global vegetation models.
 

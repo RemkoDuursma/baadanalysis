@@ -1,16 +1,25 @@
 RSCRIPT_PKGS := $(shell Rscript -e 'library(methods);writeLines(Sys.getenv("R_DEFAULT_PACKAGES"))')
 RSCRIPT = Rscript --default-packages="${RSCRIPT_PKGS},methods"
 
-all: figures ms
+ONEFIG = manuscript/figures/figure1_mlf_astba2_bypft.pdf
+ONETAB = manuscript/tables/Table_counts.RData 
+MSFILE = draftpaper
 
-ms: manuscript/draftpaper.pdf
+all: figures analysis ms
 
-manuscript/draftpaper.pdf: manuscript/draftpaper.tex
+ms: manuscript/$(MSFILE).pdf
+
+manuscript/$(MSFILE).pdf: manuscript/$(MSFILE).Rnw $(ONEFIG)
 	make -C manuscript
 
-figures: manuscript/figures/figure1_mlf_astba2_bypft.pdf data/baad.rds
+analysis: $(ONETAB) data/baad.rds data/Worldclim_landcover_climspace.csv
 
-manuscript/figures/figure1_mlf_astba2_bypft.pdf: figures.R
+$(ONETAB): statanalysis.R
+	Rscript statanalysis.R
+
+figures: $(ONEFIG) data/baad.rds
+
+$(ONEFIG): figures.R
 	Rscript figures.R
 
 deps:
