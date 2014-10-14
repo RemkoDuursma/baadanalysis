@@ -22,11 +22,6 @@ to.pdf({
 }, filename="manuscript/figures/figure1_mlf_astba2_bypft.pdf", width=6, height=5)
 
 
-smoothplotbypft(log10(h.t), log10(m.st/a.stba2), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
-                ylab=expression(Aboveground~woody~mass~(kg)), cex=0.6,
-                pointcols=transCols,linecols=linecols)
-
-
 to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.2)
   smoothplotbypft(log10(a.stba2), log10(a.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
@@ -262,6 +257,74 @@ to.pdf({
   abline(0,1)
   Legend("topleft")
 }, filename="manuscript/figures/figureSI-6_mrt_mso_bypft.pdf", width=6, height=5)
+
+
+
+
+# Worldclim
+climspace <- read.csv("data/Worldclim_landcover_climspace.csv")
+map <- climspace$MAP_WC
+mat <- climspace$MAT_WC/10
+mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
+mapmat$vegetation <- as.factor(mapmat$vegetation)
+
+pftpoints <- function(p,i){
+  panel.points(mapmat$MAT[mapmat$pft == p],
+               mapmat$MAP[mapmat$pft == p],
+               cex=1.3, pch=19, 
+               col=Cols[i])
+}
+
+# Hexbin plot with Worldclim and BAAD (figure 1)
+to.pdf({
+  Cols <- alpha(c("blue","cyan1","red","forestgreen"),0.6)
+  h <- hexbinplot(map ~ mat, aspect = 1, bins=50, 
+                  xlab = expression("Mean annual temperature"~(degree*C)), 
+                  ylab = "Mean annual precipitation (mm)", 
+                  colorkey=FALSE,
+                  par.settings = list(par.xlab.text=list(cex=1.5),
+                                      par.ylab.text=list(cex=1.5)),
+                  panel = function(...) {
+                    panel.hexbinplot(...)
+                    pftpoints("DA",1)
+                    pftpoints("EA",3)
+                    pftpoints("EG",4)
+                    pftpoints("DG",2)
+                    panel.points(rep(-25,4),seq(6000,8000,length=4),pch=19,cex=1.3,col=alpha(Cols,0.9))
+                    panel.text(rep(-22,4), seq(6000,8000,length=4), 
+                               labels=c("Deciduous Angiosperm",
+                                        "Deciduous Gymnosperm",
+                                        "Evergreen Angiosperm",
+                                        "Evergreen Gymnosperm"),
+                               pos=4, cex=0.7)
+                  })
+  print(h)
+}, filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)
+
+
+# Supporting info figure; MAP and MAT colored by vegetation
+palette(alpha(rich.colors(9),0.85))
+vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
+                  vegetation Label
+                  BorF 'Boreal forest'
+                  Gr Grassland
+                  Sav Savanna
+                  Sh Shrubland
+                  TempF 'Temperate forest'
+                  TempRF 'Temperate rainforest'
+                  TropRF 'Tropical rainforest'
+                  TropSF 'Tropical seasonal forest'
+                  Wo Woodland")
+
+to.pdf({
+  with(mapmat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
+                    xlab = expression("Mean annual temperature"~(degree*C)), 
+                    ylab = "Mean annual precipitation (mm)", 
+                    ylim=c(0,4200), xlim=c(-5,30)))
+  legend("topleft", c(vdf$Label[vdf$vegetation == levels(mapmat$vegetation)],"Glasshouse"), 
+         pch=21, pt.bg=c(palette(),"white"),  pt.cex=1.3, cex=0.8, bty='n')
+}, filename="manuscript/figures/figureSI-8_MAPMAT_vegetation.pdf",
+width=6, height=5)
 
 
 
