@@ -7,63 +7,62 @@
 
 dataset <- baad
 
-# Recalculate m.so as it is prone with errors (esp. Japanese studies)
-fixmso <- function(d){
+# Use only field studies, and get rid of deciduous gymnosperm
+dataset <- droplevels(subset(dataset, pft != "DG" & growingCondition %in% c("FW","PM","PU","FE")))
+
+# Log-transform, add Group
+dataset <- within(dataset, {
+  Group <- paste(studyName, speciesMatched)
+  pft <- as.factor(pft)
   
-  ii <- which(with(d, abs(m.st+m.lf-m.so) > 0.05))
-  set0 <- function(x){
-    x[is.na(x)] <- 0
-    return(x)
-  }
+  # Log-transform
+  lmlf_astbh <- log10(m.lf/a.stbh)
+  lalf_astbh <- log10(a.lf/a.stbh)
+  lmlf_astba <- log10(m.lf/a.stba)
+  lalf_astba <- log10(a.lf/a.stba)
+  lh.t <- log10(h.t)
+  lmlf_mso <- log10(m.lf / m.so)
+  lalf_mso <- log10(a.lf / m.so)
+  lmrt_mso <- log10(m.rt / m.so)
+  lmso <- log10(m.so)
+  lsla <- log10(a.lf / m.lf)
+  llma <- log10(m.lf / a.lf)
   
-  d$m.so[ii] <- set0(d$m.lf[ii]) + set0(d$m.br[ii]) + set0(d$m.st[ii])
+ 
+})
+
+# Predict basal diameter from breast-height
+predictBasalA <- function(dat, alldat=baad){
+  # Predicted basal diameter. See R/predict_dba...R
+  test <- subset(alldat, !is.na(d.ba) & !is.na(d.bh) & !is.na(h.t) & !is.na(h.bh) & h.t > h.bh)
+  fit <- nls(d.ba ~ d.bh * h.t^(a*h.t^b) /(h.t - h.bh)^(a*h.t^b), start=list(a=0.9, b=1),
+             data=test)
   
-return(d)
+  d.ba2 <- predict(fit, dat)
+  d.ba2[dat$h.bh >= dat$h.t] <- NA
+  d.ba2[!is.na(dat$d.ba)] <- dat$d.ba[!is.na(dat$d.ba)]
+  a.stba2 <- (pi/4)*d.ba2^2
+  
+return(a.stba2)
 }
 
-
-dataset$Group <- paste(dataset$studyName, dataset$speciesMatched)
-dataset <- droplevels(subset(dataset, pft != "DG" & growingCondition %in% c("FW","PM","PU","FE")))
-dataset$pft <- as.factor(dataset$pft)
-
-# dataset <- subset(dataset, studyName != "Roth2007")
-dataset$lmlf_astbh <- with(dataset, log10(m.lf/a.stbh))
-dataset$lalf_astbh <- with(dataset, log10(a.lf/a.stbh))
-
-dataset$lmlf_astba <- with(dataset, log10(m.lf/a.stba))
-dataset$lalf_astba <- with(dataset, log10(a.lf/a.stba))
-
-dataset$lh.t <- with(dataset, log10(h.t))
-dataset$lmlf_mso <- with(dataset, log10(m.lf / m.so))
-dataset$lalf_mso <- with(dataset, log10(a.lf / m.so))
-dataset$lmrt_mso <- with(dataset, log10(m.rt / m.so))
-dataset$lmso <- with(dataset, log10(m.so))
-
-dataset$lsla <- with(dataset, log10(a.lf / m.lf))
-
-# Predicted basal diameter. See R/predict_dba...R
-test <- subset(baad, !is.na(d.ba) & !is.na(d.bh) & !is.na(h.t) & !is.na(h.bh) & h.t > h.bh)
-fit <- nls(d.ba ~ d.bh * h.t^(a*h.t^b) /(h.t - h.bh)^(a*h.t^b), start=list(a=0.9, b=1),
-           data=test)
-dataset$d.ba2 <- predict(fit, dataset)
-dataset$d.ba2[dataset$h.bh >= dataset$h.t] <- NA
-dataset$d.ba2[!is.na(dataset$d.ba)] <- dataset$d.ba[!is.na(dataset$d.ba)]
-
-dataset$a.stba2 <- (pi/4)*dataset$d.ba2^2
-dataset$lmlf_astba2 <- with(dataset, log10(m.lf/((pi/4)*d.ba2^2)))
-dataset$lalf_astba2 <- with(dataset, log10(a.lf/((pi/4)*d.ba2^2)))
+dataset$a.stba2 <- predictBasalA(dataset)
 
 
-# Colours
-pftcols <- list(EA="red", EG="hotpink", DA="blue", DG = "skyblue2")
+# Log-transformed ratio of leaf mass and area to basal stem area.
+dataset <- within(dataset, {
+  lmlf_astba2 <- log10(m.lf/a.stba2)
+  lalf_astba2 <- log10(a.lf/a.stba2)
+})
 
 
-# Dataset with simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes.
+# Second dataset, simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes.
+# Also keep only data where leaf area and leaf mass were measured.
 dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")
                               & !is.na(a.lf) & !is.na(m.lf)))
 
-dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
 
+# Boreal, temperate or tropical
 sw <- function(type){
   switch(type,
                                BorF = "boreal",
@@ -74,7 +73,6 @@ sw <- function(type){
                                )
 }
 dataset2$bortemptrop <- as.factor(as.vector(sapply(dataset2$vegetation, sw)))
-
 dataset2$pftlong <- as.factor(with(dataset2, paste(pft, bortemptrop, sep='-')))
 
 
