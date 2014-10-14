@@ -132,19 +132,19 @@
 
 \item We focus here only on aboveground biomass because we found no PFT differences in root-shoot scaling (Fig.~\ref{fig:figureSI6}), and approximately isometric scaling (sma slope = xxx) (consistent with other reports, \cite{hui_near_2014, cairns_root_1997}).
 
-\item We found strong correlations between basal stem area and leaf mass across the entire dataset, with a clear separation between the three major plant functional types (Fig.~\ref{fig:figure1}). We analyzed the ratio MF/Asba, and found that PFT explained by far the most variation (variables tested: plant height, biome (boreal,tropical,temperate), PFT, and all interactions).
+\item We found strong correlations between basal stem area ($A_S$) and leaf mass ($M_F$) across the entire dataset, with a clear separation between the three major plant functional types (Fig.~\ref{fig:figure1}). 
 
-\item Because of weak plant height effects, we calculated the average MF/Asba for the three pfts; there was a ca. 3-fold difference between evergreen gymnosperms and deciduous angiosperms, with evergreen angiosperms taking an intermediate value (Fig.~\ref{fig:figure2}). These differences were approximately proportional to the average SLM for the PFT. 
+\item Because of weak plant height effects, we calculated average $M_F/A_S$ across the entire dataset by the three main PFTs. We found a ca. 3-fold difference between evergreen gymnosperms and deciduous angiosperms, with evergreen angiosperms taking an intermediate value (Fig.~\ref{fig:figure2}). These differences were approximately proportional to the average specific leaf mass (SLM = $M_F / A_F$)for the PFT. 
 
-\item When we calculated the ratio of leaf area to basal stem area, we found no difference between PFTs (Fig.~\ref{fig:figure2}), confirming that MF/Asba is approximately proportional to SLM across PFTs. (See also Fig.~\ref{fig:figureSI1}).
+\item However, the ratio of leaf area to basal stem area ($A_F/A_S$) was not different between PFTs (Fig.~\ref{fig:figure2}), confirming that $M_F/A_S$ is approximately proportional to SLM across PFTs (See also Fig.~\ref{fig:figureSI1}).
 
-\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). We estimated the variance explained by PFT, plant height, and biome in MF/Asba using a linear mixed-effects model (see Table~\ref{varpartpipe}). We found that plant height and biome explained only 0.86\%, but when PFT was added to the model, the variance explained increased to 2.6\%. If we used specific leaf mass instead of PFT, the R2 was similar (28\%), showing that PFT affected MF/Asba largely through differences in SLM. Consistent with this, PFT, plant height and biome explained very little variance in ALF/Astba (Table~\ref{varpartpipe}).
+\item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). We estimated the variance explained by PFT, plant height, and biome in $M_F/A_S$ using a linear mixed-effects model (see Table~\ref{varpartpipe}). We found that plant height and biome explained only 2.6\%, but when PFT was added to the model, the variance explained increased to 28\%. If we used SLM as a predictor instead of PFT, the $R^2$ was similar (31\%), showing that PFT affected $M_F/A_S$ largely through differences in SLM. Consistent with this, PFT, plant height and biome explained very little variance in $A_F/A_S$ (Table~\ref{varpartpipe}).
 
-\item We found similar results for the whole-plant leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}). See also Fig.~\ref{fig:figureSI5} for the raw data. For the leaf area ratio, pfts were generally closer together except for small evergreen gymnosperms (< 1m height) for unknown reasons. 
+\item We found similar results for the above-ground leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}, see also Fig.~\ref{fig:figureSI5}). For the leaf area ratio (LAR), PFTs were generally closer together, with a notable exception for small evergreen gymnosperms (< 1m height) (Fig.~\ref{fig:figure4}).
 
-\item Results for variance partitioning of LMF and LAR gave comparable results (Table~\ref{varpartpipe}): PFT increased the variance explained in LMF from 60 to 64\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to 73\%. The leaf area ratio, similarly to ALF/Astba, did not depend strongly on PFT or SLA.
+\item Results for variance partitioning of LMF and LAR gave comparable results (Table~\ref{varpartpipe}): PFT increased the variance explained in LMF from 64 to 73\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to 69\%. The leaf area ratio, similarly to $A_F/A_S$, did not depend strongly on PFT or SLM.
 
-\item Although biome was a significant predictor in all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT never showed significant differences for MF/Asba or AL/Asba (for example boreal vs. temperate evergreen gymnosperm) (Fig.~\ref{fig:figureSI2}).
+\item Although biome was a significant predictor in all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT mostly did not show significant differences for $M_F/A_S$ or $A_F/A_S$. The only exception was a higher $A_F/A_S$ for tropical compared to temperate evergreen angiosperms (Fig.~\ref{fig:figureSI2}).
 
 \item Unlike \cite{reich_temperature_2014}, we found no effect of mean annual temperature on the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI7}).
 
@@ -213,7 +213,7 @@
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 14 13:17:40 2014
+% Tue Oct 14 14:02:13 2014
 \begin{table}[ht]
 \centering
 \caption{Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The marginal R2 is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type. The conditional R2 is that explained by fixed and random effects (species within study). All fixed effects were highly significant (P \textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models.} 
@@ -237,7 +237,7 @@ LMF\_ASTBA & H & 0.01 & 0.53 \\
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 14 13:17:41 2014
+% Tue Oct 14 14:02:13 2014
 \begin{table}[ht]
 \centering
 \caption{Explained variance in the leaf mass fraction (leaf mass / aboveground biomass) and leaf area ratio (leaf area / aboveground biomass). See Table~\ref{varpartpipe} for more explanation. For plant height, we also added the squared term as a fixed effect, and the interaction with PFT or SLM, because the relationship was non-linear.} 
@@ -374,7 +374,7 @@ LMF & H & 0.60 & 0.88 \\
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 14 13:17:41 2014
+% Tue Oct 14 14:02:13 2014
 \begin{table}[ht]
 \centering
 \caption{Number of observations used in the analysis of Mf/As. Individual plants (number of species).} 
@@ -392,7 +392,7 @@ Sum & 1318 (16) & 4962 (182) & 1858 (187) & 8138 (385) \\
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 14 13:17:41 2014
+% Tue Oct 14 14:02:13 2014
 \begin{table}[ht]
 \centering
 \caption{Number of observations used in the analysis of Af/As. Individual plants (number of species).} 
@@ -410,7 +410,7 @@ Sum & 458 (8) & 3580 (144) & 1405 (125) & 5443 (277) \\
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 14 13:17:41 2014
+% Tue Oct 14 14:02:13 2014
 \begin{table}[ht]
 \centering
 \caption{Number of observations used in the analysis of leaf mass fraction (LMF). Individual plants (number of species).} 
@@ -428,7 +428,7 @@ Sum & 853 (11) & 4403 (186) & 1836 (183) & 7092 (380) \\
 
 
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 14 13:17:41 2014
+% Tue Oct 14 14:02:13 2014
 \begin{table}[ht]
 \centering
 \caption{Number of observations used in the analysis of leaf area ratio (LAR). Individual plants (number of species).} 
