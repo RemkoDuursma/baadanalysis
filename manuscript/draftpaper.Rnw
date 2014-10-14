@@ -72,7 +72,7 @@ baad <- readRDS("../data/baad.rds")
 
 \item We used a generalized additive model (GAM) to visualize the relationships. 
 
-\item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for  PFT-specific averages.
+\item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages. Least-square means for LMF and LAR were calculated with the lsmeans package.
 
 \item Variance partitioning with marginal (fixed effects) and conditional (fixed and random effects) R2 for linear mixed-effects models as reported by \cite{nakagawa_general_2013}.
 
@@ -97,9 +97,9 @@ baad <- readRDS("../data/baad.rds")
 
 \item We do note that there was substantial variation between individual plants (Figs.~\ref{fig:figureSI3} and~\ref{fig:figureSI3}). We estimated the variance explained by PFT, plant height, and biome in $M_F/A_S$ using a linear mixed-effects model (see Table~\ref{varpartpipe}). We found that plant height and biome explained only \Sexpr{100*signif(Table_pipemodel_varpart$Marginal[2],2)}\%, but when PFT was added to the model, the variance explained increased to \Sexpr{100*signif(Table_pipemodel_varpart$Marginal[3],2)}\%. If we used SLM as a predictor instead of PFT, the $R^2$ was similar (\Sexpr{100*signif(Table_pipemodel_varpart$Marginal[4],2)}\%), showing that PFT affected $M_F/A_S$ largely through differences in SLM. Consistent with this, PFT, plant height and biome explained very little variance in $A_F/A_S$ (Table~\ref{varpartpipe}).
 
-\item We found similar results for the above-ground leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}, see also Fig.~\ref{fig:figureSI5}). For the leaf area ratio (LAR), PFTs were generally closer together, with a notable exception for small evergreen gymnosperms (< 1m height) (Fig.~\ref{fig:figure4}).
+\item We found similar results for the above-ground leaf mass fraction (LMF), where a clear and strong separation was found between plant functional types (Fig.~\ref{fig:figure3}, see also Fig.~\ref{fig:figureSI5}). For the leaf area ratio (LAR), PFTs were generally closer together, with a notable exception for small evergreen gymnosperms (< 1m height) (Fig.~\ref{fig:figure4}). Calculated least-square means of LMF and LAR (averages accounting for variation explained by plant height) showed very similar patterns: large differences in mass-based allocation between PFTs (LMF), and small differences in area-based allocation (LAR) (Fig.~\ref{fig:figure5}).
 
-\item Results for variance partitioning of LMF and LAR gave comparable results (Table~\ref{varpartpipe}): PFT increased the variance explained in LMF from \Sexpr{100*signif(Table_LMFLAR_varpart$Marginal[2],2)} to \Sexpr{100*signif(Table_LMFLAR_varpart$Marginal[3],2)}\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to \Sexpr{100*signif(Table_LMFLAR_varpart$Marginal[4],2)}\%. The leaf area ratio, similarly to $A_F/A_S$, did not depend strongly on PFT or SLM.
+\item We also partionined the variance of LMF and LAR (Table~\ref{varpartpipe}). When added to a model that included plant height and biome, PFT increased the variance explained in log-transformed LMF from \Sexpr{100*signif(Table_LMFLAR_varpart$Marginal[2],2)} to \Sexpr{100*signif(Table_LMFLAR_varpart$Marginal[3],2)}\%. However, SLM was not a good substitute for PFT, as the explained variance decreased to \Sexpr{100*signif(Table_LMFLAR_varpart$Marginal[4],2)}\%. For (log-transformed) LAR, PFT and SLM explained very little additional variance.
 
 \item Although biome was a significant predictor in all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT mostly did not show significant differences for $M_F/A_S$ or $A_F/A_S$. The only exception was a higher $A_F/A_S$ for tropical compared to temperate evergreen angiosperms (Fig.~\ref{fig:figureSI2}).
 
@@ -227,6 +227,15 @@ print(xtable(Table_LMFLAR_varpart, label="varpartlmflar",
     \caption{Leaf area ratio (leaf area / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.}
     \label{fig:figure4}
 \end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figure5_lsmeans_LMFLAR.pdf}
+    \caption{Average leaf mass fraction (LMF) and leaf area ratio (LAR) accounting for variation explained by plant height (least-square means) with a mixed effects model (with species within study as a random effect). Error bars are 95\% confidence intervals.}
+    \label{fig:figure5}
+\end{figure}
+
 
 
 \clearpage

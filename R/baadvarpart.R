@@ -77,6 +77,8 @@ r2_lmer_LMF_1 <- r.squared(lmer_LMF_1)
 r2_lmer_LMF_2 <- r.squared(lmer_LMF_2)
 r2_lmer_LMF_3 <- r.squared(lmer_LMF_3)
 
+
+
 # LAR
 lmer_LAR_0 <- lmer(log10(a.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2) + (1|Group), data=dat_alfmso)
 lmer_LAR_1 <- lmer(log10(a.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2) + (1|Group), data=dat_alfmso)

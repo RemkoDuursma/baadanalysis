@@ -14,13 +14,18 @@ Legend <- function(where){
 }
 
 
-# pipe model plots
 to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.2)
   smoothplotbypft(log10(a.stba2), log10(m.lf), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
                   ylab=expression(Plant~leaf~mass~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
 }, filename="manuscript/figures/figure1_mlf_astba2_bypft.pdf", width=6, height=5)
+
+
+smoothplotbypft(log10(h.t), log10(m.st/a.stba2), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
+                ylab=expression(Aboveground~woody~mass~(kg)), cex=0.6,
+                pointcols=transCols,linecols=linecols)
+
 
 to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.2)
@@ -34,7 +39,6 @@ to.pdf({
 # Pipe model
 to.pdf({
 par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
-dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
 meansbypft("lmlf_astba2","lalf_astba2", "pft", 
            xvar="llma",setpar=FALSE,
            legend.where="topleft",
@@ -171,6 +175,68 @@ to.pdf({
   Legend("bottomleft")
 
 }, filename="manuscript/figures/figure4_LAR_pft_lines.pdf", width=7, height=4.5)
+
+
+#----- LMF and LAR least-square means
+lma <- mixmean("llma", "pft", dataset2)
+
+# - Fit lmer to LMF and LAR, with h.t and pft as predictors
+# - Use same dataset for all (where m.lf and a.lf is not missing)
+# - calculate least-square means, predictions of LMF and LAR averaging over all predictors.
+dat_alfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
+
+lmer_LMF_2 <- lmer(lmlf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
+                   data=dat_alfmso, na.action=na.omit)
+lmf <- lmerTest::lsmeans(lmer_LMF_2, "pft")
+
+lmer_LAR_2 <- lmer(lalf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
+                   data=dat_alfmso, na.action=na.omit)
+lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
+
+pointPlot <- function(x,lma,...){
+  
+  uci <- 10^x$lsmeans.table[["Upper CI"]]
+  lci <- 10^x$lsmeans.table[["Lower CI"]]
+  Y <- 10^x$lsmeans.table[["Estimate"]]
+  
+  plot(lma$y, Y,
+       ylim=c(0, max(uci)), 
+       panel.first={
+         arrows(x0=lma$lci, x1=lma$uci, y0=Y, y1=Y,
+                code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=lma$y, x1=lma$y, y0=lci, y1=uci, angle=90, code=3, 
+                length=0.025, col=Cols)
+       }, pch=19, col=Cols,...)
+  
+  box()
+  
+}
+
+to.pdf({
+  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.2)
+  pointPlot(lmf, lma, cex=1.3, ylab=expression("Leaf mass fraction"~~(kg~kg^-1)),
+            xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
+  pointPlot(lar, lma, cex=1.3, ylab=expression("Leaf area ratio"~~(m^2~kg^-1)),
+              xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
+}, filename="manuscript/figures/figure5_lsmeans_LMFLAR.pdf", width=8, height=4)
+
+
+# newdat <- data.frame(X=seq(log10(2), log10(40), length=101))
+# newdat$LMF1 <- predict(g$fits[[1]], newdat)
+# newdat$LMF2 <- predict(g$fits[[2]], newdat)
+# newdat$LMF3 <- predict(g$fits[[3]], newdat)
+# newdat$LAR1 <- predict(g2$fits[[1]], newdat)
+# newdat$LAR2 <- predict(g2$fits[[2]], newdat)
+# newdat$LAR3 <- predict(g2$fits[[3]], newdat)
+# 
+# with(newdat, plot(X,10^LMF1, type='l', ylim=c(0,0.4),col=linecols[1], lwd=2))
+# with(newdat, points(X,10^LMF2, type='l',col=linecols[2], lwd=2))
+# with(newdat, points(X,10^LMF3, type='l',col=linecols[3], lwd=2))
+# 
+# with(newdat, plot(X,10^LAR1, type='l', ylim=c(0,4),col=linecols[1], lwd=2))
+# with(newdat, points(X,10^LAR2, type='l',col=linecols[2], lwd=2))
+# with(newdat, points(X,10^LAR3, type='l',col=linecols[3], lwd=2))
+# 
 
 
 # to.pdf({
