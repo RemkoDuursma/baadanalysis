@@ -27,7 +27,11 @@
 
 
 <<preload, echo=FALSE>>=
+library(knitr)
+opts_chunk$set(echo=FALSE)
+
 load("tables/Tables_varpart.RData")
+baad <- readRDS("../data/baad.rds")
 @
 
 
@@ -58,9 +62,9 @@ load("tables/Tables_varpart.RData")
 \section{Methods}
 
 \begin{itemize}
-\item BAAD database, XXX observations etc.
+\item BAAD database (Falster et al., in review), including a total of \Sexpr{nrow(baad$data)} observations, but here we use only data that include leaf mass ($M_F$), leaf area ($A_F$), aboveground woody biomass ($M_W$), total root biomass ($M_R$), plant height ($H$), and stem area measured at ground level ($A_S$), or at breast height (ca. 1.3m) ($A_{Sbh}$).  For each analysis, we therefore used different subsets of the data (far fewer observations are available for root biomass, in particular), sample sizes are included in the caption of each figure (\emph{to be added}). We further excluded deciduous gymnosperms (since very few data were available), and glasshouse and common garden studies, including only field grown woody plants (including plantations).
 
-\item Removed deciduous gymnosperms, we have a few of those in BAAD (6 species / studyName combinations), but only one includes estimates of leaf area and mass. Also removed glasshouse and common garden studies, including only field grown woody plants (including plantations).
+\item We considered three plant functional types : evergreen angiosperms, evergreen gymnosperms, and decidous angiosperms. All locations were further separated into boreal (including sub-boreal), temperate, and tropical biomes (decided by contributing author, but checked with MAT and latitude).
 
 \item We did not attempt here to include SLA from another database (such as TRY), instead only used SLA directly estimated for the harvested plants.
 
@@ -72,7 +76,7 @@ load("tables/Tables_varpart.RData")
 
 \item Variance partitioning with marginal (fixed effects) and conditional (fixed and random effects) R2 for linear mixed-effects models as reported by \cite{nakagawa_general_2013}.
 
-\item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception  \cite{lang_application_1991, chen_defining_1992}.
+\item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception  \cite{lang_application_1991, chen_defining_1992}, for comparison to flat leaves.
 \end{itemize}
 
 
@@ -80,7 +84,6 @@ load("tables/Tables_varpart.RData")
 
 %------------------------------------------------------------------------------------%
 \section{Results}
-
 
 \begin{itemize}
 
@@ -168,14 +171,14 @@ library(xtable)
 
 
 
-<<results='asis', echo=FALSE>>=
+<<results='asis'>>=
 print(xtable(Table_pipemodel_varpart, label="varpartpipe", 
              caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The marginal R2 is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type. The conditional R2 is that explained by fixed and random effects (species within study). All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."), 
       include.rownames=FALSE, caption.placement="top")
 @
 
 
-<<results='asis', echo=FALSE>>=
+<<results='asis'>>=
 load("tables/Tables_varpart.RData")
 print(xtable(Table_LMFLAR_varpart, label="varpartlmflar",
       caption="Explained variance in the leaf mass fraction (leaf mass / aboveground biomass) and leaf area ratio (leaf area / aboveground biomass). See Table~\\ref{varpartpipe} for more explanation. For plant height, we also added the squared term as a fixed effect, and the interaction with PFT or SLM, because the relationship was non-linear."),
@@ -183,44 +186,17 @@ print(xtable(Table_LMFLAR_varpart, label="varpartlmflar",
 @
 
 
-\clearpage
-\section{Supporting Tables}
-
-<<results='asis', echo=FALSE>>=
-load("tables/Table_counts.RData")
-print(xtable(tab_mlfastba, align="rlll|l",
-             caption="mlf/asba"
-             ), hline.after=c(0,3), caption.placement="top")
-@
-
-
-<<results='asis', echo=FALSE>>=
-print(xtable(tab_alfastba, align="rlll|l",
-             caption="alf/asba"
-             ), hline.after=c(1,3), caption.placement="top")
-@
-
-
-<<results='asis', echo=FALSE>>=
-print(xtable(tab_lmf, align="rlll|l",
-             caption="LMF"
-             ), hline.after=c(1,3), caption.placement="top")
-@
-
-
-<<results='asis', echo=FALSE>>=
-print(xtable(tab_lar, align="rlll|l",
-             caption="LAR"
-             ), hline.after=c(1,3), caption.placement="top")
-@
-
-
-
-
-
 
 \clearpage
 \section{Figures}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{Figure1_MAPMAT_baad_vs_worldclim.pdf}
+    \caption{Mean annual precipitation and mean annual temperature for all included studies. Hexagons are terrestrial observations extracted from Worldclim (darker bins indicating more observations). Note that Worldclim observations include land areas where woody vegetation does not occur (desert, tundra). The deciduous gymnosperms were not included in any analysis in this paper, but are shown here.  }
+    \label{fig:figureworldclim}
+\end{figure}
 
 
 \begin{figure}[h!]
@@ -255,6 +231,14 @@ print(xtable(tab_lar, align="rlll|l",
 
 \clearpage
 \section{Supporting Information Figures}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figureSI-8_MAPMAT_vegetation.pdf}
+    \caption{Mean annual precipitation and temperature for all contributed datasets, by vegetation type. Note that in this study, we did not include glasshouse studies.}
+    \label{fig:figureSI8}
+\end{figure}
 
 \begin{figure}[h!]
     \centering
@@ -306,6 +290,42 @@ print(xtable(tab_lar, align="rlll|l",
     \caption{For each species within study, we fit the scaling relationship of leaf mass as a function of woody biomass assuming an exponent of 3/4, using standardized major axis. The resulting coefficient (b0) is size-invariant (and thus superior to the simple ratio of leaf mass to woody biomass, which is strongly size-dependent, see Fig.~\ref{fig:figure3}). We found no effects of mean annual temperature on the coefficient. The triangles are from Roth et al. (2007), a study on Pinus eliottii with exceptionally high leaf mass per unit woody biomass.}
     \label{fig:figureSI7}
 \end{figure}
+
+
+
+\clearpage
+\section{Supporting Information Tables}
+
+
+<<tablepreload>>=
+load("tables/Table_counts.RData")
+printit <- function(x, caption){
+  print(xtable(x, align="rlll|l",
+               caption=caption
+               ), hline.after=c(0,3), caption.placement="top")
+  
+}
+@
+
+<<results='asis'>>=
+printit(tab_mlfastba, caption="Number of observations used in the analysis of Mf/As. Individual plants (number of species).")
+@
+
+
+<<results='asis'>>=
+printit(tab_alfastba, caption="Number of observations used in the analysis of Af/As. Individual plants (number of species).")
+@
+
+
+<<results='asis'>>=
+printit(tab_lmf, caption="Number of observations used in the analysis of leaf mass fraction (LMF). Individual plants (number of species).")
+@
+
+
+<<results='asis'>>=
+printit(tab_lar, caption="Number of observations used in the analysis of leaf area ratio (LAR). Individual plants (number of species).")
+@
+
 
 
 

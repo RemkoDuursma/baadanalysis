@@ -3,19 +3,12 @@
 climspace <- read.csv("g:/work/projects/allometry database/climate_figure/climate_space_landcover_Worldclim.csv",
                       na.strings="-9999")
 
-
 source("load.R")
-library(hexbin)
-
-# windows(5,5)
-# par(mar=c(5,5,2,2), las=1)
-# h <- with(climspace, hexbin(MAT_WC/10, MAP_WC))
-# plot(h, legend=FALSE, xlab="", ylab="")
-
 
 library(hexbin)
 library(lattice)
 library(grid)
+
 map <- climspace$MAP_WC
 mat <- climspace$MAT_WC/10
 
@@ -43,28 +36,64 @@ to.pdf({
            pftpoints("EA",3)
            pftpoints("EG",4)
            pftpoints("DG",2)
+           panel.points(rep(-25,4),seq(6000,8000,length=4),pch=19,cex=1.3,col=alpha(Cols,0.9))
+           panel.text(rep(-22,4), seq(6000,8000,length=4), 
+                      labels=c("Deciduous Angiosperm",
+                               "Deciduous Gymnosperm",
+                               "Evergreen Angiosperm",
+                               "Evergreen Gymnosperm"),
+                      pos=4, cex=0.7)
            })
   print(h)
-}, filename="output/figures/MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)
+}, filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)
 
 
-# Legend 
+mapmat$vegetation <- as.factor(mapmat$vegetation)
+
+library(gplots)
+palette(alpha(rich.colors(9),0.85))
+
+vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
+                  vegetation Label
+                  BorF 'Boreal forest'
+                  Gr Grassland
+                  Sav Savanna
+                  Sh Shrubland
+                  TempF 'Temperate forest'
+                  TempRF 'Temperate rainforest'
+                  TropRF 'Tropical rainforest'
+                  TropSF 'Tropical seasonal forest'
+                  Wo Woodland")
 
 to.pdf({
-  par(mar=c(0,0,0,0))
-  plot(1, type='n', ann=FALSE, axes=FALSE,
-       xlim=c(0,1), ylim=c(0,1))
-  hexagon(0.05,0.8,0.1,col="lightgrey")
-  text(0.2,0.85,"Worldclim Landcover",pos=4,cex=0.7)
-  y <- rev(c(0.3,0.4,0.5,0.6))
-  points(rep(0.1,4),y,pch=19,col=alpha(Cols,0.9),cex=1.2)
-  text(rep(0.2,4),y,c("Deciduous Angiosperm",
-                      "Deciduous Gymnosperm",
-                      "Evergreen Angiosperm",
-                      "Evergreen Gymnosperm"
-                      ),pos=4,cex=0.7)
-}, filename="output/figures/MAPMAT_baad_vs_worldclim_Legend.pdf",
-width=2, height=2) 
+  with(mapmat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
+                    xlab = expression("Mean annual temperature"~(degree*C)), 
+                    ylab = "Mean annual precipitation (mm)", 
+                    ylim=c(0,4200), xlim=c(-5,30)))
+  legend("topleft", c(vdf$Label[vdf$vegetation == levels(mapmat$vegetation)],"Glasshouse"), 
+         pch=21, pt.bg=c(palette(),"white"),  pt.cex=1.3, cex=0.8, bty='n')
+}, filename="manuscript/figures/figureSI-8_MAPMAT_vegetation.pdf",
+width=6, height=5)
+  
+  
+
+# 
+# # Legend 
+# to.pdf({
+#   par(mar=c(0,0,0,0))
+#   plot(1, type='n', ann=FALSE, axes=FALSE,
+#        xlim=c(0,1), ylim=c(0,1))
+#   hexagon(0.05,0.8,0.1,col="lightgrey")
+#   text(0.2,0.85,"Worldclim Landcover",pos=4,cex=0.7)
+#   y <- rev(c(0.3,0.4,0.5,0.6))
+#   points(rep(0.1,4),y,pch=19,col=alpha(Cols,0.9),cex=1.2)
+#   text(rep(0.2,4),y,c("Deciduous Angiosperm",
+#                       "Deciduous Gymnosperm",
+#                       "Evergreen Angiosperm",
+#                       "Evergreen Gymnosperm"
+#                       ),pos=4,cex=0.7)
+# }, filename="manuscript/figures/MAPMAT_baad_vs_worldclim_Legend.pdf",
+# width=2, height=2) 
 
 
 
