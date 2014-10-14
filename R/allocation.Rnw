@@ -1,0 +1,47 @@
+\documentclass{article}
+
+\usepackage{parskip}
+
+\begin{document}
+
+
+Dynamics of leaf mass ($M_F$) and woody biomass ($M_S$) depend on annual allocation of NPP to these pools ($\phi_F$ and $phi_S$), and turnover rates ($yr^{-1}$) ($r_F$ and $r_S$), as in:
+
+\begin{equation}
+\frac{dM_F}{dt} = \phi_F NPP - r_F M_F
+\end{equation}
+
+\begin{equation}
+\frac{dM_S}{dt} = \phi_S NPP - r_S M_S
+\end{equation}
+With the constraint that $\phi_F + \phi_S = 1$.
+
+We can further assume that NPP is proportional to foliage biomass,
+
+\begin{equation}
+NPP = a_F M_F
+\end{equation}
+So that Eq. 1 and 2 become,
+
+\begin{equation}
+\frac{dM_F}{dt} = (\phi_F  a_F - r_F) M_F
+\end{equation}
+
+\begin{equation}
+\frac{dM_S}{dt} = \phi_S  a_F  M_F - r_S M_S
+\end{equation}
+
+
+I don't know how to deal with this system of DE's, what I would like to have is a solution that gives me the dependence of $M_F$ on $M_S$ (and time of course),
+
+$$M_F = f(M_S,t)$$
+
+Or if it is more convenient, 
+
+$$M_F/M_S = f(M_S,t)$$
+
+where either function of course also depends on the various parameters. If it helps the solution, you may also assume that $r_F >> r_S$
+
+
+
+\end{document}
