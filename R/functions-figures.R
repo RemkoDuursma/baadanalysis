@@ -24,12 +24,12 @@ meansbypft <- function(yvar1, yvar2, pftvar,
                            legend.text=NULL,
                            legend.where="topright",
                            legend.cex=0.7,
+                           siglets=c("bottom","symbol"),
                            xlab=expression(Specific~leaf~area~(m^2~kg^-1)), 
                            xlim=c(0,25),main="",
                            ylab1=NULL, ylab2=NULL, addtrend=c(FALSE,FALSE),
                            ylim1=NULL, ylim2=NULL, dataset){
-  
-  
+    
   if(pftvar == "pftlong"){
     dat <- droplevels(subset(dataset, pftlong %in% 
                                c("DA-temperate","EA-temperate","EA-tropical","EG-boreal",
@@ -37,6 +37,9 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   } else {
     dat <- dataset
   }
+  
+  siglets <- match.arg(siglets)
+  if(siglets == "symbol")library(maptools)
   
   dat$Y1 <- dat[,yvar1]
   dat$Y2 <- dat[,yvar2]
@@ -49,7 +52,7 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
   
-  # SHOULD be updated
+  # Simple trend lines; not used at the moment though.
   lmfit1 <- lm(mlfastbh$y ~ sla$y)
   lmfit2 <- lm(alfastbh$y ~ sla$y)
   
@@ -72,8 +75,15 @@ meansbypft <- function(yvar1, yvar2, pftvar,
        })
   axis(2)
   box()
+  
   u <- par()$usr
-  text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets1, pos=3, cex=0.9)
+  if(siglets == "bottom"){
+    text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets1, pos=3, cex=0.9)
+  }
+  if(siglets == "symbol"){
+    pointLabel(sla$y, mlfastbh$y, lets1, cex=0.9)
+  }
+  
   axis(1,labels=FALSE)
   if(!is.null(panel1.expr))eval(panel1.expr)
   
@@ -88,7 +98,12 @@ meansbypft <- function(yvar1, yvar2, pftvar,
        })
   u <- par()$usr
   if(!is.null(panel2.expr))eval(panel2.expr)
-  text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
+  if(siglets == "bottom"){
+    text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
+  }
+  if(siglets == "symbol"){
+    pointLabel(sla$y, alfastbh$y, lets2, cex=0.9)
+  }
   mtext(side=1, text=xlab, line=3, outer=T)
   mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
   mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T)
