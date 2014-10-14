@@ -193,7 +193,7 @@ lmer_LAR_2 <- lmer(lalf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
                    data=dat_alfmso, na.action=na.omit)
 lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 
-pointPlot <- function(x,lma,...){
+pointPlot <- function(x,lma,lets,...){
   
   uci <- 10^x$lsmeans.table[["Upper CI"]]
   lci <- 10^x$lsmeans.table[["Lower CI"]]
@@ -208,15 +208,15 @@ pointPlot <- function(x,lma,...){
                 length=0.025, col=Cols)
        }, pch=19, col=Cols,...)
   
-  box()
-  
+  u <- par()$usr
+  text(lma$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
 }
 
 to.pdf({
   par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.2)
-  pointPlot(lmf, lma, cex=1.3, ylab=expression("Leaf mass fraction"~~(kg~kg^-1)),
+  pointPlot(lmf, lma, lets=c("a","b","c"),cex=1.3, ylab=expression("Leaf mass fraction"~~(kg~kg^-1)),
             xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
-  pointPlot(lar, lma, cex=1.3, ylab=expression("Leaf area ratio"~~(m^2~kg^-1)),
+  pointPlot(lar, lma, c("ab","b","a"), cex=1.3, ylab=expression("Leaf area ratio"~~(m^2~kg^-1)),
               xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
 }, filename="manuscript/figures/figure5_lsmeans_LMFLAR.pdf", width=8, height=4)
 
