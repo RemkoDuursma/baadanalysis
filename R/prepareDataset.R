@@ -59,7 +59,10 @@ pftcols <- list(EA="red", EG="hotpink", DA="blue", DG = "skyblue2")
 
 
 # Dataset with simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes.
-dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")))
+dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")
+                              & !is.na(a.lf) & !is.na(m.lf)))
+
+dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
 
 sw <- function(type){
   switch(type,

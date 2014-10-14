@@ -297,7 +297,7 @@ gamplotandpred <- function(dat, pftvar, yvar,
   df2 <- melt(df2, id="H", value.name=paste0(yvar,"_SE"), variable.name=pftvar)  
   df <- merge(df1, df2)
   par(o)
-  return(invisible(df))
+  return(invisible(list(df=df, fits=fits)))
 }
 
 plotg <- function(g, which, ...){
