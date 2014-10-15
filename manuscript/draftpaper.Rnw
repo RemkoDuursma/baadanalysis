@@ -71,11 +71,13 @@ baad <- readRDS("../data/baad.rds")
 
 \item Stem area was measured either at breast height (ca. 1.3m) or at the base of the plant (normally for small plants). For the subset of the data where both were measured, we estimated basal stem area (Asba) from breast height area (Asbh) by fitting XXX equation. Results were similar when we used either measure of stem area (not shown).
 
-\item We used a generalized additive model (GAM) to visualize the relationships. 
+\item We used a generalized additive model (GAM) to visualize the relationships, but these were not used for formal inference.
 
-\item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages. Least-square means for LMF and LAR were calculated with the lsmeans package.
+\item We used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages. Least-square means for LMF and LAR were calculated with the 'lsmeans' package.
 
-\item Variance partitioning with marginal (fixed effects) and conditional (fixed and random effects) R2 for linear mixed-effects models as reported by \cite{nakagawa_general_2013}.
+\item All variables were log-transformed prior to analysis, to stabilize variance.
+
+\item Variance partitioning with marginal (fixed effects) and conditional (fixed and random effects) $R^2$ for linear mixed-effects models as reported by \cite{nakagawa_general_2013}.
 
 \item For conifers, leaf area was converted to half-total surface area, which is most appropriate in terms of light interception  \cite{lang_application_1991, chen_defining_1992}, for comparison to flat leaves.
 \end{itemize}
@@ -322,23 +324,23 @@ printit <- function(x, caption){
 @
 
 <<results='asis'>>=
-printit(tab_mlfastba, caption="Number of observations used in the analysis of Mf/As. Individual plants (number of species).")
+printit(tab_mlfastba, caption="Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$. Individual plants (number of species). DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
+
+% <<results='asis'>>=
+% printit(tab_alfastba, caption="Number of observations used in the analysis of Af/As. Individual plants (number of species). DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+% @
+% 
 
 <<results='asis'>>=
-printit(tab_alfastba, caption="Number of observations used in the analysis of Af/As. Individual plants (number of species).")
+printit(tab_lmf, caption="Number of observations used in the analysis of leaf mass fraction (LMF) and leaf area ratio (LAR). Individual plants (number of species). DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
-
-<<results='asis'>>=
-printit(tab_lmf, caption="Number of observations used in the analysis of leaf mass fraction (LMF). Individual plants (number of species).")
-@
-
-
-<<results='asis'>>=
-printit(tab_lar, caption="Number of observations used in the analysis of leaf area ratio (LAR). Individual plants (number of species).")
-@
+% 
+% <<results='asis'>>=
+% printit(tab_lar, caption="Number of observations used in the analysis of leaf area ratio (LAR). Individual plants (number of species). DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+% @
 
 
 
