@@ -48,12 +48,13 @@ baad <- readRDS("../data/baad.rds")
 
 \item Previous syntheses on plant biomass relationships has predominantly focused on the universal nature of size-biomass relationships in plants. Little is known about differences between plant functional types (evergreen vs. deciduous, angiosperm vs. gymnosperm). Since most global models parameterize allocation submodels by PFT, it is imperative that we better understand these potential differences.
 
-\item Major plant functional types differ widely in specific leaf mass (SLM, the ratio of leaf mass to area, an index of leaf thickness) (\cite{poorter_causes_2009}), which can be expected to affect biomass partitioning in several ways. First, SLM correlates with leaf lifespan. Longer lived leaves would lead to higher plant leaf mass (MF) as long as annual production rates are similar (\cite{enquist_global_2002}). Another interpretation is that plants may target a certain leaf area display given a certain biomass investment in supporting tissues, because light interception and photosynthesis correlate with the exchange area of the plant. 
+\item Major plant functional types differ widely in specific leaf mass (SLM, the ratio of leaf mass to area, an index of leaf thickness) (\cite{poorter_causes_2009}), which can be expected to affect biomass partitioning in several ways. First, SLM correlates with leaf lifespan. Longer lived leaves would lead to higher plant leaf mass ($M_F$) as long as annual production rates are similar (\cite{enquist_global_2002}). Another interpretation is that plants may target a certain leaf area display given a certain biomass investment in supporting tissues, because light interception and photosynthesis correlate with the exchange area of the plant. 
 
-\item It has been reported that gymnosperms (with higher SLM) have higher leaf mass fraction than angiosperms (with lower SLM) \cite{enquist_global_2002, mccarthy_consistency_2007, poorter_biomass_2012, sardans_tree_2013}. But a recent study reported no difference (\cite{wolf_allometric_2010}). No study to date has interpreted differences in partitioning between PFTs in terms of SLM. This would be useful because SLM is already an important parameter in DGVMs, potentially reducing parameters required for the allocation subroutine.
+\item It has been reported numerous times that gymnosperms (with higher SLM) have higher leaf mass fraction than angiosperms (with lower SLM) \cite{enquist_global_2002, mccarthy_consistency_2007, poorter_biomass_2012, sardans_tree_2013}, although a recent study reported no difference (\cite{wolf_allometric_2010}). No study to date has been able to analyze differences between deciduous and evergreen angiosperms, or link differences in partitioning between PFTs to other plant traits such as SLM.
 
-\item What is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes. Most global efforts to date use the Cannell database of forest biomass, which is not based on individual biomass estimates. Here we use a new database (Falster et al.), the largest ever compiled for individual woody plants, to evaluate whether important differences exist in biomass partitioning woody plant functional types. We also test whether these differences are confounded (or compounded) by climate.
-  
+\item What is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes. Most global efforts to date use the Cannell database of forest biomass, which is not based on individual biomass estimates. Here we use a new database (Falster et al.), the largest ever compiled for individual woody plants, including data for major plant functional types (PFTs), and all major biomes.
+
+\item We consider here the relationship between leaf biomass and area with stem diameter (an important allometric relationship, Enquist others, and related to the pipe model if the ratio sapwood / heartwood is relatively constant, an important measure of hydraulic supply), the aboveground leaf mass fraction (partioning of biomass into leaf vs. woody pools), and the leaf area ratio (a measure of the photosynthetic area per unit woody biomass). We expect that $M_F$ and $A_F$ are approximately proportional to the square of stem diameter, which would remove size-related shifts in allometry that often confound interpretations. For each of these variables, we ask whether 1) there are differences between major plant functional types after removing size-related variation, 2) there are differences due to climate, compared between major biomes, or as a function of the mean annual temperature (as recently reported for whole stand biomass, \cite{reich_temperature_2014}).
 
 
 \end{enumerate}
@@ -64,6 +65,12 @@ baad <- readRDS("../data/baad.rds")
 
 \begin{itemize}
 \item BAAD database (Falster et al., in review), including a total of \Sexpr{nrow(baad$data)} observations, but here we use only data that include leaf mass ($M_F$), leaf area ($A_F$), aboveground woody biomass ($M_W$), total root biomass ($M_R$), plant height ($H$), and stem area measured at ground level ($A_S$), or at breast height (ca. 1.3m) ($A_{Sbh}$).  For each analysis, we therefore used different subsets of the data (far fewer observations are available for root biomass, in particular), sample sizes are included in the caption of each figure (\emph{to be added}). We further excluded deciduous gymnosperms (since very few data were available), and glasshouse and common garden studies, including only field grown woody plants (including plantations).
+
+\item We focus here only on aboveground biomass because we found no PFT differences in root-shoot scaling (Fig.~\ref{fig:figureSI6}), and approximately isometric scaling (sma slope = xxx) (consistent with other reports, \cite{hui_near_2014, cairns_root_1997}).
+
+\item For the aboveground biomass pools, we calculated the leaf mass fraction ($M_F / M_W$) and leaf area ratio ($A_F / M_W$). LMF, LAR, SLM, $M_F$ and $A_F$ are related by,
+
+$$LMF = SLM * LAR = (M_F / A_F) * LAR$$
 
 \item We considered three plant functional types : evergreen angiosperms, evergreen gymnosperms, and decidous angiosperms. All locations were further separated into boreal (including sub-boreal), temperate, and tropical biomes (decided by contributing author, but checked with MAT and latitude).
 
@@ -89,8 +96,6 @@ baad <- readRDS("../data/baad.rds")
 \section{Results}
 
 \begin{itemize}
-
-\item We focus here only on aboveground biomass because we found no PFT differences in root-shoot scaling (Fig.~\ref{fig:figureSI6}), and approximately isometric scaling (sma slope = xxx) (consistent with other reports, \cite{hui_near_2014, cairns_root_1997}).
 
 \item We found strong correlations between basal stem area ($A_S$) and leaf mass ($M_F$) across the entire dataset, with a clear separation between the three major plant functional types (Fig.~\ref{fig:figure1}). 
 
@@ -120,6 +125,8 @@ baad <- readRDS("../data/baad.rds")
 \item We found coordination between an important leaf trait and whole-plant biomass partitioning. This has implications for global vegetation models.
 
 \item How is allocation implemented in current DGVMs? Either constant allocation fraction, target allometric equations, or optimization \cite{de2014does}. Constant allocation fraction gives constant LAR by pft if leaf lifespan is exactly proportional to SLM. Target allometric equations can be made pft-invariant by using allometry of leaf area, not leaf mass. Optimization models probably already give the right answer because normally LAI is optimized (Woodward). 
+
+\item A recent study compared allocation routines in a number of leading ecosystem models \cite{de2014does}, and recommended to constrain allocation by observed biomass fractions instead of using constant allocation fractions, which is common practice.
 
 \item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
 
