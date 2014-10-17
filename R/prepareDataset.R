@@ -26,8 +26,7 @@ dataset <- within(dataset, {
   lmrt_mso <- log10(m.rt / m.so)
   lmso <- log10(m.so)
   lsla <- log10(a.lf / m.lf)
-  llma <- log10(m.lf / a.lf)
-  
+  llma <- log10(m.lf / a.lf)  
  
 })
 
@@ -53,13 +52,15 @@ dataset$a.stba2 <- predictBasalA(dataset)
 dataset <- within(dataset, {
   lmlf_astba2 <- log10(m.lf/a.stba2)
   lalf_astba2 <- log10(a.lf/a.stba2)
+  lmso_astba2 <- log10(m.so / a.stba2)
+  lastba2 <- log10(a.stba2)
 })
 
 
 # Second dataset, simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes.
 # Also keep only data where leaf area and leaf mass were measured.
-dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")
-                              & !is.na(a.lf) & !is.na(m.lf)))
+dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")))
+#                                 !is.na(a.lf) & !is.na(m.lf)))
 
 
 # Boreal, temperate or tropical

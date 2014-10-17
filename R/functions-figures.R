@@ -15,12 +15,13 @@ mixmean <- function(yvar, g, dataset=dat){
 
 
 
-meansbypft <- function(yvar1, yvar2, pftvar, 
+meansbypft <- function(yvar1, yvar2=NULL, pftvar, 
                            xvar="lsla",
                            panel1.expr=NULL,
                            panel2.expr=NULL,
                            setpar=TRUE,
                            Cols=NULL,
+                           panel1only=FALSE,
                            legend.text=NULL,
                            legend.where="topright",
                            legend.cex=0.7,
@@ -42,30 +43,32 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   if(siglets == "symbol")library(maptools)
   
   dat$Y1 <- dat[,yvar1]
-  dat$Y2 <- dat[,yvar2]
+  if(!panel1only)dat$Y2 <- dat[,yvar2]
   dat$P <- dat[,pftvar]  
   
   sla <- mixmean(xvar,pftvar,dat)
   mlfastbh <- mixmean(yvar1,pftvar,dat)
-  alfastbh <- mixmean(yvar2,pftvar,dat)
+  if(!panel1only)alfastbh <- mixmean(yvar2,pftvar,dat)
   
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
   
   # Simple trend lines; not used at the moment though.
   lmfit1 <- lm(mlfastbh$y ~ sla$y)
-  lmfit2 <- lm(alfastbh$y ~ sla$y)
+  if(!panel1only)lmfit2 <- lm(alfastbh$y ~ sla$y)
   
   # model fit for multiple comparisons
   f1 <- lmer(Y1 ~ P - 1 + (1|Group), data=dat)
-  f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
+  if(!panel1only)f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
   
   # Multiple comparison letters.
   lets1 <- cld(glht(f1, linfct=mcp(P="Tukey")))$mcletters$Letters
-  lets2 <- cld(glht(f2, linfct=mcp(P="Tukey")))$mcletters$Letters
+  if(!panel1only)lets2 <- cld(glht(f2, linfct=mcp(P="Tukey")))$mcletters$Letters
   
-  o <- par(no.readonly=TRUE)
-  if(setpar)par(mfrow=c(2,1), oma=c(5,5,2,2), mar=c(0,0,0,0))
+  if(setpar){
+    o <- par(no.readonly=TRUE)
+    par(mfrow=c(2,1), oma=c(5,5,2,2), mar=c(0,0,0,0))
+  }
   plot(sla$y, mlfastbh$y, xlim=xlim,axes=FALSE, pch=19, col=Cols, cex=1.3,
        ylim=ylim1,xlab=xlab,ylab=ylab1,
        panel.first={
@@ -88,30 +91,54 @@ meansbypft <- function(yvar1, yvar2, pftvar,
   if(!is.null(panel1.expr))eval(panel1.expr)
   
   if(is.null(legend.text))legend.text <- rownames(sla)
-  legend(legend.where, legend.text,pch=19,col=Cols, cex=legend.cex,pt.cex=1.2)
-  plot(sla$y, alfastbh$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
-       ylim=ylim2,xlab=xlab, ylab=ylab2,
-       panel.first={
-         arrows(x0=sla$lci, x1=sla$uci, y0=alfastbh$y, y1=alfastbh$y,code=3,angle=90,length=0.025,col=Cols)
-         arrows(x0=sla$y, x1=sla$y, y0=alfastbh$lci, y1=alfastbh$uci,code=3,angle=90,length=0.025,col=Cols)
-         if(addtrend[2])ablinepiece(lmfit2)
-       })
-  u <- par()$usr
-  if(!is.null(panel2.expr))eval(panel2.expr)
-  if(siglets == "bottom"){
-    text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
+  legend(legend.where, legend.text,pch=19,col=Cols, cex=legend.cex,pt.cex=1.2, bty='n')
+  
+  if(!panel1only){
+    plot(sla$y, alfastbh$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
+         ylim=ylim2,xlab=xlab, ylab=ylab2,
+         panel.first={
+           arrows(x0=sla$lci, x1=sla$uci, y0=alfastbh$y, y1=alfastbh$y,code=3,angle=90,length=0.025,col=Cols)
+           arrows(x0=sla$y, x1=sla$y, y0=alfastbh$lci, y1=alfastbh$uci,code=3,angle=90,length=0.025,col=Cols)
+           if(addtrend[2])ablinepiece(lmfit2)
+         })
+    u <- par()$usr
+    if(!is.null(panel2.expr))eval(panel2.expr)
+    if(siglets == "bottom"){
+      text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
+    }
+    if(siglets == "symbol"){
+      pointLabel(sla$y, alfastbh$y, lets2, cex=0.9)
+    }
+    mtext(side=1, text=xlab, line=3, outer=T)
+    mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
+    mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T)
   }
-  if(siglets == "symbol"){
-    pointLabel(sla$y, alfastbh$y, lets2, cex=0.9)
-  }
-  mtext(side=1, text=xlab, line=3, outer=T)
-  mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
-  mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T)
   
   mtext(side=4, text=main, line=2, outer=TRUE)
-  par(o)
+  if(setpar)par(o)
 }
 
+
+lsmeansPlot <- function(x,lma,lets,ylim=NULL,...){
+  
+  uci <- 10^x$lsmeans.table[["Upper CI"]]
+  lci <- 10^x$lsmeans.table[["Lower CI"]]
+  Y <- 10^x$lsmeans.table[["Estimate"]]
+  
+  if(is.null(ylim))ylim <- c(0, max(uci))
+  
+  plot(lma$y, Y, 
+       ylim=ylim, 
+       panel.first={
+         arrows(x0=lma$lci, x1=lma$uci, y0=Y, y1=Y,
+                code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=lma$y, x1=lma$y, y0=lci, y1=uci, angle=90, code=3, 
+                length=0.025, col=Cols)
+       }, pch=19, col=Cols,...)
+
+  u <- par()$usr
+  text(lma$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
+}
 
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
@@ -230,15 +257,29 @@ addpoly <- function(x,y1,y2,col=alpha("lightgrey",0.8),...){
   x <- x[ii]
   polygon(c(x,rev(x)), c(y1, rev(y2)), col=col, border=NA,...)
 }
-
+predline <- function(fit, from=NULL, to=NULL, ...){
+  
+  if(is.null(from))from <- min(fit$model[,2], na.rm=TRUE)
+  if(is.null(to))to <- max(fit$model[,2], na.rm=TRUE)
+  
+  newdat <- data.frame(X = seq(from,to, length=101))
+  names(newdat)[1] <- names(coef(fit))[2]
+  
+  pred <- as.data.frame(predict(fit, newdat, se.fit=TRUE, interval="confidence")$fit)
+  
+  addpoly(newdat[[1]], pred$lwr, pred$upr)
+  ablinepiece(fit, from=from, to=to, ...)
+  
+}
 
 gamplotandpred <- function(dat, pftvar, yvar, 
+                           setpar=TRUE,
                            xlab=NULL,
                            ylab=NULL, 
                            Hs = c(1,10), plotwhich=1:2, pointCols=NULL,
                            lineCols=NULL, vlines=TRUE,legend=TRUE){
   
-  o <- par(no.readonly = TRUE)
+  if(setpar)o <- par(no.readonly = TRUE)
   dat$PFT <- dat[,pftvar]
   dat$Y <- dat[,yvar]
   dat <- droplevels(subset(dat, !is.na(lh.t) & !is.na(Y)))
@@ -296,7 +337,7 @@ gamplotandpred <- function(dat, pftvar, yvar,
   df1 <- melt(df1, id="H", value.name=yvar, variable.name=pftvar)
   df2 <- melt(df2, id="H", value.name=paste0(yvar,"_SE"), variable.name=pftvar)  
   df <- merge(df1, df2)
-  par(o)
+  if(setpar)par(o)
   return(invisible(list(df=df, fits=fits)))
 }
 
