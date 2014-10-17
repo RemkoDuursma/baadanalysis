@@ -43,6 +43,7 @@ to.pdf({
                   xlab = expression("Mean annual temperature"~(degree*C)), 
                   ylab = "Mean annual precipitation (mm)", 
                   colorkey=FALSE,
+                  colorcut=seq(0,1,length=50),
                   par.settings = list(par.xlab.text=list(cex=1.5),
                                       par.ylab.text=list(cex=1.5)),
                   panel = function(...) {
@@ -61,6 +62,8 @@ to.pdf({
                   })
   print(h)
 }, filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)
+
+
 
 
 # Figure 2 - leaf mass fraction by PFT, and least-square means and LAR.
