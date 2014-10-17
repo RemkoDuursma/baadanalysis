@@ -25,30 +25,6 @@
 \maketitle
 
 
-% Notes from Daniel phone call
-% - make case that allocating biomass vs. targeting certain leaf area vs. stem area is very different
-% 
-% fig 1 : more grey levels. scale for grey levels
-% figure captions need to be stronger statements
-% 
-% use all data with leaf mass, explain that subset has same results
-% 
-% Fig 9 + 10 instead of Fig 2 in main text.
-% Then, Fig 3 says that SLM explains differences.
-% 
-% Fig 3 + 6 log-log axes
-% 
-% Fig 4 first, introduce PFT differences
-% 
-% No difference in m.so/a.astba2, but large difference m.lf/a.stba2
-% 
-% remove fig 5
-% 
-% combine fig 3
-% 
-% climate-related effects are captured by shift in PFT
-% 
-
 %--------------------------------------------------------------------------------------------%
 
 
@@ -163,7 +139,7 @@ We test for PFT differences to both these components of biomass partioning. We w
 
 \item As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
 
-\item We found no effects of climate on anything. This is different from \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset. Are there experimental data that show temperature effects on allocation? What about water availability?
+\item We found no effects of climate on anything, when analyzed in addition to PFT. This means that climate-related differences are captured by a shift in PFT (see also Fig.~\ref{figure1}, showing PFTs occupy different parts of the climate space). Our results contrast with those of \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset. Are there experimental data that show temperature effects on allocation? What about water availability?
 
 \end{itemize}
 
