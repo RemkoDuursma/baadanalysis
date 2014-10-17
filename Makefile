@@ -1,7 +1,7 @@
 RSCRIPT_PKGS := $(shell Rscript -e 'library(methods);writeLines(Sys.getenv("R_DEFAULT_PACKAGES"))')
 RSCRIPT = Rscript --default-packages="${RSCRIPT_PKGS},methods"
 
-ONEFIG = manuscript/figures/figure1_mlf_astba2_bypft.pdf
+ONEFIG = manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf
 ONETAB = manuscript/tables/Table_counts.RData 
 MSFILE = draftpaper
 
@@ -26,5 +26,5 @@ deps:
 	${RSCRIPT} dependencies.R
 
 clean:
-	rm -rf $(ONEFIG) $(ONETAB) $(MSFILE).pdf
+	rm -rf $(ONEFIG) $(ONETAB) manuscript/$(MSFILE).pdf
 	
