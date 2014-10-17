@@ -19,9 +19,12 @@ $(ONETAB): statanalysis.R
 
 figures: $(ONEFIG) data/baad.rds
 
-$(ONEFIG): figures.R
+$(ONEFIG) R/prepareDataset.R : figures.R
 	Rscript figures.R
 
 deps:
 	${RSCRIPT} dependencies.R
 
+clean:
+	rm -rf $(ONEFIG) $(ONETAB) $(MSFILE).pdf
+	
