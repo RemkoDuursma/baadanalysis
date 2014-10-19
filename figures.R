@@ -20,47 +20,53 @@ Legend <- function(where, labels=c("short","long"), bty='n', ...){
 # Average SLM by PFT, used in several plots.
 lma <- mixmean("llma", "pft", dataset2)
 
-
 # Figure 1.
-# Hexbin plot with Worldclim and BAAD (figure 1)
-# Worldclim
+# MAP MAT vs. Worldclim
+
+
 climspace <- read.csv("data/Worldclim_landcover_climspace.csv")
+# Exclude Greenland
+climpace <- climspace[climspace$landcover != 18,]
 map <- climspace$MAP_WC
 mat <- climspace$MAT_WC/10
 mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
 mapmat$vegetation <- as.factor(mapmat$vegetation)
 
-pftpoints <- function(p,i){
-  panel.points(mapmat$MAT[mapmat$pft == p],
-               mapmat$MAP[mapmat$pft == p],
-               cex=1.3, pch=19, 
-               col=hCols[i])
-}
+h <- hexbin(map ~ mat)
+cells <- hcell2xy(h)
+
+hexd <- (h@xbnds[2] - h@xbnds[1])/h@xbins
+nhex <- h@ncells
+d <- getdiams(cells)
+
+# Set up grey levels
+cv <- seq(0, 1800, by=200)
+n <- length(cv)
+hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
+Cols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
 
 to.pdf({
+  par(pty='s', cex.lab=1.2)
+  plot(cells, type='n',
+       xlab = expression("Mean annual temperature"~(degree*C)), 
+       ylab = "Mean annual precipitation (mm)")
+  for(i in 1:nhex){
+    Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
+            border=NA,
+            col=Cols[hcut[i]])
+  }
+  l <- legend("topleft", levels(hcut), fill=Cols, cex=0.7, title="Nr cells", bty='n')
+  
+  
+  mapmat$pft <- as.factor(mapmat$pft)
   hCols <- alpha(c("blue","cyan1","red","forestgreen"),0.6)
-  h <- hexbinplot(map ~ mat, aspect = 1, bins=50, 
-                  xlab = expression("Mean annual temperature"~(degree*C)), 
-                  ylab = "Mean annual precipitation (mm)", 
-                  colorkey=FALSE,
-                  colorcut=seq(0,1,length=50),
-                  par.settings = list(par.xlab.text=list(cex=1.5),
-                                      par.ylab.text=list(cex=1.5)),
-                  panel = function(...) {
-                    panel.hexbinplot(...)
-                    pftpoints("DA",1)
-                    pftpoints("EA",3)
-                    pftpoints("EG",4)
-                    pftpoints("DG",2)
-                    panel.points(rep(-25,4),seq(6000,8000,length=4),pch=19,cex=1.3,col=alpha(Cols,0.9))
-                    panel.text(rep(-22,4), seq(6000,8000,length=4), 
-                               labels=c("Deciduous Angiosperm",
-                                        "Deciduous Gymnosperm",
-                                        "Evergreen Angiosperm",
-                                        "Evergreen Gymnosperm"),
-                               pos=4, cex=0.7)
-                  })
-  print(h)
+  with(mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
+  with(subset(mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
+  legend(l$rect$left + l$rect$w, 
+         l$rect$top, title="Plant functional type",
+         c("Deciduous Angiosperm", "Deciduous Evergreen", 
+           "Evergreen Angiosperm", "Evergreen Gymnosperm"),
+         pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
 }, filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)
 
 
