@@ -55,7 +55,7 @@ to.pdf({
             border=NA,
             col=greyCols[hcut[i]])
   }
-  l <- legend("topleft", levels(hcut), fill=Cols, cex=0.7, title="Nr cells", bty='n')
+  l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
   
   
   mapmat$pft <- as.factor(mapmat$pft)
@@ -107,7 +107,7 @@ l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
 }, filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf", width=7, height=7)
 
 
-# Histograms
+# Figure 3. Histograms of MF/AS and AF/AS.
 to.pdf({
   
   par(mfcol=c(3,2), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
@@ -128,7 +128,7 @@ to.pdf({
 }, width=6, height=6, filename="manuscript/figures/Figure3_hist_alfast_mlfast.pdf")
 
 
-# Figure 3 - average leaf mass, leaf area / stem area.
+# Figure 4 - average leaf mass, leaf area / stem area.
 to.pdf({
   par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
   meansbypft("lmlf_astba2","lalf_astba2", "pft", 
@@ -140,12 +140,15 @@ to.pdf({
              panel2.expr={axis(1);axis(2)},
              Cols=Cols,
              xlab=expression("Specific leaf mass"~~(kg~m^-2)),
-             ylab2=expression(A[L]/A[S]~~(m^2~m^-2)),
-             ylab1=expression(M[L]/A[S]~~(kg~m^-2)), 
+             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
+             ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
              dataset=dataset2, 
              xlim=c(0,0.2),
              ylim1=c(0,250),ylim2=c(0,2000))
 }, width=8, height=4, filename="manuscript/figures/Figure4_mlf_alf_astbaest_pftmeans.pdf")
+
+
+
 
 
 #::::::::::: Supporting Figures ::::::::::::::::::::::::::#
