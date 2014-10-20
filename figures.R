@@ -43,7 +43,7 @@ d <- getdiams(cells)
 cv <- seq(0, 1800, by=200)
 n <- length(cv)
 hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
-Cols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
+greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
 
 to.pdf({
   par(pty='s', cex.lab=1.2)
@@ -53,7 +53,7 @@ to.pdf({
   for(i in 1:nhex){
     Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
             border=NA,
-            col=Cols[hcut[i]])
+            col=greyCols[hcut[i]])
   }
   l <- legend("topleft", levels(hcut), fill=Cols, cex=0.7, title="Nr cells", bty='n')
   
