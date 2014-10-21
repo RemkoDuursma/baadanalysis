@@ -25,6 +25,7 @@ dataset <- within(dataset, {
   lalf_mso <- log10(a.lf / m.so)
   lmrt_mso <- log10(m.rt / m.so)
   lmso <- log10(m.so)
+  lmrt <- log10(m.rt)
   lsla <- log10(a.lf / m.lf)
   llma <- log10(m.lf / a.lf)  
  
