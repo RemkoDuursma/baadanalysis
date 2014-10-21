@@ -6,6 +6,7 @@ source("R/plot-utils.R")
 source("R/worldclim_functions.R")
 source("R/convertConiferLA.R")
 source("R/ablinepiece.R")
+source("R/predictBasalA.R")
 
 # Load BAAD
 baadall <- readRDS("data/baad.rds")

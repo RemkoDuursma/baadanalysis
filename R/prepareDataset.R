@@ -31,20 +31,6 @@ dataset <- within(dataset, {
 })
 
 # Predict basal diameter from breast-height
-predictBasalA <- function(dat, alldat=baad){
-  # Predicted basal diameter. See R/predict_dba...R
-  test <- subset(alldat, !is.na(d.ba) & !is.na(d.bh) & !is.na(h.t) & !is.na(h.bh) & h.t > h.bh)
-  fit <- nls(d.ba ~ d.bh * h.t^(a*h.t^b) /(h.t - h.bh)^(a*h.t^b), start=list(a=0.9, b=1),
-             data=test)
-  
-  d.ba2 <- predict(fit, dat)
-  d.ba2[dat$h.bh >= dat$h.t] <- NA
-  d.ba2[!is.na(dat$d.ba)] <- dat$d.ba[!is.na(dat$d.ba)]
-  a.stba2 <- (pi/4)*d.ba2^2
-  
-return(a.stba2)
-}
-
 dataset$a.stba2 <- predictBasalA(dataset)
 
 
