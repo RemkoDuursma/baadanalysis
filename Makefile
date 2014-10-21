@@ -11,6 +11,7 @@ ms: manuscript/$(MSFILE).pdf
 
 manuscript/$(MSFILE).pdf: manuscript/$(MSFILE).Rnw $(ONEFIG)
 	make -C manuscript
+	texcount manuscript/$(MSFILE).tex > manuscript/wordcount.txt
 
 analysis: $(ONETAB) data/baad.rds data/Worldclim_landcover_climspace.csv
 
