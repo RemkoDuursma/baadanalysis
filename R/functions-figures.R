@@ -142,10 +142,12 @@ lsmeansPlot <- function(x,lma,lets,ylim=NULL,...){
 
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
+                            fittype=c("gam","lm"),
                             linecols=c("deepskyblue3","red","chartreuse3"), 
                             xlab=NULL, ylab=NULL,logaxes=TRUE,
                             ...){
   
+  fittype <- match.arg(fittype)
   data$pft <- as.factor(data$pft)
   data <- droplevels(data)
   data$X <- eval(substitute(x),data)
@@ -157,18 +159,30 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
   d <- split(data, data$pft)
   
   hran <- lapply(d, function(x)range(x$X, na.rm=TRUE))
-  fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=4)))
+  if(fittype == "gam"){
+    fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=4)))
+  } else {
+    fits <- lapply(d, function(x)lm(Y ~ X, data=x))
+  }
   
   with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft],
                   xlab=xlab, ylab=ylab, ...)) 
   if(logaxes)magaxis(side=1:2, unlog=1:2)
   
   for(i in 1:length(d)){
-    nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
-    if(!inherits(fits[[i]], "try-error")){
-      p <- predict(fits[[i]],nd,se.fit=TRUE)
-      addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=alpha("lightgrey",0.7))
-      lines(nd$X, p$fit, col=linecols[i], lwd=2)
+    
+    if(fittype == "gam"){
+      nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
+      if(!inherits(fits[[i]], "try-error")){
+        p <- predict(fits[[i]],nd,se.fit=TRUE)
+        addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=alpha("lightgrey",0.7))
+        lines(nd$X, p$fit, col=linecols[i], lwd=2)
+      }
+    }
+    if(fittype == "lm"){
+      pval <- summary(fits[[i]])$coefficients[2,4]
+      LTY <- if(pval < 0.05)1 else 5
+      predline(fits[[i]], col=linecols[i], lwd=2, lty=LTY)
     }
   }
 }

@@ -102,7 +102,7 @@ We consider here the relationship between leaf biomass and area with stem diamet
 
  Although biome was a significant predictor for all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT mostly did not show significant differences for $M_F/A_S$ or $A_F/A_S$. The only exception was a higher $A_F/A_S$ for tropical compared to temperate evergreen angiosperms (Fig.~\ref{fig:figureSI8}).
 
- Unlike \cite{reich_temperature_2014}, we found no effect of mean annual temperature on the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI9}).
+ Unlike \cite{reich_temperature_2014}, we found only very weak effects of mean annual temperature the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI9}). The size-invariant relationship was only significant for deciduous angiosperms, but it was a very weak correlation that explained very little additional variation. These results were confirmed with a mixed-effects model of MF vs. MS, with MAT and PFT as covariates (see Table XXX). We found no significant effects of mean annual precipitation of leaf-woody biomass relationships (Table XXX). 
 
 
  We found coordination between an important leaf trait and whole-plant biomass partitioning. This has implications for global vegetation models.
@@ -113,7 +113,7 @@ We consider here the relationship between leaf biomass and area with stem diamet
 
  As a first approximation, which is useful for large scale DGVMs, models should aim to keep leaf area to stem cross-sectional area constant, and vary biomass allocation accordingly. Specific leaf area then gives the ratio of leaf biomass to stem biomass. 
 
- We found no effects of climate on anything, when analyzed in addition to PFT. This means that climate-related differences are captured by a shift in PFT (see also Fig.~\ref{figure1}, showing PFTs occupy different parts of the climate space). Our results contrast with those of \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset. Are there experimental data that show temperature effects on allocation? What about water availability?
+ We found no appreciable effects of climate on anything, when analyzed in addition to PFT. This means that climate-related differences are captured by a shift in PFT (see also Fig.~\ref{figure1}, showing PFTs occupy different parts of the climate space). Our results contrast with those of \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset. Are there experimental data that show temperature effects on allocation? What about water availability?
 
 
 

@@ -1,10 +1,11 @@
 
 
+
+#---------------------------------------------------------------------------------------#
 # Variance partitioning to fixed and random effects 
 source("load.R")
 source("R/preparedataset.R")
 source("R/rsquaredglmm.R")
-options(warn=-1)
 
 # Sequential R2, backwards elimination of all fixed effects.
 # ((not used at the moment))
@@ -151,8 +152,29 @@ tab_lar <- tabFun(dat_alfmso, c("lalf_mso","h.t"))
 save(tab_mlfastba,tab_alfastba,tab_lmf,tab_lar,
      file="manuscript/tables/Table_counts.RData")
 
-options(warn=0)
+
+#-----------------------------------------------------------------------------------------#
+  
 
 
-  
-  
+# Test of effect of MAT and MAP on leaf - stem scaling
+
+# Data subset
+d <- droplevels(subset(dataset2, !is.na(m.st) & !is.na(m.lf) & !is.na(MAT)))
+
+lme0 <- lme(log10(m.lf) ~ log10(m.st)*pft, random=~log10(m.st)|Group, data=d,method="ML",
+            na.action=na.omit)
+lme1 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAT, random=~log10(m.st)|Group, data=d,method="ML",
+            na.action=na.omit)
+lme2 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAP, random=~log10(m.st)|Group, data=d,method="ML",
+            na.action=na.omit)
+
+
+# MAT significant
+anova(lme0, lme1)
+
+# MAP is not
+anova(lme0, lme2)
+
+
+
