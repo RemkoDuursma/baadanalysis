@@ -341,23 +341,25 @@ to.pdf({
 # This is estimated with sma for each Group. MAT is averaged within Group,
 # this takes several locations per Group (not that many though!)
 # Roth2007 is highlighted.
-dat <- studyWithVars(dataset, c("m.lf","m.st","MAT"))
+dat <- studyWithVars(dataset, c("m.lf","m.st","MAT", "MAP"))
 sm1 <- sma(m.lf ~ m.st*Group, data=dat, log="xy", slope.test=3/4, quiet=TRUE)
 
 b0 <- sapply(sm1$nullcoef, "[",1,1)
 p <- data.frame(Group=sm1$groupsummary$group, b0=b0)
-m <- dat[,c("Group","pft","MAT")]
+m <- dat[,c("Group","pft","MAT","MAP")]
 m <- m[!duplicated(m),]
-m <- summaryBy(MAT ~ Group, FUN=mean, id=~pft, na.rm=TRUE, keep.names=TRUE, data=m)
+m <- summaryBy(MAT + MAP ~ Group, FUN=mean, id=~pft, na.rm=TRUE, keep.names=TRUE, data=m)
 h <- aggregate(h.t ~ Group, FUN=median, data=dat)
 m <- merge(m,h)
 p <- merge(p,m, all.x=TRUE, all.y=FALSE, by="Group")
 
 to.pdf({
-  par(mar=c(5,5,2,2), cex.lab=1.2)
-  smoothplotbypft(MAT, b0, p,
+  par(mar=c(5,5,2,2), cex.lab=1.1, mfrow=c(1,2))
+  
+  # MAT
+  smoothplotbypft(MAT, b0, p, fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
-                  logaxes=FALSE,xlim=c(0,30),
+                  logaxes=FALSE,xlim=c(0,30), ylim=c(-2,0.32),
                   xlab=expression(Mean~Annual~Temperature~(degree)),
                   ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
   with(p[grep("Roth2007",p$Group),],
@@ -365,24 +367,21 @@ to.pdf({
   axis(1, at=seq(0,30,by=5))
   magaxis(side=2, unlog=2)
   box()
-}, width=6, height=5, filename="manuscript/figures/FigureSI-9_MAT_LMFscaling.pdf")
+  Legend("topleft", cex=0.7, pt.cex=1)
+  
+  # MAP
+  smoothplotbypft(MAP, b0, p,fittype="lm",
+                  cex=0.9,pointcols=transCols,linecols=linecols,
+                  logaxes=FALSE, xlim=c(0,4500), ylim=c(-2,0.32),
+                  xlab=expression(Mean~Annual~Precipitation~(mm)),
+                  ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
+  with(p[grep("Roth2007",p$Group),],
+       points(MAP, b0, pch=17, col="forestgreen"))
+  axis(1, at=seq(0,5000,by=1000))
+  magaxis(side=2, unlog=2)
+  box()
+  
+}, width=8, height=4, filename="manuscript/figures/FigureSI-9_MAT_LMFscaling.pdf")
 
-
-# # MAT not significant in any way.
-# d <- droplevels(subset(dat, !is.na(m.st) & !is.na(m.lf) & !is.na(MAT)))
-# lme1 <- lme(log10(m.lf) ~ log10(m.st), random=~log10(m.st)|Group, data=d, method="ML",
-#             na.action=na.omit)
-# lme2 <- lme(log10(m.lf) ~ log10(m.st)*pft, random=~log10(m.st)|Group, data=d,method="ML",
-#             na.action=na.omit)
-# lme3 <- lme(log10(m.lf) ~ log10(m.st)*pft + MAT, random=~log10(m.st)|Group, data=d,method="ML",
-#             na.action=na.omit)
-# lme4 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAT, random=~log10(m.st)|Group, data=d,method="ML",
-#             na.action=na.omit)
-# 
-# AIC(lme1, lme2, lme3)
-# anova(lme2, lme3)
-# 
-# car::Anova(lme3)
-# car::Anova(lme4)
 
 
