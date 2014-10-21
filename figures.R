@@ -31,6 +31,8 @@ map <- climspace$MAP_WC
 mat <- climspace$MAT_WC/10
 mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
 mapmat$vegetation <- as.factor(mapmat$vegetation)
+mapmat <- droplevels(subset(mapmat, pft != "DG"))
+mmpft <- summaryBy(MAP + MAT ~ pft, data=mapmat, FUN=mean, na.rm=TRUE)
 
 h <- hexbin(map ~ mat)
 cells <- hcell2xy(h)
@@ -47,7 +49,7 @@ greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
 
 to.pdf({
   par(pty='s', cex.lab=1.2)
-  plot(cells, type='n',
+  plot(cells, type='n', ylim=c(0,6000),
        xlab = expression("Mean annual temperature"~(degree*C)), 
        ylab = "Mean annual precipitation (mm)")
   for(i in 1:nhex){
@@ -56,15 +58,16 @@ to.pdf({
             col=greyCols[hcut[i]])
   }
   l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
-  
+  box()
   
   mapmat$pft <- as.factor(mapmat$pft)
-  hCols <- alpha(c("blue","cyan1","red","forestgreen"),0.6)
-  with(mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
+  hCols <- alpha(c("blue","red","forestgreen"),0.6)  #"cyan1",
+  with(mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
+  with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
   with(subset(mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
   legend(l$rect$left + l$rect$w, 
          l$rect$top, title="Plant functional type",
-         c("Deciduous Angiosperm", "Deciduous Evergreen", 
+         c("Deciduous Angiosperm", #"Deciduous Evergreen", 
            "Evergreen Angiosperm", "Evergreen Gymnosperm"),
          pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
 }, filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)

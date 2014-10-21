@@ -3,6 +3,7 @@
 
 #---------------------------------------------------------------------------------------#
 # Variance partitioning to fixed and random effects 
+
 source("load.R")
 source("R/preparedataset.R")
 source("R/rsquaredglmm.R")
@@ -35,12 +36,16 @@ plotr2 <- function(x, which=c("Marginal","Conditional"),...){
   barplot(rev(x[[which]]), names.arg=rev(rownames(x)), horiz=T, las=2,...)
 }
 
-
-
-# MLF / AST
+# Datasets with NAs removed, of key variables.
 dat_mlf <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2)))
 dat_alf <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2)))
 
+dat_mlfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso)))
+dat_alfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
+
+
+
+# MLF / AST
 lmer_mlf_0 <- lmer(lmlf_astba2 ~ log10(h.t) + (1|Group), data=dat_mlf)
 lmer_mlf_1 <- lmer(lmlf_astba2 ~ log10(h.t)*bortemptrop + (1|Group), data=dat_mlf)
 lmer_mlf_2 <- lmer(lmlf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group), data=dat_mlf)
@@ -64,8 +69,6 @@ r2_lmer_alf_3 <- r.squared(lmer_alf_3)
 
 
 # LMF
-dat_mlfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso)))
-dat_alfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
 
 lmer_LMF_0 <- lmer(log10(m.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group), data=dat_alfmso)
 lmer_LMF_1 <- lmer(log10(m.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2)+ (1|Group), data=dat_alfmso)
@@ -122,6 +125,9 @@ save(Table_pipemodel_varpart, Table_LMFLAR_varpart, file="manuscript/tables/Tabl
 
 
 
+#-------------------------------------------------------------------------------------#
+# Tables of counts.
+
 # Count number of observations.
 tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
   
@@ -154,27 +160,25 @@ save(tab_mlfastba,tab_alfastba,tab_lmf,tab_lar,
 
 
 #-----------------------------------------------------------------------------------------#
-  
-
 
 # Test of effect of MAT and MAP on leaf - stem scaling
 
 # Data subset
 d <- droplevels(subset(dataset2, !is.na(m.st) & !is.na(m.lf) & !is.na(MAT)))
 
-lme0 <- lme(log10(m.lf) ~ log10(m.st)*pft, random=~log10(m.st)|Group, data=d,method="ML",
+mlfmst_lme0 <- lme(log10(m.lf) ~ log10(m.st)*pft, random=~log10(m.st)|Group, data=d,method="ML",
             na.action=na.omit)
-lme1 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAT, random=~log10(m.st)|Group, data=d,method="ML",
+mlfmst_lme1 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAT, random=~log10(m.st)|Group, data=d,method="ML",
             na.action=na.omit)
-lme2 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAP, random=~log10(m.st)|Group, data=d,method="ML",
+mlfmst_lme2 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAP, random=~log10(m.st)|Group, data=d,method="ML",
             na.action=na.omit)
 
-
-# MAT significant
-anova(lme0, lme1)
-
-# MAP is not
-anova(lme0, lme2)
+save(d, mlfmst_lme0,mlfmst_lme1,mlfmst_lme2, 
+     file="manuscript/tables/Fits_lme_mlfmst_MAPMAT.RData")
 
 
-
+#-----------------------------------------------------------------------------------------#
+# Predict basal stem D from breast height
+# This is done in R/prepareDataset.R, but repeated here for manuscript.
+basalafit <- predictBasalA(alldat=baad, returnwhat="fit")
+save(basalafit, file="manuscript/tables/basalafit.RData")
