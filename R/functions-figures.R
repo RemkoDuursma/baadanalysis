@@ -137,6 +137,7 @@ lsmeansPlot <- function(x,lma,lets,ylim=NULL,...){
        }, pch=19, col=Cols,...)
 
   u <- par()$usr
+  lets <- cld.lsmeans(x)$Letters
   text(lma$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
 }
 
