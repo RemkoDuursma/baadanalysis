@@ -122,7 +122,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
 lsmeansPlot <- function(y,x,lets,ylim=NULL,...){
   
   
-  if(class(rootlsmeans)[1] != "lsmeans")
+  if(class(y)[1] != "lsmeans")
     stop("Need object returned by lmerTest::lsmeans")
   
   uci <- 10^y$lsmeans.table[["Upper CI"]]
