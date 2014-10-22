@@ -119,26 +119,48 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
 }
 
 
-lsmeansPlot <- function(x,lma,lets,ylim=NULL,...){
+lsmeansPlot <- function(y,x,lets,ylim=NULL,...){
   
-  uci <- 10^x$lsmeans.table[["Upper CI"]]
-  lci <- 10^x$lsmeans.table[["Lower CI"]]
-  Y <- 10^x$lsmeans.table[["Estimate"]]
+  
+  if(class(rootlsmeans)[1] != "lsmeans")
+    stop("Need object returned by lmerTest::lsmeans")
+  
+  uci <- 10^y$lsmeans.table[["Upper CI"]]
+  lci <- 10^y$lsmeans.table[["Lower CI"]]
+  Y <- 10^y$lsmeans.table[["Estimate"]]
   
   if(is.null(ylim))ylim <- c(0, max(uci))
   
-  plot(lma$y, Y, 
-       ylim=ylim, 
-       panel.first={
-         arrows(x0=lma$lci, x1=lma$uci, y0=Y, y1=Y,
-                code=3,angle=90,length=0.025,col=Cols)
-         arrows(x0=lma$y, x1=lma$y, y0=lci, y1=uci, angle=90, code=3, 
-                length=0.025, col=Cols)
-       }, pch=19, col=Cols,...)
+  numx <- is.list(x) & "lci" %in% names(x)
+  
+  lets <- cld.lsmeans(y)$Letters
+  
+  if(numx){
+    plot(x$y, Y, 
+         ylim=ylim, 
+         panel.first={
+           arrows(x0=x$lci, x1=x$uci, y0=Y, y1=Y,
+                  code=3,angle=90,length=0.025,col=Cols)
+           arrows(x0=x$y, x1=x$y, y0=lci, y1=uci, angle=90, code=3, 
+                  length=0.025, col=Cols)
+         }, pch=19, col=Cols,...)
+    u <- par()$usr
+    text(x$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
+    
+  } else {
+    
+    plot(x, Y, ylim=ylim, col=Cols, pch=19, 
+         panel.first= arrows(x0=x, x1=x, y0=lci, y1=uci, angle=90, code=3, 
+                                       length=0.025, col=Cols),
+         ...)
+    u <- par()$usr
+    text(x, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
 
-  u <- par()$usr
-  lets <- cld.lsmeans(x)$Letters
-  text(lma$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
+    
+  }
+  
+  
+
 }
 
 
