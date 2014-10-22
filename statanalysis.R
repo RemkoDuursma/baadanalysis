@@ -9,23 +9,15 @@ source("R/rsquaredglmm.R")
 
 #---------------------------------------------------------------------------------------#
 # Root-shoot scaling
-# 
-# datroot <- subset(dataset2, !is.na(m.rt) & !is.na(m.so))
-# 
-# smoothplotbypft(log10(m.so), log10(m.rt/m.so), data=dataset2)
-# smoothplotbypft(log10(m.so), log10(m.rt/m.so), data=dataset2, fittype="lm")
-# 
-# rootlme0 <- lmer(lmrt_mso ~ lmso + (lmso|Group), data=datroot)
-# rootlme1 <- lmer(lmrt_mso ~ pft*lmso + (lmso|Group), data=datroot)
-# anova(rootlme0, rootlme1)
-# 
-# x <- lsmeans(rootlme1, "pft")
-# 
-# 
-# visreg(rootlme1, "lmso", by="pft", overlay=TRUE)
-# visreg(rootlme1, "pft", by="lmso")
-# 
-# meansbypft("lmrt_mso", pftvar="pft", dataset=datroot, xvar="llma",panel1only=TRUE,setpar=FALSE,xlim=c(0,0.2),ylim1=c(0,0.6))
+# -- not used yet in ms.
+
+rootlme0 <- lmer(lmrt_mso ~ lmso + (lmso|Group), data=datroot)
+rootlme1 <- lmer(lmrt_mso ~ pft*lmso + (lmso|Group), data=datroot)
+rootanova <- anova(rootlme0, rootlme1)
+
+# scaling
+smroot <- sma(m.rt ~ m.so*pft, data=datroot, log="xy")
+
 
 #---------------------------------------------------------------------------------------#
 # Variance partitioning to fixed and random effects 

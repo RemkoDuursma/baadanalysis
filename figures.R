@@ -2,6 +2,7 @@
 source("load.R")
 source("R/preparedataset.R")
 source("R/functions-figures.R")
+source("R/signifletters.R")  # cld.lsmeans, based on cld.glht
 
 Cols <- c("blue","red","forestgreen")
 transCols <- alpha(Cols,0.4)
@@ -100,10 +101,10 @@ l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   Legend("bottomleft", "long")
   box()
 
-  lsmeansPlot(lmf, lma, lets=c("a","b","c"),cex=1.3, 
+  lsmeansPlot(lmf, lma, cex=1.3, 
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),
               xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
-  lsmeansPlot(lar, lma, c("ab","b","a"), cex=1.3, ylab=expression(A[F]/M[T]~~(m^2~kg^-1)),
+  lsmeansPlot(lar, lma, cex=1.3, ylab=expression(A[F]/M[T]~~(m^2~kg^-1)),
               xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
 
 
@@ -186,14 +187,27 @@ width=6, height=5)
 # SI 2
 # Root-shoot
 to.pdf({
-  par(mar=c(5,5,2,2), cex.lab=1.2)
-  smoothplotbypft(log10(m.rt), log10(m.so), dataset2, 
-                  xlab=expression(Root~mass~(kg)),
-                  ylab=expression(Aboveground~mass~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
+  par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
+  smoothplotbypft(log10(h.t), log10(m.rt/m.so), datroot, 
+                  xlab=expression(H~~(m)),
+                  ylab=expression(M[R]/M[T]~~("-")),
+                  cex=0.6,pointcols=transCols,linecols=linecols)
   
-  abline(0,1)
-  Legend("topleft")
-}, filename="manuscript/figures/FigureSI-2_mrt_mso_bypft.pdf", width=6, height=5)
+  Legend("topright", cex=0.7, pt.cex=0.6)
+  box()
+  
+  rootlme1 <- lmer(lmrt_mso ~ pft*lmso + (lmso|Group), data=datroot)
+  rootlsmeans <- lmerTest::lsmeans(rootlme1, "pft")
+  lsmeansPlot(rootlsmeans, 1:3,  ylim=c(0,0.7),xlim=c(0,4),axes=FALSE,
+              xlab="",
+              ylab=expression(M[R]/M[T]~~("-")))
+  axis(1, at=1:3, labels=levels(datroot$pft))
+  axis(2)
+  box()
+  
+}, filename="manuscript/figures/FigureSI-2_mrt_mso_bypft.pdf", width=8, height=4)
+
+
 
 
 # SI 3
@@ -210,8 +224,8 @@ mstmlf_ht <- function(){
     
     with(dat, plot(log10(h.t), log10(m.st), pch=16,cex=0.5,
                    xlim=log10(c(0.01,105)), ylim=c(-6,6),
-                   xlab="Plant height (m)",
-                   ylab="Woody or foliage mass (kg)",
+                   xlab="H (m)",
+                   ylab=expression("Woody or foliage mass (kg)",
                    col=alpha("brown",0.5),axes=FALSE))
     with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
                      col=alpha("forestgreen",0.5)))
