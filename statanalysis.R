@@ -192,6 +192,39 @@ save(d, mlfmst_lme0,mlfmst_lme1,mlfmst_lme2,
      file="manuscript/tables/Fits_lme_mlfmst_MAPMAT.RData")
 
 
+
+#-----------------------------------------------------------------------------------------#
+# More climate testing. Will probably be redone with different climate vars anyway.
+
+testmapmat <- function(yvar){
+  
+  options(warn=-1)
+  f1 <- as.formula(paste(yvar,"~ h.t*I(h.t^2)*pft*MAT*MAP + (1|Group)"))
+  lme1 <- lmer(f1, data=dataset)
+  
+  f2 <- as.formula(paste(yvar,"~ h.t*I(h.t^2)*pft + (1|Group)"))
+  lme2 <- lmer(f2, data=dataset)
+  
+  f3 <- as.formula(paste(yvar,"~ h.t*I(h.t^2)*MAT*MAP + (1|Group)"))
+  lme3 <- lmer(f3, data=dataset)
+  
+  f4 <- as.formula(paste(yvar,"~ h.t*I(h.t^2) + (1|Group)"))
+  lme4 <- lmer(f4, data=dataset)
+  
+  options(warn=0)
+  return(list(lme1, lme2, lme3, lme4))
+}
+
+
+fx <- function(v="lmlf_mso")unlist(sapply(testmapmat(v), 
+                                          function(z)suppressWarnings(r.squared(z)))[4,])
+
+vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","lmrt_mso")
+l <- lapply(vars,fx)
+tab <- cbind(as.data.frame(vars), as.data.frame(do.call(rbind,l)))
+names(tab) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
+
+
 #-----------------------------------------------------------------------------------------#
 # Predict basal stem D from breast height
 # This is done in R/prepareDataset.R, but repeated here for manuscript.

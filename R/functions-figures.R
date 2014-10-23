@@ -16,7 +16,8 @@ mixmean <- function(yvar, g, dataset=dat){
 
 
 meansbypft <- function(yvar1, yvar2=NULL, pftvar, 
-                           xvar="lsla",
+                           xvar="llma",
+                           dataset,
                            panel1.expr=NULL,
                            panel2.expr=NULL,
                            setpar=TRUE,
@@ -28,8 +29,8 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                            siglets=c("bottom","symbol"),
                            xlab=expression(Specific~leaf~area~(m^2~kg^-1)), 
                            xlim=c(0,25),main="",
-                           ylab1=NULL, ylab2=NULL, addtrend=c(FALSE,FALSE),
-                           ylim1=NULL, ylim2=NULL, dataset){
+                           ylab1=NULL, ylab2=NULL, 
+                           ylim1=NULL, ylim2=NULL){
     
   if(pftvar == "pftlong"){
     dat <- droplevels(subset(dataset, pftlong %in% 
@@ -46,17 +47,21 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   if(!panel1only)dat$Y2 <- dat[,yvar2]
   dat$P <- dat[,pftvar]  
   
-  sla <- mixmean(xvar,pftvar,dat)
-  mlfastbh <- mixmean(yvar1,pftvar,dat)
-  if(!panel1only)alfastbh <- mixmean(yvar2,pftvar,dat)
+  # If xvar is a character, calculate mixmeans, otherwise it is already a numeric vector.
+  if(is.character(xvar)){
+    X <- mixmean(xvar,pftvar,dat)
+  } else {
+    X <- list(y = X, lci=rep(NA,3), uci=rep(NA,3))
+  }
+  
+  # mix means of Y variables.
+  y1 <- mixmean(yvar1,pftvar,dat)
+  if(!panel1only)y2 <- mixmean(yvar2,pftvar,dat)
   
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
   
-  # Simple trend lines; not used at the moment though.
-  lmfit1 <- lm(mlfastbh$y ~ sla$y)
-  if(!panel1only)lmfit2 <- lm(alfastbh$y ~ sla$y)
-  
+
   # model fit for multiple comparisons
   f1 <- lmer(Y1 ~ P - 1 + (1|Group), data=dat)
   if(!panel1only)f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
@@ -69,45 +74,48 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
     o <- par(no.readonly=TRUE)
     par(mfrow=c(2,1), oma=c(5,5,2,2), mar=c(0,0,0,0))
   }
-  plot(sla$y, mlfastbh$y, xlim=xlim,axes=FALSE, pch=19, col=Cols, cex=1.3,
+  plot(X$y, y1$y, xlim=xlim,axes=FALSE, pch=19, col=Cols, cex=1.3,
        ylim=ylim1,xlab=xlab,ylab=ylab1,
        panel.first={
-         arrows(x0=sla$lci, x1=sla$uci, y0=mlfastbh$y, y1=mlfastbh$y,code=3,angle=90,length=0.025,col=Cols)
-         arrows(x0=sla$y, x1=sla$y, y0=mlfastbh$lci, y1=mlfastbh$uci,code=3,angle=90,length=0.025,col=Cols)
-         if(addtrend[1])ablinepiece(lmfit1)
+         arrows(x0=X$lci, x1=X$uci, y0=y1$y, 
+                y1=y1$y,code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=X$y, x1=X$y, y0=y1$lci, 
+                y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
        })
   axis(2)
   box()
   
   u <- par()$usr
   if(siglets == "bottom"){
-    text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets1, pos=3, cex=0.9)
+    text(X$y, u[3] + 0.0*(u[4]-u[3]), lets1, pos=3, cex=0.9)
   }
   if(siglets == "symbol"){
-    pointLabel(sla$y, mlfastbh$y, lets1, cex=0.9)
+    pointLabel(X$y, y1$y, lets1, cex=0.9)
   }
   
   axis(1,labels=FALSE)
   if(!is.null(panel1.expr))eval(panel1.expr)
   
-  if(is.null(legend.text))legend.text <- rownames(sla)
-  legend(legend.where, legend.text,pch=19,col=Cols, cex=legend.cex,pt.cex=1.2, bty='n')
+  if(is.null(legend.text))legend.text <- rownames(X)
+  legend(legend.where, legend.text,pch=19,col=Cols, 
+         cex=legend.cex,pt.cex=1.2, bty='n')
   
   if(!panel1only){
-    plot(sla$y, alfastbh$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
+    plot(X$y, y2$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
          ylim=ylim2,xlab=xlab, ylab=ylab2,
          panel.first={
-           arrows(x0=sla$lci, x1=sla$uci, y0=alfastbh$y, y1=alfastbh$y,code=3,angle=90,length=0.025,col=Cols)
-           arrows(x0=sla$y, x1=sla$y, y0=alfastbh$lci, y1=alfastbh$uci,code=3,angle=90,length=0.025,col=Cols)
-           if(addtrend[2])ablinepiece(lmfit2)
+           arrows(x0=X$lci, x1=X$uci, y0=y2$y, 
+                  y1=y2$y,code=3,angle=90,length=0.025,col=Cols)
+           arrows(x0=X$y, x1=X$y, y0=y2$lci, 
+                  y1=y2$uci,code=3,angle=90,length=0.025,col=Cols)
          })
     u <- par()$usr
     if(!is.null(panel2.expr))eval(panel2.expr)
     if(siglets == "bottom"){
-      text(sla$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
+      text(X$y, u[3] + 0.0*(u[4]-u[3]), lets2, pos=3, cex=0.9)
     }
     if(siglets == "symbol"){
-      pointLabel(sla$y, alfastbh$y, lets2, cex=0.9)
+      pointLabel(X$y, y2$y, lets2, cex=0.9)
     }
     mtext(side=1, text=xlab, line=3, outer=T)
     mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
