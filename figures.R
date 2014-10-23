@@ -19,7 +19,7 @@ Legend <- function(where, labels=c("short","long"), bty='n', ...){
 }
 
 # Average SLM by PFT, used in several plots.
-lma <- mixmean("llma", "pft", dataset2)
+lma <- mixmean("llma", "pft", dataset)
 
 # Figure 1.
 # MAP MAT vs. Worldclim
@@ -34,6 +34,7 @@ mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
 mapmat$vegetation <- as.factor(mapmat$vegetation)
 mapmat <- droplevels(subset(mapmat, pft != "DG"))
 mmpft <- summaryBy(MAP + MAT ~ pft, data=mapmat, FUN=mean, na.rm=TRUE)
+mmpft$pft <- as.factor(mmpft$pft)
 
 h <- hexbin(map ~ mat)
 cells <- hcell2xy(h)
@@ -81,7 +82,7 @@ to.pdf({
 # - Fit lmer to LMF and LAR, with h.t and pft as predictors
 # - Use same dataset for all (where m.lf and a.lf is not missing)
 # - calculate least-square means, predictions of LMF and LAR averaging over all predictors.
-dat_alfmso <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
+dat_alfmso <- droplevels(subset(dataset, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
 
 lmer_LMF_2 <- lmer(lmlf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
                    data=dat_alfmso, na.action=na.omit)
@@ -94,7 +95,7 @@ lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 to.pdf({
 l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   par(mar=c(5,5,1,1), cex.axis=0.9, cex.lab=1.1)
-  g <- gamplotandpred(dataset2, "pft", "lmlf_mso", plotwhich=1, setpar=FALSE,
+  g <- gamplotandpred(dataset, "pft", "lmlf_mso", plotwhich=1, setpar=FALSE,
                       lineCols=linecols, pointCols=transCols,vlines=FALSE,legend=FALSE,
                       xlab="Plant height (m)",
                       ylab=expression(M[F]/M[T]~~(kg~kg^-1)))
@@ -115,15 +116,15 @@ l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
 to.pdf({
   
   par(mfcol=c(3,2), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
-  histbypft(lmlf_astba2, pft, dataset2, xaxis=3,legend.cex=1,col=Cols,
+  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=Cols,
             xlab="",
-            Means=mixmean("lmlf_astba2","pft",dataset2),
+            Means=mixmean("lmlf_astba2","pft",dataset),
             legend.text=c("Deciduous Angiosperm",
                           "Evergreen Angiosperm",
                           "Evergreen Gymnosperm"))
-  histbypft(lalf_astba2, pft, dataset2, xaxis=3,legend.cex=1,col=Cols,
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=Cols,
             xlab="",
-            Means=mixmean("lalf_astba2","pft",dataset2),
+            Means=mixmean("lalf_astba2","pft",dataset),
             legend.text=rep("",3))
   mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)), 
         outer=TRUE, at=0.25, cex=0.9)
@@ -146,7 +147,7 @@ to.pdf({
              xlab=expression("Specific leaf mass"~~(kg~m^-2)),
              ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
-             dataset=dataset2, 
+             dataset=dataset, 
              xlim=c(0,0.2),
              ylim1=c(0,250),ylim2=c(0,2000))
 }, width=8, height=4, filename="manuscript/figures/Figure4_mlf_alf_astbaest_pftmeans.pdf")
@@ -219,14 +220,15 @@ mstmlf_ht <- function(){
   labels <- c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
   
   for(i in 1:3){
-    p <- levels(dataset2$pft)[i]
-    dat <- dataset2[dataset2$pft == p,]
+    p <- levels(dataset$pft)[i]
+    dat <- dataset[dataset$pft == p,]
     
     with(dat, plot(log10(h.t), log10(m.st), pch=16,cex=0.5,
                    xlim=log10(c(0.01,105)), ylim=c(-6,6),
+                   col=alpha("brown",0.5),
                    xlab="H (m)",
-                   ylab=expression("Woody or foliage mass (kg)",
-                   col=alpha("brown",0.5),axes=FALSE))
+                   ylab=expression("Woody or foliage mass (kg)"),
+                   axes=FALSE))
     with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
                      col=alpha("forestgreen",0.5)))
     
@@ -251,7 +253,7 @@ to.pdf(mstmlf_ht(), width=9, height=4,
 # Leaf area ratio; raw data.
 to.pdf({
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
-  g2 <- gamplotandpred(dataset2, "pft", "lalf_mso", plotwhich=1, 
+  g2 <- gamplotandpred(dataset, "pft", "lalf_mso", plotwhich=1, 
                        lineCols=linecols, pointCols=transCols,vlines=FALSE,legend=FALSE,
                        xlab="Plant height (m)",
                        ylab=expression("Leaf area / aboveground biomass"~~(m^2~kg^-1)))
@@ -267,17 +269,20 @@ to.pdf({
 to.pdf({
   par(mfrow=c(1,2), mar=c(5,5,2,2))
   
-  smoothplotbypft(log10(a.stba2), log10(m.so), dataset2, xlab=expression(Basal~stem~area~~(m^2)),
+  smoothplotbypft(log10(a.stba2), log10(m.so), dataset, xlab=expression(Basal~stem~area~~(m^2)),
                   linecols=linecols, pointcols=transCols,
                   ylab="Above-ground biomass (kg)", cex=0.6)
   Legend("topleft")
   
   lmer_BA <- lmer(lmso_astba2 ~ pft*lastba2 + pft:I(lastba2^2) + (1|Group),
-                  data=dataset2, na.action=na.omit)
+                  data=dataset, na.action=na.omit)
   lba <- lmerTest::lsmeans(lmer_BA, "pft")
-  lsmeansPlot(lba, lma, lets=c("a","a","a") , xlim=c(0, 0.2), ylim=c(0,800),
-              xlab=expression("Specific leaf mass"~~(kg~m^-2)),
+  lsmeansPlot(lba, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,800),
+              xlab="",axes=FALSE,
               ylab=expression(M[W]/A[S]~~(kg~m^-2)))
+  axis(1, at=1:3, labels=levels(dataset$pft))
+  axis(2)
+  box()
 }, width=8, height=4, filename="manuscript/figures/FigureSI-5_mso_astba2_twopanel.pdf")
 
 
@@ -286,11 +291,11 @@ to.pdf({
 to.pdf({
 
   par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2))
-  smoothplotbypft(log10(a.stba2), log10(m.lf), dataset2, xlab=expression(A[S]~~(m^2)),
+  smoothplotbypft(log10(a.stba2), log10(m.lf), dataset, xlab=expression(A[S]~~(m^2)),
                   ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
   
-  smoothplotbypft(log10(a.stba2), log10(a.lf), dataset2, xlab=expression(A[S]~~(m^2)),
+  smoothplotbypft(log10(a.stba2), log10(a.lf), dataset, xlab=expression(A[S]~~(m^2)),
                   linecols=linecols, pointcols=transCols,
                   ylab=expression(A[F]~(m^2)), cex=0.6)
 
@@ -299,7 +304,7 @@ to.pdf({
 # SI 7
 # MF/AS and AF/AS at species level by PFT.
 agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group, 
-                 data=dataset2, FUN=mean, na.rm=TRUE, keep.names=TRUE,
+                 data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
                  id=~pft)
 agg <- subset(agg, !is.na(llma))
 
@@ -330,7 +335,6 @@ to.pdf({
 # Means of leaf mass, area per stem area by PFT - biome combination.
 to.pdf({
   par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
-  dataset2$llma <- with(dataset2, log10(1/(10^lsla)))
   meansbypft("lmlf_astba2","lalf_astba2", "pftlong", 
              xvar="llma",setpar=FALSE,
              legend.where="bottomright",

@@ -13,14 +13,16 @@
 \usepackage{geometry}
 \usepackage{authblk}
 \usepackage{gensymb}
+\usepackage{lineno}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \bibliographystyle{plain}
 
 \begin{document}
 
+\linenumbers
 
 
-\title{Specific leaf mass explains difference in biomass partitioning between woody plant functional types}
+\title{A global compilation reveals divergent biomass partitioning between plant functional types }
 
 \author[1]{Remko Duursma}
 \author[2]{Daniel Falster}
@@ -50,33 +52,31 @@ baad <- readRDS("../data/baad.rds")
 %--------------------------------------------------------------------------------------------%
 %% Main text. Max words = 2000, first para = 200.
 
-\textbf{The partitioning of biomass in terrestrial vegetation between leaves, stems and roots is a critical component of dynamic global vegetation models (DGVMs). Biomass partioning is consistently shown to be one of the most uncertain and important drivers for the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, and global predictions of carbon storage \cite{ise_comparison_2010}. Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze the largest database on plant biomass to date. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type. Evergreen gymnosperms maintain three times more leaf biomass at a given total aboveground biomass than deciduous angiosperms, with evergreen angiosperms taking an intermediate value. We found that specific leaf mass, an indicator of leaf construction cost, explains these differences so that the PFTs converged in the ratio  of leaf area to aboveground biomass. We found weak effects of mean annual temperature and no effects of precipitation on biomass partitioning, suggesting that climate-related differences are captured largely by a shift in PFT. These results point to a simple algorithm for biomass partitioning in the world’s forests.}
+\section*{First paragraph}
+
+\textbf{The partitioning of biomass in terrestrial vegetation between leaves, stems and roots is a critical component of dynamic global vegetation models (DGVMs). Biomass partioning is consistently shown to be one of the most uncertain and important drivers for global predictions of carbon storage \cite{ise_comparison_2010}, the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, and the CO$_2$ response of net primary production \cite{dekauwe2014does} . Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze the largest database on plant biomass to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type. Evergreen gymnosperms maintain three times more leaf biomass at a given total aboveground biomass than deciduous angiosperms, with evergreen angiosperms taking an intermediate value. We found that specific leaf mass, an indicator of leaf construction cost, explains these differences so that the PFTs converged in the ratio  of leaf area to aboveground biomass. We found weak effects of mean annual temperature and no effects of precipitation on biomass partitioning, suggesting that climate-related differences are captured largely by a shift in PFT. These results point to a simple algorithm for biomass partitioning in the world’s forests.}
 
 
-\section{flow}
-
-\begin{itemize}
-
-\item First paragraph
-\item Allocation in models, main uncertainties
-\item Climate effects on partioning : direct (MAT, MAP), indirect (PFT).
-\item Known: gymnosperm vs. angiosperm. Unknown: leaf habit (deciduous vs. evergreen), direct climate, patterns for individual plants
-\item BAAD : Largest database, other large datasets are stands or only small plants
-\item Root scaling no PFT differences, focus on aboveground
-\item LMF, LAR
-\item Found very large LMF differences, but convergent LAR
-\item decompose into MF/AS, MT/AS, find similar differences in MF/AS but none in MT/AS, suggesting convergent AF/AS between PFTs.
-\item No direct climate effects, so shift in PFT captures global patterns in biomass partioning
-\item This has implications for allocation in DGVMs, they can be divided into roughly three categories in terms of biomass allocation (allocation fractions, allometric constraints, LAI optimization). Allocation vs. partitioning: the role of leaf and stem turnover.
-
-\end{itemize}
-
-
-\section{textbits}
+% \section{flow}
+% 
+% \begin{itemize}
+% 
+% \item First paragraph
+% \item Allocation in models, main uncertainties
+% \item Climate effects on partioning : direct (MAT, MAP), indirect (PFT).
+% \item Known: gymnosperm vs. angiosperm. Unknown: leaf habit (deciduous vs. evergreen), direct climate, patterns for individual plants
+% \item BAAD : Largest database, other large datasets are stands or only small plants
+% \item Root scaling no PFT differences, focus on aboveground
+% \item LMF, LAR
+% \item Found very large LMF differences, but convergent LAR
+% \item decompose into MF/AS, MT/AS, find similar differences in MF/AS but none in MT/AS, suggesting convergent AF/AS between PFTs.
+% \item No direct climate effects, so shift in PFT captures global patterns in biomass partioning
+% \item This has implications for allocation in DGVMs, they can be divided into roughly three categories in terms of biomass allocation (allocation fractions, allometric constraints, LAI optimization). Allocation vs. partitioning: the role of leaf and stem turnover.
+% 
+% \end{itemize}
 
 
-
-
+\section*{Main text}
 
 Previous syntheses on plant biomass relationships has predominantly focused on the universal nature of size-biomass relationships in plants. Little is known about differences between plant functional types (evergreen vs. deciduous, angiosperm vs. gymnosperm). Since most global models parameterize allocation submodels by PFT, it is imperative that we better understand these potential differences.
 
@@ -86,7 +86,7 @@ It has been reported numerous times that gymnosperms (with higher SLM) have high
 
 What is lacking is a solid empirical base that can be used to constrain any model of allocation, that includes woody plants of all sizes, of all major plant functional types and biomes. Most global efforts to date use the Cannell database of forest biomass, which is not based on individual biomass estimates. Here we use a new database (Falster et al.), the largest ever compiled for individual woody plants, including data for major plant functional types (PFTs), and all major biomes.
 
-We found some evidence for a higher root-shoot ratio ($M_R/M_T$) in deciduous angiosperms (Fig.~\ref{fig:figureSI2}), however differences were small and depended on plant height. We found near-isometric scaling ($M_R \propto H^0.93) (cf. \cite{hui_near_2014, cairns_root_1997}), leading to only small shifts in the root-shoot ratio with increasing height. We did not test for direct climate effects on $M_R/M_T$ due to limited data availability for root biomass. 
+We found some evidence for a higher root-shoot ratio ($M_R/M_T$) in deciduous angiosperms (Fig.~\ref{fig:figureSI2}), however differences were small and depended on plant height. We found near-isometric scaling ($M_R \propto H^{0.93}$) (cf. \cite{hui_near_2014, cairns_root_1997}), leading to only small shifts in the root-shoot ratio with increasing height. We did not test for direct climate effects on $M_R/M_T$ due to limited data availability for root biomass. 
 
 The main objective was to test whether PFT-specific differences exist in the ratio of leaf mass to total above-ground biomass (the 'leaf mass fraction', LMF), and the leaf area to aboveground biomass (the 'leaf area ratio', LAR). Because PFT and climate are confounded to some extent (Fig.~\ref{figure1}), we also test whether climate has additional effects on biomass partitioning, or whether these effects are captured by PFT alone.
 
