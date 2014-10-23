@@ -66,7 +66,7 @@ dataset2$pftlong <- as.factor(with(dataset2, paste(pft, bortemptrop, sep='-')))
 
 
 # Root dataset, excluding three studies with very poor root estimates
-datroot <- subset(dataset2, !is.na(m.rt) & !is.na(m.so) &
+datroot <- subset(dataset, !is.na(m.rt) & !is.na(m.so) &
                     !studyName %in% c("Gargaglione2010","Rodriguez2003","Albrektson1984"))
 
 
