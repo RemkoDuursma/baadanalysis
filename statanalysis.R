@@ -224,6 +224,9 @@ l <- lapply(vars,fx)
 tab <- cbind(as.data.frame(vars), as.data.frame(do.call(rbind,l)))
 names(tab) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
 
+aics <- lapply()
+
+x <- testmapmat("lmrt_mso")
 
 #-----------------------------------------------------------------------------------------#
 # Predict basal stem D from breast height

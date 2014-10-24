@@ -137,7 +137,9 @@ to.pdf({
 to.pdf({
   par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
   meansbypft("lmlf_astba2","lalf_astba2", "pft", 
-             xvar="llma",setpar=FALSE,
+             xvar="llma",
+             dataset=dataset, 
+             setpar=FALSE,
              legend.where="topleft",
              legend.cex=0.6,
              legend.text=c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno."),
@@ -147,7 +149,6 @@ to.pdf({
              xlab=expression("Specific leaf mass"~~(kg~m^-2)),
              ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
-             dataset=dataset, 
              xlim=c(0,0.2),
              ylim1=c(0,250),ylim2=c(0,2000))
 }, width=8, height=4, filename="manuscript/figures/Figure4_mlf_alf_astbaest_pftmeans.pdf")
@@ -334,23 +335,23 @@ to.pdf({
 # SI 8
 # Means of leaf mass, area per stem area by PFT - biome combination.
 to.pdf({
-  par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
+  Labs <- c("Temp. Decid. Angio.","Temp. Evergr. Angio.",
+    "Trop. Evergr. Angio.","Boreal Evergr. Gymno.",
+    "Temp. Evergr. Gymno.")
+  par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=2, cex.axis=0.9)
   meansbypft("lmlf_astba2","lalf_astba2", "pftlong", 
-             xvar="llma",setpar=FALSE,
-             legend.where="bottomright",
-             legend.cex=0.6,
-             legend.text=c("Temp. Decid. Angio.","Temp. Evergr. Angio.",
-                           "Trop. Evergr. Angio.","Boreal Evergr. Gymno.",
-                           "Temp. Evergr. Gymno."),
-             panel1.expr={axis(1);axis(2)},
-             panel2.expr={axis(1);axis(2)},
-             Cols=rainbow(5),
-             siglets="symbol",
-             xlab=expression("Specific leaf mass"~~(kg~m^-2)),
+             xvar=1:5,setpar=FALSE,
+             addlegend=FALSE,
+             Cols=c(Cols[1:2], "hotpink2", Cols[3], linecols[3]),
+             panel1.exp={axis(1, at=1:5, labels=Labs, las=2, cex.axis=0.8)},
+             panel2.exp={axis(1, at=1:5, labels=Labs, las=2, cex.axis=0.8)},
+             siglets="bottom",
+             xlab="",
+             axis1=FALSE,
              ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
              dataset=dataset2, 
-             xlim=c(0,0.3),
+             xlim=c(0,6),
              ylim1=c(0,250),ylim2=c(0,2000))
 }, filename="manuscript/figures/FigureSI-8_mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
 
