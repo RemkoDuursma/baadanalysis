@@ -18,11 +18,13 @@ mixmean <- function(yvar, g, dataset=dat){
 meansbypft <- function(yvar1, yvar2=NULL, pftvar, 
                            xvar="llma",
                            dataset,
+                           axis1=TRUE,
                            panel1.expr=NULL,
                            panel2.expr=NULL,
                            setpar=TRUE,
                            Cols=NULL,
                            panel1only=FALSE,
+                          addlegend=TRUE,
                            legend.text=NULL,
                            legend.where="topright",
                            legend.cex=0.7,
@@ -51,7 +53,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   if(is.character(xvar)){
     X <- mixmean(xvar,pftvar,dat)
   } else {
-    X <- list(y = X, lci=rep(NA,3), uci=rep(NA,3))
+    X <- list(y = xvar, lci=rep(NA,length(xvar)), uci=rep(NA,length(xvar)))
   }
   
   # mix means of Y variables.
@@ -61,7 +63,6 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
   
-
   # model fit for multiple comparisons
   f1 <- lmer(Y1 ~ P - 1 + (1|Group), data=dat)
   if(!panel1only)f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
@@ -83,6 +84,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                 y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
        })
   axis(2)
+  if(axis1)axis(1,labels=FALSE)
   box()
   
   u <- par()$usr
@@ -93,22 +95,26 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
     pointLabel(X$y, y1$y, lets1, cex=0.9)
   }
   
-  axis(1,labels=FALSE)
   if(!is.null(panel1.expr))eval(panel1.expr)
   
   if(is.null(legend.text))legend.text <- rownames(X)
-  legend(legend.where, legend.text,pch=19,col=Cols, 
+  if(addlegend){
+    legend(legend.where, legend.text,pch=19,col=Cols, 
          cex=legend.cex,pt.cex=1.2, bty='n')
+  }
   
   if(!panel1only){
     plot(X$y, y2$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
-         ylim=ylim2,xlab=xlab, ylab=ylab2,
+         ylim=ylim2,xlab=xlab, ylab=ylab2,axes=FALSE,
          panel.first={
            arrows(x0=X$lci, x1=X$uci, y0=y2$y, 
                   y1=y2$y,code=3,angle=90,length=0.025,col=Cols)
            arrows(x0=X$y, x1=X$y, y0=y2$lci, 
                   y1=y2$uci,code=3,angle=90,length=0.025,col=Cols)
          })
+    axis(2)
+    box()
+    if(axis1)axis(1)
     u <- par()$usr
     if(!is.null(panel2.expr))eval(panel2.expr)
     if(siglets == "bottom"){
