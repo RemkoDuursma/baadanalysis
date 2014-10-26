@@ -1,17 +1,19 @@
 
+# 1. Barplot with number of observations by variable.
+# 2. Barplot with number of observations by PFT, vegetation and growingCondition.
+# Nice for presentations etc.
 source("load.R")
 library(Hmisc)
 fn <- function(x)sum(!is.na(baad[,x]))
 
-cfg <- read.csv("data/variableDefinitions.csv", stringsAsFactors=FALSE)
-
-
-Vars <- cfg$Variable[13:47]
-Desc <- capitalize(cfg$label[13:47])
+# Choose variables, get names and labels.
+thesevars <- 15:50
+Vars <- cfg$variable[thesevars]
+Desc <- capitalize(cfg$label[thesevars])
 names(Vars) <- Desc
 Vars <- Vars[!Vars %in% c("d.bh","h.c","d.ba")]
 vn <- sort(sapply(Vars,fn),F)
-vn <- vn[vn >0]
+vn <- vn[vn >0] # exclude vars with 0 observations
 
 to.pdf({
   par(mar=c(1,13,3,1), las=1, mgp=c(2,0.5,0), cex=0.8, tcl=0.4)

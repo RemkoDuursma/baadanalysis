@@ -9,6 +9,8 @@ transCols <- alpha(Cols,0.4)
 linecols <- c("deepskyblue3","firebrick2","chartreuse3")
 palette(Cols)
 
+lmaLabel <- expression("Leaf mass per area"~~(kg~m^-2))
+
 Legend <- function(where, labels=c("short","long"), bty='n', ...){
   lab <- if(match.arg(labels) == "short")
             c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno.")
@@ -104,9 +106,9 @@ l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
 
   lsmeansPlot(lmf, lma, cex=1.3, 
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),
-              xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
+              xlim=c(0,0.2), xlab=lmaLabel)
   lsmeansPlot(lar, lma, cex=1.3, ylab=expression(A[F]/M[T]~~(m^2~kg^-1)),
-              xlim=c(0,0.2), xlab=expression("Specific leaf mass"~~(kg~m^-2)))
+              xlim=c(0,0.2), xlab=lmaLabel)
 
 
 }, filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf", width=7, height=7)
@@ -146,7 +148,7 @@ to.pdf({
              panel1.expr={axis(1);axis(2)},
              panel2.expr={axis(1);axis(2)},
              Cols=Cols,
-             xlab=expression("Specific leaf mass"~~(kg~m^-2)),
+             xlab=lmaLabel,
              ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
              xlim=c(0,0.2),
@@ -280,7 +282,7 @@ to.pdf({
   lba <- lmerTest::lsmeans(lmer_BA, "pft")
   lsmeansPlot(lba, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,800),
               xlab="",axes=FALSE,
-              ylab=expression(M[W]/A[S]~~(kg~m^-2)))
+              ylab=expression(M[T]/A[S]~~(kg~m^-2)))
   axis(1, at=1:3, labels=levels(dataset$pft))
   axis(2)
   box()
@@ -315,9 +317,10 @@ lm2 <- lm(lalf_astba2 ~ llma, data=agg)
 to.pdf({
   par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.1)
   
-  with(agg, plot(llma, lmlf_astba2, pch=19, col=transCols[pft], axes=FALSE, ylim=log10(c(1,1000)),
+  with(agg, plot(llma, lmlf_astba2, pch=19, col=transCols[pft], 
+                 axes=FALSE, ylim=log10(c(1,1000)),
                  xlim=log10(c(0.01,1)),
-                 xlab=expression("Specific leaf mass"~(kg~m^-2)), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
+                 xlab=lmaLabel, ylab=expression(M[F]/A[S]~~(kg~m^-2))))
   magaxis(1:2, unlog=1:2)
   predline(lm1)
   box()
@@ -325,7 +328,7 @@ to.pdf({
   
   with(agg, plot(llma, lalf_astba2, pch=19, col=transCols[pft], axes=FALSE, ylim=log10(c(90,10000)),
                  xlim=log10(c(0.01,1)),
-                 xlab=expression("Specific leaf mass"~(kg~m^-2)), ylab=expression(A[F]/A[S]~~(kg~m^-2))))
+                 xlab=lmaLabel, ylab=expression(A[F]/A[S]~~(kg~m^-2))))
   magaxis(1:2, unlog=1:2)
   predline(lm2)
   box()

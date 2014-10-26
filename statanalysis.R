@@ -220,13 +220,14 @@ fx <- function(v="lmlf_mso")unlist(sapply(testmapmat(v),
                                           function(z)suppressWarnings(r.squared(z)))[4,])
 
 vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","lmrt_mso")
-l <- lapply(vars,fx)
-tab <- cbind(as.data.frame(vars), as.data.frame(do.call(rbind,l)))
+modelfits <- lapply(vars, testmapmat) 
+r2 <- do.call(rbind,lapply(1:length(vars), function(i)unlist(sapply(modelfits[[i]],r.squared)[4,])))
+
+tab <- cbind(as.data.frame(vars), as.data.frame(r2))
 names(tab) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
 
-aics <- lapply()
+save(tab, file="manuscript/tables/R2_MAPMAT_lmemodels.RData")
 
-x <- testmapmat("lmrt_mso")
 
 #-----------------------------------------------------------------------------------------#
 # Predict basal stem D from breast height
