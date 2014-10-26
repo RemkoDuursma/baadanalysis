@@ -7,10 +7,14 @@
 # R data files from past sessions
 .Rdata
 .Rproj.user
+*.Rproj
 
 *.log
 *.pdf
 *.synctex.gz
 *.rds
 *.html
-
+*.tex
+*.bbl
+manuscript/tables/
+manuscript/wordcount.txt

@@ -11,7 +11,7 @@ source("R/predictBasalA.R")
 # Load BAAD
 baadall <- readRDS("data/baad.rds")
 baad <- baadall$data
-
+cfg <- baadall$dictionary
 
 # Convert conifer leaf areas
 baad$a.lf <- convertConiferLA(baadall)
@@ -20,4 +20,4 @@ baad$a.lf <- convertConiferLA(baadall)
 # (usecache=FALSE depends on wordclim layers; only works on remko's machine)
 baad <- addWorldClimMAPMAT(baad, usecache=TRUE)
 
-cfg <- read.csv("data/variableDefinitions.csv", stringsAsFactors=FALSE)
+
