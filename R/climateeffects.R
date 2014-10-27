@@ -72,6 +72,40 @@ r.squared(lme_egb)
 r.squared(lme_egb2)
 
 
+#------------------------------------------------------------------------------------#
+# explained variance with gam
+
+
+testdata <- subset(dataset, MAP > 900 & MAT > 8)
+
+testmapmatgam <- function(yvar){
+  
+  f <- list()
+  f[[1]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(MAP) + te(MAT)"))
+  f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
+  f[[3]] <- as.formula(paste(yvar,"~ te(lh.t) + te(MAP) + te(MAT)"))
+  f[[4]] <- as.formula(paste(yvar,"~ te(lh.t)"))
+  
+  g <- lapply(f, function(x)gam(formula=x, data=testdata))
+return(g)
+}
+
+vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma", "lmrt_mso")
+gams <- lapply(vars, testmapmatgam)
+
+r2g <- do.call(rbind,lapply(1:length(vars), 
+                            function(i)unlist(sapply(gams[[i]],function(x)summary(x)$r.sq))))
+
+tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
+names(tabg) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
+
+tabg
+
+
+
+
+
+
 
 
 

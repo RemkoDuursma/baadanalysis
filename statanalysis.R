@@ -215,10 +215,6 @@ testmapmat <- function(yvar){
   return(list(lme1, lme2, lme3, lme4))
 }
 
-
-fx <- function(v="lmlf_mso")unlist(sapply(testmapmat(v), 
-                                          function(z)suppressWarnings(r.squared(z)))[4,])
-
 vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","lmrt_mso")
 modelfits <- lapply(vars, testmapmat) 
 r2 <- do.call(rbind,lapply(1:length(vars), function(i)unlist(sapply(modelfits[[i]],r.squared)[4,])))
