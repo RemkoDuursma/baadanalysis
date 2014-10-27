@@ -21,3 +21,5 @@ baad$a.lf <- convertConiferLA(baadall)
 baad <- addWorldClimMAPMAT(baad, usecache=TRUE)
 
 
+
+

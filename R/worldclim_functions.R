@@ -36,13 +36,8 @@ addWorldClimMAPMAT <- function(data, usecache=TRUE){
   
   if(!usecache){
     # Get unique lat long from data. 
-    latlong <- paste(data$latitude,data$longitude)
-    ii <- which(!duplicated(latlong))
-    df <- data.frame(latlong=latlong[ii], latitude=as.numeric(data$latitude[ii]), 
-                     longitude=as.numeric(data$longitude[ii]),
-                     stringsAsFactors=FALSE)
+    df <- data[!duplicated(data$latitude, data$longitude),c("latitude","longitude")]
     df <- df[complete.cases(df),]
-    
     
     library(raster)
     library(dismo)
@@ -65,6 +60,7 @@ addWorldClimMAPMAT <- function(data, usecache=TRUE){
     
   }
   data$latlong <- paste(data$latitude,data$longitude)
+  df$latlong <- paste(df$latitude,df$longitude)
   data <- merge(data, df[,c("latlong","MAP","MAT")], by="latlong", all=TRUE)
   data$latlong <- NULL
   
