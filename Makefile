@@ -22,6 +22,7 @@ figures: $(ONEFIG) data/baad.rds
 
 $(ONEFIG) R/prepareDataset.R : figures.R
 	Rscript figures.R
+	rm -f Rplots.pdf
 
 deps:
 	${RSCRIPT} dependencies.R
