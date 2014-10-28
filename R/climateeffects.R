@@ -76,7 +76,7 @@ r.squared(lme_egb2)
 # explained variance with gam
 
 
-testdata <- subset(dataset, MAP > 900 & MAT > 8)
+testdata <- dataset # subset(dataset, MAP > 900 & MAT > 8)
 
 testmapmatgam <- function(yvar){
   
@@ -100,13 +100,99 @@ tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
 names(tabg) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
 
 tabg
+# well that's confusing
+
+#------------------------------------------------------------------------------------#
+
+# Add mgdd0 and MI
+
+clim <- read.csv("data/MI_mGDDD_landcover_filtered.csv", stringsAsFactors=FALSE)
+names(clim)[names(clim)  == "MAP"] <- "MAPclim"
+names(clim)[names(clim)  == "MAT"] <- "MATclim"
+
+mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),c("studyName","latitude","longitude","MAP","MAT")]
+
+
+dif <- function(lat1, lat2, lon1, lon2)(lat1-lat2)^2 + (lon1-lon2)^2
+
+ii <- sapply(1:nrow(mapmat), function(i)which.min(dif(mapmat$latitude[i], clim$lat, mapmat$longitude[i], clim$lon)))
+mapmat <- cbind(mapmat, clim[ii, c("lon","lat","MATclim","MAPclim","mgdd0","MI")])
+
+dataset$latlon <- with(dataset, paste(latitude, longitude))
+mapmat$latlon <- with(mapmat, paste(latitude, longitude))
+dataset <- merge(dataset, mapmat[,c("latlon","mgdd0","MI")], all.x=T)
+
+testdata <- d
+
+testmapmatgam2 <- function(yvar, mgdd0=TRUE){
+  
+  f <- list()
+  f[[1]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(MI, k=4)", if(mgdd0)" + te(mgdd0, k=4)"))
+  f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
+  f[[3]] <- as.formula(paste(yvar,"~ te(lh.t) + te(MI, k=4)", if(mgdd0)" + te(mgdd0, k=4)"))
+  f[[4]] <- as.formula(paste(yvar,"~ te(lh.t)"))
+  
+  g <- lapply(f, function(x)gam(formula=x, data=testdata))
+  return(g)
+}
+
+vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma", "lmrt_mso")
+gams <- lapply(vars, testmapmatgam2, mgdd0=FALSE)
+
+r2g <- do.call(rbind,lapply(1:length(vars), 
+                            function(i)unlist(sapply(gams[[i]],function(x)summary(x)$r.sq))))
+
+tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
+names(tabg) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
+
+tabg
+
+plot(gams[[2]][[3]])
+
+
+# am i chasing a red herring? are we interested in climate effects when PFT not included??
+# dont think so!!!
+
+#------------------------------------------------------------------------------------#
+
+
+pdf("varsbyclim.pdf")
+smoothplotbypft(MI, llma, dataset, log="y", kgam=2)
+smoothplotbypft(mgdd0, llma, dataset, log="y", kgam=2)
+smoothplotbypft(MI, lmlf_astba2, dataset, log="y", kgam=2)
+smoothplotbypft(mgdd0, lmlf_astba2, dataset, log="y", kgam=2)
+smoothplotbypft(MI, lalf_astba2, dataset, log="y", kgam=2)
+smoothplotbypft(mgdd0, lalf_astba2, dataset, log="y", kgam=2)
+dev.off()
+
+pdf("varsbyclim2.pdf")
+smoothplotbypft(MAT, llma, dataset, log="y")
+smoothplotbypft(MAP, llma, dataset, log="y")
+smoothplotbypft(MAT, lmlf_astba2, dataset, log="y")
+smoothplotbypft(MAP, lmlf_astba2, dataset, log="y")
+smoothplotbypft(MAT, lalf_astba2, dataset, log="y")
+smoothplotbypft(MAP, lalf_astba2, dataset, log="y")
+dev.off()
 
 
 
 
 
+f <- function(x)sum(!is.na(x))
+dataset$ngroupmlf <- with(dataset, ave(lmlf_astba2,Group,FUN=f))
+
+dat <- subset(dataset, ngroupmlf > 0)
+
+fit1 <- gamm(lmlf_astba2 ~ s(MI), random = list(Group=~1), data=dat ) 
 
 
+g <- gamm(llma ~ s(MI, k=-1) + s(Group, bs="re"), data=dataset)
+f <- fitgam("MI","llma",dataset,R="Group")
+
+
+
+
+smoothplotbypft(MAT, llma, dataset, log="y", R="Group")
 
 
 
