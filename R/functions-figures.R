@@ -180,6 +180,7 @@ lsmeansPlot <- function(y,x,lets,ylim=NULL,...){
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
                             fittype=c("gam","lm"),
+                            fitoneline=FALSE,
                             linecols=c("deepskyblue3","red","chartreuse3"), 
                             xlab=NULL, ylab=NULL,logaxes=TRUE,
                             ...){
@@ -190,12 +191,15 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
   data$X <- eval(substitute(x),data)
   data$Y <- eval(substitute(y),data)
   
+  data <- data[!is.na(data$X) & !is.na(data$Y) & !is.na(data$pft),]
+  
   if(is.null(xlab))xlab <- substitute(x)
   if(is.null(ylab))ylab <- substitute(y)
   
   d <- split(data, data$pft)
   
   hran <- lapply(d, function(x)range(x$X, na.rm=TRUE))
+  
   if(fittype == "gam"){
     fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=4)))
   } else {
