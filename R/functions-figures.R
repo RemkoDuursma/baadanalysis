@@ -1,10 +1,13 @@
 
-mixmean <- function(yvar, g, dataset=dat){
+
+#' Means by some grouping variable g, accounting for random effect R.
+mixmean <- function(yvar, g, R="Group", dataset){
   
   dataset$P <- dataset[,g]
   dataset$Y <- dataset[,yvar]
+  dataset$R <- dataset[,R]
   
-  f <- lmer(Y ~ P - 1 + (1|Group), data=dataset)
+  f <- lmer(Y ~ P - 1 + (1|R), data=dataset)
   
   ci <- suppressMessages(confint(f)[-c(1,2),])
   ci <- as.data.frame(cbind(10^fixef(f),10^ci))
@@ -14,7 +17,8 @@ mixmean <- function(yvar, g, dataset=dat){
 }
 
 
-
+#' Plot means by plant functional type
+#' @description Optionally makes two panels. Adds CI based on \code{mixmean}.
 meansbypft <- function(yvar1, yvar2=NULL, pftvar, 
                            xvar="llma",
                            dataset,
@@ -24,7 +28,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                            setpar=TRUE,
                            Cols=NULL,
                            panel1only=FALSE,
-                          addlegend=TRUE,
+                           addlegend=TRUE,
                            legend.text=NULL,
                            legend.where="topright",
                            legend.cex=0.7,
@@ -133,7 +137,11 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
 }
 
 
-lsmeansPlot <- function(y,x,lets,ylim=NULL,...){
+#' Plot least-square means
+#' @description Plots least-square means, adds CI bars and significance letters.
+#' @param y An object returned by \code{lmerTest::lsmeans},
+#' @param x Either a numeric vector, or an object returned by \code{mixmean}
+lsmeansPlot <- function(y,x, ylim=NULL, col=palette(), ...){
   
   
   if(class(y)[1] != "lsmeans")
@@ -154,56 +162,91 @@ lsmeansPlot <- function(y,x,lets,ylim=NULL,...){
          ylim=ylim, 
          panel.first={
            arrows(x0=x$lci, x1=x$uci, y0=Y, y1=Y,
-                  code=3,angle=90,length=0.025,col=Cols)
+                  code=3,angle=90,length=0.025,col=col)
            arrows(x0=x$y, x1=x$y, y0=lci, y1=uci, angle=90, code=3, 
-                  length=0.025, col=Cols)
-         }, pch=19, col=Cols,...)
+                  length=0.025, col=col)
+         }, pch=19, col=col,...)
     u <- par()$usr
     text(x$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
     
   } else {
     
-    plot(x, Y, ylim=ylim, col=Cols, pch=19, 
+    plot(x, Y, ylim=ylim, col=col, pch=19, 
          panel.first= arrows(x0=x, x1=x, y0=lci, y1=uci, angle=90, code=3, 
-                                       length=0.025, col=Cols),
+                                       length=0.025, col=col),
          ...)
     u <- par()$usr
     text(x, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
 
     
   }
-  
-  
 
 }
 
 
-smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
+#' Function for smoothplot. Probably not use otherwise.
+fitgam <- function(X,Y,dfr, k=-1, R=NULL){
+  dfr$Y <- dfr[,Y]
+  dfr$X <- dfr[,X]
+  if(!is.null(R)){
+    dfr$R <- dfr[,R]
+    model <- 2
+  } else model <- 1
+  dfr <- droplevels(dfr)
+  
+  
+  if(model ==1){
+    g <- gam(Y ~ s(X, k=k), data=dfr)
+  }
+  if(model ==2){
+    g <- gamm(Y ~ s(X, k=k), random = list(R=~1), data=dfr)
+  }
+  
+  return(g)
+}
+
+
+#' Plot a generalized additive model
+#' @param x Variable for X axis (unquoted)
+#' @param y Variable for Y axis (unquoted)
+#' @param data Dataframe containing x and y
+#' @param kgam the \code{k} parameter for smooth terms in gam.
+#' @param R An optional random effect (quoted)
+#' @param log Whether to add log axes for x or y (but no transformations are done).
+#' @param fitoneline Whether to fit only 
+smoothplot <- function(x,y,g=NULL,data,
                             fittype=c("gam","lm"),
                             kgam=4,
                             R=NULL,
                             log="xy",
                             fitoneline=FALSE,
-                            linecols=c("deepskyblue3","red","chartreuse3"), 
+                            pointcols=NULL,
+                            linecols=NULL, 
                             xlab=NULL, ylab=NULL,
+                            polycolor=alpha("lightgrey",0.7),
                             ...){
   
   fittype <- match.arg(fittype)
-  data$pft <- as.factor(data$pft)
-  data <- droplevels(data)
+
+  if(!is.null(g)){
+    data$G <- as.factor(eval(substitute(g),data))
+  } else {
+    fitoneline <- TRUE
+    data$G <- 1
+  }
   data$X <- eval(substitute(x),data)
   data$Y <- eval(substitute(y),data)
+  data <- droplevels(data)
   
-  data <- data[!is.na(data$X) & !is.na(data$Y) & !is.na(data$pft),]
+  data <- data[!is.na(data$X) & !is.na(data$Y) & !is.na(data$G),]
   
   if(is.null(xlab))xlab <- substitute(x)
   if(is.null(ylab))ylab <- substitute(y)
   
-  d <- split(data, data$pft)
-  
-  
-  
   if(!fitoneline){
+    
+    d <- split(data, data$G)
+    
     if(fittype == "gam"){
       fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=kgam, R=R)))
       if(!is.null(R))fits <- lapply(fits, "[[", "gam")
@@ -222,7 +265,7 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
     
   }
   
-  with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft],
+  with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
                   xlab=xlab, ylab=ylab, ...))
   
   if(log=="xy")magaxis(side=1:2, unlog=1:2)
@@ -248,7 +291,7 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
       nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
       if(!inherits(fits[[i]], "try-error")){
         p <- predict(fits[[i]],nd,se.fit=TRUE)
-        addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=alpha("lightgrey",0.7))
+        addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=polycolor)
         lines(nd$X, p$fit, col=linecols[i], lwd=2)
       }
     }
@@ -331,25 +374,6 @@ histbypft <- function(yvar, pftvar, dataset,
   mtext(side=1, line=3, text=xlab, outer=T, las=1)
 }
 
-fitgam <- function(X,Y,dfr, k=-1, R=NULL){
-  dfr$Y <- dfr[,Y]
-  dfr$X <- dfr[,X]
-  if(!is.null(R)){
-    dfr$R <- dfr[,R]
-    model <- 2
-  } else model <- 1
-  dfr <- droplevels(dfr)
-  
-  
-  if(model ==1){
-    g <- gam(Y ~ s(X, k=k), data=dfr)
-  }
-  if(model ==2){
-    g <- gamm(Y ~ s(X, k=k), random = list(R=~1), data=dfr)
-  }
-  
-  return(g)
-}
 
 addpoly <- function(x,y1,y2,col=alpha("lightgrey",0.8),...){
   ii <- order(x)
