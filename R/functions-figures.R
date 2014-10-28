@@ -258,6 +258,8 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
       predline(fits[[i]], col=linecols[i], lwd=2, lty=LTY)
     }
   }
+  
+return(invisible(fits))
 }
 
 
@@ -348,6 +350,7 @@ fitgam <- function(X,Y,dfr, k=-1, R=NULL){
   
   return(g)
 }
+
 addpoly <- function(x,y1,y2,col=alpha("lightgrey",0.8),...){
   ii <- order(x)
   y1 <- y1[ii]
