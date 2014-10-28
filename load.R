@@ -20,6 +20,11 @@ baad$a.lf <- convertConiferLA(baadall)
 # (usecache=FALSE depends on wordclim layers; only works on remko's machine)
 baad <- addWorldClimMAPMAT(baad, usecache=TRUE)
 
+# Add moisture index (MI) and mean T during growing season (when T > 0)
+baad <- addMImgdd0(baad)
+
+
+
 
 
 
