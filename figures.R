@@ -97,10 +97,11 @@ lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 to.pdf({
 l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   par(mar=c(5,5,1,1), cex.axis=0.9, cex.lab=1.1)
-  g <- gamplotandpred(dataset, "pft", "lmlf_mso", plotwhich=1, setpar=FALSE,
-                      lineCols=linecols, pointCols=transCols,vlines=FALSE,legend=FALSE,
-                      xlab="Plant height (m)",
-                      ylab=expression(M[F]/M[T]~~(kg~kg^-1)))
+  smoothplotbypft(lh.t, lmlf_mso, dataset, R="Group",linecols=linecols, pointcols=transCols,
+                  xlab="Plant height (m)",
+                  ylab=expression(M[F]/M[T]~~(kg~kg^-1))
+                  )
+
   Legend("bottomleft", "long")
   box()
 
@@ -192,7 +193,7 @@ width=6, height=5)
 # Root-shoot
 to.pdf({
   par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
-  smoothplotbypft(log10(h.t), log10(m.rt/m.so), datroot, 
+  smoothplotbypft(log10(h.t), log10(m.rt/m.so), datroot, R="Group",
                   xlab=expression(H~~(m)),
                   ylab=expression(M[R]/M[T]~~("-")),
                   cex=0.6,pointcols=transCols,linecols=linecols)
@@ -256,13 +257,36 @@ to.pdf(mstmlf_ht(), width=9, height=4,
 # Leaf area ratio; raw data.
 to.pdf({
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
-  g2 <- gamplotandpred(dataset, "pft", "lalf_mso", plotwhich=1, 
-                       lineCols=linecols, pointCols=transCols,vlines=FALSE,legend=FALSE,
-                       xlab="Plant height (m)",
-                       ylab=expression("Leaf area / aboveground biomass"~~(m^2~kg^-1)))
+
+  x <- smoothplotbypft(lh.t, lalf_mso, dataset,  R="Group", linecols=linecols, pointcols=transCols,
+                  xlab="Plant height (m)",
+                  ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
+  
   Legend("bottomleft")
   
 }, filename="manuscript/figures/FigureSI-4_LAR_pft_lines.pdf", width=7, height=4.5)
+
+
+
+dg <- subset(dataset, pft == "EG")
+g <- gamm(lalf_mso ~ s(lh.t, k=-1), random = list(Group=~1), data=dg)
+g0 <- gam(lalf_mso ~ s(lh.t, k=-1), data=dg)
+g2 <- gamm(lalf_mso ~ te(lh.t), random = list(Group=~1), data=dg)
+
+dg$p <- predict(g$gam, dg)
+dg$p0 <- predict(g0, dg)
+dg$p2 <- predict(g2$gam, dg)
+
+with(dg, plot(lh.t, lalf_mso - p))
+
+
+
+g2 <- gamm(lalf_mso ~ s(lh.t), random = list(Group=~1), data=dg)
+dg$p2 <- predict(g2$gam, dg)
+with(dg, plot(lh.t, lalf_mso - p2))
+abline(h=0)
+
+g0 <- gam(lalf_mso ~ s(lh.t, k=-1), data=dataset)
 
 
 
@@ -273,7 +297,7 @@ to.pdf({
   par(mfrow=c(1,2), mar=c(5,5,2,2))
   
   smoothplotbypft(log10(a.stba2), log10(m.so), dataset, xlab=expression(Basal~stem~area~~(m^2)),
-                  linecols=linecols, pointcols=transCols,
+                  linecols=linecols, pointcols=transCols, R="Group",
                   ylab="Above-ground biomass (kg)", cex=0.6)
   Legend("topleft")
   
@@ -295,10 +319,12 @@ to.pdf({
 
   par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2))
   smoothplotbypft(log10(a.stba2), log10(m.lf), dataset, xlab=expression(A[S]~~(m^2)),
+                  R="Group",
                   ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
   
   smoothplotbypft(log10(a.stba2), log10(a.lf), dataset, xlab=expression(A[S]~~(m^2)),
+                  R="Group",
                   linecols=linecols, pointcols=transCols,
                   ylab=expression(A[F]~(m^2)), cex=0.6)
 
@@ -384,27 +410,23 @@ to.pdf({
   # MAT
   smoothplotbypft(MAT, b0, p, fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
-                  logaxes=FALSE,xlim=c(0,30), ylim=c(-2,0.32),
+                  R="Group",
+                  log="",xlim=c(0,30), ylim=c(-2,0.32),
                   xlab=expression(Mean~Annual~Temperature~(degree)),
                   ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
   with(p[grep("Roth2007",p$Group),],
        points(MAT, b0, pch=17, col="forestgreen"))
-  axis(1, at=seq(0,30,by=5))
-  magaxis(side=2, unlog=2)
-  box()
   Legend("topleft", cex=0.7, pt.cex=1)
   
   # MAP
   smoothplotbypft(MAP, b0, p,fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
-                  logaxes=FALSE, xlim=c(0,4500), ylim=c(-2,0.32),
+                  R="Group",
+                  log="", xlim=c(0,4500), ylim=c(-2,0.32),
                   xlab=expression(Mean~Annual~Precipitation~(mm)),
                   ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
   with(p[grep("Roth2007",p$Group),],
        points(MAP, b0, pch=17, col="forestgreen"))
-  axis(1, at=seq(0,5000,by=1000))
-  magaxis(side=2, unlog=2)
-  box()
   
 }, width=8, height=4, filename="manuscript/figures/FigureSI-9_MAT_LMFscaling.pdf")
 
