@@ -180,9 +180,12 @@ lsmeansPlot <- function(y,x,lets,ylim=NULL,...){
 
 smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen"),0.3),
                             fittype=c("gam","lm"),
+                            kgam=4,
+                            R=NULL,
+                            log="xy",
                             fitoneline=FALSE,
                             linecols=c("deepskyblue3","red","chartreuse3"), 
-                            xlab=NULL, ylab=NULL,logaxes=TRUE,
+                            xlab=NULL, ylab=NULL,
                             ...){
   
   fittype <- match.arg(fittype)
@@ -198,19 +201,48 @@ smoothplotbypft <- function(x,y,data,pointcols=alpha(c("blue","red","forestgreen
   
   d <- split(data, data$pft)
   
-  hran <- lapply(d, function(x)range(x$X, na.rm=TRUE))
   
-  if(fittype == "gam"){
-    fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=4)))
+  
+  if(!fitoneline){
+    if(fittype == "gam"){
+      fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=kgam, R=R)))
+      if(!is.null(R))fits <- lapply(fits, "[[", "gam")
+    } else {
+      fits <- lapply(d, function(x)lm(Y ~ X, data=x))
+    }
+    hran <- lapply(d, function(x)range(x$X, na.rm=TRUE))
   } else {
-    fits <- lapply(d, function(x)lm(Y ~ X, data=x))
+    if(fittype == "gam"){
+      fits <- list(fitgam("X","Y",data, k=kgam, R=R))
+      if(!is.null(R))fits <- lapply(fits, "[[", "gam")
+    } else {
+      fits <- list(lm(Y ~ X, data=data))
+    }
+    hran <- list(range(data$X, na.rm=TRUE))
+    
   }
   
   with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[pft],
-                  xlab=xlab, ylab=ylab, ...)) 
-  if(logaxes)magaxis(side=1:2, unlog=1:2)
+                  xlab=xlab, ylab=ylab, ...))
   
-  for(i in 1:length(d)){
+  if(log=="xy")magaxis(side=1:2, unlog=1:2)
+  if(log=="x"){
+    magaxis(side=1, unlog=1)
+    axis(2)
+    box()
+  }
+  if(log=="y"){
+    magaxis(side=2, unlog=2)
+    axis(1)
+    box()
+  }
+  if(log==""){
+    axis(1)
+    axis(2)
+    box()
+  }
+  
+  for(i in 1:length(fits)){
     
     if(fittype == "gam"){
       nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
@@ -297,11 +329,22 @@ histbypft <- function(yvar, pftvar, dataset,
   mtext(side=1, line=3, text=xlab, outer=T, las=1)
 }
 
-fitgam <- function(X,Y,dfr, k=-1, model=1){
+fitgam <- function(X,Y,dfr, k=-1, R=NULL){
   dfr$Y <- dfr[,Y]
   dfr$X <- dfr[,X]
+  if(!is.null(R)){
+    dfr$R <- dfr[,R]
+    model <- 2
+  } else model <- 1
   dfr <- droplevels(dfr)
-  g<- gam(Y ~ s(X, k=k), data=dfr)
+  
+  
+  if(model ==1){
+    g <- gam(Y ~ s(X, k=k), data=dfr)
+  }
+  if(model ==2){
+    g <- gamm(Y ~ s(X, k=k), random = list(R=~1), data=dfr)
+  }
   
   return(g)
 }
