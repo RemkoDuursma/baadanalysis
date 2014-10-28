@@ -105,24 +105,7 @@ tabg
 #------------------------------------------------------------------------------------#
 
 # Add mgdd0 and MI
-
-clim <- read.csv("data/MI_mGDDD_landcover_filtered.csv", stringsAsFactors=FALSE)
-names(clim)[names(clim)  == "MAP"] <- "MAPclim"
-names(clim)[names(clim)  == "MAT"] <- "MATclim"
-
-mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),c("studyName","latitude","longitude","MAP","MAT")]
-
-
-dif <- function(lat1, lat2, lon1, lon2)(lat1-lat2)^2 + (lon1-lon2)^2
-
-ii <- sapply(1:nrow(mapmat), function(i)which.min(dif(mapmat$latitude[i], clim$lat, mapmat$longitude[i], clim$lon)))
-mapmat <- cbind(mapmat, clim[ii, c("lon","lat","MATclim","MAPclim","mgdd0","MI")])
-
-dataset$latlon <- with(dataset, paste(latitude, longitude))
-mapmat$latlon <- with(mapmat, paste(latitude, longitude))
-dataset <- merge(dataset, mapmat[,c("latlon","mgdd0","MI")], all.x=T)
-
-testdata <- d
+testdata <- dataset
 
 testmapmatgam2 <- function(yvar, mgdd0=TRUE){
   
@@ -156,44 +139,16 @@ plot(gams[[2]][[3]])
 #------------------------------------------------------------------------------------#
 
 
+K <- 4
+
 pdf("varsbyclim.pdf")
-smoothplotbypft(MI, llma, dataset, log="y", kgam=2)
-smoothplotbypft(mgdd0, llma, dataset, log="y", kgam=2)
-smoothplotbypft(MI, lmlf_astba2, dataset, log="y", kgam=2)
-smoothplotbypft(mgdd0, lmlf_astba2, dataset, log="y", kgam=2)
-smoothplotbypft(MI, lalf_astba2, dataset, log="y", kgam=2)
-smoothplotbypft(mgdd0, lalf_astba2, dataset, log="y", kgam=2)
+smoothplotbypft(MI, llma, dataset, log="y", kgam=K, R="Group")
+smoothplotbypft(mgdd0, llma, dataset, log="y", kgam=K, R="Group")
+smoothplotbypft(MI, lmlf_astba2, dataset, log="y", kgam=K, R="Group")
+smoothplotbypft(mgdd0, lmlf_astba2, dataset, log="y", kgam=K, R="Group")
+smoothplotbypft(MI, lalf_astba2, dataset, log="y", kgam=K, R="Group")
+smoothplotbypft(mgdd0, lalf_astba2, dataset, log="y", kgam=K, R="Group")
 dev.off()
-
-pdf("varsbyclim2.pdf")
-smoothplotbypft(MAT, llma, dataset, log="y")
-smoothplotbypft(MAP, llma, dataset, log="y")
-smoothplotbypft(MAT, lmlf_astba2, dataset, log="y")
-smoothplotbypft(MAP, lmlf_astba2, dataset, log="y")
-smoothplotbypft(MAT, lalf_astba2, dataset, log="y")
-smoothplotbypft(MAP, lalf_astba2, dataset, log="y")
-dev.off()
-
-
-
-
-
-f <- function(x)sum(!is.na(x))
-dataset$ngroupmlf <- with(dataset, ave(lmlf_astba2,Group,FUN=f))
-
-dat <- subset(dataset, ngroupmlf > 0)
-
-fit1 <- gamm(lmlf_astba2 ~ s(MI), random = list(Group=~1), data=dat ) 
-
-
-g <- gamm(llma ~ s(MI, k=-1) + s(Group, bs="re"), data=dataset)
-f <- fitgam("MI","llma",dataset,R="Group")
-
-
-
-
-smoothplotbypft(MAT, llma, dataset, log="y", R="Group")
-
 
 
 
