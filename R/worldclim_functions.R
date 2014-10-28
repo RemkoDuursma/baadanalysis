@@ -83,7 +83,39 @@ addWorldClimMAPMAT <- function(data, usecache=TRUE){
   return(data)
 }
 
-
+addMImgdd0 <- function(data, dataloc="data/MI_mGDDD_landcover_filtered.csv"){
+  
+  if(!file.exists(dataloc)){
+    message("Data not found.")
+    return(data)
+  }
+    
+  clim <- read.csv(dataloc, stringsAsFactors=FALSE)
+  names(clim)[names(clim)  == "MAP"] <- "MAPclim"
+  names(clim)[names(clim)  == "MAT"] <- "MATclim"
+  
+  mapmat <- data[!duplicated(data[,c("latitude","longitude")]),
+                 c("studyName","latitude","longitude","MAP","MAT")]
+  mapmat <- mapmat[!is.na(mapmat$latitude),]
+  
+  # Find nearest point based on lat, lon comparison
+  dif <- function(lat1, lat2, lon1, lon2)(lat1-lat2)^2 + (lon1-lon2)^2
+  
+  ii <- sapply(1:nrow(mapmat), 
+               function(i)which.min(dif(mapmat$latitude[i], 
+                                        clim$lat, mapmat$longitude[i], clim$lon)))
+  
+  # Merge. Also includes MAT, MAP from Worldclim for this tile, for comparison to finer
+  # estimate already in dataset (to check merge is OK).
+  mapmat <- cbind(mapmat, clim[ii, c("lon","lat","MATclim","MAPclim","mgdd0","MI")])
+  
+  # For some reason safer to merge by pasted latlon than both as numeric.
+  data$latlon <- with(data, paste(latitude, longitude))
+  mapmat$latlon <- with(mapmat, paste(latitude, longitude))
+  data <- merge(data, mapmat[,c("latlon","mgdd0","MI")], all.x=T)
+  
+  return(data)
+}
 
 
 
