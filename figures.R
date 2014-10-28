@@ -97,7 +97,7 @@ lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 to.pdf({
 l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   par(mar=c(5,5,1,1), cex.axis=0.9, cex.lab=1.1)
-  smoothplotbypft(lh.t, lmlf_mso, dataset, R="Group",linecols=linecols, pointcols=transCols,
+  smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
                   xlab="Plant height (m)",
                   ylab=expression(M[F]/M[T]~~(kg~kg^-1))
                   )
@@ -107,9 +107,9 @@ l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
 
   lsmeansPlot(lmf, lma, cex=1.3, 
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),
-              xlim=c(0,0.2), xlab=lmaLabel)
+              xlim=c(0,0.2), xlab=lmaLabel, col=Cols)
   lsmeansPlot(lar, lma, cex=1.3, ylab=expression(A[F]/M[T]~~(m^2~kg^-1)),
-              xlim=c(0,0.2), xlab=lmaLabel)
+              xlim=c(0,0.2), xlab=lmaLabel, col=Cols)
 
 
 }, filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf", width=7, height=7)
@@ -193,7 +193,7 @@ width=6, height=5)
 # Root-shoot
 to.pdf({
   par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
-  smoothplotbypft(log10(h.t), log10(m.rt/m.so), datroot, R="Group",
+  smoothplot(log10(h.t), log10(m.rt/m.so), pft, datroot, R="Group",
                   xlab=expression(H~~(m)),
                   ylab=expression(M[R]/M[T]~~("-")),
                   cex=0.6,pointcols=transCols,linecols=linecols)
@@ -204,7 +204,7 @@ to.pdf({
   rootlme1 <- lmer(lmrt_mso ~ pft*lmso + (lmso|Group), data=datroot)
   rootlsmeans <- lmerTest::lsmeans(rootlme1, "pft")
   lsmeansPlot(rootlsmeans, 1:3,  ylim=c(0,0.7),xlim=c(0,4),axes=FALSE,
-              xlab="",
+              xlab="",col=Cols,
               ylab=expression(M[R]/M[T]~~("-")))
   axis(1, at=1:3, labels=levels(datroot$pft))
   axis(2)
@@ -258,7 +258,8 @@ to.pdf(mstmlf_ht(), width=9, height=4,
 to.pdf({
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
 
-  x <- smoothplotbypft(lh.t, lalf_mso, dataset,  R="Group", linecols=linecols, pointcols=transCols,
+  x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group", 
+                  linecols=linecols, pointcols=transCols,
                   xlab="Plant height (m)",
                   ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
   
@@ -296,7 +297,7 @@ g0 <- gam(lalf_mso ~ s(lh.t, k=-1), data=dataset)
 to.pdf({
   par(mfrow=c(1,2), mar=c(5,5,2,2))
   
-  smoothplotbypft(log10(a.stba2), log10(m.so), dataset, xlab=expression(Basal~stem~area~~(m^2)),
+  smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(Basal~stem~area~~(m^2)),
                   linecols=linecols, pointcols=transCols, R="Group",
                   ylab="Above-ground biomass (kg)", cex=0.6)
   Legend("topleft")
@@ -305,7 +306,7 @@ to.pdf({
                   data=dataset, na.action=na.omit)
   lba <- lmerTest::lsmeans(lmer_BA, "pft")
   lsmeansPlot(lba, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,800),
-              xlab="",axes=FALSE,
+              xlab="",axes=FALSE,col=Cols,
               ylab=expression(M[T]/A[S]~~(kg~m^-2)))
   axis(1, at=1:3, labels=levels(dataset$pft))
   axis(2)
@@ -318,12 +319,12 @@ to.pdf({
 to.pdf({
 
   par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2))
-  smoothplotbypft(log10(a.stba2), log10(m.lf), dataset, xlab=expression(A[S]~~(m^2)),
+  smoothplot(log10(a.stba2), log10(m.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
                   R="Group",
                   ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
   
-  smoothplotbypft(log10(a.stba2), log10(a.lf), dataset, xlab=expression(A[S]~~(m^2)),
+  smoothplot(log10(a.stba2), log10(a.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
                   R="Group",
                   linecols=linecols, pointcols=transCols,
                   ylab=expression(A[F]~(m^2)), cex=0.6)
@@ -408,7 +409,7 @@ to.pdf({
   par(mar=c(5,5,2,2), cex.lab=1.1, mfrow=c(1,2))
   
   # MAT
-  smoothplotbypft(MAT, b0, p, fittype="lm",
+  smoothplot(MAT, b0, pft, p, fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
                   R="Group",
                   log="",xlim=c(0,30), ylim=c(-2,0.32),
@@ -419,7 +420,7 @@ to.pdf({
   Legend("topleft", cex=0.7, pt.cex=1)
   
   # MAP
-  smoothplotbypft(MAP, b0, p,fittype="lm",
+  smoothplot(MAP, b0, pft, p,fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
                   R="Group",
                   log="", xlim=c(0,4500), ylim=c(-2,0.32),
