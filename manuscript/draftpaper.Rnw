@@ -108,6 +108,8 @@ Although biome was a significant predictor for all variables tested, it consiste
 
 Unlike \cite{reich_temperature_2014}, we found only very weak effects of mean annual temperature the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI9}). The variance explained by MAT was very small, especially compared to the large difference between PFTs. These results were confirmed with a mixed-effects model of MF vs. MS, with MAT and PFT as covariates (see Table~\ref{table:matlmeanova}). We found no significant effects of mean annual precipitation of leaf-woody biomass relationships (Table~\ref{table:maplmeanova}).
 
+More plasticity in LMA than biomass partitioning has been demonstrated \cite{poorter_biomass_2012}.
+
 In summary, we found coordination between an important leaf trait and whole-plant biomass partitioning. This has implications for global vegetation models.
 
 How is allocation implemented in current DGVMs? Either constant allocation fraction, target allometric equations, or optimization \cite{de2014does}. Constant allocation fraction gives constant LAR by pft if leaf lifespan is exactly proportional to SLM. Target allometric equations can be made pft-invariant by using allometry of leaf area, not leaf mass. Optimization models probably already give the right answer because normally LAI is optimized (Woodward). 
