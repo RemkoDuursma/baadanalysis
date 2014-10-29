@@ -221,6 +221,7 @@ smoothplot <- function(x,y,g=NULL,data,
                             fittype=c("gam","lm"),
                             kgam=4,
                             R=NULL,
+                            randommethod=c("lmer","aggregate"),
                             log="xy",
                             fitoneline=FALSE,
                             pointcols=NULL,
@@ -230,8 +231,9 @@ smoothplot <- function(x,y,g=NULL,data,
                             ...){
   
   fittype <- match.arg(fittype)
+  randommethod <- match.arg(randommethod)
 
-  if(!is.null(g)){
+  if(!is.null(substitute(g))){
     data$G <- as.factor(eval(substitute(g),data))
   } else {
     fitoneline <- TRUE
@@ -248,6 +250,16 @@ smoothplot <- function(x,y,g=NULL,data,
   
   if(is.null(xlab))xlab <- substitute(x)
   if(is.null(ylab))ylab <- substitute(y)
+  
+  # If randommethod = aggregate, average by group and fit simple gam.
+  if(!is.null(R) && randommethod == "aggregate"){
+    data$R <- data[,R]
+    
+    data <- summaryBy(. ~ R, FUN=mean, na.rm=TRUE, keep.names=TRUE, data=data,
+                      id=~G)
+    R <- NULL
+  }
+  
   
   if(!fitoneline){
     
