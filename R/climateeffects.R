@@ -105,50 +105,57 @@ tabg
 #------------------------------------------------------------------------------------#
 
 # Add mgdd0 and MI
-testdata <- dataset
-
-testmapmatgam2 <- function(yvar, mgdd0=TRUE){
+gamr2 <- function(data, ranef=TRUE){
+    
+  testmapmatgam2 <- function(yvar, mgdd0=TRUE){
+    
+    f <- list()
+    
+    f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
+    f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(MI, k=4)", 
+                               if(mgdd0)" + te(mgdd0, k=4)"))
+    
+    if(!ranef)
+      g <- lapply(f, function(x)gam(formula=x, data=data))
+    else
+      g <- lapply(f, function(x)gamm(formula=x, random=list(Group=~1), data=data))
+    
+    return(g)
+  }
   
-  f <- list()
-  f[[1]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(MI, k=4)", if(mgdd0)" + te(mgdd0, k=4)"))
-  f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
-  f[[3]] <- as.formula(paste(yvar,"~ te(lh.t) + te(MI, k=4)", if(mgdd0)" + te(mgdd0, k=4)"))
-  f[[4]] <- as.formula(paste(yvar,"~ te(lh.t)"))
+  vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma", "lmrt_mso")
+  gams <- lapply(vars, testmapmatgam2, mgdd0=TRUE)
   
-  g <- lapply(f, function(x)gam(formula=x, data=testdata))
-  return(g)
+  r2g <- do.call(rbind,lapply(1:length(vars), 
+                              function(i)unlist(sapply(gams[[i]],function(x){
+                                if(ranef)summary(x$gam)$r.sq else summary(x)$r.sq
+                              }))))
+  
+  tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
+  names(tabg) <- c("Variable","H","H,PFT","H,PFT,MI,mgdd0")
+  
+  return(list(r2table=tabg, fits=gams))
 }
 
-vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma", "lmrt_mso")
-gams <- lapply(vars, testmapmatgam2, mgdd0=FALSE)
+# g <- gamr2(dataset, ranef=T)
+g0 <- gamr2(dataset, ranef=F)
 
-r2g <- do.call(rbind,lapply(1:length(vars), 
-                            function(i)unlist(sapply(gams[[i]],function(x)summary(x)$r.sq))))
-
-tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
-names(tabg) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
-
-tabg
-
-plot(gams[[2]][[3]])
-
-
-# am i chasing a red herring? are we interested in climate effects when PFT not included??
-# dont think so!!!
 
 #------------------------------------------------------------------------------------#
 
 
-K <- 4
+K <- 3
 
 pdf("varsbyclim.pdf")
-smoothplotbypft(MI, llma, dataset, log="y", kgam=K, R="Group")
-smoothplotbypft(mgdd0, llma, dataset, log="y", kgam=K, R="Group")
-smoothplotbypft(MI, lmlf_astba2, dataset, log="y", kgam=K, R="Group")
-smoothplotbypft(mgdd0, lmlf_astba2, dataset, log="y", kgam=K, R="Group")
-smoothplotbypft(MI, lalf_astba2, dataset, log="y", kgam=K, R="Group")
-smoothplotbypft(mgdd0, lalf_astba2, dataset, log="y", kgam=K, R="Group")
+smoothplot(MI, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg")
+smoothplot(mgdd0, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg")
+smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg")
+smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg")
+smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg")
+smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg")
 dev.off()
+
 
 
 
