@@ -1,14 +1,20 @@
 
+# Load BAAD and add climate data etc.
 source("load.R")
+
+# Prepare 'dataset' and 'dataset2'.
 source("R/preparedataset.R")
 source("R/functions-figures.R")
 source("R/signifletters.R")  # cld.lsmeans, based on cld.glht
 
+# Color settings
 Cols <- c("blue","red","forestgreen")
 transCols <- alpha(Cols,0.4)
 linecols <- c("deepskyblue3","firebrick2","chartreuse3")
 palette(Cols)
 
+
+# Plot settings.
 lmaLabel <- expression("Leaf mass per area"~~(kg~m^-2))
 
 Legend <- function(where, labels=c("short","long"), bty='n', ...){
@@ -22,6 +28,14 @@ Legend <- function(where, labels=c("short","long"), bty='n', ...){
 
 # Average SLM by PFT, used in several plots.
 lma <- mixmean("llma", "pft", dataset)
+
+# Base parameter for all gam fits.
+KGAM <- 4
+
+
+
+#---------------------------------------------------------------------------#
+#:: Main figures.
 
 # Figure 1.
 # MAP MAT vs. Worldclim
@@ -98,7 +112,7 @@ to.pdf({
 l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   par(mar=c(5,5,1,1), cex.axis=0.9, cex.lab=1.1)
   smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
-                  xlab="Plant height (m)",
+                  xlab="Plant height (m)",kgam=KGAM,
                   ylab=expression(M[F]/M[T]~~(kg~kg^-1))
                   )
 
@@ -194,7 +208,7 @@ width=6, height=5)
 to.pdf({
   par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
   smoothplot(log10(h.t), log10(m.rt/m.so), pft, datroot, R="Group",
-                  xlab=expression(H~~(m)),
+                  xlab=expression(H~~(m)),kgam=KGAM,
                   ylab=expression(M[R]/M[T]~~("-")),
                   cex=0.6,pointcols=transCols,linecols=linecols)
   
@@ -260,7 +274,7 @@ to.pdf({
 
   x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group", 
                   linecols=linecols, pointcols=transCols,
-                  xlab="Plant height (m)",
+                  xlab="Plant height (m)",kgam=KGAM,
                   ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
   
   Legend("bottomleft")
@@ -298,7 +312,7 @@ to.pdf({
   par(mfrow=c(1,2), mar=c(5,5,2,2))
   
   smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(Basal~stem~area~~(m^2)),
-                  linecols=linecols, pointcols=transCols, R="Group",
+                  linecols=linecols, pointcols=transCols, R="Group",kgam=KGAM,
                   ylab="Above-ground biomass (kg)", cex=0.6)
   Legend("topleft")
   
@@ -320,12 +334,12 @@ to.pdf({
 
   par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2))
   smoothplot(log10(a.stba2), log10(m.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
-                  R="Group",
+                  R="Group",kgam=KGAM,
                   ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
   
   smoothplot(log10(a.stba2), log10(a.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
-                  R="Group",
+                  R="Group",kgam=KGAM,
                   linecols=linecols, pointcols=transCols,
                   ylab=expression(A[F]~(m^2)), cex=0.6)
 
@@ -365,23 +379,30 @@ to.pdf({
 # SI 8
 # Means of leaf mass, area per stem area by PFT - biome combination.
 to.pdf({
-  Labs <- c("Temp. Decid. Angio.","Temp. Evergr. Angio.",
-    "Trop. Evergr. Angio.","Boreal Evergr. Gymno.",
-    "Temp. Evergr. Gymno.")
+  Labs <- c(
+    "Boreal DA",
+    "Temp. DA",
+    "Trop. DA",
+    "Temp. EA",
+    "Trop. EA",
+    "Boreal EG",
+    "Temp. EG")
   par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=2, cex.axis=0.9)
-  meansbypft("lmlf_astba2","lalf_astba2", "pftlong", 
-             xvar=1:5,setpar=FALSE,
+  meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
+             xvar=1:7,setpar=FALSE,
              addlegend=FALSE,
-             Cols=c(Cols[1:2], "hotpink2", Cols[3], linecols[3]),
-             panel1.exp={axis(1, at=1:5, labels=Labs, las=2, cex.axis=0.8)},
-             panel2.exp={axis(1, at=1:5, labels=Labs, las=2, cex.axis=0.8)},
+             Cols=c("dodgerblue2","blue", "lightskyblue", "red","hotpink2",
+                    "forestgreen","chartreuse3"),
+#              Cols=c(Cols[1:2], "hotpink2", Cols[3], linecols[3]),
+             panel1.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
+             panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
              siglets="bottom",
              xlab="",
              axis1=FALSE,
              ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
              dataset=dataset2, 
-             xlim=c(0,6),
+             xlim=c(0,8),
              ylim1=c(0,250),ylim2=c(0,2000))
 }, filename="manuscript/figures/FigureSI-8_mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
 
@@ -411,7 +432,7 @@ to.pdf({
   # MAT
   smoothplot(MAT, b0, pft, p, fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
-                  R="Group",
+                  R="Group",kgam=KGAM,
                   log="",xlim=c(0,30), ylim=c(-2,0.32),
                   xlab=expression(Mean~Annual~Temperature~(degree)),
                   ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
@@ -422,7 +443,7 @@ to.pdf({
   # MAP
   smoothplot(MAP, b0, pft, p,fittype="lm",
                   cex=0.9,pointcols=transCols,linecols=linecols,
-                  R="Group",
+                  R="Group",kgam=KGAM,
                   log="", xlim=c(0,4500), ylim=c(-2,0.32),
                   xlab=expression(Mean~Annual~Precipitation~(mm)),
                   ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
