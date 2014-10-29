@@ -1,19 +1,31 @@
 
 
 #' Means by some grouping variable g, accounting for random effect R.
-mixmean <- function(yvar, g, R="Group", dataset){
+mixmean <- function(yvar, g, data, R="Group"){
   
-  dataset$P <- dataset[,g]
-  dataset$Y <- dataset[,yvar]
-  dataset$R <- dataset[,R]
+  data$P <- data[,g]
+  data$Y <- data[,yvar]
+  data$R <- data[,R]
   
-  f <- lmer(Y ~ P - 1 + (1|R), data=dataset)
+  f <- lmer(Y ~ P - 1 + (1|R), data=data)
   
   ci <- suppressMessages(confint(f)[-c(1,2),])
   ci <- as.data.frame(cbind(10^fixef(f),10^ci))
-  rownames(ci) <- gsub("P","", rownames(ci))
   names(ci) <- c("y","lci","uci")
-  return(ci)
+  ci[,g] <- gsub("P","", rownames(ci))
+  rownames(ci) <- NULL
+  
+  df <- data.frame(unique(data$P))
+  names(df) <- g
+  df <- merge(df, ci, all=TRUE)
+  
+  lets <- as.data.frame(cld(glht(f, linfct=mcp(P="Tukey")))$mcletters$Letters)
+  names(lets) <- "signifletters"
+  lets[,g] <- rownames(lets)
+  rownames(lets) <- NULL
+  df <- merge(df, lets, all=TRUE)
+
+  return(df)
 }
 
 
@@ -38,13 +50,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                            ylab1=NULL, ylab2=NULL, 
                            ylim1=NULL, ylim2=NULL){
     
-  if(pftvar == "pftlong"){
-    dat <- droplevels(subset(dataset, pftlong %in% 
-                               c("DA-temperate","EA-temperate","EA-tropical","EG-boreal",
-                                 "EG-temperate")))
-  } else {
-    dat <- dataset
-  }
+  dat <- dataset
   
   siglets <- match.arg(siglets)
   if(siglets == "symbol")library(maptools)
@@ -67,13 +73,9 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
   
-  # model fit for multiple comparisons
-  f1 <- lmer(Y1 ~ P - 1 + (1|Group), data=dat)
-  if(!panel1only)f2 <- lmer(Y2 ~ P - 1 + (1|Group), data=dat)
-  
   # Multiple comparison letters.
-  lets1 <- cld(glht(f1, linfct=mcp(P="Tukey")))$mcletters$Letters
-  if(!panel1only)lets2 <- cld(glht(f2, linfct=mcp(P="Tukey")))$mcletters$Letters
+  lets1 <- y1$signifletters
+  if(!panel1only)lets2 <- y2$signifletters
   
   if(setpar){
     o <- par(no.readonly=TRUE)
@@ -108,6 +110,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   }
   
   if(!panel1only){
+    
     plot(X$y, y2$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
          ylim=ylim2,xlab=xlab, ylab=ylab2,axes=FALSE,
          panel.first={
@@ -239,6 +242,9 @@ smoothplot <- function(x,y,g=NULL,data,
   data <- droplevels(data)
   
   data <- data[!is.na(data$X) & !is.na(data$Y) & !is.na(data$G),]
+  
+  if(is.null(pointcols))pointcols <- palette()
+  if(is.null(linecols))linecols <- palette()
   
   if(is.null(xlab))xlab <- substitute(x)
   if(is.null(ylab))ylab <- substitute(y)
