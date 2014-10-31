@@ -8,7 +8,7 @@
 \usepackage{framed}
 \usepackage{parskip}
 \usepackage{graphicx}
-\usepackage[T1]{fontenc}
+% \usepackage[T1]{fontenc}
 \usepackage[default,osfigures,scale=0.95]{opensans}
 \graphicspath{ {./figures/} }
 \usepackage{geometry}
@@ -55,7 +55,7 @@ baad <- readRDS("../data/baad.rds")
 
 \section*{First paragraph}
 
-\textbf{The partitioning of biomass in terrestrial vegetation between leaves, stems and roots is a critical component of dynamic global vegetation models (DGVMs). Biomass partioning is consistently shown to be one of the most uncertain and important drivers for global predictions of carbon storage \cite{ise_comparison_2010}, the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, and the CO$_2$ response of net primary production \cite{dekauwe2014does} . Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze the largest database on plant biomass to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type. Evergreen gymnosperms maintain three times more leaf biomass at a given total aboveground biomass than deciduous angiosperms, with evergreen angiosperms taking an intermediate value. We found that leaf mass per area, an indicator of leaf construction cost, explains these differences so that the PFTs converged in the ratio  of leaf area to aboveground biomass. We found weak effects of mean annual temperature and no effects of precipitation on biomass partitioning, suggesting that climate-related differences are captured largely by a shift in PFT. These results point to a simple algorithm for biomass partitioning in the world’s forests.}
+\textbf{The partitioning of biomass in terrestrial vegetation between leaves, stems and roots is a critical component of dynamic global vegetation models (DGVMs). Biomass partioning is consistently shown to be one of the most uncertain and important drivers for global predictions of carbon storage \cite{ise_comparison_2010}, the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, and the CO$_2$ response of net primary production \cite{dekauwe2014does} . Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze the largest database on plant biomass to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type. Evergreen gymnosperms maintain three times more leaf biomass at a given total aboveground biomass than deciduous angiosperms, with evergreen angiosperms taking an intermediate value. We found that leaf mass per area, an indicator of leaf construction cost, explains these differences so that the PFTs converged in the ratio  of leaf area to aboveground biomass. We found weak effects of mean annual temperature and no effects of precipitation on biomass partitioning, suggesting that climate-related differences are captured largely by a shift in PFT. These results point to a simple algorithm for biomass partitioning in the world's forests.}
 
 
 % \section{flow}
@@ -388,7 +388,7 @@ The estimated coefficients were $c_0$ = \Sexpr{coef(basalafit)[1]}, $c_1$ = \Sex
 
 We have shown that biomass partitioning to leaf biomass decreases quickly with increasing plant size. However, this does not yield a model for the allocation of net primary production (NPP) to leaf and stem components, since partitioning depends on allocation as well as turnover. Here we construct a minimal model of biomass allocation to evaluate the fixed allocation model (a model that allocates a fixed proportion of NPP to leaves and stems, not accounting for possible shifts with plant size). We consider two pools: a leaf pool with high turnover, and an aboveground woody pool with slow turnover. Belowground allocation is not considered here, it is implicitly assumed that the allocation to belowground is a fixed proportion of NPP.
 
-Dynamics of leaf mass ($M_F$) and aboveground woody biomass ($M_S$) depend on annual allocation of NPP to these pools ($\phi_F$ and $phi_S$), and turnover rates ($yr^{-1}$) ($r_F$ and $r_S$), as in:
+Dynamics of leaf mass ($M_F$) and aboveground woody biomass ($M_S$) depend on annual allocation of NPP to these pools ($\phi_F$ and $\phi_S$), and turnover rates ($yr^{-1}$) ($r_F$ and $r_S$), as in:
 
 \begin{equation}\label{eq:dmfdt}
 \frac{dM_F}{dt} = \phi_F NPP - r_F M_F
@@ -436,7 +436,7 @@ We are here interested in the ratio $M_F/M_S$ and its dependence on plant size. 
 Finally, it can easily be shown that $M_F/M_S$ converges to the following equation (found by setting $t = \infty$ in Eqs.~\ref{eq:mfsolution} and~\ref{eq:mssolution}, and taking the ratio $M_F/M_S$). To simplify the result, we have also assumed that $r_S = 0$ (because we can assume that $r_S << r_F$).
 
 \begin{equation}
-\lim_{t\to \infty} \frac{M_F}{M_S} = \frac{\phi_F - r_F/a_F}{1 - \phi_F|}
+\lim_{t\to \infty} \frac{M_F}{M_S} = \frac{\phi_F - r_F/a_F}{1 - \phi_F}
 \end{equation}
 
 
