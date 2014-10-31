@@ -454,3 +454,51 @@ to.pdf({
 
 
 
+
+# SI 10.
+figure_SI10 <- function(){
+  
+  par(mar=c(5,5,2,2), cex.lab=1.2)
+  # Mf0, Ms0 = initial values foliage, stem biomass
+  # af - biomass production per unit leaf biomass
+  # 
+  leafstem <- function(t, Mf0=1, Ms0=1, af = 0.3, rf = 0.1, rs = 0.01, phif = 0.5, 
+                       phis = 1 - phif){
+    
+    MF <- Mf0*exp(t*(phif*af - rf))
+    
+    c4 <- Ms0 - (phis*af*Mf0/(phif*af-rf))*(1/(rs/(phif*af - rf)+1))
+    MS <- (phis*af*Mf0)/(phif*af - rf) * (1/(rs/(phif*af - rf)+1)) * 
+      exp(t*(phif*af-rf)) + c4*exp(-rs*t)
+    
+    if(diff(tail(MF,2)) < 0)warning("Negative growth!")
+    
+    return(data.frame(t=t, MF=MF, MS=MS, LMF=MF/(MF+MS)))
+  }
+  
+  
+  alloclinecols <- rainbow(3)
+  MF0 <- 1e-06
+  MS0 <- 0.5e-08
+  r1 <- leafstem(1:700, rf=0.4, af=1.2, phif=0.4, Mf0=MF0, Ms0=MS0)
+  r2 <- leafstem(1:700, rf=0.4, af=1.2, phif=0.45, Mf0=MF0, Ms0=MS0)
+  r3 <- leafstem(1:700, rf=0.4, af=1.2, phif=0.5, Mf0=MF0, Ms0=MS0)
+  
+  smoothplot(log10(m.st), log10(m.lf / m.st), data=dataset, 
+             linecols="black", pointcols="white",
+             xlab=expression(M[S]~~(kg)),kgam=4,
+             ylab=expression(M[F]/M[S]~~(kg~kg^-1)))
+  
+  
+  with(r1, lines(log10(MS), log10(MF/MS), col=alloclinecols[1]))
+  with(r2, lines(log10(MS), log10(MF/MS), col=alloclinecols[2]))
+  with(r3, lines(log10(MS), log10(MF/MS), col=alloclinecols[3]))
+  magaxis(side=1:2, unlog=1:2)
+  
+  legend("topright", c("Data (spline)",expression(phi[F]==0.4),expression(phi[F]==0.45),expression(phi[F]==0.5)),
+         col=c("black",alloclinecols), lty=1, lwd=c(2,1,1,1))
+  
+}
+to.pdf(figure_SI10(), filename="manuscript/figures/FigureSI-10_allocationmodel.pdf")
+
+
