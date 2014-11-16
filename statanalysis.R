@@ -20,36 +20,6 @@ smroot <- sma(m.rt ~ m.so*pft, data=datroot, log="xy")
 
 
 #---------------------------------------------------------------------------------------#
-# Variance partitioning to fixed and random effects 
-
-
-# Sequential R2, backwards elimination of all fixed effects.
-# ((not used at the moment))
-r2stepwise <- function(m, data){
-  
-  tr <- attributes(terms(m))$term.labels
-  ii <- lapply(1:length(tr), function(x)1:x)
-  yvar <- rownames(attributes(terms(m))$factors)[1]
-  
-  fitM <- function(i, dat){
-    tr <- c(tr[i], "(1|Group)")
-    f <- as.formula(paste(yvar, "~", paste(tr, collapse=" + ")))
-    M <- lmer(formula=f, data=dat)
-  return(M)
-  }
-  
-  models <- lapply(ii, fitM, dat=data)
-  rsq <- do.call(rbind, lapply(models, r.squared))
-rownames(rsq) <- tr
-return(rsq)
-}
-
-plotr2 <- function(x, which=c("Marginal","Conditional"),...){
-
-  which <- match.arg(which)
-  par(mar=c(4,11,2,2))
-  barplot(rev(x[[which]]), names.arg=rev(rownames(x)), horiz=T, las=2,...)
-}
 
 # Datasets with NAs removed, of key variables.
 dat_mlf <- droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2)))
@@ -119,7 +89,7 @@ makem <- function(..., variable=NULL){
   m <- do.call(rbind, lapply(l,s))  
   m <- as.data.frame(m)
   if(!is.null(variable))m <- cbind(data.frame(Variable=c(variable,NA,NA,NA), 
-                                              Predictors=c("H", "H, B", "PFT, H, B", "SLM, H, B")),
+                                              Predictors=c("H", "H, B", "PFT, H, B", "LMA, H, B")),
                                    m)
                                               
   
@@ -192,38 +162,56 @@ save(d, mlfmst_lme0,mlfmst_lme1,mlfmst_lme2,
      file="manuscript/tables/Fits_lme_mlfmst_MAPMAT.RData")
 
 
+#------------------------------------------------------------------------------------#
 
-#-----------------------------------------------------------------------------------------#
-# More climate testing. Will probably be redone with different climate vars anyway.
-
-testmapmat <- function(yvar){
+# GAM explained variance with mgdd0 and MI
+gamr2 <- function(data, ranef=FALSE, kgam=4){
   
-  options(warn=-1)
-  f1 <- as.formula(paste(yvar,"~ h.t*I(h.t^2)*pft*MAT*MAP + (1|Group)"))
-  lme1 <- lmer(f1, data=dataset)
+  testmapmatgam2 <- function(yvar, mgdd0=TRUE){
+    
+    f <- list()
+    
+    f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
+    f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(MI, k=",kgam,")", 
+                               if(mgdd0)" + te(mgdd0, k=",kgam,")"))
+    
+    if(!ranef)
+      g <- lapply(f, function(x)gam(formula=x, data=data))
+    else
+      g <- lapply(f, function(x)gamm(formula=x, random=list(Group=~1), data=data))
+    
+    return(g)
+  }
   
-  f2 <- as.formula(paste(yvar,"~ h.t*I(h.t^2)*pft + (1|Group)"))
-  lme2 <- lmer(f2, data=dataset)
+  vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma", "lmrt_mso")
+  gams <- lapply(vars, testmapmatgam2, mgdd0=TRUE)
   
-  f3 <- as.formula(paste(yvar,"~ h.t*I(h.t^2)*MAT*MAP + (1|Group)"))
-  lme3 <- lmer(f3, data=dataset)
+  r2g <- do.call(rbind,lapply(1:length(vars), 
+                              function(i)unlist(sapply(gams[[i]],function(x){
+                                if(ranef)summary(x$gam)$r.sq else summary(x)$r.sq
+                              }))))
   
-  f4 <- as.formula(paste(yvar,"~ h.t*I(h.t^2) + (1|Group)"))
-  lme4 <- lmer(f4, data=dataset)
+  pftr2 <- function(varname, data){
+    
+    Y <- data[,varname]
+    fit <- lm(Y ~ pft, data=data)
+    return(summary(fit)$r.squared)
+  }
   
-  options(warn=0)
-  return(list(lme1, lme2, lme3, lme4))
+  r2p <- sapply(vars, pftr2, data=dataset)
+  r2g <- cbind(unname(r2p), r2g)
+  tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
+  names(tabg) <- c("Variable","PFT","H","H,PFT","H,PFT,MI,mgdd0")
+  
+  return(list(r2table=tabg, fits=gams))
 }
 
-vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","lmrt_mso")
-modelfits <- lapply(vars, testmapmat) 
-r2 <- do.call(rbind,lapply(1:length(vars), function(i)unlist(sapply(modelfits[[i]],r.squared)[4,])))
+g0 <- gamr2(dataset, kgam=4)$r2table
+g0$Variable <- c("MF/MT","AF/MT","MF/AS",
+                 "AF/AS","MF/AF","MR/MT")
 
-tab <- cbind(as.data.frame(vars), as.data.frame(r2))
-names(tab) <- c("Variable","H,PFT,MAT,MAP","H,PFT","H,MAT,MAP","H")
-
-save(tab, file="manuscript/tables/R2_MAPMAT_lmemodels.RData")
-
+save(g0, file="manuscript/tables/gamr2MIgdd0.RData")
 
 #-----------------------------------------------------------------------------------------#
 # Predict basal stem D from breast height
