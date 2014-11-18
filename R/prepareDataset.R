@@ -43,6 +43,8 @@ dataset <- within(dataset, {
   lastba2 <- log10(a.stba2)
 })
 
+# Save copy
+saveRDS(dataset, "output/dataset.rds")
 
 # Second dataset, simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes.
 # Also keep only data where leaf area and leaf mass were measured.
