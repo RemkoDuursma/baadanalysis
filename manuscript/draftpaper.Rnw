@@ -23,7 +23,7 @@
 \linenumbers
 
 
-\title{A global compilation reveals divergent biomass partitioning between plant functional types }
+\title{Indirect climate effects on biomass partitioning}
 
 \author[1]{Remko Duursma}
 \author[2]{Daniel Falster}
@@ -54,6 +54,8 @@ baad <- readRDS("../data/baad.rds")
 %--------------------------------------------------------------------------------------------%
 %% Main text. Max words = 2000, first para = 200.
 
+% First paragraph The first paragraph should be 180 to 200 words and should contain references. The paragraph should serve both as a general introduction to the topic and as a brief, non-technical summary of your main results and their implications. Ideally, the paragraph starts with two to three sentences of background explaining the topic and current understanding. This is followed by a phrase like “Here we present” to introduce the new work. In the second part, the main methods, findings, conclusions and implications should be described clearly and accessibly.
+
 \section*{First paragraph}
 
 \textbf{The partitioning of biomass in terrestrial vegetation between leaves, stems and roots is a critical component of dynamic global vegetation models (DGVMs). Biomass partioning is consistently shown to be one of the most uncertain and important drivers for global predictions of carbon storage \cite{ise_comparison_2010}, the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, and the CO$_2$ response of net primary production \cite{dekauwe2014does} . Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze the largest database on plant biomass to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type. Evergreen gymnosperms maintain three times more leaf biomass at a given total aboveground biomass than deciduous angiosperms, with evergreen angiosperms taking an intermediate value. We found that leaf mass per area, an indicator of leaf construction cost, explains these differences so that the PFTs converged in the ratio  of leaf area to aboveground biomass. We found weak effects of climate while accounting for PFT effects, suggesting that climate-related differences are captured largely by a shift in PFT. These results can be used to constrain biomass partitioning routines in global dynamic vegetation models.}
@@ -66,13 +68,12 @@ baad <- readRDS("../data/baad.rds")
 % \item First paragraph
 % \item Allocation in models, main uncertainties
 % \item Climate effects on partioning : direct (MAT, MAP), indirect (PFT).
-% \item Known: gymnosperm vs. angiosperm. Unknown: leaf habit (deciduous vs. evergreen), direct climate, patterns for individual plants
+% \item Known: gymnosperm vs. angiosperm. Unknown: leaf habit (deciduous vs. evergreen), direct climate, patterns for individual plants.
 % \item BAAD : Largest database, other large datasets are stands or only small plants
-% \item Root scaling no PFT differences, focus on aboveground
-% \item LMF, LAR
+% \item Root scaling no PFT and very weak climate differences, focus on aboveground
 % \item Found very large LMF differences, but convergent LAR
 % \item decompose into MF/AS, MT/AS, find similar differences in MF/AS but none in MT/AS, suggesting convergent AF/AS between PFTs.
-% \item No direct climate effects, so shift in PFT captures global patterns in biomass partioning
+% \item Only small direct climate effects, so shift in PFT captures global patterns in biomass partioning.
 % \item This has implications for allocation in DGVMs, they can be divided into roughly three categories in terms of biomass allocation (allocation fractions, allometric constraints, LAI optimization). Allocation vs. partitioning: the role of leaf and stem turnover.
 % 
 % \end{itemize}
@@ -166,6 +167,7 @@ print(xtable(g0, label="table/gamr2table",
 \clearpage
 \section{Figures}
 
+% Figures A Nature Climate Change Letter can contain up to four display items (any combination of figures and/or tables). Figures should be sized in single or double column format. Multi-panel figures should be arranged so that the figure forms a neat rectangle.
 
 \begin{figure}[h!]
     \centering
@@ -180,8 +182,6 @@ print(xtable(g0, label="table/gamr2table",
     \caption{Leaf mass fraction (leaf mass / aboveground biomass) by plant functional type. Each symbol is an individual plant. Lines are generalized additive model fits.Bottom panels show average leaf mass fraction (LMF) and leaf area ratio (LAR) accounting for variation explained by plant height (least-square means) with a mixed effects model (with species within study as a random effect). Error bars are 95\% confidence intervals.}
     \label{fig:figure2}
 \end{figure}
-
-
 
 
 \begin{figure}[h!]
