@@ -109,7 +109,7 @@ We also partionined the variance of LMF and LAR (Table~\ref{varpartpipe}). When 
 
 Although biome was a significant predictor for all variables tested, it consistently explained very little variation (Table~\ref{varpartpipe} and~\ref{varpartlmflar}). Pair-wise comparisons between biomes within PFT mostly did not show significant differences for $M_F/A_S$ or $A_F/A_S$. The only exception was a higher $A_F/A_S$ for tropical compared to temperate evergreen angiosperms (Fig.~\ref{fig:figureSI8}).
 
-Unlike \cite{reich_temperature_2014}, we found only very weak effects of mean annual temperature the scaling of leaf biomass with woody biomass (Fig.~\ref{fig:figureSI9}). The variance explained by MAT was very small, especially compared to the large difference between PFTs. These results were confirmed with a mixed-effects model of MF vs. MS, with MAT and PFT as covariates (see Table~\ref{table:matlmeanova}). We found no significant effects of mean annual precipitation of leaf-woody biomass relationships (Table~\ref{table:maplmeanova}).
+Unlike \cite{reich_temperature_2014}, we found only very weak effects of climate on biomass relationships. The variance explained by MAT was very small, especially compared to the large difference between PFTs. These results were confirmed with a mixed-effects model of MF vs. MS, with MAT and PFT as covariates (see Table~\ref{table:matlmeanova}). We found no significant effects of mean annual precipitation of leaf-woody biomass relationships (Table~\ref{table:maplmeanova}).
 
 More plasticity in LMA than biomass partitioning has been demonstrated \cite{poorter_biomass_2012}.
 
@@ -279,8 +279,8 @@ print(xtable(g0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureSI-9_MAT_LMFscaling.pdf}
-    \caption{For each species within study, we fit the scaling relationship of leaf mass as a function of woody biomass assuming an exponent of 3/4, using standardized major axis. The resulting coefficient (b0) is size-invariant (and thus superior to the simple ratio of leaf mass to woody biomass, which is strongly size-dependent, see Fig.~\ref{fig:figure3}). We found no effects of mean annual temperature on the coefficient. The triangles are from Roth et al. (2007), a study on Pinus eliottii with exceptionally high leaf mass per unit woody biomass.}
+    \includegraphics[width=0.99\textwidth]{FigureSI-9_climateeffects.pdf}
+    \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables (leaf mass per area, LMA, and $M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). See SI Methods for calculation of MI and growing season temperature. Solid lines are generalized additive model fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the gam after averaging each variable by species/dataset combination (but all raw individual plant data are shown in the plots).}
   \label{fig:figureSI9}
 \end{figure}
 

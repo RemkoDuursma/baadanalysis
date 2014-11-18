@@ -17,6 +17,7 @@ palette(Cols)
 # Plot settings.
 lmaLabel <- expression("Leaf mass per area"~~(kg~m^-2))
 
+
 Legend <- function(where, labels=c("short","long"), bty='n', ...){
   lab <- if(match.arg(labels) == "short")
             c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno.")
@@ -409,48 +410,36 @@ to.pdf({
 
 
 # SI 9
-# cf. Reich et al 2014. Does MAT influence LMF?
-# Here, I 'correct' for size by estimating b0 in MF = b0*MS^(3/4).
-# This is estimated with sma for each Group. MAT is averaged within Group,
-# this takes several locations per Group (not that many though!)
-# Roth2007 is highlighted.
-dat <- studyWithVars(dataset, c("m.lf","m.st","MAT", "MAP"))
-sm1 <- sma(m.lf ~ m.st*Group, data=dat, log="xy", slope.test=3/4, quiet=TRUE)
+# Three size-invariant variables as a function of MI and mgdd0
+figure_SI9 <- function(K=3){
+  milab <- "Moisture Index (-)"
+  mgdlab <- expression(Growing~season~T~(degree*C))
+  par(mfrow=c(3,2), cex.lab=1.2, mar=c(5,5,1,1))
+  smoothplot(MI, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=milab,
+             ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
+  Legend("topright")
+  smoothplot(mgdd0, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=mgdlab,
+             ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
+  smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=milab,
+             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
+  smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=mgdlab,
+             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
+  smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=milab,
+             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
+  smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=mgdlab,
+             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
+}
 
-b0 <- sapply(sm1$nullcoef, "[",1,1)
-p <- data.frame(Group=sm1$groupsummary$group, b0=b0)
-m <- dat[,c("Group","pft","MAT","MAP")]
-m <- m[!duplicated(m),]
-m <- summaryBy(MAT + MAP ~ Group, FUN=mean, id=~pft, na.rm=TRUE, keep.names=TRUE, data=m)
-h <- aggregate(h.t ~ Group, FUN=median, data=dat)
-m <- merge(m,h)
-p <- merge(p,m, all.x=TRUE, all.y=FALSE, by="Group")
+to.pdf(figure_SI9(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
+       width=7, height=9)
 
-to.pdf({
-  par(mar=c(5,5,2,2), cex.lab=1.1, mfrow=c(1,2))
-  
-  # MAT
-  smoothplot(MAT, b0, pft, p, fittype="lm",
-                  cex=0.9,pointcols=transCols,linecols=linecols,
-                  R="Group",kgam=KGAM,
-                  log="",xlim=c(0,30), ylim=c(-2,0.32),
-                  xlab=expression(Mean~Annual~Temperature~(degree)),
-                  ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
-  with(p[grep("Roth2007",p$Group),],
-       points(MAT, b0, pch=17, col="forestgreen"))
-  Legend("topleft", cex=0.7, pt.cex=1)
-  
-  # MAP
-  smoothplot(MAP, b0, pft, p,fittype="lm",
-                  cex=0.9,pointcols=transCols,linecols=linecols,
-                  R="Group",kgam=KGAM,
-                  log="", xlim=c(0,4500), ylim=c(-2,0.32),
-                  xlab=expression(Mean~Annual~Precipitation~(mm)),
-                  ylab=expression(b[0]~'in'~M[F]==b[0]*M[S]^{3/4}))
-  with(p[grep("Roth2007",p$Group),],
-       points(MAP, b0, pch=17, col="forestgreen"))
-  
-}, width=8, height=4, filename="manuscript/figures/FigureSI-9_MAT_LMFscaling.pdf")
+
 
 
 
