@@ -115,7 +115,7 @@ lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 
 to.pdf({
 l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
-  par(mar=c(5,5,1,1), cex.axis=0.9, cex.lab=1.1)
+  par(mar=c(4,4,1,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
   smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
                   xlab="Plant height (m)",kgam=KGAM,
                   ylab=expression(M[F]/M[T]~~(kg~kg^-1))
@@ -176,6 +176,38 @@ to.pdf({
 }, width=8, height=4, filename="manuscript/figures/Figure4_mlf_alf_astbaest_pftmeans.pdf")
 
 
+
+
+# Fig 4.
+# Three size-invariant variables as a function of MI and mgdd0
+figure_SI9 <- function(K=3){
+  milab <- "Moisture Index (-)"
+  mgdlab <- expression(Growing~season~T~(degree*C))
+  par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1))
+#   smoothplot(MI, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+#              xlab=milab,
+#              ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
+#   
+#   smoothplot(mgdd0, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+#              xlab=mgdlab,
+#              ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
+  smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=milab, ylim=c(0,3),
+             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
+Legend("bottomright")  
+smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=mgdlab,ylim=c(0,3),
+             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
+  smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=milab,
+             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
+  smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
+             xlab=mgdlab,
+             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
+}
+
+to.pdf(figure_SI9(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
+       width=7, height=9)
 
 
 
@@ -411,37 +443,6 @@ to.pdf({
              ylim1=c(0,250),ylim2=c(0,2000))
 }, filename="manuscript/figures/FigureSI-8_mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
 
-
-
-# SI 9
-# Three size-invariant variables as a function of MI and mgdd0
-figure_SI9 <- function(K=3){
-  milab <- "Moisture Index (-)"
-  mgdlab <- expression(Growing~season~T~(degree*C))
-  par(mfrow=c(3,2), cex.lab=1.2, mar=c(5,5,1,1))
-  smoothplot(MI, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=milab,
-             ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
-  Legend("topright")
-  smoothplot(mgdd0, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=mgdlab,
-             ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
-  smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=milab,
-             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-  smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=mgdlab,
-             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-  smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=milab,
-             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
-  smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=mgdlab,
-             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
-}
-
-to.pdf(figure_SI9(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
-       width=7, height=9)
 
 
 

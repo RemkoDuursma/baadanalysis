@@ -173,12 +173,6 @@ print(xtable(g0, label="table/gamr2table",
 
 % Figures A Nature Climate Change Letter can contain up to four display items (any combination of figures and/or tables). Figures should be sized in single or double column format. Multi-panel figures should be arranged so that the figure forms a neat rectangle.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics{Figure1_MAPMAT_baad_vs_worldclim.pdf}
-    \caption{Global coverage of the climate space by the dataset. Hexagons are terrestrial observations extracted from Worldclim \cite{worldclim} (colored by number of 0.5\degree~cells, cut off at 6000mm MAP), excluding areas without woody vegetation (taken from the global land cover database GLC-SHARE \cite{lathamglobal}) Triangles are averages for the three PFTs across all contributed studies. }
-    \label{fig:figure1}
-\end{figure}
 
 \begin{figure}[h!]
     \centering
@@ -205,6 +199,13 @@ print(xtable(g0, label="table/gamr2table",
 \end{figure}
 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureSI-9_climateeffects.pdf}
+    \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables (leaf mass per area, LMA, and $M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). See SI Methods for calculation of MI and growing season temperature. Solid lines are generalized additive model fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the gam after averaging each variable by species/dataset combination (but all raw individual plant data are shown in the plots).}
+  \label{fig:figureSI9}
+\end{figure}
+
 
 
 
@@ -215,6 +216,13 @@ print(xtable(g0, label="table/gamr2table",
 \renewcommand\thefigure{S\arabic{figure}}    
 \setcounter{figure}{0}   
 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{Figure1_MAPMAT_baad_vs_worldclim.pdf}
+    \caption{Global coverage of the climate space by the dataset. Hexagons are terrestrial observations extracted from Worldclim \cite{worldclim} (colored by number of 0.5\degree~cells, cut off at 6000mm MAP), excluding areas without woody vegetation (taken from the global land cover database GLC-SHARE \cite{lathamglobal}) Triangles are averages for the three PFTs across all contributed studies. }
+    \label{fig:figure1}
+\end{figure}
 
 
 \begin{figure}[h!]
@@ -280,13 +288,6 @@ print(xtable(g0, label="table/gamr2table",
 \end{figure}
 
 
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.99\textwidth]{FigureSI-9_climateeffects.pdf}
-    \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables (leaf mass per area, LMA, and $M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). See SI Methods for calculation of MI and growing season temperature. Solid lines are generalized additive model fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the gam after averaging each variable by species/dataset combination (but all raw individual plant data are shown in the plots).}
-  \label{fig:figureSI9}
-\end{figure}
 
 
 
