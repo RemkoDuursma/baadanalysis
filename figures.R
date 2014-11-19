@@ -42,9 +42,13 @@ KGAM <- 4
 # MAP MAT vs. Worldclim
 
 
-climspace <- read.csv("data/Worldclim_landcover_climspace.csv")
+climspace <- read.csv("data/Worldclim_landcover_climspace_withcover.csv")
 # Exclude Greenland
-climpace <- climspace[climspace$landcover != 18,]
+climspace <- subset(climspace, landcover != 18)
+
+# Exclude areas with zero tree or shrub cover
+climspace <- subset(climspace, treecover > 0 | shrubcover > 0)
+
 map <- climspace$MAP_WC
 mat <- climspace$MAT_WC/10
 mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
@@ -61,7 +65,7 @@ nhex <- h@ncells
 d <- getdiams(cells)
 
 # Set up grey levels
-cv <- seq(0, 1800, by=200)
+cv <- seq(0, 1200, by=200)
 n <- length(cv)
 hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
 greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))

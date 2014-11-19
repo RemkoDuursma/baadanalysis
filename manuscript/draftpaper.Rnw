@@ -140,7 +140,11 @@ We did not include LMA estimates from another database (such as TRY), instead on
 Stem cross-sectional area was measured either at breast height (ca. 1.3m) and/or at the base of the plant. For the subset of the data where both were measured, we estimated basal stem area ($A_S$) from breast height stem area ($A_{Sbh}$) using non-linear regression (see~SIXXX). The main results were similar when we repeated it for data where either $A_S$ or $A_{Sbh}$ were directly measured (not shown).
 
 We used a generalized additive model (GAM) to visualize the relationships, but these were not used for formal inference. Instead we used linear mixed-effects models (with species within study as the random effect) to test for significance and to calculate confidence intervals for PFT-specific averages. Least-square means for LMF and LAR were calculated with the 'lsmeans' package in R. All variables were log-transformed prior to analysis. Variance partitioning with marginal (fixed effects) and conditional (fixed and random effects) $R^2$ for linear mixed-effects models as reported by \cite{nakagawa_general_2013}.
- 
+
+Moisture index and growing season temperature were taken from Lin et al. (in review). 
+
+
+
 
 
 \section{Tables}
@@ -172,7 +176,7 @@ print(xtable(g0, label="table/gamr2table",
 \begin{figure}[h!]
     \centering
     \includegraphics{Figure1_MAPMAT_baad_vs_worldclim.pdf}
-    \caption{Global coverage of the climate space by the dataset. Hexagons are terrestrial observations extracted from Worldclim (colored by number of 0.5\degree~cells, cut off at 6000mm MAP). Note that Worldclim observations include land areas where woody vegetation does not occur (e.g., desert, tundra). Triangles are averages for the three PFTs across all contributed studies. }
+    \caption{Global coverage of the climate space by the dataset. Hexagons are terrestrial observations extracted from Worldclim \cite{worldclim} (colored by number of 0.5\degree~cells, cut off at 6000mm MAP), excluding areas without woody vegetation (taken from the global land cover database GLC-SHARE \cite{lathamglobal}) Triangles are averages for the three PFTs across all contributed studies. }
     \label{fig:figure1}
 \end{figure}
 
