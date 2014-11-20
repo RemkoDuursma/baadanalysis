@@ -135,6 +135,8 @@ to.pdf(figure3(), width=8, height=4,
 # Three size-invariant variables as a function of MI and mgdd0
 figure4 <- function(K=3){
   
+  
+  gcol <- alpha("lightgrey",0.5)
   milab <- "Moisture Index (-)"
   mgdlab <- expression(Growing~season~T~(degree*C))
   par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1))
@@ -145,18 +147,18 @@ figure4 <- function(K=3){
 #   smoothplot(mgdd0, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
 #              xlab=mgdlab,
 #              ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
-  smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=milab, ylim=c(0,3),
+  smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg", fittype="lm",
+             xlab=milab, ylim=c(0,3),polycolor=gcol,
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-Legend("bottomright")  
-smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=mgdlab,ylim=c(0,3),
+Legend("bottomright", lab="long")
+smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg", fittype="lm",
+             xlab=mgdlab,ylim=c(0,3),polycolor=gcol,
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-  smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=milab,
+  smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg", fittype="lm",
+             xlab=milab,polycolor=gcol,
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
-  smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
-             xlab=mgdlab,
+  smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg", fittype="lm",
+             xlab=mgdlab,polycolor=gcol,
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
 }
 
@@ -167,33 +169,6 @@ to.pdf(figure4(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
 
 #::::::::::::::::::;;:::::::::: Supporting Figures ::::::::::::::::::::::::::#
 
-# Make dataframe with global MAP, MAT space where woody vegetation occurs
-make_baadmapmat <- function(){
-    
-  mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
-  mapmat$vegetation <- as.factor(mapmat$vegetation)
-  mapmat$pft <- as.factor(mapmat$pft)
-  mapmat <- droplevels(subset(mapmat, pft != "DG"))
-  
-return(mapmat)
-}
-make_worldmapmat <- function(){
-  climspace <- read.csv("data/Worldclim_landcover_climspace_withcover.csv")
-  # Exclude Greenland
-  climspace <- subset(climspace, landcover != 18)
-  
-  # Exclude areas with zero tree or shrub cover
-  climspace <- subset(climspace, treecover > 1 | shrubcover > 1)
-  
-  dfr <- data.frame(map = climspace$MAP_WC,
-                    mat = climspace$MAT_WC/10,
-                    treecover = climspace$treecover,
-                    shrubcover = climspace$shrubcover)
-  return(dfr)
-}
-  
-baad_mapmat <- make_baadmapmat()
-world_mapmat <- make_worldmapmat()
 
 # Figure 1.
 # MAP MAT vs. Worldclim
