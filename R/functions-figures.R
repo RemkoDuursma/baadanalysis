@@ -1,5 +1,26 @@
 
 
+# Alternative to to.pdf, here the filename is expr if expr is a function.
+To.pdf <- function(expr, filename=NULL, to.path=getwd(), ..., verbose=TRUE) {
+  
+  chr <- as.character(substitute(expr))
+  if(is.null(filename) && is.function(get(chr))){
+    filename <- file.path(to.path, paste0(chr,".pdf"))
+  } else if(is.null(filename)){
+    stop("Provide an output filename.")
+  }
+  
+  if(!file.exists(dirname(filename)))
+    dir.create(dirname(filename), recursive=TRUE)
+  if ( verbose )
+    cat(sprintf("Creating %s\n", filename))
+  pdf(filename, ...)
+  on.exit(dev.off())
+  eval.parent(substitute(expr))
+}
+#To.pdf(figureSI3(), width=8, height=4, to.path="manuscript/figures")
+
+
 #' Means by some grouping variable g, accounting for random effect R.
 mixmean <- function(yvar, g, data, R="Group"){
   
