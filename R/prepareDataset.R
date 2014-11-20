@@ -1,9 +1,10 @@
 
 # Prepare dataset for analysis.
 # - remove non-field grown plants, deciduous gymnosperms
-# - add some log-transformed variables (need these for bootstrap to not choke)
-# - add 'Group', interaction of species and studyName (i.e. species in different datasets are assumed to be independent,
-# not entirely a fair assumption but will account for large environmental differences.)
+# - add some log-transformed variables
+# - add 'Group', interaction of species and studyName (i.e. species in different datasets 
+# are assumed to be independent, not entirely a fair assumption but will account for large 
+# environmental/management/measurement methods differences.)
 
 dataset <- baad
 
@@ -72,5 +73,32 @@ datroot <- subset(dataset, !is.na(m.rt) & !is.na(m.so) &
                     !studyName %in% c("Gargaglione2010","Rodriguez2003","Albrektson1984"))
 
 
+# Make dataframe with global MAP, MAT space where woody vegetation occurs
+make_baadmapmat <- function(){
+  
+  mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
+  mapmat$vegetation <- as.factor(mapmat$vegetation)
+  mapmat$pft <- as.factor(mapmat$pft)
+  mapmat <- droplevels(subset(mapmat, pft != "DG"))
+  
+  return(mapmat)
+}
+make_worldmapmat <- function(){
+  climspace <- read.csv("data/Worldclim_landcover_climspace_withcover.csv")
+  # Exclude Greenland
+  climspace <- subset(climspace, landcover != 18)
+  
+  # Exclude areas with zero tree or shrub cover
+  climspace <- subset(climspace, treecover > 1 | shrubcover > 1)
+  
+  dfr <- data.frame(map = climspace$MAP_WC,
+                    mat = climspace$MAT_WC/10,
+                    treecover = climspace$treecover,
+                    shrubcover = climspace$shrubcover)
+  return(dfr)
+}
+
+baad_mapmat <- make_baadmapmat()
+world_mapmat <- make_worldmapmat()
 
 
