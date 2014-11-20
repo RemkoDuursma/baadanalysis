@@ -228,7 +228,7 @@ print(xtable(g0, label="table/gamr2table",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureSI-1_MAPMAT_vegetation.pdf}
-    \caption{Mean annual precipitation and temperature for all contributed datasets, by vegetation type. Note that in this study, we did not include glasshouse studies.}
+    \caption{Mean annual precipitation (MAP) and temperature (MAT) for all contributed datasets, by vegetation type. MAP and MAT were taken from Worldclim \cite{worldclim}, using latitude and longitude reported for each contributed dataset.}
     \label{fig:figureSI1}
 \end{figure}
 

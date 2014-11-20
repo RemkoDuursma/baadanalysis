@@ -79,7 +79,7 @@ make_baadmapmat <- function(){
   mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
   mapmat$vegetation <- as.factor(mapmat$vegetation)
   mapmat$pft <- as.factor(mapmat$pft)
-  mapmat <- droplevels(subset(mapmat, pft != "DG"))
+  mapmat <- droplevels(subset(mapmat, pft != "DG" & growingCondition != "GH"))
   
   return(mapmat)
 }

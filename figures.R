@@ -221,7 +221,6 @@ to.pdf(figureSI1(), width=6, height=6,
 # Supporting info figure; MAP and MAT colored by vegetation
 figureSI2 <- function(){
 
-  palette(alpha(rich.colors(9),0.85))
   vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
                     vegetation Label
                     BorF 'Boreal forest'
@@ -233,13 +232,17 @@ figureSI2 <- function(){
                     TropRF 'Tropical rainforest'
                     TropSF 'Tropical seasonal forest'
                     Wo Woodland")
-
-  with(baad_mapmat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
+#   palette(alpha(rich.colors(nrow(vdf)),0.85))
+  
+  palette(c(brewer.pal(8,"Set1"), brewer.pal(3,"Set2")))
+  
+  dat <- subset(baad_mapmat, vegetation %in% vdf$vegetation)
+  with(dat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
                     xlab = expression("Mean annual temperature"~(degree*C)), 
                     ylab = "Mean annual precipitation (mm)", 
                     ylim=c(0,4200), xlim=c(-5,30)))
-  legend("topleft", c(vdf$Label[vdf$vegetation == levels(baad_mapmat$vegetation)],"Glasshouse"), 
-         pch=21, pt.bg=c(palette(),"white"),  pt.cex=1.3, cex=0.8, bty='n')
+  legend("topleft", vdf$Label[vdf$vegetation == levels(baad_mapmat$vegetation)], 
+         pch=21, pt.bg=palette(),  pt.cex=1.3, cex=0.8, bty='n')
 }
 
 to.pdf(figureSI2(), width=6, height=5,
