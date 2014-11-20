@@ -18,11 +18,15 @@ palette(Cols)
 lmaLabel <- expression("Leaf mass per area"~~(kg~m^-2))
 
 
-Legend <- function(where, labels=c("short","long"), bty='n', ...){
+Legend <- function(where, labels=c("short","long"), bty='n', rev=TRUE, ...){
   lab <- if(match.arg(labels) == "short")
             c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno.")
          else
            c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
+  if(rev){
+    lab <- rev(lab)
+    Cols <- rev(Cols)
+  }
   legend(where, lab ,
          pch=19, col=Cols, bty=bty, ...)
 }
@@ -38,67 +42,8 @@ KGAM <- 4
 #---------------------------------------------------------------------------#
 #:: Main figures.
 
-# Figure 1.
-# MAP MAT vs. Worldclim
 
-
-climspace <- read.csv("data/Worldclim_landcover_climspace_withcover.csv")
-# Exclude Greenland
-climspace <- subset(climspace, landcover != 18)
-
-# Exclude areas with zero tree or shrub cover
-climspace <- subset(climspace, treecover > 0 | shrubcover > 0)
-
-map <- climspace$MAP_WC
-mat <- climspace$MAT_WC/10
-mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
-mapmat$vegetation <- as.factor(mapmat$vegetation)
-mapmat <- droplevels(subset(mapmat, pft != "DG"))
-mmpft <- summaryBy(MAP + MAT ~ pft, data=mapmat, FUN=mean, na.rm=TRUE)
-mmpft$pft <- as.factor(mmpft$pft)
-
-h <- hexbin(map ~ mat)
-cells <- hcell2xy(h)
-
-hexd <- (h@xbnds[2] - h@xbnds[1])/h@xbins
-nhex <- h@ncells
-d <- getdiams(cells)
-
-# Set up grey levels
-cv <- seq(0, 1200, by=200)
-n <- length(cv)
-hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
-greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
-
-to.pdf({
-  par(pty='s', cex.lab=1.2)
-  plot(cells, type='n', ylim=c(0,6000),
-       xlab = expression("Mean annual temperature"~(degree*C)), 
-       ylab = "Mean annual precipitation (mm)")
-  for(i in 1:nhex){
-    Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
-            border=NA,
-            col=greyCols[hcut[i]])
-  }
-  l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
-  box()
-  
-  mapmat$pft <- as.factor(mapmat$pft)
-  hCols <- alpha(c("blue","red","forestgreen"),0.6)  #"cyan1",
-  with(mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
-  with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
-  with(subset(mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
-  legend(l$rect$left + l$rect$w, 
-         l$rect$top, title="Plant functional type",
-         c("Deciduous Angiosperm", #"Deciduous Evergreen", 
-           "Evergreen Angiosperm", "Evergreen Gymnosperm"),
-         pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
-}, filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf", width=6, height=6)
-
-
-
-
-# Figure 2 - leaf mass fraction by PFT, and least-square means and LAR.
+# Figure 1 - leaf mass fraction by PFT, and least-square means and LAR.
 # LMF
 # - Fit lmer to LMF and LAR, with h.t and pft as predictors
 # - Use same dataset for all (where m.lf and a.lf is not missing)
@@ -113,29 +58,31 @@ lmer_LAR_2 <- lmer(lalf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
                    data=dat_alfmso, na.action=na.omit)
 lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 
-to.pdf({
-l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
+figure1 <- function(){
+  l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   par(mar=c(4,4,1,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
   smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
-                  xlab="Plant height (m)",kgam=KGAM,
-                  ylab=expression(M[F]/M[T]~~(kg~kg^-1))
-                  )
-
+             xlab="Plant height (m)",kgam=KGAM,
+             ylab=expression(M[F]/M[T]~~(kg~kg^-1))
+  )
+  
   Legend("bottomleft", "long")
   box()
-
+  
   lsmeansPlot(lmf, lma, cex=1.3, 
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),
               xlim=c(0,0.2), xlab=lmaLabel, col=Cols)
   lsmeansPlot(lar, lma, cex=1.3, ylab=expression(A[F]/M[T]~~(m^2~kg^-1)),
               xlim=c(0,0.2), xlab=lmaLabel, col=Cols)
 
+}
 
-}, filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf", width=7, height=7)
+to.pdf(figure1(), width=7, height=7,
+       filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf")
 
 
-# Figure 3. Histograms of MF/AS and AF/AS.
-to.pdf({
+# Figure 2. Histograms of MF/AS and AF/AS.
+figure2 <- function(){
   
   par(mfcol=c(3,2), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
   histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=Cols,
@@ -152,11 +99,14 @@ to.pdf({
         outer=TRUE, at=0.25, cex=0.9)
   mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)), 
         outer=TRUE, at=0.75, cex=0.9)
-}, width=6, height=6, filename="manuscript/figures/Figure3_hist_alfast_mlfast.pdf")
+}
+
+to.pdf(figure2(), width=6, height=6, 
+       filename="manuscript/figures/Figure3_hist_alfast_mlfast.pdf")
 
 
-# Figure 4 - average leaf mass, leaf area / stem area.
-to.pdf({
+# Figure 3 - average leaf mass, leaf area / stem area.
+figure3 <- function(){
   par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
   meansbypft("lmlf_astba2","lalf_astba2", "pft", 
              xvar="llma",
@@ -173,14 +123,18 @@ to.pdf({
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
              xlim=c(0,0.2),
              ylim1=c(0,250),ylim2=c(0,2000))
-}, width=8, height=4, filename="manuscript/figures/Figure4_mlf_alf_astbaest_pftmeans.pdf")
+}
+
+to.pdf(figure3(), width=8, height=4, 
+       filename="manuscript/figures/Figure4_mlf_alf_astbaest_pftmeans.pdf")
 
 
 
 
-# Fig 4.
+# Figure 4.
 # Three size-invariant variables as a function of MI and mgdd0
-figure_SI9 <- function(K=3){
+figure4 <- function(K=3){
+  
   milab <- "Moisture Index (-)"
   mgdlab <- expression(Growing~season~T~(degree*C))
   par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1))
@@ -206,48 +160,125 @@ smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=K, R="Group", randomm
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
 }
 
-to.pdf(figure_SI9(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
+to.pdf(figure4(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
        width=7, height=9)
 
 
 
-#::::::::::: Supporting Figures ::::::::::::::::::::::::::#
+#::::::::::::::::::;;:::::::::: Supporting Figures ::::::::::::::::::::::::::#
 
+# Make dataframe with global MAP, MAT space where woody vegetation occurs
+make_baadmapmat <- function(){
+    
+  mapmat <- baad[!duplicated(baad[,c("MAP","MAT")]),]
+  mapmat$vegetation <- as.factor(mapmat$vegetation)
+  mapmat$pft <- as.factor(mapmat$pft)
+  mapmat <- droplevels(subset(mapmat, pft != "DG"))
+  
+return(mapmat)
+}
+make_worldmapmat <- function(){
+  climspace <- read.csv("data/Worldclim_landcover_climspace_withcover.csv")
+  # Exclude Greenland
+  climspace <- subset(climspace, landcover != 18)
+  
+  # Exclude areas with zero tree or shrub cover
+  climspace <- subset(climspace, treecover > 1 | shrubcover > 1)
+  
+  dfr <- data.frame(map = climspace$MAP_WC,
+                    mat = climspace$MAT_WC/10,
+                    treecover = climspace$treecover,
+                    shrubcover = climspace$shrubcover)
+  return(dfr)
+}
+  
+baad_mapmat <- make_baadmapmat()
+world_mapmat <- make_worldmapmat()
 
-# SI 1
-# Supporting info figure; MAP and MAT colored by vegetation
-palette(alpha(rich.colors(9),0.85))
-vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
-                  vegetation Label
-                  BorF 'Boreal forest'
-                  Gr Grassland
-                  Sav Savanna
-                  Sh Shrubland
-                  TempF 'Temperate forest'
-                  TempRF 'Temperate rainforest'
-                  TropRF 'Tropical rainforest'
-                  TropSF 'Tropical seasonal forest'
-                  Wo Woodland")
+# Figure 1.
+# MAP MAT vs. Worldclim
+figureSI1 <- function(){
+  
+  mmpft <- summaryBy(MAP + MAT ~ pft, data=baad_mapmat, FUN=mean, na.rm=TRUE)
+  mmpft$pft <- as.factor(mmpft$pft)
+  
+  h <- with(world_mapmat, hexbin(map ~ mat))
+  cells <- hcell2xy(h)
+  
+  hexd <- (h@xbnds[2] - h@xbnds[1])/h@xbins
+  nhex <- h@ncells
+  d <- getdiams(cells)
+  
+  # Set up grey levels
+  cv <- seq(0, 1200, by=200)
+  n <- length(cv)
+  hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
+  greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
 
-to.pdf({
-  with(mapmat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
-                    xlab = expression("Mean annual temperature"~(degree*C)), 
-                    ylab = "Mean annual precipitation (mm)", 
-                    ylim=c(0,4200), xlim=c(-5,30)))
-  legend("topleft", c(vdf$Label[vdf$vegetation == levels(mapmat$vegetation)],"Glasshouse"), 
-         pch=21, pt.bg=c(palette(),"white"),  pt.cex=1.3, cex=0.8, bty='n')
-}, filename="manuscript/figures/FigureSI-1_MAPMAT_vegetation.pdf",
-width=6, height=5)
+  # Plot
+  par(pty='s', cex.lab=1.2)
+  plot(cells, type='n', ylim=c(0,6000),
+       xlab = expression("Mean annual temperature"~(degree*C)), 
+       ylab = "Mean annual precipitation (mm)")
+  for(i in 1:nhex){
+    Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
+            border=NA,
+            col=greyCols[hcut[i]])
+  }
+  l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
+  box()
+  hCols <- alpha(transCols,0.7)
+  with(baad_mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
+  with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
+#   with(subset(baad_mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
+  legend(l$rect$left + l$rect$w, 
+         l$rect$top, title="Plant functional type",
+         c("Deciduous Angiosperm", #"Deciduous Evergreen", 
+           "Evergreen Angiosperm", "Evergreen Gymnosperm"),
+         pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
+}
+  
+to.pdf(figureSI1(), width=6, height=6,
+  filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf")
 
 
 # SI 2
+# Supporting info figure; MAP and MAT colored by vegetation
+figureSI2 <- function(){
+
+  palette(alpha(rich.colors(9),0.85))
+  vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
+                    vegetation Label
+                    BorF 'Boreal forest'
+                    Gr Grassland
+                    Sav Savanna
+                    Sh Shrubland
+                    TempF 'Temperate forest'
+                    TempRF 'Temperate rainforest'
+                    TropRF 'Tropical rainforest'
+                    TropSF 'Tropical seasonal forest'
+                    Wo Woodland")
+
+  with(baad_mapmat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
+                    xlab = expression("Mean annual temperature"~(degree*C)), 
+                    ylab = "Mean annual precipitation (mm)", 
+                    ylim=c(0,4200), xlim=c(-5,30)))
+  legend("topleft", c(vdf$Label[vdf$vegetation == levels(baad_mapmat$vegetation)],"Glasshouse"), 
+         pch=21, pt.bg=c(palette(),"white"),  pt.cex=1.3, cex=0.8, bty='n')
+}
+
+to.pdf(figureSI2(), width=6, height=5,
+       filename="manuscript/figures/FigureSI-1_MAPMAT_vegetation.pdf")
+
+
+# SI 3
 # Root-shoot
-to.pdf({
+figureSI3 <- function(){
   par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
   smoothplot(log10(h.t), log10(m.rt/m.so), pft, datroot, R="Group",
-                  xlab=expression(H~~(m)),kgam=KGAM,
-                  ylab=expression(M[R]/M[T]~~("-")),
-                  cex=0.6,pointcols=transCols,linecols=linecols)
+             xlab=expression(H~~(m)),kgam=KGAM,
+             ylab=expression(M[R]/M[T]~~("-")),
+             cex=0.6,pointcols=transCols,linecols=linecols)
   
   Legend("topright", cex=0.7, pt.cex=0.6)
   box()
@@ -261,15 +292,15 @@ to.pdf({
   axis(2)
   box()
   
-}, filename="manuscript/figures/FigureSI-2_mrt_mso_bypft.pdf", width=8, height=4)
+}
+to.pdf(figureSI3(), width=8, height=4,
+       filename="manuscript/figures/FigureSI-2_mrt_mso_bypft.pdf")
 
 
-
-
-# SI 3
+# SI 4
 # Leaf mass, woody mass
 # LMF scaling
-mstmlf_ht <- function(){
+figureSI4 <- function(){
   
   par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(5,5,2,2))
   labels <- c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
@@ -300,57 +331,38 @@ mstmlf_ht <- function(){
   mtext(side=1, text="Plant height (m)", line=3, outer=TRUE)
   mtext(side=2, text="Leaf or woody biomass (kg)", line=3, outer=TRUE)
 }
-to.pdf(mstmlf_ht(), width=9, height=4,
+
+to.pdf(figureSI4(), width=9, height=4,
        filename="manuscript/figures/FigureSI-3_mlfmst_byht_pft.pdf")
 
 
-# SI 4
+# SI 5
 # Leaf area ratio; raw data.
-to.pdf({
+figureSI5 <- function(){
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
-
+  
   x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group", 
                   linecols=linecols, pointcols=transCols,
                   xlab="Plant height (m)",kgam=KGAM,
                   ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
   
   Legend("bottomleft")
-  
-}, filename="manuscript/figures/FigureSI-4_LAR_pft_lines.pdf", width=7, height=4.5)
+}
+
+to.pdf(figureSI5(), width=7, height=4.5,
+       filename="manuscript/figures/FigureSI-4_LAR_pft_lines.pdf")
 
 
 
-dg <- subset(dataset, pft == "EG")
-g <- gamm(lalf_mso ~ s(lh.t, k=-1), random = list(Group=~1), data=dg)
-g0 <- gam(lalf_mso ~ s(lh.t, k=-1), data=dg)
-g2 <- gamm(lalf_mso ~ te(lh.t), random = list(Group=~1), data=dg)
-
-dg$p <- predict(g$gam, dg)
-dg$p0 <- predict(g0, dg)
-dg$p2 <- predict(g2$gam, dg)
-
-with(dg, plot(lh.t, lalf_mso - p))
-
-
-
-g2 <- gamm(lalf_mso ~ s(lh.t), random = list(Group=~1), data=dg)
-dg$p2 <- predict(g2$gam, dg)
-with(dg, plot(lh.t, lalf_mso - p2))
-abline(h=0)
-
-g0 <- gam(lalf_mso ~ s(lh.t, k=-1), data=dataset)
-
-
-
-# SI 5
+# SI 6
 # Woody mass per unit basal stem area
 # - Least-square means because not isometric scaling
-to.pdf({
+figureSI6 <- function(){
   par(mfrow=c(1,2), mar=c(5,5,2,2))
   
-  smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(Basal~stem~area~~(m^2)),
-                  linecols=linecols, pointcols=transCols, R="Group",kgam=KGAM,
-                  ylab="Above-ground biomass (kg)", cex=0.6)
+  smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
+             linecols=linecols, pointcols=transCols, R="Group",kgam=KGAM,
+             ylab=expression(M[T]~~(kg)), cex=0.6)
   Legend("topleft")
   
   lmer_BA <- lmer(lmso_astba2 ~ pft*lastba2 + pft:I(lastba2^2) + (1|Group),
@@ -362,37 +374,43 @@ to.pdf({
   axis(1, at=1:3, labels=levels(dataset$pft))
   axis(2)
   box()
-}, width=8, height=4, filename="manuscript/figures/FigureSI-5_mso_astba2_twopanel.pdf")
+}
+
+to.pdf(figureSI6(), width=8, height=4, 
+       filename="manuscript/figures/FigureSI-5_mso_astba2_twopanel.pdf")
 
 
-# SI 6
+# SI 7
 # Raw data of leaf mass, area and basal stem area. 
-to.pdf({
-
+figureSI7 <- function(){
+  
   par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2))
   smoothplot(log10(a.stba2), log10(m.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
-                  R="Group",kgam=KGAM,
-                  ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
+             R="Group",kgam=KGAM,
+             ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
   Legend("topleft")
   
   smoothplot(log10(a.stba2), log10(a.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
-                  R="Group",kgam=KGAM,
-                  linecols=linecols, pointcols=transCols,
-                  ylab=expression(A[F]~(m^2)), cex=0.6)
+             R="Group",kgam=KGAM,
+             linecols=linecols, pointcols=transCols,
+             ylab=expression(A[F]~(m^2)), cex=0.6)
+}
 
-}, filename="manuscript/figures/FigureSI-6_mlf_alf_astba2_bypft.pdf", width=8, height=4)
+to.pdf(figureSI7(), width=8, height=4,
+       filename="manuscript/figures/FigureSI-6_mlf_alf_astba2_bypft.pdf")
 
-# SI 7
+# SI 8
 # MF/AS and AF/AS at species level by PFT.
-agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group, 
-                 data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
-                 id=~pft)
-agg <- subset(agg, !is.na(llma))
-
-lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
-lm2 <- lm(lalf_astba2 ~ llma, data=agg)
-
-to.pdf({
+figureSI8 <- function(){
+  agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group, 
+                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
+                   id=~pft)
+  agg <- subset(agg, !is.na(llma))
+  
+  lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
+  lm2 <- lm(lalf_astba2 ~ llma, data=agg)
+  
+  
   par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.1)
   
   with(agg, plot(llma, lmlf_astba2, pch=19, col=transCols[pft], 
@@ -410,12 +428,15 @@ to.pdf({
   magaxis(1:2, unlog=1:2)
   predline(lm2)
   box()
-}, width=8, height=4, filename="manuscript/figures/FigureSI-7_mlf_alf_ast_byspecies.pdf")
+}
 
+to.pdf(figureSI8(), width=8, height=4, 
+       filename="manuscript/figures/FigureSI-7_mlf_alf_ast_byspecies.pdf")
 
-# SI 8
+# SI 9
 # Means of leaf mass, area per stem area by PFT - biome combination.
-to.pdf({
+figureSI9 <- function(){
+  
   Labs <- c(
     "Boreal DA",
     "Temp. DA",
@@ -424,13 +445,14 @@ to.pdf({
     "Trop. EA",
     "Boreal EG",
     "Temp. EG")
+  
   par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=2, cex.axis=0.9)
   meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
              xvar=1:7,setpar=FALSE,
              addlegend=FALSE,
              Cols=c("dodgerblue2","blue", "lightskyblue", "red","hotpink2",
                     "forestgreen","chartreuse3"),
-#              Cols=c(Cols[1:2], "hotpink2", Cols[3], linecols[3]),
+             #              Cols=c(Cols[1:2], "hotpink2", Cols[3], linecols[3]),
              panel1.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
              panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
              siglets="bottom",
@@ -441,7 +463,9 @@ to.pdf({
              dataset=dataset2, 
              xlim=c(0,8),
              ylim1=c(0,250),ylim2=c(0,2000))
-}, filename="manuscript/figures/FigureSI-8_mlf_alf_astbaest_pftlongmeans.pdf", width=8, height=4)
+}
+to.pdf(figureSI9(), width=8, height=4,
+       filename="manuscript/figures/FigureSI-8_mlf_alf_astbaest_pftlongmeans.pdf")
 
 
 
