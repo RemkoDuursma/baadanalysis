@@ -146,6 +146,13 @@ To test for direct climate effects in addition to the PFT effect, we used moistu
 
 
 
+\section{Acknowledgments}
+
+
+
+\section{Author contributions}
+
+
 
 
 \section{Tables}
