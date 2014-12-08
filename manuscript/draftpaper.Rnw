@@ -285,6 +285,10 @@ print(xtable(g0, label="table/gamr2table",
 \section{Supporting Information Tables}
 
 
+\renewcommand\thetable{S\arabic{table}}    
+\setcounter{table}{0}   
+
+
 <<tablepreload1>>=
 load("tables/Table_counts.RData")
 printit <- function(x, caption, label=NULL){
