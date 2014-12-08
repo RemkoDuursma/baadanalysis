@@ -16,7 +16,7 @@ palette(Cols)
 
 # Plot settings.
 lmaLabel <- expression("Leaf mass per area"~~(kg~m^-2))
-
+lmaLabelshort <- expression(M[F]/A[F]~~(kg~m^-2))
 
 Legend <- function(where, labels=c("short","long"), bty='n', rev=TRUE, ...){
   lab <- if(match.arg(labels) == "short")
@@ -45,7 +45,7 @@ KGAM <- 4
 
 # Figure 1.
 # MAP MAT vs. Worldclim
-figureSI1 <- function(){
+figureSI1 <- function(setpar=TRUE, legend2=TRUE){
   
   mmpft <- summaryBy(MAP + MAT ~ pft, data=baad_mapmat, FUN=mean, na.rm=TRUE)
   mmpft$pft <- as.factor(mmpft$pft)
@@ -64,7 +64,7 @@ figureSI1 <- function(){
   greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
   
   # Plot
-  par(pty='s', cex.lab=1.2)
+  if(setpar)par(pty='s', cex.lab=1.2)
   plot(cells, type='n', ylim=c(0,6000),
        xlab = expression("Mean annual temperature"~(degree*C)), 
        ylab = "Mean annual precipitation (mm)")
@@ -79,15 +79,17 @@ figureSI1 <- function(){
   with(baad_mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
   with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
   #   with(subset(baad_mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
-  legend(l$rect$left + l$rect$w, 
-         l$rect$top, title="Plant functional type",
-         c("Deciduous Angiosperm", #"Deciduous Evergreen", 
-           "Evergreen Angiosperm", "Evergreen Gymnosperm"),
-         pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
+  if(legend2){
+    legend(l$rect$left + l$rect$w, 
+           l$rect$top, title="Plant functional type",
+           c("Deciduous Angiosperm", #"Deciduous Evergreen", 
+             "Evergreen Angiosperm", "Evergreen Gymnosperm"),
+           pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
+  }
 }
 
-to.pdf(figureSI1(), width=6, height=6,
-       filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf")
+# to.pdf(figureSI1(), width=6, height=6,
+#        filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf")
 
 
 # Figure 1 - leaf mass fraction by PFT, and least-square means and LAR.
@@ -106,8 +108,12 @@ lmer_LAR_2 <- lmer(lalf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
 lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 
 figure1 <- function(){
-  l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
-  par(mar=c(4,4,1,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
+  l <- layout(matrix(c(1,2,3,1,2,4), byrow=T, ncol=3),
+              widths=c(1,1,0.67), heights=c(1,1))
+  
+  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
+  figureSI1(setpar=FALSE, legend2=FALSE)
+  
   obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
              xlab="Plant height (m)",kgam=KGAM,
              ylab=expression(M[F]/M[T]~~(kg~kg^-1))
@@ -118,19 +124,27 @@ figure1 <- function(){
   
   obj2 <- smoothplot(lh.t, lalf_mso, pft, dataset, R="Group",plotit=FALSE)
 
+  par(mar=c(0.35,4,4,1), pty="m") #, oma=c(0,0,0,0))
   
   plotGamPred(obj1, xpred=mean(dataset$lh.t, na.rm=TRUE),
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),ylim=c(0,0.35),
-              xlim=c(0,0.2), xlab=lmaLabel)
+              xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
   
+  par(mar=c(4,4,0.35,1)) #, oma=c(0,0,0,0))
   plotGamPred(obj2, xpred=mean(dataset$lh.t, na.rm=TRUE),
               ylab=expression(A[F]/M[T]~~(kg~kg^-1)),ylim=c(0,2.5),
-              xlim=c(0,0.2), xlab=lmaLabel)
+              xlim=c(0,0.2), xlab=lmaLabelshort)
   
 }
 
-to.pdf(figure1(), width=7, height=7,
+to.pdf(figure1(), width=8, height=3.8,
        filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf")
+
+
+
+
+
+
 
 
 
