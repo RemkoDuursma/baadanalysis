@@ -1,25 +1,3 @@
-
-
-# Alternative to to.pdf, here the filename is expr if expr is a function.
-To.pdf <- function(expr, filename=NULL, to.path=getwd(), ..., verbose=TRUE) {
-  
-  chr <- as.character(substitute(expr))
-  if(is.null(filename) && is.function(get(chr))){
-    filename <- file.path(to.path, paste0(chr,".pdf"))
-  } else if(is.null(filename)){
-    stop("Provide an output filename.")
-  }
-  
-  if(!file.exists(dirname(filename)))
-    dir.create(dirname(filename), recursive=TRUE)
-  if ( verbose )
-    cat(sprintf("Creating %s\n", filename))
-  pdf(filename, ...)
-  on.exit(dev.off())
-  eval.parent(substitute(expr))
-}
-#To.pdf(figureSI3(), width=8, height=4, to.path="manuscript/figures")
-
 # Simple function for placing labels on a figure.
 plotlabel <- function(txt, where, inset=0.08, ...){
   u <- par()$usr
@@ -27,30 +5,29 @@ plotlabel <- function(txt, where, inset=0.08, ...){
   if(grepl("right",where))x <- u[2] - inset*(u[2]-u[1])
   if(grepl("bottom",where))y <- u[3] + inset*(u[4]-u[3])
   if(grepl("top",where))y <- u[4] - inset*(u[4]-u[3])
-  
+
   text(x,y,txt,...)
 }
 
-
 #' Means by some grouping variable g, accounting for random effect R.
 mixmean <- function(yvar, g, data, R="Group"){
-  
+
   data$P <- data[,g]
   data$Y <- data[,yvar]
   data$R <- data[,R]
-  
+
   f <- lmer(Y ~ P - 1 + (1|R), data=data)
-  
+
   ci <- suppressMessages(confint(f)[-c(1,2),])
   ci <- as.data.frame(cbind(10^fixef(f),10^ci))
   names(ci) <- c("y","lci","uci")
   ci[,g] <- gsub("P","", rownames(ci))
   rownames(ci) <- NULL
-  
+
   df <- data.frame(unique(data$P))
   names(df) <- g
   df <- merge(df, ci, all=TRUE)
-  
+
   lets <- as.data.frame(cld(glht(f, linfct=mcp(P="Tukey")))$mcletters$Letters)
   names(lets) <- "signifletters"
   lets[,g] <- rownames(lets)
@@ -63,7 +40,7 @@ mixmean <- function(yvar, g, data, R="Group"){
 
 #' Plot means by plant functional type
 #' @description Optionally makes two panels. Adds CI based on \code{mixmean}.
-meansbypft <- function(yvar1, yvar2=NULL, pftvar, 
+meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                            xvar="llma",
                            dataset,
                            axis1=TRUE,
@@ -77,38 +54,38 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                            legend.where="topright",
                            legend.cex=0.7,
                            siglets=c("bottom","symbol"),
-                           xlab=expression(Specific~leaf~area~(m^2~kg^-1)), 
+                           xlab=expression(Specific~leaf~area~(m^2~kg^-1)),
                            xlim=c(0,25),main="",
-                           ylab1=NULL, ylab2=NULL, 
+                           ylab1=NULL, ylab2=NULL,
                            ylim1=NULL, ylim2=NULL){
-    
+
   dat <- dataset
-  
+
   siglets <- match.arg(siglets)
   if(siglets == "symbol")library(maptools)
-  
+
   dat$Y1 <- dat[,yvar1]
   if(!panel1only)dat$Y2 <- dat[,yvar2]
-  dat$P <- dat[,pftvar]  
-  
+  dat$P <- dat[,pftvar]
+
   # If xvar is a character, calculate mixmeans, otherwise it is already a numeric vector.
   if(is.character(xvar)){
     X <- mixmean(xvar,pftvar,dat)
   } else {
     X <- list(y = xvar, lci=rep(NA,length(xvar)), uci=rep(NA,length(xvar)))
   }
-  
+
   # mix means of Y variables.
   y1 <- mixmean(yvar1,pftvar,dat)
   if(!panel1only)y2 <- mixmean(yvar2,pftvar,dat)
-  
+
   if(is.null(Cols))
     Cols <- rainbow(length(unique(dat$P)))
-  
+
   # Multiple comparison letters.
   lets1 <- y1$signifletters
   if(!panel1only)lets2 <- y2$signifletters
-  
+
   if(setpar){
     o <- par(no.readonly=TRUE)
     par(mfrow=c(2,1), oma=c(5,5,2,2), mar=c(0,0,0,0))
@@ -116,9 +93,9 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   plot(X$y, y1$y, xlim=xlim,axes=FALSE, pch=19, col=Cols, cex=1.3,
        ylim=ylim1,xlab=xlab,ylab=ylab1,
        panel.first={
-         arrows(x0=X$lci, x1=X$uci, y0=y1$y, 
+         arrows(x0=X$lci, x1=X$uci, y0=y1$y,
                 y1=y1$y,code=3,angle=90,length=0.025,col=Cols)
-         arrows(x0=X$y, x1=X$y, y0=y1$lci, 
+         arrows(x0=X$y, x1=X$y, y0=y1$lci,
                 y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
        })
   axis(2)
@@ -126,7 +103,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
     axis(1,labels=FALSE)
   }
   box()
-  
+
   u <- par()$usr
   if(siglets == "bottom"){
     text(X$y, u[3] + 0.0*(u[4]-u[3]), lets1, pos=3, cex=0.9)
@@ -134,23 +111,23 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
   if(siglets == "symbol"){
     pointLabel(X$y, y1$y, lets1, cex=0.9)
   }
-  
+
   if(!is.null(panel1.expr))eval(panel1.expr)
-  
+
   if(is.null(legend.text))legend.text <- rownames(X)
   if(addlegend){
-    legend(legend.where, legend.text,pch=19,col=Cols, 
+    legend(legend.where, legend.text,pch=19,col=Cols,
          cex=legend.cex,pt.cex=1.2, bty='n')
   }
-  
+
   if(!panel1only){
-    
+
     plot(X$y, y2$y, xlim=xlim,pch=19, col=Cols, cex=1.3,
          ylim=ylim2,xlab=xlab, ylab=ylab2,axes=FALSE,
          panel.first={
-           arrows(x0=X$lci, x1=X$uci, y0=y2$y, 
+           arrows(x0=X$lci, x1=X$uci, y0=y2$y,
                   y1=y2$y,code=3,angle=90,length=0.025,col=Cols)
-           arrows(x0=X$y, x1=X$y, y0=y2$lci, 
+           arrows(x0=X$y, x1=X$y, y0=y2$lci,
                   y1=y2$uci,code=3,angle=90,length=0.025,col=Cols)
          })
     axis(2)
@@ -168,7 +145,7 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
     mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T, las=0)
     mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T, las=0)
   }
-  
+
   mtext(side=4, text=main, line=2, outer=TRUE)
   if(setpar)par(o)
 }
@@ -176,29 +153,29 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
 
 
 #' Not a generic function! Only works for our case.
-lsmeansGam <- function(obj, x){
-  
+lsmeansGam <- function(obj, dataset, x){
+
   y <- list()
   for(i in 1:3){
-    y[[i]] <- predict(obj[[i]], 
+    y[[i]] <- predict(obj[[i]],
                       data.frame(pft=levels(dataset$pft)[i],
                                  X=x),
                       se.fit=TRUE)
   }
-  
+
   f <- function(z){
     p <- 10^c(z$fit, z$fit - 2*z$se.fit, z$fit + 2*z$se.fit)
     names(p) <- c("fit","lwr","upr")
     return(p)
   }
-  tab <- sapply(y,f)  
+  tab <- sapply(y,f)
   colnames(tab) <- levels(dataset$pft)
   cis <- t(tab[2:3,])
-  
+
   lets <- cld_generic(cis, rownames(cis))$Letters
-  
+
   return(list(tab=as.data.frame(t(tab)),siglets=lets))
-  
+
 }
 
 
@@ -206,13 +183,14 @@ lsmeansGam <- function(obj, x){
 #' Plot prediction from gam
 #' Used to take single prediction from multiple gams, plot as function of something.
 plotGamPred <- function(obj,   # object returned by smoothplot, with pft as grouping (list of 3 gams)
+                        dat,
                         xvar="llma",
                         xpred,
                         pftvar="pft",
                         siglets="bottom",
-                        xlab="", 
+                        xlab="",
                         xlim=c(0,25),main="",
-                        ylab=NULL, 
+                        ylab=NULL,
                         ylim=NULL,
                         axis1=TRUE,
                         xaxislabels=TRUE,
@@ -221,40 +199,37 @@ plotGamPred <- function(obj,   # object returned by smoothplot, with pft as grou
                         legend.where="topleft",
                         addlegend=FALSE,...){
 
-  
-  dat <- dataset
-  
-  dat$P <- dat[,pftvar]  
-  
+  dat$P <- dat[,pftvar]
+
   # Calculate mixmeans
   if(is.character(xvar)){
     X <- mixmean(xvar,pftvar,dat)
   }
-  
-  z <- lsmeansGam(obj,xpred)
 
-  plot(X$y, z$tab$fit, xlim=xlim,axes=FALSE, pch=19, col=Cols, cex=1.3,
+  z <- lsmeansGam(obj, dat, xpred)
+
+  plot(X$y, z$tab$fit, xlim=xlim,axes=FALSE, pch=19, col=my_cols(), cex=1.3,
        ylim=ylim,xlab=xlab,ylab=ylab,
        panel.first={
-         arrows(x0=X$lci, x1=X$uci, y0=z$tab$fit, 
-                y1=z$tab$fit,code=3,angle=90,length=0.025,col=Cols)
-         arrows(x0=X$y, x1=X$y, y0=z$tab$lwr, 
-                y1=z$tab$upr,code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=X$lci, x1=X$uci, y0=z$tab$fit,
+                y1=z$tab$fit,code=3,angle=90,length=0.025,col=my_cols())
+         arrows(x0=X$y, x1=X$y, y0=z$tab$lwr,
+                y1=z$tab$upr,code=3,angle=90,length=0.025,col=my_cols())
        })
   axis(2)
   if(axis1)axis(1,labels=xaxislabels)
   box()
-  
+
   u <- par()$usr
   if(siglets == "bottom"){
     text(X$y, u[3] + 0.0*(u[4]-u[3]), z$siglets, pos=3, cex=0.9)
   }
-  
+
   if(!is.null(panel.expr))eval(panel.expr)
-  
+
   if(is.null(legend.text))legend.text <- rownames(X)
   if(addlegend){
-    legend(legend.where, legend.text,pch=19,col=Cols, 
+    legend(legend.where, legend.text,pch=19,col=my_cols(),
            cex=legend.cex,pt.cex=1.2, bty='n')
   }
 
@@ -267,43 +242,43 @@ plotGamPred <- function(obj,   # object returned by smoothplot, with pft as grou
 #' @param y An object returned by \code{lmerTest::lsmeans},
 #' @param x Either a numeric vector, or an object returned by \code{mixmean}
 lsmeansPlot <- function(y,x, ylim=NULL, col=palette(), ...){
-  
-  
+
+
   if(class(y)[1] != "lsmeans")
     stop("Need object returned by lmerTest::lsmeans")
-  
+
   uci <- 10^y$lsmeans.table[["Upper CI"]]
   lci <- 10^y$lsmeans.table[["Lower CI"]]
   Y <- 10^y$lsmeans.table[["Estimate"]]
-  
+
   if(is.null(ylim))ylim <- c(0, max(uci))
-  
+
   numx <- is.list(x) & "lci" %in% names(x)
-  
+
   lets <- cld.lsmeans(y)$Letters
-  
+
   if(numx){
-    plot(x$y, Y, 
-         ylim=ylim, 
+    plot(x$y, Y,
+         ylim=ylim,
          panel.first={
            arrows(x0=x$lci, x1=x$uci, y0=Y, y1=Y,
                   code=3,angle=90,length=0.025,col=col)
-           arrows(x0=x$y, x1=x$y, y0=lci, y1=uci, angle=90, code=3, 
+           arrows(x0=x$y, x1=x$y, y0=lci, y1=uci, angle=90, code=3,
                   length=0.025, col=col)
          }, pch=19, col=col,...)
     u <- par()$usr
     text(x$y, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
-    
+
   } else {
-    
-    plot(x, Y, ylim=ylim, col=col, pch=19, 
-         panel.first= arrows(x0=x, x1=x, y0=lci, y1=uci, angle=90, code=3, 
+
+    plot(x, Y, ylim=ylim, col=col, pch=19,
+         panel.first= arrows(x0=x, x1=x, y0=lci, y1=uci, angle=90, code=3,
                                        length=0.025, col=col),
          ...)
     u <- par()$usr
     text(x, u[3] + 0.0*(u[4]-u[3]), lets, pos=3, cex=0.9)
 
-    
+
   }
 
 }
@@ -318,15 +293,15 @@ fitgam <- function(X,Y,dfr, k=-1, R=NULL){
     model <- 2
   } else model <- 1
   dfr <- droplevels(dfr)
-  
-  
+
+
   if(model ==1){
     g <- gam(Y ~ s(X, k=k), data=dfr)
   }
   if(model ==2){
     g <- gamm(Y ~ s(X, k=k), random = list(R=~1), data=dfr)
   }
-  
+
   return(g)
 }
 
@@ -338,7 +313,7 @@ fitgam <- function(X,Y,dfr, k=-1, R=NULL){
 #' @param kgam the \code{k} parameter for smooth terms in gam.
 #' @param R An optional random effect (quoted)
 #' @param log Whether to add log axes for x or y (but no transformations are done).
-#' @param fitoneline Whether to fit only 
+#' @param fitoneline Whether to fit only
 smoothplot <- function(x,y,g=NULL,data,
                             fittype=c("gam","lm"),
                             kgam=4,
@@ -347,12 +322,12 @@ smoothplot <- function(x,y,g=NULL,data,
                             log="xy",
                             fitoneline=FALSE,
                             pointcols=NULL,
-                            linecols=NULL, 
+                            linecols=NULL,
                             xlab=NULL, ylab=NULL,
                             polycolor=alpha("lightgrey",0.7),
                             plotit=TRUE,
                             ...){
-  
+
   fittype <- match.arg(fittype)
   randommethod <- match.arg(randommethod)
 
@@ -365,29 +340,29 @@ smoothplot <- function(x,y,g=NULL,data,
   data$X <- eval(substitute(x),data)
   data$Y <- eval(substitute(y),data)
   data <- droplevels(data)
-  
+
   data <- data[!is.na(data$X) & !is.na(data$Y) & !is.na(data$G),]
-  
+
   if(is.null(pointcols))pointcols <- palette()
   if(is.null(linecols))linecols <- palette()
-  
+
   if(is.null(xlab))xlab <- substitute(x)
   if(is.null(ylab))ylab <- substitute(y)
-  
+
   # If randommethod = aggregate, average by group and fit simple gam.
   if(!is.null(R) && randommethod == "aggregate"){
     data$R <- data[,R]
-    
+
     data <- summaryBy(. ~ R, FUN=mean, na.rm=TRUE, keep.names=TRUE, data=data,
                       id=~G)
     R <- NULL
   }
-  
-  
+
+
   if(!fitoneline){
-    
+
     d <- split(data, data$G)
-    
+
     if(fittype == "gam"){
       fits <- lapply(d, function(x)try(fitgam("X","Y",x, k=kgam, R=R)))
       if(!is.null(R))fits <- lapply(fits, "[[", "gam")
@@ -403,13 +378,13 @@ smoothplot <- function(x,y,g=NULL,data,
       fits <- list(lm(Y ~ X, data=data))
     }
     hran <- list(range(data$X, na.rm=TRUE))
-    
+
   }
-  
+
   if(plotit){
     with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
                     xlab=xlab, ylab=ylab, ...))
-    
+
     if(log=="xy")magaxis(side=1:2, unlog=1:2)
     if(log=="x"){
       magaxis(side=1, unlog=1)
@@ -426,9 +401,9 @@ smoothplot <- function(x,y,g=NULL,data,
       axis(2)
       box()
     }
-    
+
     for(i in 1:length(fits)){
-      
+
       if(fittype == "gam"){
         nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
         if(!inherits(fits[[i]], "try-error")){
@@ -448,18 +423,18 @@ return(invisible(fits))
 }
 
 
-histbypft <- function(yvar, pftvar, dataset, 
-                      nbin=100, 
-                      log=TRUE, 
+histbypft <- function(yvar, pftvar, dataset,
+                      nbin=100,
+                      log=TRUE,
                       col=1:5,
-                      xlab=NULL, 
-                      ylab="Nr. individuals", 
+                      xlab=NULL,
+                      ylab="Nr. individuals",
                       legend.text=NULL,
                       legend.cex=1,
                       xaxis=NULL,
                       meanline=TRUE,
                       Means=NULL){
-  
+
   if(is.null(Means))meanline <- FALSE
   yall <- eval(substitute(yvar), dataset)
   dataset$Group <- eval(substitute(pftvar), dataset)
@@ -467,21 +442,21 @@ histbypft <- function(yvar, pftvar, dataset,
   mx <- max(yall,na.rm=T)
   br <- seq(mn - 0.01*(mx-mn),mx + 0.01*(mx-mn),length=nbin)
   w <- br[2]-br[1]
-  
+
   d <- split(dataset, dataset$Group)
   if(is.null(legend.text))legend.text <- names(d)
-  
+
   if(is.null(xaxis))xaxis <- 1:length(d)
-  
+
 
   for(i in 1:length(d)){
-    
+
     x <- d[[i]]
     Y <- eval(substitute(yvar),x)
     Y <- Y[!is.na(Y)]
-    
+
     h <- hist(Y, breaks=br, plot=FALSE)
-    
+
     plot(br, br, ylim=c(0,max(h$counts)), axes=FALSE, type='n')
     for(j in 1:length(h$counts)){
       n <- h$counts[j]
@@ -489,7 +464,7 @@ histbypft <- function(yvar, pftvar, dataset,
       if(n == 0)next
       rect(xleft=m-w/2, xright=m+w/2, ybottom=0, ytop=n,  border=NA,col=col[i])
     }
-    
+
     if(i %in% xaxis){
       if(log)
         magaxis(side=1, unlog=1, tcl=-0.4)
@@ -497,21 +472,21 @@ histbypft <- function(yvar, pftvar, dataset,
         axis(1)
     }
     axis(2)
-    
-    
+
+
     u <- par()$usr
     text(x=u[1], y=0.96*u[4], legend.text[i], cex=legend.cex,font=2,pos=4)
-    
+
     if(meanline){
-      
+
       rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
            ybottom=0, ytop=max(h$counts), col=alpha("grey",0.6), border=NA)
-      segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]), 
+      segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
                y0=0, y1=max(h$counts))
-      
+
     }
   }
-  
+
   mtext(side=2, line=3, text=ylab, outer=T, las=3)
   mtext(side=1, line=3, text=xlab, outer=T, las=1)
 }
@@ -525,35 +500,35 @@ addpoly <- function(x,y1,y2,col=alpha("lightgrey",0.8),...){
   polygon(c(x,rev(x)), c(y1, rev(y2)), col=col, border=NA,...)
 }
 predline <- function(fit, from=NULL, to=NULL, polycolor=alpha("lightgrey",0.8),...){
-  
+
   if(is.null(from))from <- min(fit$model[,2], na.rm=TRUE)
   if(is.null(to))to <- max(fit$model[,2], na.rm=TRUE)
-  
+
   newdat <- data.frame(X = seq(from,to, length=101))
   names(newdat)[1] <- names(coef(fit))[2]
-  
+
   pred <- as.data.frame(predict(fit, newdat, se.fit=TRUE, interval="confidence")$fit)
-  
+
   addpoly(newdat[[1]], pred$lwr, pred$upr, col=polycolor)
   ablinepiece(fit, from=from, to=to, ...)
-  
+
 }
 
 
 # Modified from plotrix::hexagon
 Hexagon <- function (x, y, xdiam = 1, ydiam=xdiam, center=TRUE, col = NA, border = "black") {
-  
-  xx <- c(x, x, x + xdiam/2, x + xdiam, x + xdiam, 
+
+  xx <- c(x, x, x + xdiam/2, x + xdiam, x + xdiam,
           x + xdiam/2)
-  yy <- c(y + ydiam * 0.125, y + ydiam * 
-            0.875, y + ydiam * 1.125, y + ydiam * 0.875, y + 
+  yy <- c(y + ydiam * 0.125, y + ydiam *
+            0.875, y + ydiam * 1.125, y + ydiam * 0.875, y +
             ydiam * 0.125, y - ydiam * 0.125)
-  
+
   if(center){
     xx <- xx - xdiam/2
     yy <- yy - ydiam/2
   }
-  
+
   polygon(xx, yy, col = col, border = border)
 }
 
@@ -563,14 +538,54 @@ getdiams <- function(cells){
   cel$xcount <- with(cel, ave(x, y, FUN=length))
   z <- subset(cel, xcount == max(xcount))
   xdiam <- median(diff(z$x))/2
-  
+
   cel$ycount <- with(cel, ave(y, x, FUN=length))
   z <- subset(cel, ycount == max(ycount))
   ydiam <- median(diff(z$y))/2
-  
+
   return(list(xdiam=xdiam, ydiam=ydiam))
 }
 
+#'@title Add a line to a plot
+#'@description As \code{abline}, but with \code{from} and \code{to} arguments.
+#'If a fitted linear regression model is used as asn argument, it uses the min and max values of the data used to fit the model.
+#'@param a Intercept (optional)
+#'@param b Slope (optional)
+#'@param reg A fitted linear regression model (output of \code{\link{lm}}).
+#'@param from Draw from this X value
+#'@param to Draw to this x value
+#'@param \dots Further parameters passed to \code{\link{segments}}
+#'@export
+ablinepiece <- function(a=NULL,b=NULL,reg=NULL,from=NULL,to=NULL,...){
+
+  # Borrowed from abline
+  if (!is.null(reg)) a <- reg
+
+  if (!is.null(a) && is.list(a)) {
+    temp <- as.vector(coefficients(a))
+    from <- min(a$model[,2], na.rm=TRUE)
+    to <- max(a$model[,2], na.rm=TRUE)
+
+    if (length(temp) == 1) {
+      a <- 0
+      b <- temp
+    }
+    else {
+      a <- temp[1]
+      b <- temp[2]
+    }
+  }
+
+  segments(x0=from,x1=to,
+           y0=a+from*b,y1=a+to*b,...)
+
+}
 
 
-
+## Position label at a fractional x/y position on a plot
+label <- function(px, py, lab, ..., adj=c(0, 1)) {
+  usr <- par("usr")
+  text(usr[1] + px*(usr[2] - usr[1]),
+       usr[3] + py*(usr[4] - usr[3]),
+       lab, adj=adj, ...)
+}

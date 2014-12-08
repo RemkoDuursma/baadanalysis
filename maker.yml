@@ -1,0 +1,204 @@
+packages:
+  - lmerTest
+  - maps
+  - mapdata
+  - maptools
+  - gdata
+  - smatr
+  - scales
+  - magicaxis
+  - dplyr
+  - multcomp
+  - doBy
+  - mgcv
+  - reshape2
+  - lme4
+  - Hmisc
+  - hexbin
+  - lattice
+  - grid
+  - stringr
+  - raster
+  - dismo
+  - XML
+  - rgdal
+  - lsmeans
+  - gplots
+  - car
+  - RColorBrewer
+  - xtable
+  - knitr
+  - rmarkdown
+  - RCurl
+
+sources:
+  - R/data_processing.R
+  - R/tables_stats.R
+  - R/rsquaredglmm.R
+  - R/figures.R
+  - R/functions-figures.R
+  - R/signifletters.R
+  - R/build.R
+
+plot_options:
+  tall:
+    width: 3
+    height: 5
+  wide:
+    width: 8
+    height: 4
+  small_square:
+    width: 4
+    height: 4
+  med_square:
+    width: 6
+    height: 6
+  large_square:
+    width: 8
+    height: 8
+
+targets:
+  all:
+    depends:
+      - manuscript.pdf
+
+  manuscript.pdf:
+    depends:
+      - figures
+      - "references.bib"
+      - "manuscript.Rnw"
+    command: tex_2_pdf("manuscript.tex")
+
+  manuscript.tex:
+    depends:
+      - baad_all
+      - table_pipemodel_varpart
+      - table_LMFLAR_varpart
+      - table_mlfastba
+      - table_alfastba
+      - table_lmf
+      - table_lar
+      - table_gamr2MIgdd0
+      - basalafit
+      - figures
+    knitr: TRUE
+
+  data:
+    depends:
+      - dataset
+      - dataset2
+      - cfg
+      - datroot
+      - baad_all
+      - dat_mlf
+      - dat_alf
+      - dat_alfmso
+      - dat_mlfmso
+      - baad_mapmat
+      - world_mapmat
+
+  tables:
+    depends:
+      - table_pipemodel_varpart
+      - table_LMFLAR_varpart
+      - table_mlfastba
+      - table_alfastba
+      - table_lmf
+      - table_lar
+      - table_gamr2MIgdd0
+      - basalafit
+
+  figures:
+    depends:
+      - figures/Figure1.pdf
+      - figures/Figure2.pdf
+      - figures/Figure3.pdf
+      - figures/Figure4.pdf
+      - figures/FigureS1.pdf
+      - figures/FigureS2.pdf
+      - figures/FigureS3.pdf
+      - figures/FigureS4.pdf
+      - figures/FigureS5.pdf
+      - figures/FigureS6.pdf
+      - figures/FigureS7.pdf
+
+  # Data --------------------------------------
+  baad_mapmat:
+    command: prepare_baadmapmat(baad_climate1)
+  world_mapmat:
+    command: prepare_worldmapmat("data/Worldclim_landcover_climspace_withcover.csv")
+  dat_alfmso:
+    command: prepare_dat_alfmso(dataset2)
+  dat_mlfmso:
+    command: prepare_dat_mlfmso(dataset2)
+  dat_mlf:
+    command: prepare_dat_mlf(dataset2)
+  dat_alf:
+    command: prepare_dat_alf(dataset2)
+  dataset:
+    command: prepare_dataset_1(baad_climate2)
+  dataset2:
+    command: prepare_dataset_2(dataset)
+  datroot:
+    command: prepare_dataset_roots(dataset)
+  baad_climate2:
+    command: addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.csv")
+  baad_climate1:
+    command: addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
+  baad_all:
+    command: readRDS("data/baad.rds")
+  cfg:
+    command: extract_baad_dictionary(baad_all)
+
+  # Stats & tables --------------------------------------
+  basalafit:
+    command: BasalA_fit(baad_all)
+  table_gamr2MIgdd0:
+    command: make_table_gamr2MIgdd0(dataset)
+  table_mlfastba:
+    command: make_table_mlfastba(dat_mlf)
+  table_alfastba:
+    command:  make_table_alfastba(dat_alf)
+  table_lmf:
+    command:  make_table_lmf(dat_mlfmso)
+  table_lar:
+    command:  make_table_lar(dat_alfmso)
+  table_pipemodel_varpart:
+    command: make_table_pipemodel_varpart(dataset2)
+  table_LMFLAR_varpart:
+    command: make_table_LMFLAR_varpart(dataset2)
+
+  # Figures --------------------------------------
+  figures/Figure1.pdf:
+    command: figure1(dataset, baad_mapmat, world_mapmat)
+    plot: wide
+  figures/Figure2.pdf:
+    command: figure2(dataset)
+    plot: tall
+  figures/Figure3.pdf:
+    command: figure3(dataset)
+    plot: med_square
+  figures/Figure4.pdf:
+    command: figure4(dataset)
+    plot: med_square
+  figures/FigureS1.pdf:
+    command: figureS1(baad_mapmat)
+    plot: med_square
+  figures/FigureS2.pdf:
+    command: figureS2(dataset)
+    plot: wide
+  figures/FigureS3.pdf:
+    command: figureS3(dataset)
+    plot: wide
+  figures/FigureS4.pdf:
+    command: figureS4(dataset)
+    plot: wide
+  figures/FigureS5.pdf:
+    command: figureS5(dataset)
+    plot: wide
+  figures/FigureS6.pdf:
+    command: figureS6(dataset)
+    plot: wide
+  figures/FigureS7.pdf:
+    command: figureS7(dataset2)
+    plot: wide

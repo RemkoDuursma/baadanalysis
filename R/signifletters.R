@@ -1,7 +1,7 @@
 
 
 cld.lsmeans <- function(object, ... ){
-  
+
   cis <- object$lsmeans.table[,c("Lower CI","Upper CI")]
   lvls <- object$lsmeans.table[,1]
   return(cld_generic(cis, lvls))
@@ -11,18 +11,18 @@ cld.lsmeans <- function(object, ... ){
 cld_generic <- function(cis, lvls){
 
   n <- nrow(cis)
-  
+
   comps <- combn(1:n,2)
   nc <- ncol(comps)
-  
+
   f <- list()
   for(i in 1:nc){
     f[[i]]  <- paste(findInterval(cis[comps[1,i],],cis[comps[2,i],]), collapse=" ")
   }
   f <- do.call(c,f)
-  
+
   nm <- rownames(cis)
-  
+
   logi <- rep(TRUE, length(f))
   logi[grep("1",f)] <- FALSE
   logi[f == "0 0"] <- TRUE
@@ -30,9 +30,9 @@ cld_generic <- function(cis, lvls){
   logi[f == "0 2"] <- FALSE
   logi[f == "2 0"] <- FALSE
   names(logi) <- apply(comps,2,function(x)paste(lvls[x], collapse="-"))
-  
+
   lets <- insert_absorb(logi, lvl_order=lvls)
-  
+
 return(lets)
 }
 
@@ -47,11 +47,11 @@ return(lets)
 # separator ... a separating character used to produce a sufficiently large set of
 #               characters for a compact letter display (default is separator=".") in case
 #               the number of letters required exceeds the number of letters available
-# Decreasing ... Inverse the order of the letters 
+# Decreasing ... Inverse the order of the letters
 
-insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decreasing = FALSE, 
+insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decreasing = FALSE,
                            comps = NULL, lvl_order){
-  
+
   obj_x <- deparse(substitute(x))
   if (is.null(comps)) {
     namx <- names(x)
@@ -61,12 +61,12 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decrea
     split_names <- strsplit(namx, "-")
     stopifnot( sapply(split_names, length) == 2 )
     comps <- t(as.matrix(as.data.frame(split_names)))
-  } 
+  }
   rownames(comps) <- names(x)
   lvls <- lvl_order
   n <- length(lvls)
   lmat <- array(TRUE, dim=c(n,1), dimnames=list(lvls, NULL) )
-  
+
   if( sum(x) == 0 ){                                                        # no differences
     ltrs <- rep(get_letters(1, Letters=Letters, separator=separator), length(lvls) )
     names(ltrs) <- lvls
@@ -78,7 +78,7 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decrea
   }
   else{
     signifs <- comps[x,,drop=FALSE]
-    
+
     absorb <- function(m){
       for(j in 1:(ncol(m)-1)){
         for(k in (j+1):ncol(m)){
@@ -119,7 +119,7 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decrea
                                  separator=separator)
   lmat <- lmat[,order(apply(lmat, 2, sum))]                                                   # 2nd sweep
   lmat <- sweepLetters(lmat)
-  lmat <- lmat[,names(sort(apply(lmat,2, function(x) return(min(which(x)))), 
+  lmat <- lmat[,names(sort(apply(lmat,2, function(x) return(min(which(x)))),
                            decreasing = decreasing))]                # reorder columns
   colnames(lmat) <- get_letters( ncol(lmat),  Letters=Letters,
                                  separator=separator)
@@ -143,7 +143,7 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decrea
   }
   msl <- apply(msl, 1, paste, collapse="")
   names(msl) <- rownames(lmat)
-  ret <- list( Letters=ltrs, monospacedLetters=msl, LetterMatrix=lmat, 
+  ret <- list( Letters=ltrs, monospacedLetters=msl, LetterMatrix=lmat,
                aLetters = Letters, aseparator = separator )
   class(ret) <- "multcompLetters"
   return(ret)
@@ -158,22 +158,22 @@ insert_absorb <- function( x, Letters=c(letters, LETTERS), separator=".", decrea
 # Letters     ... a set of user defined letters { default is Letters=c(letters, LETTERS) }
 # separator   ... a separating character used to produce a sufficiently large set of
 #                 characters for a compact letter display (default is separator=".") in case
-#                 the number of letters required exceeds the number of letters available 
+#                 the number of letters required exceeds the number of letters available
 
 sweepLetters <- function(mat, start.col=1, Letters=c(letters, LETTERS), separator="."){
-  
+
   stopifnot( all(start.col %in% 1:ncol(mat)) )
   locked <- matrix(rep(0,ncol(mat)*nrow(mat)), ncol=ncol(mat))          # 1 indicates that another letter dependes on this entry
   cols <- 1:ncol(mat)
   cols <- cols[c( start.col, cols[-start.col] )]
   if( any(is.na(cols) ) )
     cols <- cols[-which(is.na(cols))]
-  
+
   for( i in cols){
     tmp <- matrix(rep(0,ncol(mat)*nrow(mat)), ncol=ncol(mat))
     tmp[which(mat[,i]),] <- mat[which(mat[,i]),]                        # get items of those rows which are TRUE in col "i"
     one <- which(tmp[,i]==1)
-    
+
     if( all(apply(tmp[,-i,drop=FALSE], 1, function(x) return( any(x==1) ))) ){     # there is at least one row "l" where mat[l,i] is the only item which is TRUE i.e. no item can be removed in this column
       next
     }
@@ -232,7 +232,7 @@ sweepLetters <- function(mat, start.col=1, Letters=c(letters, LETTERS), separato
 #                   n=5, Letters=c("a","b") => "a", "b", ".a", ".b", "..a"
 
 get_letters <- function( n, Letters=c(letters, LETTERS), separator="." ){
-  
+
   n.complete <- floor(n / length(Letters))        # number of complete sets of Letters
   n.partial <- n %% length(Letters)               # number of additional Letters
   lett <- character()
