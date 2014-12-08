@@ -142,7 +142,8 @@ to.pdf(figure1(), width=8, height=3.8,
 
 # Figure 2 - average leaf mass, leaf area / stem area.
 figure2 <- function(){
-  par(cex.axis=0.85, mfrow=c(1,2), mar=c(5,5,1,1), cex=1.1)
+  par(cex.axis=0.85, mfrow=c(2,1), mar=c(0,0,0,0), 
+      cex=1.1, oma=c(5,5,1,1))
   meansbypft("lmlf_astba2","lalf_astba2", "pft", 
              xvar="llma",
              dataset=dataset, 
@@ -150,10 +151,10 @@ figure2 <- function(){
              legend.where="topleft",
              legend.cex=0.6,
              legend.text=c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno."),
-             panel1.expr={axis(1);axis(2)},
+             panel1.expr={axis(2)},
              panel2.expr={axis(1);axis(2)},
              Cols=Cols,
-             xlab=lmaLabel,
+             xlab=lmaLabelshort,
              ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)), 
              xlim=c(0,0.2),

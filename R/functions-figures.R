@@ -122,7 +122,9 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                 y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
        })
   axis(2)
-  if(axis1)axis(1,labels=FALSE)
+  if(axis1){
+    axis(1,labels=FALSE)
+  }
   box()
   
   u <- par()$usr
