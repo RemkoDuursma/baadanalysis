@@ -189,7 +189,7 @@ print(xtable(g0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure2.pdf}
+    \includegraphics[width=0.5\textwidth]{Figure2.pdf}
     \caption{Average leaf mass per unit basal stem area (panel 1), and leaf area per unit basal stem area (panel 2) for the three major plant functional types. Error bars are 95\% confidence interval for the mean (calculated with a mixed-effects model with species within study as the random effect). Letters denote significant differences (at $\alpha = 0.05$). }
     \label{fig:figure2}
 \end{figure}
