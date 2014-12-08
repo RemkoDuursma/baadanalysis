@@ -43,6 +43,53 @@ KGAM <- 4
 #:: Main figures.
 
 
+# Figure 1.
+# MAP MAT vs. Worldclim
+figureSI1 <- function(){
+  
+  mmpft <- summaryBy(MAP + MAT ~ pft, data=baad_mapmat, FUN=mean, na.rm=TRUE)
+  mmpft$pft <- as.factor(mmpft$pft)
+  
+  h <- with(world_mapmat, hexbin(map ~ mat))
+  cells <- hcell2xy(h)
+  
+  hexd <- (h@xbnds[2] - h@xbnds[1])/h@xbins
+  nhex <- h@ncells
+  d <- getdiams(cells)
+  
+  # Set up grey levels
+  cv <- seq(0, 1200, by=200)
+  n <- length(cv)
+  hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
+  greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
+  
+  # Plot
+  par(pty='s', cex.lab=1.2)
+  plot(cells, type='n', ylim=c(0,6000),
+       xlab = expression("Mean annual temperature"~(degree*C)), 
+       ylab = "Mean annual precipitation (mm)")
+  for(i in 1:nhex){
+    Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
+            border=NA,
+            col=greyCols[hcut[i]])
+  }
+  l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
+  box()
+  hCols <- alpha(transCols,0.7)
+  with(baad_mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
+  with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
+  #   with(subset(baad_mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
+  legend(l$rect$left + l$rect$w, 
+         l$rect$top, title="Plant functional type",
+         c("Deciduous Angiosperm", #"Deciduous Evergreen", 
+           "Evergreen Angiosperm", "Evergreen Gymnosperm"),
+         pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
+}
+
+to.pdf(figureSI1(), width=6, height=6,
+       filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf")
+
+
 # Figure 1 - leaf mass fraction by PFT, and least-square means and LAR.
 # LMF
 # - Fit lmer to LMF and LAR, with h.t and pft as predictors
@@ -61,24 +108,31 @@ lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
 figure1 <- function(){
   l <- layout(matrix(c(1,1,2,3), byrow=T, ncol=2))
   par(mar=c(4,4,1,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
-  smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
+  obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
              xlab="Plant height (m)",kgam=KGAM,
              ylab=expression(M[F]/M[T]~~(kg~kg^-1))
   )
-  
   Legend("bottomleft", "long")
   box()
   
-  lsmeansPlot(lmf, lma, cex=1.3, 
-              ylab=expression(M[F]/M[T]~~(kg~kg^-1)),
-              xlim=c(0,0.2), xlab=lmaLabel, col=Cols)
-  lsmeansPlot(lar, lma, cex=1.3, ylab=expression(A[F]/M[T]~~(m^2~kg^-1)),
-              xlim=c(0,0.2), xlab=lmaLabel, col=Cols)
+  
+  obj2 <- smoothplot(lh.t, lalf_mso, pft, dataset, R="Group",plotit=FALSE)
 
+  
+  plotGamPred(obj1, xpred=mean(dataset$lh.t, na.rm=TRUE),
+              ylab=expression(M[F]/M[T]~~(kg~kg^-1)),ylim=c(0,0.35),
+              xlim=c(0,0.2), xlab=lmaLabel)
+  
+  plotGamPred(obj2, xpred=mean(dataset$lh.t, na.rm=TRUE),
+              ylab=expression(A[F]/M[T]~~(kg~kg^-1)),ylim=c(0,2.5),
+              xlim=c(0,0.2), xlab=lmaLabel)
+  
 }
 
 to.pdf(figure1(), width=7, height=7,
        filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf")
+
+
 
 
 # Figure 2. Histograms of MF/AS and AF/AS.
@@ -169,52 +223,6 @@ to.pdf(figure4(), filename="manuscript/figures/FigureSI-9_climateeffects.pdf",
 
 #::::::::::::::::::;;:::::::::: Supporting Figures ::::::::::::::::::::::::::#
 
-
-# Figure 1.
-# MAP MAT vs. Worldclim
-figureSI1 <- function(){
-  
-  mmpft <- summaryBy(MAP + MAT ~ pft, data=baad_mapmat, FUN=mean, na.rm=TRUE)
-  mmpft$pft <- as.factor(mmpft$pft)
-  
-  h <- with(world_mapmat, hexbin(map ~ mat))
-  cells <- hcell2xy(h)
-  
-  hexd <- (h@xbnds[2] - h@xbnds[1])/h@xbins
-  nhex <- h@ncells
-  d <- getdiams(cells)
-  
-  # Set up grey levels
-  cv <- seq(0, 1200, by=200)
-  n <- length(cv)
-  hcut <- cut(h@count, cv, labels=paste(cv[1:(n-1)], cv[2:n], sep=" - "))
-  greyCols <- grey(seq(0.85,0.2,length=nlevels(hcut)))
-
-  # Plot
-  par(pty='s', cex.lab=1.2)
-  plot(cells, type='n', ylim=c(0,6000),
-       xlab = expression("Mean annual temperature"~(degree*C)), 
-       ylab = "Mean annual precipitation (mm)")
-  for(i in 1:nhex){
-    Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
-            border=NA,
-            col=greyCols[hcut[i]])
-  }
-  l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
-  box()
-  hCols <- alpha(transCols,0.7)
-  with(baad_mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
-  with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
-#   with(subset(baad_mapmat, pft=="DG"), points(MAT, MAP, pch=19, col=hCols[pft], cex=1.2))
-  legend(l$rect$left + l$rect$w, 
-         l$rect$top, title="Plant functional type",
-         c("Deciduous Angiosperm", #"Deciduous Evergreen", 
-           "Evergreen Angiosperm", "Evergreen Gymnosperm"),
-         pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
-}
-  
-to.pdf(figureSI1(), width=6, height=6,
-  filename="manuscript/figures/Figure1_MAPMAT_baad_vs_worldclim.pdf")
 
 
 # SI 2
