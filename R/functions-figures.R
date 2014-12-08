@@ -20,6 +20,17 @@ To.pdf <- function(expr, filename=NULL, to.path=getwd(), ..., verbose=TRUE) {
 }
 #To.pdf(figureSI3(), width=8, height=4, to.path="manuscript/figures")
 
+# Simple function for placing labels on a figure.
+plotlabel <- function(txt, where, inset=0.08, ...){
+  u <- par()$usr
+  if(grepl("left",where))x <- u[1] + inset*(u[2]-u[1])
+  if(grepl("right",where))x <- u[2] - inset*(u[2]-u[1])
+  if(grepl("bottom",where))y <- u[3] + inset*(u[4]-u[3])
+  if(grepl("top",where))y <- u[4] - inset*(u[4]-u[3])
+  
+  text(x,y,txt,...)
+}
+
 
 #' Means by some grouping variable g, accounting for random effect R.
 mixmean <- function(yvar, g, data, R="Group"){
@@ -111,7 +122,9 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
                 y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
        })
   axis(2)
-  if(axis1)axis(1,labels=FALSE)
+  if(axis1){
+    axis(1,labels=FALSE)
+  }
   box()
   
   u <- par()$usr
@@ -151,14 +164,102 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
     if(siglets == "symbol"){
       pointLabel(X$y, y2$y, lets2, cex=0.9)
     }
-    mtext(side=1, text=xlab, line=3, outer=T)
-    mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
-    mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T)
+    mtext(side=1, text=xlab, line=3, outer=T, las=0)
+    mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T, las=0)
+    mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T, las=0)
   }
   
   mtext(side=4, text=main, line=2, outer=TRUE)
   if(setpar)par(o)
 }
+
+
+
+#' Not a generic function! Only works for our case.
+lsmeansGam <- function(obj, x){
+  
+  y <- list()
+  for(i in 1:3){
+    y[[i]] <- predict(obj[[i]], 
+                      data.frame(pft=levels(dataset$pft)[i],
+                                 X=x),
+                      se.fit=TRUE)
+  }
+  
+  f <- function(z){
+    p <- 10^c(z$fit, z$fit - 2*z$se.fit, z$fit + 2*z$se.fit)
+    names(p) <- c("fit","lwr","upr")
+    return(p)
+  }
+  tab <- sapply(y,f)  
+  colnames(tab) <- levels(dataset$pft)
+  cis <- t(tab[2:3,])
+  
+  lets <- cld_generic(cis, rownames(cis))$Letters
+  
+  return(list(tab=as.data.frame(t(tab)),siglets=lets))
+  
+}
+
+
+
+#' Plot prediction from gam
+#' Used to take single prediction from multiple gams, plot as function of something.
+plotGamPred <- function(obj,   # object returned by smoothplot, with pft as grouping (list of 3 gams)
+                        xvar="llma",
+                        xpred,
+                        pftvar="pft",
+                        siglets="bottom",
+                        xlab="", 
+                        xlim=c(0,25),main="",
+                        ylab=NULL, 
+                        ylim=NULL,
+                        axis1=TRUE,
+                        xaxislabels=TRUE,
+                        panel.expr=NULL,
+                        legend.text=NULL,
+                        legend.where="topleft",
+                        addlegend=FALSE,...){
+
+  
+  dat <- dataset
+  
+  dat$P <- dat[,pftvar]  
+  
+  # Calculate mixmeans
+  if(is.character(xvar)){
+    X <- mixmean(xvar,pftvar,dat)
+  }
+  
+  z <- lsmeansGam(obj,xpred)
+
+  plot(X$y, z$tab$fit, xlim=xlim,axes=FALSE, pch=19, col=Cols, cex=1.3,
+       ylim=ylim,xlab=xlab,ylab=ylab,
+       panel.first={
+         arrows(x0=X$lci, x1=X$uci, y0=z$tab$fit, 
+                y1=z$tab$fit,code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=X$y, x1=X$y, y0=z$tab$lwr, 
+                y1=z$tab$upr,code=3,angle=90,length=0.025,col=Cols)
+       })
+  axis(2)
+  if(axis1)axis(1,labels=xaxislabels)
+  box()
+  
+  u <- par()$usr
+  if(siglets == "bottom"){
+    text(X$y, u[3] + 0.0*(u[4]-u[3]), z$siglets, pos=3, cex=0.9)
+  }
+  
+  if(!is.null(panel.expr))eval(panel.expr)
+  
+  if(is.null(legend.text))legend.text <- rownames(X)
+  if(addlegend){
+    legend(legend.where, legend.text,pch=19,col=Cols, 
+           cex=legend.cex,pt.cex=1.2, bty='n')
+  }
+
+}
+
 
 
 #' Plot least-square means
@@ -249,6 +350,7 @@ smoothplot <- function(x,y,g=NULL,data,
                             linecols=NULL, 
                             xlab=NULL, ylab=NULL,
                             polycolor=alpha("lightgrey",0.7),
+                            plotit=TRUE,
                             ...){
   
   fittype <- match.arg(fittype)
@@ -304,43 +406,44 @@ smoothplot <- function(x,y,g=NULL,data,
     
   }
   
-  with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
-                  xlab=xlab, ylab=ylab, ...))
-  
-  if(log=="xy")magaxis(side=1:2, unlog=1:2)
-  if(log=="x"){
-    magaxis(side=1, unlog=1)
-    axis(2)
-    box()
-  }
-  if(log=="y"){
-    magaxis(side=2, unlog=2)
-    axis(1)
-    box()
-  }
-  if(log==""){
-    axis(1)
-    axis(2)
-    box()
-  }
-  
-  for(i in 1:length(fits)){
+  if(plotit){
+    with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
+                    xlab=xlab, ylab=ylab, ...))
     
-    if(fittype == "gam"){
-      nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
-      if(!inherits(fits[[i]], "try-error")){
-        p <- predict(fits[[i]],nd,se.fit=TRUE)
-        addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=polycolor)
-        lines(nd$X, p$fit, col=linecols[i], lwd=2)
+    if(log=="xy")magaxis(side=1:2, unlog=1:2)
+    if(log=="x"){
+      magaxis(side=1, unlog=1)
+      axis(2)
+      box()
+    }
+    if(log=="y"){
+      magaxis(side=2, unlog=2)
+      axis(1)
+      box()
+    }
+    if(log==""){
+      axis(1)
+      axis(2)
+      box()
+    }
+    
+    for(i in 1:length(fits)){
+      
+      if(fittype == "gam"){
+        nd <- data.frame(X=seq(hran[[i]][1], hran[[i]][2], length=101))
+        if(!inherits(fits[[i]], "try-error")){
+          p <- predict(fits[[i]],nd,se.fit=TRUE)
+          addpoly(nd$X, p$fit-2*p$se.fit, p$fit+2*p$se.fit, col=polycolor)
+          lines(nd$X, p$fit, col=linecols[i], lwd=2)
+        }
+      }
+      if(fittype == "lm"){
+        pval <- summary(fits[[i]])$coefficients[2,4]
+        LTY <- if(pval < 0.05)1 else 5
+        predline(fits[[i]], col=linecols[i], lwd=2, lty=LTY, polycolor=polycolor)
       }
     }
-    if(fittype == "lm"){
-      pval <- summary(fits[[i]])$coefficients[2,4]
-      LTY <- if(pval < 0.05)1 else 5
-      predline(fits[[i]], col=linecols[i], lwd=2, lty=LTY, polycolor=polycolor)
-    }
   }
-  
 return(invisible(fits))
 }
 

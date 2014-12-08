@@ -4,6 +4,12 @@ cld.lsmeans <- function(object, ... ){
   
   cis <- object$lsmeans.table[,c("Lower CI","Upper CI")]
   lvls <- object$lsmeans.table[,1]
+  return(cld_generic(cis, lvls))
+}
+
+
+cld_generic <- function(cis, lvls){
+
   n <- nrow(cis)
   
   comps <- combn(1:n,2)
