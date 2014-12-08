@@ -20,6 +20,17 @@ To.pdf <- function(expr, filename=NULL, to.path=getwd(), ..., verbose=TRUE) {
 }
 #To.pdf(figureSI3(), width=8, height=4, to.path="manuscript/figures")
 
+# Simple function for placing labels on a figure.
+plotlabel <- function(txt, where, inset=0.08, ...){
+  u <- par()$usr
+  if(grepl("left",where))x <- u[1] + inset*(u[2]-u[1])
+  if(grepl("right",where))x <- u[2] - inset*(u[2]-u[1])
+  if(grepl("bottom",where))y <- u[3] + inset*(u[4]-u[3])
+  if(grepl("top",where))y <- u[4] - inset*(u[4]-u[3])
+  
+  text(x,y,txt,...)
+}
+
 
 #' Means by some grouping variable g, accounting for random effect R.
 mixmean <- function(yvar, g, data, R="Group"){
