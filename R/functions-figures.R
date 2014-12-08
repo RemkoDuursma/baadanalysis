@@ -164,9 +164,9 @@ meansbypft <- function(yvar1, yvar2=NULL, pftvar,
     if(siglets == "symbol"){
       pointLabel(X$y, y2$y, lets2, cex=0.9)
     }
-    mtext(side=1, text=xlab, line=3, outer=T)
-    mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T)
-    mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T)
+    mtext(side=1, text=xlab, line=3, outer=T, las=0)
+    mtext(side=2, at = 0.25, text=ylab2, line=3, outer=T, las=0)
+    mtext(side=2, at = 0.75, text=ylab1, line=3, outer=T, las=0)
   }
   
   mtext(side=4, text=main, line=2, outer=TRUE)

@@ -142,8 +142,8 @@ to.pdf(figure1(), width=8, height=3.8,
 
 # Figure 2 - average leaf mass, leaf area / stem area.
 figure2 <- function(){
-  par(cex.axis=0.85, mfrow=c(2,1), mar=c(0,0,0,0), 
-      cex=1.1, oma=c(5,5,1,1))
+  par(cex.axis=0.8, mfrow=c(2,1), mar=c(0,0,0,0), 
+      cex.lab=1.3, oma=c(5,5,1,1), las=1)
   meansbypft("lmlf_astba2","lalf_astba2", "pft", 
              xvar="llma",
              dataset=dataset, 
@@ -161,7 +161,7 @@ figure2 <- function(){
              ylim1=c(0,250),ylim2=c(0,2000))
 }
 
-to.pdf(figure2(), width=8, height=4, 
+to.pdf(figure2(), width=3.5, height=6, 
        filename="manuscript/figures/Figure2.pdf")
 
 
