@@ -202,6 +202,7 @@ plotGamPred <- function(obj,   # object returned by smoothplot, with pft as grou
                         ylab=NULL, 
                         ylim=NULL,
                         axis1=TRUE,
+                        xaxislabels=TRUE,
                         panel.expr=NULL,
                         legend.text=NULL,
                         legend.where="topleft",
@@ -228,7 +229,7 @@ plotGamPred <- function(obj,   # object returned by smoothplot, with pft as grou
                 y1=z$tab$upr,code=3,angle=90,length=0.025,col=Cols)
        })
   axis(2)
-  if(axis1)axis(1,labels=TRUE)
+  if(axis1)axis(1,labels=xaxislabels)
   box()
   
   u <- par()$usr
