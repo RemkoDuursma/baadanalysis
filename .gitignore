@@ -16,5 +16,6 @@
 *.html
 *.tex
 *.bbl
+*.dvi
 manuscript/tables/
 manuscript/wordcount.txt
