@@ -1,47 +1,3 @@
-#' R-squared and pseudo-rsquared for a list of (generalized) linear (mixed) models
-#'
-#' This function calls the generic \code{\link{r.squared}} function for each of the
-#' models in the list and rbinds the outputs into one data frame
-#'
-#' @param a single model or a list of fitted (generalized) linear (mixed) model objects
-#' @return a dataframe with one row per model, and "Class",
-#'         "Family", "Marginal", "Conditional" and "AIC" columns
-rsquared.glmm <- function(modlist) {
-  if( class(modlist) != "list" ) modlist = list(modlist) else modlist
-  # Iterate over each model in the list
-  do.call(rbind, lapply(modlist, r.squared))
-}
-
-#' R-squared and pseudo-rsquared for (generalized) linear (mixed) models
-#'
-#' This generic function calculates the r squared and pseudo r-squared for
-#' a variety of(generalized) linear (mixed) model fits.
-#' Currently implemented for \code{\link{lm}}, \code{\link{lmerTest::merMod}},
-#' and \code{\link{nlme::lme}} objects.
-#' Implementing methods usually call \code{\link{.rsquared.glmm}}
-#'
-#' @param mdl a fitted (generalized) linear (mixed) model object
-#' @return Implementing methods usually return a dataframe with "Class",
-#'         "Family", "Marginal", "Conditional", and "AIC" columns
-r.squared <- function(mdl){
-  UseMethod("r.squared")
-}
-
-#' Marginal r-squared for lm objects
-#'
-#' This method uses r.squared from \code{\link{summary}} as the marginal.
-#' Contrary to other \code{\link{r.squared}} methods, 
-#' this one doesn't call \code{\link{.rsquared.glmm}}
-#'
-#' @param mdl an lm object (usually fit using \code{\link{lm}},
-#' @return a dataframe with with "Class" = "lm", "Family" = "gaussian",
-#'        "Marginal" = unadjusted r-squared, "Conditional" = NA, and "AIC" columns
-r.squared.lm <- function(mdl){
-  data.frame(Class=class(mdl), Family="gaussian", Link="identity",
-             Marginal=summary(mdl)$r.squared,
-             Conditional=NA, AIC=AIC(mdl))
-}
-
 #' Marginal and conditional r-squared for merMod objects
 #'
 #' This method extracts the variance for fixed and random effects, residuals,
@@ -100,42 +56,6 @@ r.squared.merMod <- function(mdl){
                  mdl.aic = mdl.aic,
                  mdl.class = class(mdl),
                  null.fixef = null.fixef)
-}
-
-#' Marginal and conditional r-squared for lme objects
-#'
-#' This method extracts the variance for fixed and random effects,
-#' as well as residuals, and calls \code{\link{.rsquared.glmm}}
-#'
-#' @param mdl an lme model (usually fit using \code{\link{nlme::lme}})
-r.squared.lme <- function(mdl){
-  # Get design matrix of fixed effects from model
-  Fmat <- model.matrix(eval(mdl$call$fixed)[-2], mdl$data)
-  # Get variance of fixed effects by multiplying coefficients by design matrix
-  VarF <- var(as.vector(nlme::fixef(mdl) %*% t(Fmat)))
-  # First, extract variance-covariance matrix of random effects
-  Sigma.list = VarCorr(mdl)[!grepl(" =",rownames(VarCorr(mdl))) & rownames(VarCorr(mdl)) != "Residual", colnames(VarCorr(mdl))=="Variance", drop=F]
-  corr.list = as.numeric(VarCorr(mdl)[!grepl(" =",rownames(VarCorr(mdl))) & rownames(VarCorr(mdl)) != "Residual" & rownames(VarCorr(mdl)) != "(Intercept)",colnames(VarCorr(mdl))=="Corr",drop=F])
-  Sigma.list2 = split(as.numeric(Sigma.list), cumsum(rownames(Sigma.list) == "(Intercept)"), drop=F)
-  Sigma.list2 = lapply(1:length(Sigma.list2), function(i) { 
-    mat = matrix(prod(Sigma.list2[[i]])*abs(corr.list[i]), ncol=length(Sigma.list2[[i]]), nrow=length(Sigma.list2[[i]]))
-    diag(mat) = Sigma.list2[[i]]
-    colnames(mat) = rownames(Sigma.list)[1:sum(cumsum(rownames(Sigma.list) == "(Intercept)") == 1)]
-    rownames(mat) = colnames(mat)
-    return(mat) } )
-  # Calculate variance of random effects
-  VarRand = sum(
-    sapply(
-      Sigma.list2,
-      function(Sigma) {
-        Z <- Fmat[,colnames(Sigma),drop=F]
-        sum(diag(Z %*% Sigma %*% t(Z)))/nrow(Fmat) } ) )
-  # Get residual variance
-  VarResid <- as.numeric(nlme::VarCorr(mdl)[rownames(nlme::VarCorr(mdl))=="Residual", 1])
-  # Call the internal function to do the pseudo r-squared calculations
-  .rsquared.glmm(VarF, VarRand, VarResid, VarDisp, family = "gaussian", link = "identity",
-                 mdl.aic = AIC(update(mdl, method="ML")),
-                 mdl.class = class(mdl))
 }
 
 #' Marginal and conditional r-squared for glmm given fixed and random variances
