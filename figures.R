@@ -108,7 +108,7 @@ figure1 <- function(){
   l <- layout(matrix(c(1,2,3,1,2,4), byrow=T, ncol=3),
               widths=c(1,1,0.67), heights=c(1,1))
   
-  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
+  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
   figureMAPMATworldclim(setpar=FALSE, legend2=FALSE)
   plotlabel("(a)","topright")  
   obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
@@ -200,7 +200,7 @@ figure4 <- function(K=3){
   gcol <- alpha("lightgrey",0.5)
   milab <- "Moisture Index (-)"
   mgdlab <- expression(Growing~season~T~(degree*C))
-  par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1))
+  par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1), las=1)
 #   smoothplot(MI, llma, pft, dataset, log="y", kgam=K, R="Group", randommethod = "agg",
 #              xlab=milab,
 #              ylim=c(-2,0), ylab=expression(LMA~~(kg~m^-2)))
@@ -251,7 +251,7 @@ figureS1 <- function(){
   
   dat <- subset(baad_mapmat, vegetation %in% vdf$vegetation)
 
-  par(mar=c(5,5,1,1), cex.lab=1.2, cex.axis=0.9)
+  par(mar=c(5,5,1,1), cex.lab=1.2, cex.axis=0.9, las=1)
   with(dat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
                     xlab = expression("Mean annual temperature"~(degree*C)), 
                     ylab = "Mean annual precipitation (mm)", 
@@ -268,7 +268,7 @@ to.pdf(figureS1(), width=6, height=5,
 # Leaf mass, woody mass raw data
 figureSI2 <- function(){
   
-  par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(5,5,2,2))
+  par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
   labels <- c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
   
   for(i in 1:3){
@@ -278,8 +278,6 @@ figureSI2 <- function(){
     with(dat, plot(log10(h.t), log10(m.st), pch=16,cex=0.5,
                    xlim=log10(c(0.01,105)), ylim=c(-6,6),
                    col=alpha("brown",0.5),
-                   xlab="H (m)",
-                   ylab=expression("Woody or foliage mass (kg)"),
                    axes=FALSE))
     with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
                      col=alpha("forestgreen",0.5)))
@@ -289,13 +287,13 @@ figureSI2 <- function(){
     box()
     legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
     if(i == 1){
-      legend(-2,4.5, c("Leaf","Woody abvgr."), pch=19, 
-             col=c("forestgreen","brown"), bty='n', pt.cex=1, cex=1.2)
+      legend(-2,4.5, c(expression(M[F]),expression(M[W])), pch=19, 
+             col=c("forestgreen","brown"), bty='n', pt.cex=1, cex=1.4)
     }
   }
   
-  mtext(side=1, text="Plant height (m)", line=3, outer=TRUE)
-  mtext(side=2, text="Leaf or woody biomass (kg)", line=3, outer=TRUE)
+  mtext(side=1, text="H (m)", line=3, outer=TRUE, las=0, cex=1.2)
+  mtext(side=2, text=expression(M[F]~or~M[W]~~(kg)), line=3, outer=TRUE, las=0, cex=1.2)
 }
 
 to.pdf(figureSI2(), width=9, height=4,
@@ -305,7 +303,7 @@ to.pdf(figureSI2(), width=9, height=4,
 # SI3
 # Leaf area ratio; raw data.
 figureSI3 <- function(){
-  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1)
+  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1)
   
   x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group", 
                   linecols=linecols, pointcols=transCols,
@@ -324,7 +322,7 @@ to.pdf(figureSI3(), width=7, height=4.5,
 # Woody mass per unit basal stem area
 # - Least-square means because not isometric scaling
 figureSI4 <- function(){
-  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.axis=0.9)
+  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.axis=0.9, las=1)
   
   smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
              linecols=linecols, pointcols=transCols, R="Group",kgam=KGAM,
@@ -351,7 +349,7 @@ to.pdf(figureSI4(), width=8, height=4,
 # Raw data of leaf mass, area and basal stem area. 
 figureSI5 <- function(){
   
-  par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2), cex.axis=0.9)
+  par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2), cex.axis=0.9, las=1)
   smoothplot(log10(a.stba2), log10(m.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
              R="Group",kgam=KGAM,
              ylab=expression(M[F]~(kg)), cex=0.6,pointcols=transCols,linecols=linecols)
@@ -380,12 +378,12 @@ figureSI6 <- function(){
   lm2 <- lm(lalf_astba2 ~ llma, data=agg)
   
   
-  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.1)
+  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.1, las=1)
   
   with(agg, plot(llma, lmlf_astba2, pch=19, col=transCols[pft], 
                  axes=FALSE, ylim=log10(c(1,1000)),
                  xlim=log10(c(0.01,1)),
-                 xlab=lmaLabel, ylab=expression(M[F]/A[S]~~(kg~m^-2))))
+                 xlab=lmaLabelshort, ylab=expression(M[F]/A[S]~~(kg~m^-2))))
   magaxis(1:2, unlog=1:2)
   predline(lm1)
   box()
@@ -415,7 +413,7 @@ figureSI7 <- function(){
     "Boreal EG",
     "Temp. EG")
   
-  par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=2, cex.axis=0.9)
+  par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=1, cex.axis=0.9)
   meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
              xvar=1:7,setpar=FALSE,
              addlegend=FALSE,
