@@ -113,14 +113,14 @@ figure1 <- function(){
   
   par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35)
   figureSI1(setpar=FALSE, legend2=FALSE)
-  
+  plotlabel("(a)","topright")  
   obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=linecols, pointcols=transCols,
              xlab="Plant height (m)",kgam=KGAM,
              ylab=expression(M[F]/M[T]~~(kg~kg^-1))
   )
   Legend("bottomleft", "long")
   box()
-  
+  plotlabel("(b)","topright")
   
   obj2 <- smoothplot(lh.t, lalf_mso, pft, dataset, R="Group",plotit=FALSE)
 
@@ -129,20 +129,17 @@ figure1 <- function(){
   plotGamPred(obj1, xpred=mean(dataset$lh.t, na.rm=TRUE),
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),ylim=c(0,0.35),
               xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
+  plotlabel("(c)","topright")
   
   par(mar=c(4,4,0.35,1)) #, oma=c(0,0,0,0))
   plotGamPred(obj2, xpred=mean(dataset$lh.t, na.rm=TRUE),
               ylab=expression(A[F]/M[T]~~(kg~kg^-1)),ylim=c(0,2.5),
               xlim=c(0,0.2), xlab=lmaLabelshort)
-  
+  plotlabel("(d)","topright")
 }
 
 to.pdf(figure1(), width=8, height=3.8,
        filename="manuscript/figures/Figure2_LMF_lines_lsmeans_3panel.pdf")
-
-
-
-
 
 
 
