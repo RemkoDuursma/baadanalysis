@@ -425,18 +425,23 @@ return(invisible(fits))
 
 histbypft <- function(yvar, pftvar, dataset,
                       nbin=100,
+                      plotwhat=c("counts","density"),
                       log=TRUE,
                       col=1:5,
+                      meanlinecol="black",
                       xlab=NULL,
                       ylab="Nr. individuals",
+                      ylim=NULL,
                       legend.text=NULL,
                       legend.cex=1,
                       xaxis=NULL,
                       meanline=TRUE,
-                      Means=NULL){
+                      Means=NULL,
+                      overlay=FALSE){
 
   if(is.null(Means))meanline <- FALSE
   yall <- eval(substitute(yvar), dataset)
+  plotwhat <- match.arg(plotwhat)
   dataset$Group <- eval(substitute(pftvar), dataset)
   mn <- min(yall,na.rm=T)
   mx <- max(yall,na.rm=T)
@@ -444,6 +449,7 @@ histbypft <- function(yvar, pftvar, dataset,
   w <- br[2]-br[1]
 
   d <- split(dataset, dataset$Group)
+  if(length(meanlinecol) == 1)meanlinecol <- rep(meanlinecol,length(d))
   if(is.null(legend.text))legend.text <- names(d)
 
   if(is.null(xaxis))xaxis <- 1:length(d)
@@ -456,10 +462,14 @@ histbypft <- function(yvar, pftvar, dataset,
     Y <- Y[!is.na(Y)]
 
     h <- hist(Y, breaks=br, plot=FALSE)
-
-    plot(br, br, ylim=c(0,max(h$counts)), axes=FALSE, type='n')
-    for(j in 1:length(h$counts)){
-      n <- h$counts[j]
+    if(is.null(ylim))
+      Ylim <- c(0,max(h[[plotwhat]]))
+    else
+      Ylim <- ylim
+    
+    if(!overlay || (overlay & i == 1))plot(br, br, ylim=Ylim, axes=FALSE, type='n')
+    for(j in 1:length(h[[plotwhat]])){
+      n <- h[[plotwhat]][j]
       m <- h$mids[j]
       if(n == 0)next
       rect(xleft=m-w/2, xright=m+w/2, ybottom=0, ytop=n,  border=NA,col=col[i])
@@ -477,16 +487,23 @@ histbypft <- function(yvar, pftvar, dataset,
     u <- par()$usr
     text(x=u[1], y=0.96*u[4], legend.text[i], cex=legend.cex,font=2,pos=4)
 
-    if(meanline){
-
-      rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
-           ybottom=0, ytop=max(h$counts), col=alpha("grey",0.6), border=NA)
-      segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
-               y0=0, y1=max(h$counts))
-
+    if(!overlay && meanline){
+        rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
+             ybottom=0, ytop=u[4], col=alpha("grey",0.6), border=NA)
+        segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
+                 y0=0, y1=u[4], col=meanlinecol[i])
     }
   }
 
+  if(overlay && meanline){
+    for(i in 1:length(d)){ 
+      rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
+           ybottom=0, ytop=u[4], col=alpha("grey",0.6), border=NA)
+      segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
+               y0=0, y1=u[4], col=meanlinecol[i])
+    }
+  }
+  
   mtext(side=2, line=3, text=ylab, outer=T, las=3)
   mtext(side=1, line=3, text=xlab, outer=T, las=1)
 }
