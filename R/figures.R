@@ -50,10 +50,19 @@ my_legend <- function(where, labels=c("short","long"), bty='n', rev=TRUE, ...){
 
 # Figure 1. panel a.
 # MAP MAT vs. Worldclim
-figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, setpar=TRUE, legend2=TRUE){
+figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft", 
+                                  col=my_cols_transparent(0.7), setpar=TRUE, 
+                                  legend1=TRUE,
+                                  legend2=TRUE,
+                                  meanpoints=TRUE,
+                                  pch=19,
+                                  xlab = expression("Mean annual temperature"~(degree*C)),
+                                  ylab = "Mean annual precipitation (mm)"
+                                  ){
 
-  mmpft <- summaryBy(MAP + MAT ~ pft, data=baad_mapmat, FUN=mean, na.rm=TRUE)
-  mmpft$pft <- as.factor(mmpft$pft)
+  baad_mapmat$Group <- baad_mapmat[,groupvar]
+  mmpft <- summaryBy(MAP + MAT ~ Group, data=baad_mapmat, FUN=mean, na.rm=TRUE)
+  mmpft$Group <- as.factor(mmpft$Group)
 
   h <- with(world_mapmat, hexbin(map ~ mat))
   cells <- hcell2xy(h)
@@ -71,22 +80,21 @@ figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, setpar=TRUE, legend
   # Plot
   if(setpar)par(pty='s', cex.lab=1.2)
   plot(cells, type='n', ylim=c(0,6000),
-       xlab = expression("Mean annual temperature"~(degree*C)),
-       ylab = "Mean annual precipitation (mm)")
+       xlab = xlab,
+       ylab = ylab)
   for(i in 1:nhex){
     Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
             border=NA,
             col=greyCols[hcut[i]])
   }
-  l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
+  if(legend1)l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
   box()
-  hCols <- my_cols_transparent(0.7)
-  with(baad_mapmat, points(MAT, MAP, pch=19, col=hCols[pft], cex=1.1))
-  with(mmpft, points(MAT.mean, MAP.mean, col=hCols[pft], pch=24, cex=1.5, bg="white", lwd=2))
+  with(baad_mapmat, points(MAT, MAP, pch=pch, col=col[Group], cex=1.1))
+  if(meanpoints)with(mmpft, points(MAT.mean, MAP.mean, col=col[Group], pch=24, cex=1.5, bg="white", lwd=2))
   if(legend2){
     legend(l$rect$left + l$rect$w,
            l$rect$top, title="Plant functional type",
-           c("Deciduous Angiosperm", #"Deciduous Evergreen",
+           c("Deciduous Angiosperm", 
              "Evergreen Angiosperm", "Evergreen Gymnosperm"),
            pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
   }
@@ -295,6 +303,30 @@ figureS1 <- function(baad_mapmat){
          pch=21, pt.bg=palette(),  pt.cex=1.3, cex=0.8, bty='n')
 }
 
+figureS1b <- function(baad_mapmat, world_mapmat){
+  
+  vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
+                    vegetation Label
+                    BorF 'Boreal forest'
+                    Gr Grassland
+                    Sav Savanna
+                    Sh Shrubland
+                    TempF 'Temperate forest'
+                    TempRF 'Temperate rainforest'
+                    TropRF 'Tropical rainforest'
+                    TropSF 'Tropical seasonal forest'
+                    Wo Woodland")
+  Cols <- c(brewer.pal(8,"Set1"), brewer.pal(3,"Set2"))
+  
+  figureMAPMATworldclim(baad_mapmat, world_mapmat, groupvar="vegetation", col=Cols,
+                        legend2=FALSE, legend1=FALSE, meanpoints=FALSE)
+  
+  legend("topleft", vdf$Label[vdf$vegetation == levels(baad_mapmat$vegetation)],
+         pch=19,  pt.cex=1.1, cex=0.8, bty='n', col=Cols)
+  
+}
+
+  
 
 # SI 2
 # Leaf mass, woody mass raw data
