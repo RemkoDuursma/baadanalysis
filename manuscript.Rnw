@@ -205,7 +205,7 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure4.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure4b.pdf}
     \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables (leaf mass per area, LMA, and $M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). See SI Methods for calculation of MI and growing season temperature. Solid lines are generalized additive model fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the gam after averaging each variable by species/dataset combination (but all raw individual plant data are shown in the plots).}
   \label{fig:figure4}
 \end{figure}
