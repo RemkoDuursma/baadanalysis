@@ -55,12 +55,6 @@ opts_chunk$set(echo=FALSE)
 
 % First paragraph The first paragraph should be 180 to 200 words and should contain references. The paragraph should serve both as a general introduction to the topic and as a brief, non-technical summary of your main results and their implications. Ideally, the paragraph starts with two to three sentences of background explaining the topic and current understanding. This is followed by a phrase like “Here we present” to introduce the new work. In the second part, the main methods, findings, conclusions and implications should be described clearly and accessibly.
 
-\section*{First paragraph}
-
-
-\textbf{The partitioning of biomass in terrestrial vegetation between leaves, stems and roots is a critical component of dynamic global vegetation models (DGVMs). Biomass partioning is consistently shown to be one of the most uncertain and important drivers for global predictions of carbon storage \cite{ise_comparison_2010}, the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, and the CO\textsubscript{2} response of net primary production \cite{dekauwe2014}. Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze the largest database on plant biomass to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type. Evergreen gymnosperms maintain three times more leaf biomass at a given total aboveground biomass than deciduous angiosperms, with evergreen angiosperms taking an intermediate value. We found that leaf mass per area, an indicator of leaf construction cost, explains these differences so that the PFTs converged in the ratio  of leaf area to aboveground biomass. We found weak effects of climate while accounting for PFT effects, suggesting that climate-related differences are captured largely by a shift in PFT. These results can be used to constrain biomass partitioning routines in global dynamic vegetation models.}
-
-
 % \section{flow}
 %
 % \begin{itemize}
@@ -74,13 +68,22 @@ opts_chunk$set(echo=FALSE)
 % \item decompose into MF/AS, MT/AS, find similar differences in MF/AS but none in MT/AS, suggesting convergent AF/AS between PFTs.
 % \item Only small direct climate effects, so shift in PFT captures global patterns in biomass partioning.
 % \item This has implications for allocation in DGVMs, they can be divided into roughly three categories in terms of biomass allocation (allocation fractions, allometric constraints, LAI optimization). Allocation vs. partitioning: the role of leaf and stem turnover.
+% \item Another implication is that, as a first approximation, using LMA is more appropriate than splitting by PFT. Using LMA, together with the assumption of invariant leaf area display, gives biomass partitioning between leaves and stems. This even worked, to some extent, across species.
 %
 % \end{itemize}
+
+\section*{First paragraph}
+
+
+\textbf{The partitioning of biomass in terrestrial vegetation between long-lived stems and short-lived leaves affects the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, model predictions of global carbon storage \cite{ise_comparison_2010}, and the CO\textsubscript{2} response of net primary production \cite{dekauwe2014}. Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze a new database on plant biomass fractions, the largest to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type, and proportional to the leaf mass per area, an important leaf functional trait. As a result, plant functional types converged in the ratio of leaf area to aboveground biomass. We found only modest effects of climate after accounting for PFT, suggesting that climate-related differences in biomass partitioning are captured largely by a shift in PFT. These results form an important constraint on biomass partitioning routines in global dynamic vegetation models.}
+
 
 
 \section*{Main text}
 
-Previous syntheses on plant biomass relationships has predominantly focused on the universal nature of size-biomass relationships in plants. Little is known about differences between plant functional types (evergreen vs. deciduous, angiosperm vs. gymnosperm). Since most global models parameterize allocation submodels by PFT, it is imperative that we better understand these potential differences.
+% 1. Importance of allocation in global vegetation models, short-lived leaves vs. long-lived stems affect ecosystem-scale turnover of C, as well as productivity (as partitioning to leaves affects LAI). DGVMs split plant diversity into a few plant functional types (PFTs). This begs two questions : how does biomass partitioning dffer between PFTs, and can we relate it to commonly measured leaf traits, to simplify application of DGVMs?
+
+Previous syntheses on plant biomass relationships have predominantly focused on the universal nature of size-biomass relationships in plants. Relatively little is known about differences in biomass partitioning between PFTs(evergreen vs. deciduous, angiosperm vs. gymnosperm). 
 
 Major plant functional types differ widely in leaf mass per area (LMA, the ratio of leaf mass to area, an index of leaf thickness) (\cite{poorter_causes_2009}), which can be expected to affect biomass partitioning in several ways. First, LMA correlates with leaf lifespan. Longer lived leaves would lead to higher plant leaf mass ($M_F$) as long as annual production rates are similar (\cite{enquist_global_2002}). Another interpretation is that plants may target a certain leaf area display given a certain biomass investment in supporting tissues, because light interception and photosynthesis correlate with the exchange area of the plant.
 
@@ -117,8 +120,6 @@ There is no shortage of theoretical developments in understanding biomass alloca
 We found no effects of MAP on biomass partitioning, and only very weak effects of MAT on LMF, when analyzed in addition to PFT. This means that climate-related differences are captured by a shift in PFT (see also Fig.~\ref{fig:figure1}, showing PFTs occupy different parts of the climate space). Our results contrast with those of \cite{reich_temperature_2014} but they studied whole-stand biomass, not individual plant biomass. So perhaps this means the climate effects are on stand density not individual plant effects. No effect of climate is good news for models that parameterize the globe by PFT, as this seems sufficient, based on our dataset.
 
 
-
-%------------------------------------------------------------------------------------%
 \section*{Methods}
 
 We used the recently compiled Biomass And Allometry Database (BAAD) (Falster et al., in review), including a total of \Sexpr{nrow(baad_all$data)} observations, but here we use only data that include leaf mass ($M_F$), leaf area ($A_F$), aboveground woody biomass ($M_W$), plant height ($H$), and stem area measured at ground level ($A_S$), or at breast height (ca. 1.3m) ($A_{Sbh}$).  For each analysis, we used different subsets of the data. Sample sizes by PFT are summarized in Tables~\ref{table:count1}-\ref{table:count4} We exluded glasshouse and common garden studies, including only field-grown woody plants (including natural vegetation, unmanaged and managed plantations). We considered three PFTs : evergreen angiosperms, evergreen gymnosperms, and decidous angiosperms. We excluded  deciduous gymnosperms because few data were available. All locations were further separated into boreal (including sub-boreal), temperate, and tropical biomes.
