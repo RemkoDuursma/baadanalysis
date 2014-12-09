@@ -189,33 +189,60 @@ figure3 <- function(dataset){
 # Figure 4.
 # Three size-invariant variables as a function of MI and mgdd0
 # TODO: Why is KGAM 3 here, but elsewhere is 4?
-figure4 <- function(dataset, KGAM=3){
+figure4 <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitoneline=FALSE, fittype="lm", R="Group"){
 
   gcol <- alpha("lightgrey",0.5)
-  milab <- "Moisture Index (-)"
-  mgdlab <- expression(Growing~season~T~(degree*C))
+  
+  if(climvar1 == "MI")Xlab1 <- "Moisture Index (-)"
+  if(climvar1 == "MAP")Xlab1 <- "Mean annual precipitation (mm)"
+  
+  if(climvar2 == "mgdd0")Xlab2 <- expression(Growing~season~T~(degree*C))
+  if(climvar2 == "MAT")Xlab2 <- expression(Mean~annual~temperature~~(degree*C))
+  
+  dataset$XVAR1 <- dataset[,climvar1]
+  dataset$XVAR2 <- dataset[,climvar2]
+  
   par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1), las=1)
-  smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=milab, ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+  smoothplot(XVAR1, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab=Xlab1, ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
   
   my_legend("bottomright", lab="long")
   
-  smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=mgdlab,ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+  smoothplot(XVAR2, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab=Xlab2,ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-  smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=milab,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+  smoothplot(XVAR1, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab=Xlab1,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
-  smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=mgdlab,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+  smoothplot(XVAR2, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab=Xlab2,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
 }
 
 
+figure4b <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=FALSE, fittype="gam"){
+  figure4(dataset, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
+}
+
+figure4c <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=TRUE, fittype="gam"){
+  figure4(dataset, KGAM=3, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
+}
 
 
-#::::::::::::::::::;;:::::::::: Supporting Figures ::::::::::::::::::::::::::#
+    
+  
+  
+  
+  
+  
+
+
+#:::::::::::::::::::::::::::::: Supporting Figures ::::::::::::::::::::::::::#
 
 
 
