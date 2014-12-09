@@ -186,6 +186,27 @@ figure3 <- function(dataset){
 }
 
 
+# Figure 3. Histograms of MF/AS and AF/AS.
+figure3b <- function(dataset){
+  
+  par(mar=c(0,0,0,0), oma=c(5,5,2,2), las=1, mfrow=c(1,2), cex.axis=0.85)
+  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("lmlf_astba2","pft",dataset),
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(a)","topleft")
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("lalf_astba2","pft",dataset),
+            legend.text=rep("",3), meanlinecol=my_linecols())
+  plotlabel("(b)","topleft")
+  mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
+        outer=TRUE, at=0.25, cex=0.9)
+  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
+        outer=TRUE, at=0.75, cex=0.9)
+}
+
+
 # Figure 4.
 # Three size-invariant variables as a function of MI and mgdd0
 # TODO: Why is KGAM 3 here, but elsewhere is 4?
