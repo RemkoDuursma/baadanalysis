@@ -1,6 +1,5 @@
 
 
-
 # Color settings
 my_cols <- function() {
   c("blue","red","forestgreen")
@@ -192,25 +191,28 @@ figure3 <- function(dataset){
 # TODO: Why is KGAM 3 here, but elsewhere is 4?
 figure4 <- function(dataset, KGAM=3){
 
-
   gcol <- alpha("lightgrey",0.5)
   milab <- "Moisture Index (-)"
   mgdlab <- expression(Growing~season~T~(degree*C))
   par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1), las=1)
   smoothplot(MI, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=milab, ylim=c(0,3),polycolor=gcol,
+             xlab=milab, ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-my_legend("bottomright", lab="long")
-smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=mgdlab,ylim=c(0,3),polycolor=gcol,
+  
+  my_legend("bottomright", lab="long")
+  
+  smoothplot(mgdd0, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
+             xlab=mgdlab,ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
   smoothplot(MI, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=milab,polycolor=gcol,
+             xlab=milab,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
   smoothplot(mgdd0, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R="Group", randommethod = "agg", fittype="lm",
-             xlab=mgdlab,polycolor=gcol,
+             xlab=mgdlab,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
 }
+
+
 
 
 #::::::::::::::::::;;:::::::::: Supporting Figures ::::::::::::::::::::::::::#
