@@ -197,21 +197,32 @@ figure3 <- function(dataset){
 # Figure 3. Histograms of MF/AS and AF/AS.
 figure3b <- function(dataset){
   
-  par(mar=c(0,0,0,0), oma=c(5,5,2,2), las=1, mfrow=c(1,2), cex.axis=0.85)
-  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), #rep(alpha(grey(0.4),0.4),3),
+  par(mar=c(0,0,0,0), oma=c(5,5,1,1), las=1, mfrow=c(1,3), cex.axis=0.85)
+  
+  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("llma","pft",dataset),cicol=alpha("white",0.5),
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(a)","topleft")
+  
+  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
             xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
             Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("white",0.5),
             legend.text="", meanlinecol=my_linecols())
-  plotlabel("(a)","topleft")
-  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), #rep(alpha(grey(0.4),0.4),3), 
+  plotlabel("(b)","topleft")
+  
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
             xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
             Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("white",0.65),
             legend.text=rep("",3), meanlinecol=my_linecols())
-  plotlabel("(b)","topleft")
+  plotlabel("(c)","topleft")
+  
+  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
+        outer=TRUE, at=1/6, cex=0.9)
   mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
-        outer=TRUE, at=0.25, cex=0.9)
+        outer=TRUE, at=3/6, cex=0.9)
   mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
-        outer=TRUE, at=0.75, cex=0.9)
+        outer=TRUE, at=5/6, cex=0.9)
 }
 
 

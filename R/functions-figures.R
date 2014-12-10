@@ -499,9 +499,9 @@ histbypft <- function(yvar, pftvar, dataset,
   if(overlay && meanline){
     for(i in 1:length(d)){ 
       rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
-           ybottom=0, ytop=u[4], col=cicol, border=NA)
+           ybottom=u[1], ytop=0, col=cicol, border=NA)
       segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
-               y0=0, y1=u[4], col=meanlinecol[i])
+               y0=u[1], y1=0, col=meanlinecol[i])
     }
   }
   
