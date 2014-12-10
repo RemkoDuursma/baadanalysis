@@ -44,7 +44,7 @@
 <<preload, echo=FALSE>>=
 library(knitr)
 opts_chunk$set(echo=FALSE)
-
+source("R/functions-ms.R")
 @
 
 
@@ -74,7 +74,11 @@ opts_chunk$set(echo=FALSE)
 
 \section*{First paragraph}
 
+% Remko version new
+\textbf{
+- The partitioning of biomass into short-lived leaves and long-lived stems is one of the most uncertain  and influential components of dynamic global vegetation models (DGVMs), affecting the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, predictions of global carbon storage \cite{ise_comparison_2010}, and the CO\textsubscript{2} response of net primary production \cite{dekauwe2014}. Despite its importance, little is known about the variation in biomass partitioning due to plant functional type (PFT), biome, or climate. Here, we use a new large compilation of global woody plant biomass data to quantify this variation. We show that across three major PFTs, the partitioning to total plant leaf mass is proportional to leaf mass per area, an important leaf functional trait. As a result, plant functional types converged in the ratio of leaf area to aboveground biomass. We found only modest effects of biome or climate after accounting for PFT. These results suggest that leaf mass per area can be substituted for PFT to predict biomass partitioning to leaves and stems in DGVMs. We recommend that these results are used as a benchmark to test the many existing biomass allocation routines \cite{dekauwe2014}.}
 
+% Remko version old
 \textbf{The partitioning of biomass in terrestrial vegetation between long-lived stems and short-lived leaves affects the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, model predictions of global carbon storage \cite{ise_comparison_2010}, and the CO\textsubscript{2} response of net primary production \cite{dekauwe2014}. Little is known about direct and indirect effects of climate on biomass partitioning, largely due to the lack of a global individual-based biomass dataset. Here, we analyze a new database on plant biomass fractions, the largest to date [cite]. We show that partitioning of biomass to leaves vs. woody stems is strongly dependent on the plant functional type, and proportional to the leaf mass per area, an important leaf functional trait. As a result, plant functional types converged in the ratio of leaf area to aboveground biomass. We found only modest effects of climate after accounting for PFT, suggesting that climate-related differences in biomass partitioning are captured largely by a shift in PFT. These results form an important constraint on biomass partitioning routines in global dynamic vegetation models.}
 
 
