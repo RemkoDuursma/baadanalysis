@@ -189,22 +189,18 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 
 
-%(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells, cut off at 6000mm MAP. Triangles are averages for the three PFTs across all contributed studies. 
-
-
-
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
-    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost.  (b) Leaf mass fraction (LMF = leaf mass / aboveground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (c) and (d) Leaf mass fraction (LMF) and leaf area ratio (LAR) at the average plant height in the dataset, estimated from panel (b). Error bars are 95\% confidence intervals. Letters denote significant differences.}
+    \caption{(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells, cut off at 6000mm MAP. Triangles are averages for the three PFTs across all contributed studies. (b) Schematic of a woody plant, and the variables considered in this study. H = plant height, $A_S$ basal stem area, $A_sbh$ stem area at 'breast height', $M_W$ woody biomass, $M_F$ leaf biomass (total aboveground biomass $M_T = M_F + M_W$), $A_F$ total leaf area.}
     \label{fig:figure1}
 \end{figure}
 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{Figure2.pdf}
-    \caption{Average leaf mass per unit basal stem area (panel 1), and leaf area per unit basal stem area (panel 2) for the three major PFTs. Error bars are 95\% confidence interval for the mean (calculated with a mixed-effects model with species within study as the random effect). Letters denote significant differences (at $\alpha = 0.05$). }
+    \includegraphics[width=0.99\textwidth]{Figure2.pdf}
+    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost.  (a) Leaf mass fraction (LMF = leaf mass / aboveground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (b) and (c) Leaf mass fraction (LMF) and leaf area ratio (LAR) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figure2}
 \end{figure}
 
