@@ -24,7 +24,7 @@
 \linenumbers
 
 
-\title{Plant functional type effects on biomass partitioning}
+\title{Leaf traits drive differences in biomass partitioning among major plant functional types}
 
 \author[1]{Remko A. Duursma}
 \author[2]{Daniel S. Falster}
@@ -84,9 +84,8 @@ source("R/functions-ms.R")
 
 \section*{First paragraph - Daniel}
 
-\textbf{Leaf traits drive differences in biomass partitioning among major plant functional types}
-
-The partitioning of plant primary productivity among fleshy leaves and woody stems is a key factor driving carbon cycles and the flow of energy within terrestrial ecosystems. Although researchers have long assumed key plant functional types (PFTs) to differ in biomass partitioning, empirical data have been lacking. Divergent approaches to modelling allocation is thus a major source of uncertainty in terrestrial ecosystem models (TEMs) and global carbon cycles. Using a new database on Biomass partitioning combining data from over 175 studies, we here show a strong effect of PFT on biomass partitioning. Contrary to prior expectation, we show that major woody PFTs do not differ in the amount of leaf area supported, but rather the amount of leaf mass per unit above ground biomass. Moreover, we find that such differences relate to systematic shifts in leaf-mass per area, a leading trait within the leaf economics spectrum. Another core trait, leaf area per sapwood area, explained further variation among species in biomass partitioning, but did not differ systematically among PFTs. Combined, these results uncover fundamental differences in how plants are constructed and allow for systematic testing of allocation routines with current TEMs.
+\textbf{
+The partitioning of plant primary productivity among fleshy leaves and woody stems is a key factor driving carbon cycles and the flow of energy within terrestrial ecosystems. Although researchers have long assumed key plant functional types (PFTs) to differ in biomass partitioning, empirical data have been lacking. Divergent approaches to modelling allocation is thus a major source of uncertainty in terrestrial ecosystem models (TEMs) and global carbon cycles. Using a new database on Biomass partitioning combining data from over 175 studies, we here show a strong effect of PFT on biomass partitioning. Contrary to prior expectation, we show that major woody PFTs do not differ in the amount of leaf area supported, but rather the amount of leaf mass per unit above ground biomass. Moreover, we find that such differences relate to systematic shifts in leaf-mass per area, a leading trait within the leaf economics spectrum. Another core trait, leaf area per sapwood area, explained further variation among species in biomass partitioning, but did not differ systematically among PFTs. Combined, these results uncover fundamental differences in how plants are constructed and allow for systematic testing of allocation routines with current TEMs.}
 
 
 \section*{Main text}
@@ -189,10 +188,15 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 % Figures A Nature Climate Change Letter can contain up to four display items (any combination of figures and/or tables). Figures should be sized in single or double column format. Multi-panel figures should be arranged so that the figure forms a neat rectangle.
 
 
+
+%(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells, cut off at 6000mm MAP. Triangles are averages for the three PFTs across all contributed studies. 
+
+
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
-    \caption{(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells, cut off at 6000mm MAP. Triangles are averages for the three PFTs across all contributed studies. (b) Leaf mass fraction (LMF = leaf mass / aboveground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (c) and (d) Leaf mass fraction (LMF) and leaf area ratio (LAR) at the average plant height in the dataset, estimated from panel (b). Error bars are 95\% confidence intervals. Letters denote significant differences.}
+    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost.  (b) Leaf mass fraction (LMF = leaf mass / aboveground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (c) and (d) Leaf mass fraction (LMF) and leaf area ratio (LAR) at the average plant height in the dataset, estimated from panel (b). Error bars are 95\% confidence intervals. Letters denote significant differences.}
     \label{fig:figure1}
 \end{figure}
 
@@ -233,7 +237,7 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
+    \includegraphics[width=0.99\textwidth]{FigureS1b.pdf}
     \caption{Mean annual precipitation (MAP) and temperature (MAT) for all contributed datasets, by vegetation type. MAP and MAT were taken from Worldclim \cite{worldclim}, using latitude and longitude reported for each contributed dataset.}
     \label{fig:figureS1}
 \end{figure}
