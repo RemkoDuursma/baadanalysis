@@ -101,36 +101,39 @@ figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft",
 }
 
 
-# Figure 1 - leaf mass fraction by PFT, and least-square means and LAR.
-# LMF
-# - Fit lmer to LMF and LAR, with h.t and pft as predictors
-# - Use same dataset for all (where m.lf and a.lf is not missing)
-# - calculate least-square means, predictions of LMF and LAR averaging over all predictors.
+figure1 <- function(baad_mapmat, world_mapmat){
+  
+  par(mfrow=c(1,2), mar=c(5,5,1,1))
+  
+  figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=FALSE)
 
-# dat_alfmso <- droplevels(subset(dataset, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
+  
+  img <- readPNG("figures/crappytree.fw.png")
+  transparent <- img[,,4] == 0
+  img <- as.raster(img[,,1:3])
+  img[transparent] <- NA
+  par(mar=c(2,2,1,1))
+  plot(1:2, type='n', ann=FALSE, axes=FALSE)
+  rasterImage(img, 1.2, 1, 1.75, 2, interpolate=FALSE)
+  
+  
+}
 
-# lmer_LMF_2 <- lmer(lmlf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
-#                    data=dat_alfmso, na.action=na.omit)
-# lmf <- lmerTest::lsmeans(lmer_LMF_2, "pft")
 
-# lmer_LAR_2 <- lmer(lalf_mso ~ pft*lh.t + pft:I(lh.t^2) + (1|Group),
-#                    data=dat_alfmso, na.action=na.omit)
-# lar <- lmerTest::lsmeans(lmer_LAR_2, "pft")
-
-figure1 <- function(dataset, baad_mapmat, world_mapmat, KGAM=4){
-  l <- layout(matrix(c(1,2,3,1,2,4), byrow=T, ncol=3),
-              widths=c(1,1,0.67), heights=c(1,1))
+# Figure 1 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS.
+figure2 <- function(dataset, KGAM=4){
+  
+  l <- layout(matrix(c(1,2,4,1,3,5), byrow=T, ncol=3),
+              widths=c(1,0.67,0.67), heights=c(1,1))
 
   par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
-  figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=FALSE)
-  plotlabel("(a)","topright")
   obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=my_linecols(), pointcols=my_cols_transparent(),
              xlab="Plant height (m)",kgam=KGAM,
              ylab=expression(M[F]/M[T]~~(kg~kg^-1))
   )
   my_legend("bottomleft", "long")
   box()
-  plotlabel("(b)","topright")
+  plotlabel("(a)","topright")
 
   obj2 <- smoothplot(lh.t, lalf_mso, pft, dataset, R="Group",plotit=FALSE)
 
@@ -140,13 +143,30 @@ figure1 <- function(dataset, baad_mapmat, world_mapmat, KGAM=4){
   plotGamPred(obj1, dataset, xpred=xpred,
               ylab=expression(M[F]/M[T]~~(kg~kg^-1)),ylim=c(0,0.35),
               xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
-  plotlabel("(c)","topright")
+  plotlabel("(b)","topright")
 
   par(mar=c(4,4,0.35,1)) #, oma=c(0,0,0,0))
   plotGamPred(obj2, dataset, xpred=xpred,
               ylab=expression(A[F]/M[T]~~(kg~kg^-1)),ylim=c(0,2.5),
               xlim=c(0,0.2), xlab=lmaLabel_short())
-  plotlabel("(d)","topright")
+  plotlabel("(c)","topright")
+  
+  par(mar=c(0.35,4,4,1), pty="m")
+  meansbypft("lmlf_astba2","lalf_astba2", "pft",
+             xvar="llma",
+             dataset=dataset,
+             setpar=FALSE,
+             addlegend=FALSE,
+             panel1.expr={axis(2);plotlabel("(d)","topleft");par(mar=c(4,4,0.35,1))},
+             panel2.expr={axis(1);axis(2);plotlabel("(e)","topleft")},
+             Cols=my_cols(),
+             xlab=lmaLabel_short(),
+             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
+             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
+             xlim=c(0,0.2),
+             ylim1=c(0,250),ylim2=c(0,2000))
+  
+  
 }
 
 figure1b <- function(dataset, KGAM=4){
@@ -185,7 +205,7 @@ figure1c <- function(dataset, KGAM=4){
 
 
 # Figure 2 - average leaf mass, leaf area / stem area.
-figure2 <- function(dataset){
+figure2old <- function(dataset){
   par(cex.axis=0.8, mfrow=c(2,1), mar=c(0,0,0,0),
       cex.lab=1.3, oma=c(5,5,1,1), las=1)
   meansbypft("lmlf_astba2","lalf_astba2", "pft",

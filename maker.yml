@@ -2,7 +2,6 @@ packages:
   - lmerTest
   - maps
   - mapdata
-  - maptools
   - gdata
   - smatr
   - scales
@@ -30,6 +29,7 @@ packages:
   - knitr
   - rmarkdown
   - RCurl
+  - png
 
 sources:
   - R/data_processing.R
@@ -111,8 +111,6 @@ targets:
   figures:
     depends:
       - figures/Figure1.pdf
-      - figures/Figure1b.pdf
-      - figures/Figure1c.pdf
       - figures/Figure2.pdf
       - figures/Figure3.pdf
       - figures/Figure4.pdf
@@ -175,7 +173,7 @@ targets:
 
   # Figures --------------------------------------
   figures/Figure1.pdf:
-    command: figure1(dataset, baad_mapmat, world_mapmat)
+    command: figure1(baad_mapmat, world_mapmat)
     plot: wide
   figures/Figure1b.pdf:
     command: figure1b(dataset)
@@ -185,7 +183,7 @@ targets:
     plot: wide
   figures/Figure2.pdf:
     command: figure2(dataset)
-    plot: tall
+    plot: wide
   figures/Figure3.pdf:
     command: figure3(dataset)
     plot: wide
