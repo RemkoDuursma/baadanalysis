@@ -211,8 +211,8 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure3b.pdf}
-    \caption{Plant functional types diverge strongly in mass-based allocation, but converge in area-based allocation. Shown are histograms of leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Vertical lines and shading are means with confidence intervals (same as in Fig.~\ref{fig:figure2}).}
+    \includegraphics[width=0.99\textwidth]{Figure3.pdf}
+    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
     \label{fig:figure3}
 \end{figure}
 

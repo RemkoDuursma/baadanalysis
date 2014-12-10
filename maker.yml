@@ -115,7 +115,6 @@ targets:
       - figures/Figure1c.pdf
       - figures/Figure2.pdf
       - figures/Figure3.pdf
-      - figures/Figure3b.pdf
       - figures/Figure4.pdf
       - figures/Figure4b.pdf
       - figures/Figure4c.pdf
@@ -189,9 +188,6 @@ targets:
     plot: tall
   figures/Figure3.pdf:
     command: figure3(dataset)
-    plot: med_square
-  figures/Figure3b.pdf:
-    command: figure3b(dataset)
     plot: wide
   figures/Figure4.pdf:
     command: figure4(dataset)
