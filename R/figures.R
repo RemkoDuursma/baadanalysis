@@ -149,6 +149,39 @@ figure1 <- function(dataset, baad_mapmat, world_mapmat, KGAM=4){
   plotlabel("(d)","topright")
 }
 
+figure1b <- function(dataset, KGAM=4){
+
+  par(mar=c(4,4,4,1),  mfrow=c(1,3), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
+
+  for(p in  unique(dataset$pft)){
+    cols <- my_linecols()
+    cols <- cols[c(3,2,1)]
+    names(cols) <- unique(dataset$pft)
+
+    obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset[dataset$pft==p, ], R="Group",linecols=cols[p], pointcols=alpha(cols[p], 0.4),
+               xlab="Plant height (m)",kgam=KGAM,
+               ylab=expression(M[F]/M[T]~~(kg~kg^-1)), ylim=c(-3, 0), xlim=log10(c(0.05, 100)))
+    box()
+    plotlabel(as.character(p),"topright")
+  }
+}
+
+figure1c <- function(dataset, KGAM=4){
+
+  par(mar=c(4,4,4,1),  mfrow=c(1,3), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
+
+  for(p in  unique(dataset$pft)){
+    cols <- my_linecols()
+    cols <- 2:100
+
+    obj1 <- smoothplot(h.t, lmlf_mso, studyName, dataset[dataset$pft==p, ], R="Group",linecols=cols[p], pointcols=alpha(cols, 0.4), fitoneline=TRUE,
+               xlab="Plant height (m)",kgam=KGAM,
+               ylab=expression(M[F]/M[T]~~(kg~kg^-1)), ylim=c(-3, 0), xlim=c(0.05, 30), log="y")
+    box()
+    plotlabel(as.character(p),"topright")
+  }
+}
+
 
 
 # Figure 2 - average leaf mass, leaf area / stem area.
