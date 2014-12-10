@@ -429,6 +429,7 @@ histbypft <- function(yvar, pftvar, dataset,
                       log=TRUE,
                       col=1:5,
                       meanlinecol="black",
+                      cicol=alpha("grey",0.6),
                       xlab=NULL,
                       ylab="Nr. individuals",
                       ylim=NULL,
@@ -489,7 +490,7 @@ histbypft <- function(yvar, pftvar, dataset,
 
     if(!overlay && meanline){
         rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
-             ybottom=0, ytop=u[4], col=alpha("grey",0.6), border=NA)
+             ybottom=0, ytop=u[4], col=cicol, border=NA)
         segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
                  y0=0, y1=u[4], col=meanlinecol[i])
     }
@@ -498,7 +499,7 @@ histbypft <- function(yvar, pftvar, dataset,
   if(overlay && meanline){
     for(i in 1:length(d)){ 
       rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
-           ybottom=0, ytop=u[4], col=alpha("grey",0.6), border=NA)
+           ybottom=0, ytop=u[4], col=cicol, border=NA)
       segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
                y0=0, y1=u[4], col=meanlinecol[i])
     }

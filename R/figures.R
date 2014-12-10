@@ -198,14 +198,14 @@ figure3 <- function(dataset){
 figure3b <- function(dataset){
   
   par(mar=c(0,0,0,0), oma=c(5,5,2,2), las=1, mfrow=c(1,2), cex.axis=0.85)
-  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), #rep(alpha(grey(0.4),0.4),3),
             xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lmlf_astba2","pft",dataset),
+            Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("white",0.5),
             legend.text="", meanlinecol=my_linecols())
   plotlabel("(a)","topleft")
-  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), #rep(alpha(grey(0.4),0.4),3), 
             xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lalf_astba2","pft",dataset),
+            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("white",0.65),
             legend.text=rep("",3), meanlinecol=my_linecols())
   plotlabel("(b)","topleft")
   mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
