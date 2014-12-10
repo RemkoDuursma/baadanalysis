@@ -498,10 +498,11 @@ histbypft <- function(yvar, pftvar, dataset,
 
   if(overlay && meanline){
     for(i in 1:length(d)){ 
+      del <- 0.1 * -u[3]
       rect(xleft=log10(Means$lci[i]), xright=log10(Means$uci[i]),
-           ybottom=u[1], ytop=0, col=cicol, border=NA)
-      segments(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
-               y0=u[1], y1=0, col=meanlinecol[i])
+           ybottom=u[3]+del, ytop=-del, col=cicol, border=NA)
+      arrows(x0=log10(Means$y[i]), x1=log10(Means$y[i]),
+               y0=u[3]+del, y1=-del, col=meanlinecol[i], length=0.05)
     }
   }
   
