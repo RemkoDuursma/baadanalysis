@@ -319,34 +319,7 @@ figure4c <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=TRUE, f
 
 
 # SI 1
-# Supporting info figure; MAP and MAT colored by vegetation
-figureS1 <- function(baad_mapmat){
-
-  vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
-                    vegetation Label
-                    BorF 'Boreal forest'
-                    Gr Grassland
-                    Sav Savanna
-                    Sh Shrubland
-                    TempF 'Temperate forest'
-                    TempRF 'Temperate rainforest'
-                    TropRF 'Tropical rainforest'
-                    TropSF 'Tropical seasonal forest'
-                    Wo Woodland")
-  palette(c(brewer.pal(8,"Set1"), brewer.pal(3,"Set2")))
-
-  dat <- subset(baad_mapmat, vegetation %in% vdf$vegetation)
-
-  par(mar=c(5,5,1,1), cex.lab=1.2, cex.axis=0.9, las=1)
-  with(dat, plot(MAT, MAP, pch=21, bg=vegetation, cex=1.3,
-                    xlab = expression("Mean annual temperature"~(degree*C)),
-                    ylab = "Mean annual precipitation (mm)",
-                    ylim=c(0,4200), xlim=c(-5,30)))
-  legend("topleft", vdf$Label[vdf$vegetation == levels(baad_mapmat$vegetation)],
-         pch=21, pt.bg=palette(),  pt.cex=1.3, cex=0.8, bty='n')
-}
-
-figureS1b <- function(baad_mapmat, world_mapmat){
+figureS1 <- function(baad_mapmat, world_mapmat){
   
   vdf <- read.table(header=TRUE, stringsAsFactors=FALSE, text="
                     vegetation Label
