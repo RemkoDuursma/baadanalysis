@@ -108,7 +108,7 @@ figure1 <- function(baad_mapmat, world_mapmat){
   figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=FALSE)
 
   
-  img <- readPNG("figures/crappytree.fw.png")
+  img <- readPNG("data/crappytree.fw.png")
   transparent <- img[,,4] == 0
   img <- as.raster(img[,,1:3])
   img[transparent] <- NA
