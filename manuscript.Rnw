@@ -192,7 +192,7 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
-    \caption{(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells, cut off at 6000mm MAP. Triangles are averages for the three PFTs across all contributed studies. (b) Schematic of a woody plant, and the variables considered in this study. H = plant height, $A_S$ basal stem area, $A_sbh$ stem area at 'breast height', $M_W$ woody biomass, $M_F$ leaf biomass (total aboveground biomass $M_T = M_F + M_W$), $A_F$ total leaf area.}
+    \caption{(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells. (b) Schematic of a woody plant, and the variables considered in this study. H = plant height, $A_S$ basal stem area, $A_{sbh}$ stem area at 'breast height', $M_W$ woody biomass, $M_F$ leaf biomass (total aboveground biomass $M_T = M_F + M_W$), $A_F$ total leaf area.}
     \label{fig:figure1}
 \end{figure}
 
@@ -233,8 +233,8 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS1b.pdf}
-    \caption{Mean annual precipitation (MAP) and temperature (MAT) for all contributed datasets, by vegetation type. MAP and MAT were taken from Worldclim \cite{worldclim}, using latitude and longitude reported for each contributed dataset.}
+    \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
+    \caption{Global coverage of the climate space by the dataset. Methods are as in Fig 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
     \label{fig:figureS1}
 \end{figure}
 
