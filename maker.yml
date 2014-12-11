@@ -117,7 +117,6 @@ targets:
       - figures/Figure4b.pdf
       - figures/Figure4c.pdf
       - figures/FigureS1.pdf
-      - figures/FigureS1b.pdf
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
@@ -197,10 +196,7 @@ targets:
     command: figure4c(dataset)
     plot: med_square
   figures/FigureS1.pdf:
-    command: figureS1(baad_mapmat)
-    plot: med_square
-  figures/FigureS1b.pdf:
-    command: figureS1b(baad_mapmat, world_mapmat)
+    command: figureS1(baad_mapmat, world_mapmat)
     plot: med_square
   figures/FigureS2.pdf:
     command: figureS2(dataset)
