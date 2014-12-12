@@ -5,7 +5,7 @@ plotlabel <- function(txt, where, inset=0.08, ...){
   if(grepl("right",where))x <- u[2] - inset*(u[2]-u[1])
   if(grepl("bottom",where))y <- u[3] + inset*(u[4]-u[3])
   if(grepl("top",where))y <- u[4] - inset*(u[4]-u[3])
-
+  
   text(x,y,txt,...)
 }
 

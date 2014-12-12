@@ -1,20 +1,66 @@
-author_details <- function(filename_first_authors, baad) {
-  first_authors <- read.csv(filename_first_authors, na.strings=c(NA, ''),
-                            stringsAsFactors=FALSE, strip.white=TRUE)
+author_details <- function(baad) {
+  
   data_authors <- baad$contact
   data_authors <- data_authors[order(last_name(data_authors$name),
                                      data_authors$name),]
-  data_authors$email[data_authors$email == ""] <- NA
   
-  cols <- c("name", "email", "address")
+  cols <- c("name", "address")
   all_authors <- rbind(first_authors[cols], data_authors[,cols])
   all_authors <- all_authors[!duplicated(all_authors$name),]
+
+  all_authors <- subset(all_authors, !name %in% c("Remko A. Duursma","Daniel S. Falster"))
+  names(all_authors) <- c("Name","Affiliation")
   
-  address <- unique(all_authors$address)
-  address_table <- data.frame(code=seq_along(address), address=address)
+  # split affiliation into multiple rows to avoid nchar > maxchar.
+  z <- split(all_authors, 1:nrow(all_authors))
   
-  all_authors$address_code <- match(all_authors$address, address)
+  splitaffil <- function(x){
+    maxch <- 80
+    
+    b <- str_trim(strsplit(x[[2]],",")[[1]])
+    nc <- cumsum(nchar(b))
+    
+    txt <- vector("list",10)
+    txt[[1]] <- b[1]
+    rtxt <- b
+    i <- 2
+    k <- 1
+    for(i in 2:length(rtxt)){
+      
+      tmp <- paste(paste(txt[[k]], collapse=","), rtxt[i], sep=", ")
+      if(nchar(tmp) > maxch){
+        k <- k + 1  
+      } else {
+        txt[[k]] <- c(txt[[k]], rtxt[i])
+      }
+      
+    }
+    txt <- txt[!sapply(txt,is.null)]
+    if(length(txt) > 1){
+      txt <- c(sapply(txt[1:(length(txt)-1)], function(x)paste0(paste(x,collapse=", "),",")),
+               paste(txt[[length(txt)]],collapse=", "))
+    } else {
+      txt <- paste(txt[[1]],collapse=", ")
+    }
+    
+    z <- data.frame(Name=x$Name, Affiliation=txt, stringsAsFactors=FALSE)
+    if(nrow(z) > 1)z$Name[2:nrow(z)] <- ""
+    return(z)
+  }
+  l <- lapply(z, splitaffil)
+  all_authors <- do.call(rbind,l)
   
-  data.frame(authors=all_authors,
-       address_table=address_table)
+  rownames(all_authors) <- as.character(1:nrow(all_authors))
+return(all_authors)
 }
+
+last_name <- function(author) {
+  sapply(author, function(x)
+    last(strsplit(x, ' ', useBytes=TRUE)[[1]]))
+}
+
+last <- function(x) {
+  x[[length(x)]]
+}
+
+
