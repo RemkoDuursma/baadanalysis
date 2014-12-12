@@ -37,6 +37,7 @@ sources:
   - R/rsquaredglmm.R
   - R/figures.R
   - R/functions-figures.R
+  - R/functions-ms.R
   - R/signifletters.R
   - R/build.R
 

@@ -303,9 +303,6 @@ print(xtable(dataauthors,
 @
 
 
-
-
-
 <<tablepreload1>>=
 printit <- function(x, caption, label=NULL){
   print(xtable(x, align="rlll|l",
