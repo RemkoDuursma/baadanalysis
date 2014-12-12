@@ -15,6 +15,7 @@
 \usepackage{geometry}
 \usepackage{authblk}
 \usepackage{gensymb}
+\usepackage{longtable}
 \usepackage{lineno}
 \geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
 \bibliographystyle{plain}
@@ -30,8 +31,8 @@
 \author[2]{Daniel S. Falster}
 \author[3]{BAAD contributors}
 
-\affil[1]{Hawkesbury Institute for the Environment}
-\affil[2]{Macquarie University}
+\affil[1]{1 Hawkesbury Insitute for the Environment, University of Western Sydney, Hawkesbury Campus, First Floor, Building L9, Locked Bag 1797, Penrith NSW 2751, Australia}
+\affil[2]{Biological Sciences, Macquarie University NSW 2109, Australia}
 \affil[3]{See Supporting Information}
 
 \renewcommand\Authands{ and }
@@ -45,6 +46,8 @@
 library(knitr)
 opts_chunk$set(echo=FALSE)
 source("R/functions-ms.R")
+baad <- readRDS("data/baad.rds")
+dataauthors <- author_details(baad)
 @
 
 
@@ -233,7 +236,7 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS1b.pdf}
+    \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
     \caption{Mean annual precipitation (MAP) and temperature (MAT) for all contributed datasets, by vegetation type. MAP and MAT were taken from Worldclim \cite{worldclim}, using latitude and longitude reported for each contributed dataset.}
     \label{fig:figureS1}
 \end{figure}
@@ -290,6 +293,17 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 
 \renewcommand\thetable{S\arabic{table}}
 \setcounter{table}{0}
+
+
+<<results='asis'>>=
+print(xtable(dataauthors,
+             caption="Contributors to the BAAD"
+             ), include.rownames=FALSE, tabular.environment='longtable', floating=FALSE, size="small",
+      caption.placement="top")
+@
+
+
+
 
 
 <<tablepreload1>>=
@@ -352,9 +366,6 @@ print(xtable(table_LMFLAR_varpart, label="varpartlmflar",
 
 \subsection*{Predicting basal diameter}
 \label{sec:predas}
-
-<<>>=
-@
 
 
 Using the subset of data where basal stem diameter ($A_S$) and diameter at breast height ($A_{Sbh}$) were measured (a total of \Sexpr{length(residuals(basalafit))} observations covering the three major PFTs), we developed a non-linear model to predict $A_S$ when only $A_{Sbh}$ and plant height ($H$) were measured. We fit the following equation, using non-linear regression.
