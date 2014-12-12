@@ -103,10 +103,10 @@ figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft",
 
 figure1 <- function(baad_mapmat, world_mapmat){
   
-  par(mfrow=c(1,2), mar=c(5,5,1,1))
+  par(mfrow=c(1,2), mar=c(5,5,1,1), las=1, cex.axis=0.85)
   
-  figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=FALSE)
-
+  figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=FALSE,
+                        meanpoints=FALSE)
   
   img <- readPNG("data/crappytree.fw.png")
   transparent <- img[,,4] == 0
@@ -385,7 +385,7 @@ figureS3 <- function(dataset, KGAM=4){
 
   x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group",
                   linecols=my_linecols(), pointcols=my_cols_transparent(),
-                  xlab="Plant height (m)",kgam=KGAM,
+                  xlab="H (m)",kgam=KGAM,
                   ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
   box()
   my_legend("bottomleft")
@@ -397,20 +397,30 @@ figureS3 <- function(dataset, KGAM=4){
 # Woody mass per unit basal stem area
 # - Least-square means because not isometric scaling
 figureS4 <- function(dataset, KGAM=4){
-  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.axis=0.9, las=1)
+  par(mfrow=c(1,3), mar=c(5,5,2,2), cex.axis=0.9, las=1)
 
   smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
              linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
-             ylab=expression(M[T]~~(kg)), cex=0.6)
+             ylab=expression(M[T]~~(kg)), cex=0.6, xlim=c(-8,2.5), ylim=c(-6,6))
   box()
+  plotlabel("(a)","topright")
   my_legend("topleft")
 
+  smoothplot(log10(h.t), log10(m.so/a.stba2), pft, dataset, xlab=expression(H~~(m)),
+             ylab=expression(M[T]/A[S]~~(kg~m^-2)), 
+             linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
+             cex=0.6, xlim=c(-2,2.5), ylim=c(0,4.5))
+  box()
+  plotlabel("(b)","topright")
+  
   lmer_BA <- lmer(lmso_astba2 ~ pft*lastba2 + pft:I(lastba2^2) + (1|Group),
                   data=dataset, na.action=na.omit)
   lba <- lmerTest::lsmeans(lmer_BA, "pft")
   lsmeansPlot(lba, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,800),
               xlab="",axes=FALSE,col=my_cols(),
               ylab=expression(M[T]/A[S]~~(kg~m^-2)))
+  
+  plotlabel("(c)","topright")
   axis(1, at=1:3, labels=levels(dataset$pft))
   axis(2)
   box()
