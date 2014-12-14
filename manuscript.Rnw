@@ -47,7 +47,7 @@ library(knitr)
 opts_chunk$set(echo=FALSE)
 source("R/functions-ms.R")
 baad <- readRDS("data/baad.rds")
-dataauthors <- author_details(baad)
+dataauthors <- author_details(baad, "data/contact.csv")
 @
 
 
@@ -62,7 +62,7 @@ dataauthors <- author_details(baad)
 
 \textbf{
 The partitioning of biomass into short-lived leaves and long-lived stems is one of the most uncertain  and influential components of dynamic global vegetation models (DGVMs), affecting the lifetime of carbon in ecosystems \cite{friend_carbon_2014}, predictions of global carbon storage \cite{ise_comparison_2010}, and the CO\textsubscript{2} response of net primary production \cite{dekauwe2014}. Although DGVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical data have been lacking. Using a new database on biomass partitioning from over 175 studies, we here show a strong effect of PFT on biomass partitioning. Contrary to prior expectation, we show that major woody PFTs do not differ in the amount of leaf area supported, but rather the amount of leaf mass per unit above ground biomass. Moreover, we find that these differences relate to systematic shifts in leaf mass per area, a leading trait within the leaf economics spectrum. Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in current DGVMs.
-
+}
 
 \section*{Main text}
 
