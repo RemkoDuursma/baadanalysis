@@ -1,4 +1,6 @@
-author_details <- function(baad) {
+author_details <- function(baad, first_authors_file) {
+  
+  first_authors <- read.csv(first_authors_file, stringsAsFactors=FALSE)
   
   data_authors <- baad$contact
   data_authors <- data_authors[order(last_name(data_authors$name),
