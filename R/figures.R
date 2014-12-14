@@ -120,7 +120,7 @@ figure1 <- function(baad_mapmat, world_mapmat){
 }
 
 
-# Figure 1 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS.
+# Figure 2 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS.
 figure2 <- function(dataset, KGAM=4){
   
   l <- layout(matrix(c(1,2,4,1,3,5), byrow=T, ncol=3),
@@ -167,62 +167,6 @@ figure2 <- function(dataset, KGAM=4){
              ylim1=c(0,250),ylim2=c(0,2000))
   
   
-}
-
-figure1b <- function(dataset, KGAM=4){
-
-  par(mar=c(4,4,4,1),  mfrow=c(1,3), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
-
-  for(p in  unique(dataset$pft)){
-    cols <- my_linecols()
-    cols <- cols[c(3,2,1)]
-    names(cols) <- unique(dataset$pft)
-
-    obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset[dataset$pft==p, ], R="Group",linecols=cols[p], pointcols=alpha(cols[p], 0.4),
-               xlab="Plant height (m)",kgam=KGAM,
-               ylab=expression(M[F]/M[T]~~(kg~kg^-1)), ylim=c(-3, 0), xlim=log10(c(0.05, 100)))
-    box()
-    plotlabel(as.character(p),"topright")
-  }
-}
-
-figure1c <- function(dataset, KGAM=4){
-
-  par(mar=c(4,4,4,1),  mfrow=c(1,3), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
-
-  for(p in  unique(dataset$pft)){
-    cols <- my_linecols()
-    cols <- 2:100
-
-    obj1 <- smoothplot(h.t, lmlf_mso, studyName, dataset[dataset$pft==p, ], R="Group",linecols=cols[p], pointcols=alpha(cols, 0.4), fitoneline=TRUE,
-               xlab="Plant height (m)",kgam=KGAM,
-               ylab=expression(M[F]/M[T]~~(kg~kg^-1)), ylim=c(-3, 0), xlim=c(0.05, 30), log="y")
-    box()
-    plotlabel(as.character(p),"topright")
-  }
-}
-
-
-
-# Figure 2 - average leaf mass, leaf area / stem area.
-figure2old <- function(dataset){
-  par(cex.axis=0.8, mfrow=c(2,1), mar=c(0,0,0,0),
-      cex.lab=1.3, oma=c(5,5,1,1), las=1)
-  meansbypft("lmlf_astba2","lalf_astba2", "pft",
-             xvar="llma",
-             dataset=dataset,
-             setpar=FALSE,
-             legend.where="topleft",
-             legend.cex=0.6,
-             legend.text=c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno."),
-             panel1.expr={axis(2)},
-             panel2.expr={axis(1);axis(2)},
-             Cols=my_cols(),
-             xlab=lmaLabel_short(),
-             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
-             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
-             xlim=c(0,0.2),
-             ylim1=c(0,250),ylim2=c(0,2000))
 }
 
 
@@ -426,25 +370,6 @@ figureS4 <- function(dataset, KGAM=4){
   box()
 }
 
-
-
-# SI5
-# Raw data of leaf mass, area and basal stem area.
-figureS5 <- function(dataset, KGAM=4){
-
-  par(mar=c(5,5,2,2), cex.lab=1.2, mfrow=c(1,2), cex.axis=0.9, las=1)
-  smoothplot(log10(a.stba2), log10(m.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
-             R="Group",kgam=KGAM,
-             ylab=expression(M[F]~(kg)), cex=0.6,pointcols=my_cols_transparent(),linecols=my_linecols())
-  my_legend("topleft")
-  box()
-
-  smoothplot(log10(a.stba2), log10(a.lf), pft, dataset, xlab=expression(A[S]~~(m^2)),
-             R="Group",kgam=KGAM,
-             linecols=my_linecols(), pointcols=my_cols_transparent(),
-             ylab=expression(A[F]~(m^2)), cex=0.6)
-  box()
-}
 
 
 # SI6
