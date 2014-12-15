@@ -2,6 +2,10 @@
 %------------------------------------------------------------------------------------%
 \section{Lit notes}
 
+Chabot and Hicks 1982, "The canopies of many conifers contain several cohorts of leaves. In these cases, long leaf life spans allow the accumulation of a large total leaf area through incremental investments spread over several years."
+
+Bond 1989 : "The high productivity of some taxa is due, in part, to a large leaf area resulting from the accumulation of cohorts of leaves over a number of years." Throughout the paper, leaf mass is considered synonymous for leaf area, though clearly LMA is very different. For example they cite Schulze 1986 for support of the above statement, but they only provided some rough estimates of leaf mass by biome type, not leaf area. Waring and Franklin 1979 is also cited, but they just report high LAI of some conifer stands in the pacific NW USA - which says nothing about leaf area or mass per unit aboveground biomass, or a comparison to angiosperms.
+
 Reich et al 1992, for seedlings, negative relationship leaf lifespan and LAR. This is different from our results, since SLM is nearly proportional to leaf lifespan, and we found no relationship between LAR and SLM (but do they have all the PFTs??). However, across stands, positive relationship between leaf biomass and leaf lifespan, which is consistent with our results.
 
 Cornelissen et al 1996 positive relationship SLA and LAR, but this is for tiny seedlings harvested 21 days after first leaf appearance. But check references and who cites this!
