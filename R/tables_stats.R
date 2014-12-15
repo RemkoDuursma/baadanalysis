@@ -28,8 +28,8 @@ make_table_pipemodel_varpart <- function(dataset2) {
   alf_lmer_r2 <- lapply( alf_lmer_fits, r.squared.merMod)
 
   rm(dat_mlf, dat_alf, envir = .GlobalEnv)
-  rbind(make_r2_table(mlf_lmer_r2, "LMF_ASTBA"),
-        make_r2_table(alf_lmer_r2, "LAR_ASTBA"))
+  rbind(make_r2_table(mlf_lmer_r2, "$M_F/A_S$"),
+        make_r2_table(alf_lmer_r2, "$A_F/A_S$"))
 }
 
 
@@ -58,8 +58,8 @@ make_table_LMFLAR_varpart <- function(dataset2) {
   alf_lmer_r2 <- lapply( alf_lmer_fits, r.squared.merMod)
 
   rm(dat_mlfmso, dat_alfmso, envir = .GlobalEnv)
-  rbind(make_r2_table( mlf_lmer_r2 ,"MF/MT"),
-        make_r2_table(alf_lmer_r2  , "AF/MT"))
+  rbind(make_r2_table( mlf_lmer_r2 ,"$M_F/M_T$"),
+        make_r2_table(alf_lmer_r2  , "$A_F/M_T$"))
 }
 
 
@@ -78,7 +78,7 @@ make_table_LMA_varpart <- function(dataset2) {
   lma_lmer_r2 <- lapply( lma_lmer_fits, r.squared.merMod)
   
   rm(dat_lma, envir = .GlobalEnv)
-  df <- make_r2_table( lma_lmer_r2 ,"MF/AF")
+  df <- make_r2_table( lma_lmer_r2 ,"$M_F/A_F$")
         
   # Last one is nonsense.
   df$r2[nrow(df)] <- NA
@@ -114,8 +114,6 @@ make_table_varpart2 <- function(dataset2){
   
   df <- rbind(f(tab1), f(tab2), f(tab3))
   names(df)[2:ncol(df)] <- nm
-  df$Variable[df$Variable == "LMF_ASTBA"] <- "MF/AS"
-  df$Variable[df$Variable == "LAR_ASTBA"] <- "AF/AS"
   
 return(df)
 }
@@ -213,15 +211,15 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 
 make_table_gamr2MIgdd0 <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4)$r2table
-  g0$Variable <- c("MF/MT","AF/MT","MF/AS",
-                 "AF/AS","MF/AF")
+  g0$Variable <- c("$M_F/M_T$","$A_F/M_T$","$M_F/A_S$",
+                   "$A_F/A_S$","$M_F/A_F$")
   g0
 }
 
 make_table_gamr2MATMAP <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
-  g0$Variable <- c("MF/MT","AF/MT","MF/AS",
-                   "AF/AS","MF/AF")
+  g0$Variable <- c("$M_F/M_T$","$A_F/M_T$","$M_F/A_S$",
+                   "$A_F/A_S$","$M_F/A_F$")
   g0
 }
 
