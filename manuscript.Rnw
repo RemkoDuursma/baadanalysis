@@ -28,7 +28,7 @@
 
 \author[1]{Remko A. Duursma}
 \author[2]{Daniel S. Falster}
-\author[3]{BAAD contributors}
+\author[3]{the BAAD consortium}
 
 \affil[1]{1 Hawkesbury Insitute for the Environment, University of Western Sydney, Hawkesbury Campus, First Floor, Building L9, Locked Bag 1797, Penrith NSW 2751, Australia}
 \affil[2]{Biological Sciences, Macquarie University NSW 2109, Australia}
@@ -166,16 +166,12 @@ library(xtable)
 
 
 <<results='asis'>>=
-print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
-      caption="Explained variance by plant functional type (PFT), plant height (H), moisture index (MI) and growing season average temperature (mgdd0), for six whole-plant variables. Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."), caption.placement="top")
-@
-
-
-<<results='asis'>>=
-print(xtable(table_varpart2, label="varpartpipe",
-             caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The R2 shown is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type.  All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
+print(xtable(table_gamr2MATMAP, label="table/gamr2table",
+      caption="Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables. Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."), 
       include.rownames=FALSE, caption.placement="top")
 @
+
+
 
 
 
@@ -285,7 +281,7 @@ print(xtable(table_varpart2, label="varpartpipe",
 
 <<results='asis'>>=
 print(xtable(dataauthors,
-             caption="Contributors to the BAAD"
+             caption="Co-authors in the BAAD consortium."
              ), include.rownames=FALSE, tabular.environment='longtable', floating=FALSE, size="small",
       caption.placement="top")
 @
@@ -327,6 +323,14 @@ printit(table_lmf,
 printit(table_lar,
         label="table:count4",
         caption="Number of observations used in the analysis of leaf area ratio (LAR). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+@
+
+
+
+<<results='asis'>>=
+print(xtable(table_varpart2, label="varpart2",
+             caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The R2 shown is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type.  All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
+      include.rownames=FALSE, caption.placement="top")
 @
 
 
