@@ -187,6 +187,8 @@ prepare_dataset_1 <- function(baad){
     lmrt_mso <- log10(m.rt / m.so)
     lmso <- log10(m.so)
     lmrt <- log10(m.rt)
+    lmlf <- log10(m.lf)
+    lmst <- log10(m.st)
     lsla <- log10(a.lf / m.lf)
     llma <- log10(m.lf / a.lf)
 

@@ -13,9 +13,6 @@ my_linecols <- function() {
   c("deepskyblue3","firebrick2","chartreuse3")
 }
 
-#palette(Cols)
-
-
 # Plot settings.
 lmaLabel <- function() {
   expression("Leaf mass per area"~~(kg~m^-2))
