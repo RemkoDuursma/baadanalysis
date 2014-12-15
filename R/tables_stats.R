@@ -13,10 +13,11 @@ make_table_pipemodel_varpart <- function(dataset2) {
   assign("dat_alf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2))), envir = .GlobalEnv)
 
   mlf_formulas <- list()
+  mlf_formulas[["PFT"]]       <- lmlf_astba2 ~ pft + (1|Group)
   mlf_formulas[["H"]]         <- lmlf_astba2 ~ log10(h.t) + (1|Group)
-  mlf_formulas[["H, B"]]      <- lmlf_astba2 ~ log10(h.t)*bortemptrop + (1|Group)
-  mlf_formulas[["PFT, H, B"]] <- lmlf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group)
-  mlf_formulas[["LMA, H, B"]] <- lmlf_astba2 ~ log10(h.t)*lsla*bortemptrop + (1|Group)
+  mlf_formulas[["H, PFT"]]    <- lmlf_astba2 ~ log10(h.t)*pft + (1|Group)
+  mlf_formulas[["H, PFT, B"]] <- lmlf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group)
+  mlf_formulas[["H, LMA, B"]] <- lmlf_astba2 ~ log10(h.t)*llma*bortemptrop + (1|Group)
 
   mlf_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_mlf))
   mlf_lmer_r2 <- lapply( mlf_lmer_fits, r.squared.merMod)
@@ -34,7 +35,7 @@ make_table_pipemodel_varpart <- function(dataset2) {
 
 make_table_LMFLAR_varpart <- function(dataset2) {
 
-assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2))), envir = .GlobalEnv)
+  assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2))), envir = .GlobalEnv)
   assign("dat_alf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2))), envir = .GlobalEnv)
 
   assign("dat_mlfmso", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso))), envir = .GlobalEnv)
@@ -42,10 +43,11 @@ assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na
 
 
   mlf_formulas <- list()
+  mlf_formulas[["PFT"]]       <- log10(m.lf/m.so) ~ pft + (1|Group)
   mlf_formulas[["H"]]         <- log10(m.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group)
-  mlf_formulas[["H, B"]]      <- log10(m.lf/m.so) ~ log10(h.t)*bortemptrop + I(log10(h.t)^2)+ (1|Group)
-  mlf_formulas[["PFT, H, B"]] <- log10(m.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group)
-  mlf_formulas[["LMA, H, B"]] <- log10(m.lf/m.so) ~ lsla*log10(h.t)*bortemptrop +  lsla:I(log10(h.t)^2) + (1|Group)
+  mlf_formulas[["H, PFT"]]    <- log10(m.lf/m.so) ~ log10(h.t)*pft + pft:I(log10(h.t)^2)+ (1|Group)
+  mlf_formulas[["H, PFT, B"]] <- log10(m.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group)
+  mlf_formulas[["H, LMA, B"]] <- log10(m.lf/m.so) ~ llma*log10(h.t)*bortemptrop +  llma:I(log10(h.t)^2) + (1|Group)
 
   mlf_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_mlfmso))
   mlf_lmer_r2 <- lapply( mlf_lmer_fits, r.squared.merMod)
@@ -56,8 +58,32 @@ assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na
   alf_lmer_r2 <- lapply( alf_lmer_fits, r.squared.merMod)
 
   rm(dat_mlfmso, dat_alfmso, envir = .GlobalEnv)
-  rbind(make_r2_table( mlf_lmer_r2 ,"LMF"),
-        make_r2_table(alf_lmer_r2  , "LAR"))
+  rbind(make_r2_table( mlf_lmer_r2 ,"MF/MT"),
+        make_r2_table(alf_lmer_r2  , "AF/MT"))
+}
+
+
+make_table_LMA_varpart <- function(dataset2) {
+  
+  assign("dat_lma", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(llma))), envir = .GlobalEnv)
+  
+  mlf_formulas <- list()
+  mlf_formulas[["PFT"]]       <- llma ~ pft + (1|Group)
+  mlf_formulas[["H"]]         <- llma ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group)
+  mlf_formulas[["H, PFT"]]    <- llma ~ log10(h.t)*pft + pft:I(log10(h.t)^2)+ (1|Group)
+  mlf_formulas[["H, PFT, B"]] <- llma ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group)
+  mlf_formulas[["H, LMA, B"]] <- llma ~ 1 + (1|Group)
+  
+  lma_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_lma))
+  lma_lmer_r2 <- lapply( lma_lmer_fits, r.squared.merMod)
+  
+  rm(dat_lma, envir = .GlobalEnv)
+  df <- make_r2_table( lma_lmer_r2 ,"MF/AF")
+        
+  # Last one is nonsense.
+  df$r2[nrow(df)] <- NA
+  
+return(df)
 }
 
 
@@ -67,18 +93,26 @@ make_table_varpart2 <- function(dataset2){
   tab1$Variable <- as.character(tab1$Variable)
   tab2 <- make_table_pipemodel_varpart(dataset2)
   tab2$Variable <- as.character(tab2$Variable)
+  tab3 <- make_table_LMA_varpart(dataset2)
+  tab3$Variable <- as.character(tab3$Variable)
+  
   
   # Reshape
   f <- function(x){
     
-    n <- nrow(x)/2
-    x$Variable <- as.character(c(rep(x$Variable[1],n), rep(x$Variable[n+1],n)))
+    if(any(duplicated(x$Predictors))){
+      n <- nrow(x)/2
+      x$Variable <- as.character(c(rep(x$Variable[1],n), rep(x$Variable[n+1],n)))
+    } else {
+      x$Variable <- as.character(rep(x$Variable[1],nrow(x)))
+    }
     y <- reshape(x, direction="wide", timevar="Predictors", idvar="Variable")
     
   return(y)
   }
   nm <- rownames(tab1)[1:(nrow(tab1)/2)]
-  df <- rbind(f(tab1), f(tab2))
+  
+  df <- rbind(f(tab1), f(tab2), f(tab3))
   names(df)[2:ncol(df)] <- nm
   df$Variable[df$Variable == "LMF_ASTBA"] <- "MF/AS"
   df$Variable[df$Variable == "LAR_ASTBA"] <- "AF/AS"

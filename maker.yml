@@ -78,7 +78,7 @@ targets:
       - table_alfastba
       - table_lmf
       - table_lar
-      - table_gamr2MIgdd0
+      - table_gamr2MATMAP
       - basalafit
       - figures
     knitr: TRUE
@@ -104,7 +104,7 @@ targets:
       - table_alfastba
       - table_lmf
       - table_lar
-      - table_gamr2MIgdd0
+      - table_gamr2MATMAP
       - basalafit
 
   figures:
@@ -152,8 +152,8 @@ targets:
   # Stats & tables --------------------------------------
   basalafit:
     command: BasalA_fit(baad_all)
-  table_gamr2MIgdd0:
-    command: make_table_gamr2MIgdd0(dataset)
+  table_gamr2MATMAP:
+    command: make_table_gamr2MATMAP(dataset)
   table_mlfastba:
     command: make_table_mlfastba(dat_mlf)
   table_alfastba:

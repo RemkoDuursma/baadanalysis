@@ -239,7 +239,7 @@ clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitone
 }
 
 
-figure4 <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=FALSE, fittype="lm"){
+figure4 <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=FALSE, fittype="gam"){
   clim_figure(dataset, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
 }
 
