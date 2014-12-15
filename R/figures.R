@@ -170,42 +170,40 @@ figure2 <- function(dataset, KGAM=4){
 }
 
 
-# Figure 3. Histograms of MF/AS and AF/AS.
-figure3 <- function(dataset){
-  
-  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,3), mgp=c(3,1.5,0))
-  
-  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
-            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("llma","pft",dataset),cicol=alpha("grey",0.5),
-            legend.text="", meanlinecol=my_linecols())
-  plotlabel("(a)","topleft")
-  
-  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
-            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("grey",0.5),
-            legend.text="", meanlinecol=my_linecols())
-  plotlabel("(b)","topleft")
-  
-  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
-            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
-            legend.text=rep("",3), meanlinecol=my_linecols())
-  plotlabel("(c)","topleft")
-  
-  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
-        outer=TRUE, at=1/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
-        outer=TRUE, at=3/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
-        outer=TRUE, at=5/6, cex=0.9)
-}
 
+# Means of leaf mass, area per stem area by PFT - biome combination.
+figure3 <- function(dataset2){
+  
+  Labs <- c(
+    "Boreal DA",
+    "Temp. DA",
+    "Trop. DA",
+    "Temp. EA",
+    "Trop. EA",
+    "Boreal EG",
+    "Temp. EG")
+  
+  par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=1, cex.axis=0.9)
+  meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
+             xvar=1:7,setpar=FALSE,
+             addlegend=FALSE,
+             Cols=c("dodgerblue2","blue", "lightskyblue", "red","hotpink2",
+                    "forestgreen","chartreuse3"),
+             panel1.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
+             panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
+             siglets="bottom",
+             xlab="",
+             axis1=FALSE,
+             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
+             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
+             dataset=dataset2,
+             xlim=c(0,8),
+             ylim1=c(0,250),ylim2=c(0,2000))
+}
 
 # Figure 4.
 # Three size-invariant variables as a function of MI and mgdd0
-# TODO: Why is KGAM 3 here, but elsewhere is 4?
-figure4 <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitoneline=FALSE, fittype="lm", R="Group"){
+clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitoneline=FALSE, fittype="lm", R="Group"){
 
   gcol <- alpha("lightgrey",0.5)
   
@@ -241,14 +239,9 @@ figure4 <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitoneline
 }
 
 
-figure4b <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=FALSE, fittype="lm"){
-  figure4(dataset, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
+figure4 <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=FALSE, fittype="lm"){
+  clim_figure(dataset, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
 }
-
-figure4c <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=TRUE, fittype="gam"){
-  figure4(dataset, KGAM=3, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
-}
-
 
     
   
@@ -372,6 +365,38 @@ figureS4 <- function(dataset, KGAM=4){
 
 
 
+# Figure SI5. Histograms of MF/AS and AF/AS.
+figureS5 <- function(dataset){
+  
+  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,3), mgp=c(3,1.5,0))
+  
+  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("llma","pft",dataset),cicol=alpha("grey",0.5),
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(a)","topleft")
+  
+  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("grey",0.5),
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(b)","topleft")
+  
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(), 
+            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
+            legend.text=rep("",3), meanlinecol=my_linecols())
+  plotlabel("(c)","topleft")
+  
+  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
+        outer=TRUE, at=1/6, cex=0.9)
+  mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
+        outer=TRUE, at=3/6, cex=0.9)
+  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
+        outer=TRUE, at=5/6, cex=0.9)
+}
+
+
 # SI6
 # MF/AS and AF/AS at species level by PFT.
 figureS6 <- function(dataset){
@@ -404,33 +429,3 @@ figureS6 <- function(dataset){
 }
 
 
-# SI 9
-# Means of leaf mass, area per stem area by PFT - biome combination.
-figureS7 <- function(dataset2){
-
-  Labs <- c(
-    "Boreal DA",
-    "Temp. DA",
-    "Trop. DA",
-    "Temp. EA",
-    "Trop. EA",
-    "Boreal EG",
-    "Temp. EG")
-
-  par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=1, cex.axis=0.9)
-  meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
-             xvar=1:7,setpar=FALSE,
-             addlegend=FALSE,
-             Cols=c("dodgerblue2","blue", "lightskyblue", "red","hotpink2",
-                    "forestgreen","chartreuse3"),
-             panel1.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
-             panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
-             siglets="bottom",
-             xlab="",
-             axis1=FALSE,
-             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
-             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
-             dataset=dataset2,
-             xlim=c(0,8),
-             ylim1=c(0,250),ylim2=c(0,2000))
-}
