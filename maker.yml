@@ -73,8 +73,7 @@ targets:
   manuscript.tex:
     depends:
       - baad_all
-      - table_pipemodel_varpart
-      - table_LMFLAR_varpart
+      - table_varpart2
       - table_mlfastba
       - table_alfastba
       - table_lmf
@@ -100,8 +99,7 @@ targets:
 
   tables:
     depends:
-      - table_pipemodel_varpart
-      - table_LMFLAR_varpart
+      - table_varpart2
       - table_mlfastba
       - table_alfastba
       - table_lmf
@@ -115,15 +113,13 @@ targets:
       - figures/Figure2.pdf
       - figures/Figure3.pdf
       - figures/Figure4.pdf
-      - figures/Figure4b.pdf
-      - figures/Figure4c.pdf
       - figures/FigureS1.pdf
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
       - figures/FigureS6.pdf
-      - figures/FigureS7.pdf
+  
 
   # Data --------------------------------------
   baad_mapmat:
@@ -166,35 +162,21 @@ targets:
     command:  make_table_lmf(dat_mlfmso)
   table_lar:
     command:  make_table_lar(dat_alfmso)
-  table_pipemodel_varpart:
-    command: make_table_pipemodel_varpart(dataset2)
-  table_LMFLAR_varpart:
-    command: make_table_LMFLAR_varpart(dataset2)
+  table_varpart2:
+    command:  make_table_varpart2(dataset2)
 
   # Figures --------------------------------------
   figures/Figure1.pdf:
     command: figure1(baad_mapmat, world_mapmat)
     plot: wide
-  figures/Figure1b.pdf:
-    command: figure1b(dataset)
-    plot: wide
-  figures/Figure1c.pdf:
-    command: figure1c(dataset)
-    plot: wide
   figures/Figure2.pdf:
     command: figure2(dataset)
     plot: wide
   figures/Figure3.pdf:
-    command: figure3(dataset)
+    command: figure3(dataset2)
     plot: wide
   figures/Figure4.pdf:
     command: figure4(dataset)
-    plot: med_square
-  figures/Figure4b.pdf:
-    command: figure4b(dataset)
-    plot: med_square
-  figures/Figure4c.pdf:
-    command: figure4c(dataset)
     plot: med_square
   figures/FigureS1.pdf:
     command: figureS1(baad_mapmat, world_mapmat)
@@ -214,6 +196,4 @@ targets:
   figures/FigureS6.pdf:
     command: figureS6(dataset)
     plot: wide
-  figures/FigureS7.pdf:
-    command: figureS7(dataset2)
-    plot: wide
+

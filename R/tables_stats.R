@@ -2,7 +2,7 @@
 make_r2_table <- function(data,  variable_name ){
   data.frame(Variable = c(variable_name, rep(NA, length(data)-1)),
     Predictors=names(data),
-    r2=sapply(data,function(x) x[,"Conditional"]))
+    r2=sapply(data,function(x) x[,"Marginal"]))
 }
 
 
@@ -61,6 +61,32 @@ assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na
 }
 
 
+make_table_varpart2 <- function(dataset2){
+  
+  tab1 <- make_table_LMFLAR_varpart(dataset2)
+  tab1$Variable <- as.character(tab1$Variable)
+  tab2 <- make_table_pipemodel_varpart(dataset2)
+  tab2$Variable <- as.character(tab2$Variable)
+  
+  # Reshape
+  f <- function(x){
+    
+    n <- nrow(x)/2
+    x$Variable <- as.character(c(rep(x$Variable[1],n), rep(x$Variable[n+1],n)))
+    y <- reshape(x, direction="wide", timevar="Predictors", idvar="Variable")
+    
+  return(y)
+  }
+  nm <- rownames(tab1)[1:(nrow(tab1)/2)]
+  df <- rbind(f(tab1), f(tab2))
+  names(df)[2:ncol(df)] <- nm
+  df$Variable[df$Variable == "LMF_ASTBA"] <- "MF/AS"
+  df$Variable[df$Variable == "LAR_ASTBA"] <- "AF/AS"
+  
+return(df)
+}
+
+
 # Count number of observations.
 tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
 
@@ -109,7 +135,7 @@ make_table_lar  <- function(x) tabFun(x, c("lalf_mso","h.t"))
 # #------------------------------------------------------------------------------------#
 
 # GAM explained variance with mgdd0 and MI
-gamr2 <- function(data, ranef=FALSE, kgam=4){
+gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 
   testmapmatgam2 <- function(yvar, mgdd0=TRUE){
 
@@ -117,8 +143,8 @@ gamr2 <- function(data, ranef=FALSE, kgam=4){
 
     f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
     f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
-    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(MI, k=",kgam,")",
-                               if(mgdd0)" + te(mgdd0, k=",kgam,")"))
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")",
+                               if(mgdd0)" + te(",climvar2,", k=",kgam,")"))
 
     if(!ranef)
       g <- lapply(f, function(x)gam(formula=x, data=data))
@@ -128,7 +154,7 @@ gamr2 <- function(data, ranef=FALSE, kgam=4){
     return(g)
   }
 
-  vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma", "lmrt_mso")
+  vars <- c("lmlf_mso","lalf_mso","lmlf_astba2","lalf_astba2","llma")
   gams <- lapply(vars, testmapmatgam2, mgdd0=TRUE)
 
   r2g <- do.call(rbind,lapply(1:length(vars),
@@ -146,7 +172,7 @@ gamr2 <- function(data, ranef=FALSE, kgam=4){
   r2p <- sapply(vars, pftr2, data=data)
   r2g <- cbind(unname(r2p), r2g)
   tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
-  names(tabg) <- c("Variable","PFT","H","H,PFT","H,PFT,MI,mgdd0")
+  names(tabg) <- c("Variable","PFT","H","H,PFT",paste0("H,PFT,",climvar1,",",climvar2))
 
   list(r2table=tabg, fits=gams)
 }
@@ -154,6 +180,14 @@ gamr2 <- function(data, ranef=FALSE, kgam=4){
 make_table_gamr2MIgdd0 <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4)$r2table
   g0$Variable <- c("MF/MT","AF/MT","MF/AS",
-                 "AF/AS","MF/AF","MR/MT")
+                 "AF/AS","MF/AF")
   g0
 }
+
+make_table_gamr2MATMAP <- function(dataset) {
+  g0 <- gamr2(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
+  g0$Variable <- c("MF/MT","AF/MT","MF/AS",
+                   "AF/AS","MF/AF")
+  g0
+}
+

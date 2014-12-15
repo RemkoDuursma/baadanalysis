@@ -9,7 +9,6 @@
 \usepackage{parskip}
 \usepackage{graphicx}
 \usepackage{fixltx2e}
-% \usepackage[T1]{fontenc}
 \usepackage[default,osfigures,scale=0.95]{opensans}
 \graphicspath{ {./figures/} }
 \usepackage{geometry}
@@ -81,10 +80,9 @@ The partitioning of biomass into short-lived leaves and long-lived stems is one 
 \item We then found that LMF was proportional to the leaf construction cost, as measured by leaf mass per area (Fig 2b). \item The consequence of this is that the leaf area ratio (the amount of leaf area supported per unit aboveground biomass), was invariant between PFTs, because $LAR = LMF / LMA$ (Fig 2c and S3). We thus supported the view that PFTs differ in LMF, but for the first time demonstrated that they converge in the amount of leaf area supported.
 \item Next, we split LMF into two components, $LMF = M_F/M_T = M_F/A_S * A_S/MT$, where $M_F/A_S$ is the ratio of leaf biomass to stem basal area (see Methods S1), and $A_S/M_T$ the ratio of stem basal area to total aboveground biomass. We found that the first term showed identical PFT patterns as LMF (Fig 2d and e), $M_F/A_S$ was highly variable between PFT and proportional to LMA, so that $A_F/A_S$ is invariant between PFTs. 
 \item This split is also convenient because the first term is nearly independent of plant height, allowing a more straightforward analysis of climate effects (not having to correct for height every time). The second term was found to be nearly unaffected by PFT (S4), but strongly height-dependent. It thus absorbs variation related to height and aboveground plant geometry, and is consistent with previous findings that this ratio is fairly conserved between plant species (Chaves).
-\item We analyzed climate effects in two ways, biome, quantitative variables (MAP,MAT,MI,mgdd0)
-\item We did not find differences between biomes in $M_F/A_S$ (Fig S5 - now S7!), but some small inconsistent differences in $A_F/A_S$ (corresponding to slightly lower LMA in tropical vs. temperate evergreen angiosperms). SHOULD THIS BE FIGURE 4? Biome consistently explained very little variation when added to a statistical model in addition to PFT and plant height (Table S7 SHOULD BE IN MAIN TEXT). 
+\item We analyzed climate effects in two ways, biome, quantitative variables (MAP,MAT), and by biome (tropical / temperate/ boreal), which is a simple classification taking into account both MAT and MAP.
+\item Regardless of how we analyzed it, we found only weak climate effects. We did not find differences between biomes in $M_F/A_S$ (Fig 3), but some small inconsistent differences in $A_F/A_S$ (corresponding to slightly lower LMA in tropical vs. temperate evergreen angiosperms). Biome consistently explained very little variation when added to a statistical model in addition to PFT and plant height (Table S7 SHOULD BE IN MAIN TEXT). 
 \item We found statistically significant but weak and inconsistent effects of climate variables (MAP and MAT) on $M_F/A_S$ and $A_F/A_S$ (Fig 4). These variables explained very little variation when added to a statistical model in addition to PFT and plant height (Table 1). 
-
 \item We found that PFTs differed in LMF, and this was proportional to leaf mass per area, a leading trait within the leaf economics spectrum. Indeed, if LMA was used instead of PFT, we were able to explain more variation in $M_F/A_S$ and $A_F/A_S$ (Table S7). It thus seems possible to integrate a key leaf trait with whole-plant modelling of biomass partitioning. 
 \item We found very modest effects of climate on biomass partitioning, somewhat inconsistent with Reich et al 2014. It is consistent with the idea that LMA is more flexible than biomass partitioning (Poorter). We argue that climate directly or indirectly affects LMA, which then leads to differences in LMF, because LAR is less variable. Plants seem to target a certain total leaf area display per unit aboveground biomass investment, but we do stress that there is still much variation unaccounted for (Figure S histograms), and that other studies certainly have uncovered small-scale effects of climate on leaf area to sapwood area (pine studies etc), an important component of $A_F/A_S$. Our results hold at the PFT level, which is relevant for DGVMs.
 \item What consequences for DGVMs? There is a multitude of allocation models (de Kauwe). Together with assumptions on leaf and stem turnover rates, this gives estimates of biomass partitioning (S2 methods). So far it is common to choose between different models largely based on philosophical arguments (Franklin 2012). We argue that relationships such as in Fig 2a should be used to benchmark and constrain the various allocation models. The data we use here is freely available (Falster), which should aid in the models being tested, with the hope that they perhaps converge.
@@ -92,20 +90,6 @@ The partitioning of biomass into short-lived leaves and long-lived stems is one 
 
 
 \end{itemize}
-
-
-
-
-
-% Fig 3 to SI.
-% Fig S7 to main text
-
-
-
-
-
-
-
 
 
 
@@ -169,6 +153,7 @@ To test for direct climate effects in addition to the PFT effect, we used moistu
 R.A.D and D.S.F. conceived the ideas and methods, and co-wrote the paper. R.A.D. analysed data. BAAD contributors shared data.
 
 
+\clearpage
 \section{Tables}
 
 
@@ -186,6 +171,11 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 @
 
 
+<<results='asis'>>=
+print(xtable(table_varpart2, label="varpartpipe",
+             caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The R2 shown is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type.  All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
+      include.rownames=FALSE, caption.placement="top")
+@
 
 
 
@@ -211,18 +201,16 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
     \label{fig:figure2}
 \end{figure}
 
-
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure3.pdf}
-    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
+    \caption{Mean leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/A_S$) by PFT and major biome. No leaf area estimates were available for boreal deciduous angiosperms. DA = deciduous angiosperm, EA = evergreen angiosperm, EG = evergreen gymnosperm, Trop. = tropical, Temp. = temperate. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$)}
     \label{fig:figure3}
 \end{figure}
 
-
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure4b.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure4.pdf}
     \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables (leaf mass per area, LMA, and $M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). See SI Methods for calculation of MI and growing season temperature. Solid lines are generalized additive model fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the gam after averaging each variable by species/dataset combination (but all raw individual plant data are shown in the plots).}
   \label{fig:figure4}
 \end{figure}
@@ -241,7 +229,7 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
-    \caption{Global coverage of the climate space by the dataset. Methods are as in Fig 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
+    \caption{Global coverage of the climate space by the dataset. Methods are as in Fig. 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
 \label{fig:figureS1}
 \end{figure}
 
@@ -266,26 +254,22 @@ print(xtable(table_gamr2MIgdd0, label="table/gamr2table",
     \label{fig:figureS4}
 \end{figure}
 
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{Plant leaf mass as a function of basal stem area (left panel), and leaf area as a function of basal stem area (right panel). Each symbol is an individual plant. Lines are generalized additive model fits.}
-  \label{fig:figureS5}
+    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
+    \label{fig:figures5}
 \end{figure}
+
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS6.pdf}
-    \caption{Plant leaf mass as a function of basal stem area (left panel), and leaf area as a function of basal stem area (right panel). Individual plant sata were averaged by species/study (the same species occuring in multiple datasets thus appears multiple times). Lines are linear regressions with 95\% confidence intervals. Both regressions were significant, but R2 was 0.28 in the left panel, and only 0.02 in the right panel. The coefficient of variation between species was 0.19 for log-transformed MF/AS, and only 0.099 for AF/AS.}
+    \caption{Plant leaf mass as a function of basal stem area (left panel), and leaf area as a function of basal stem area (right panel). Individual plant data were averaged by species/study (the same species occuring in multiple datasets thus appears multiple times). Lines are linear regressions with 95\% confidence intervals. Both regressions were significant, but $R^2$ was 0.28 in the left panel, and only 0.02 in the right panel.}
   \label{fig:figureS6}
 \end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.99\textwidth]{FigureS7.pdf}
-    \caption{Mean leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/A_S$) by PFT and major biome. No leaf area estimates were available for boreal deciduous angiosperms. DA = deciduous angiosperm, EA = evergreen angiosperm, EG = evergreen gymnosperm, Trop. = tropical, Temp. = temperate. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$)}
-    \label{fig:figureS7}
-\end{figure}
 
 
 
@@ -305,6 +289,8 @@ print(xtable(dataauthors,
              ), include.rownames=FALSE, tabular.environment='longtable', floating=FALSE, size="small",
       caption.placement="top")
 @
+
+\clearpage
 
 
 <<tablepreload1>>=
@@ -341,21 +327,6 @@ printit(table_lmf,
 printit(table_lar,
         label="table:count4",
         caption="Number of observations used in the analysis of leaf area ratio (LAR). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
-@
-
-
-
-<<results='asis'>>=
-print(xtable(table_pipemodel_varpart, label="varpartpipe",
-             caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The marginal R2 is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type. The conditional R2 is that explained by fixed and random effects (species within study). All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
-      include.rownames=FALSE, caption.placement="top")
-@
-
-
-<<results='asis'>>=
-print(xtable(table_LMFLAR_varpart, label="varpartlmflar",
-      caption="Explained variance in the leaf mass fraction (leaf mass / aboveground biomass) and leaf area ratio (leaf area / aboveground biomass). See Table~\\ref{varpartpipe} for more explanation. For plant height, we also added the squared term as a fixed effect, and the interaction with PFT or LMA, because the relationship was non-linear."),
-      include.rownames=FALSE, caption.placement="top")
 @
 
 
