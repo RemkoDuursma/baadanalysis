@@ -168,7 +168,7 @@ library(xtable)
 <<results='asis'>>=
 print(xtable(table_gamr2MATMAP, label="table/gamr2table",
       caption="Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables. Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."), 
-      include.rownames=FALSE, caption.placement="top")
+      include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
 @
 
 
@@ -330,7 +330,7 @@ printit(table_lar,
 <<results='asis'>>=
 print(xtable(table_varpart2, label="varpart2",
              caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The R2 shown is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type.  All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
-      include.rownames=FALSE, caption.placement="top")
+      include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
 @
 
 
