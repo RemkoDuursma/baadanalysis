@@ -2,7 +2,9 @@
 download_baad <- function(destination_filename) {
   url <-
     "https://github.com/dfalster/baad/releases/download/v2-Ecology-check/baad.rds"
-  download.file(url, destination_filename, mode="wb")
+  download(url, destination_filename)
+  # download function from package downloader provides wrapper
+  # to download file so that works for https and across platforms
 }
 
 download_tree_png <- function(destination_filename) {
