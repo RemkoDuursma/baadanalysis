@@ -1,34 +1,18 @@
 packages:
-  - lmerTest
-  - maps
-  - mapdata
-  - gdata
-  - smatr
-  - scales
-  - magicaxis
-  - dplyr
-  - multcomp
-  - doBy
-  - mgcv
-  - reshape2
-  - lme4
-  - Hmisc
-  - hexbin
-  - lattice
-  - grid
+  # dataset construction
+  - downloader
   - stringr
-  - raster
-  - dismo
-  - XML
-  - rgdal
-  - lsmeans
-  - gplots
-  - car
+  - multcomp #cld
+  - doBy  #summaryBy
+  # tables
+  - mgcv  #gam
+  - lmerTest
+  # plotting
+  - magicaxis #magaxis
   - RColorBrewer
+  - hexbin
   - xtable
   - knitr
-  - rmarkdown
-  - downloader
   - png
   - gridBase
   - gridExtra
