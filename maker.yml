@@ -28,7 +28,7 @@ packages:
   - xtable
   - knitr
   - rmarkdown
-  - RCurl
+  - downloader
   - png
   - gridBase
   - gridExtra
