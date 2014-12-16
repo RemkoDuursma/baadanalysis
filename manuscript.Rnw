@@ -218,7 +218,7 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure4.pdf}
-    \caption{Modest effects of climate on leaf mass and area per unit stem basal area, compared to the very large effect of plant functional type on mass-based variables ($M_F/A_S$). Solid lines are generalized additive model (GAM) fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the GAM. To account for within-species and contributed dataset correlations, data were first averaged by species/dataset combination.}
+    \caption{Modest effects of climate (mean annual temperature, MAT, and mean annual precipitation, MAP) on leaf mass and area per unit stem basal area, compared to the very large effect of plant functional type on mass-based variables ($M_F/A_S$). Solid lines are generalized additive model (GAM) fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the GAM. To account for within-species and contributed dataset correlations, data were first averaged by species/dataset combination.}
   \label{fig:figure4}
 \end{figure}
 

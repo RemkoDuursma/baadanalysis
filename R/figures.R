@@ -234,29 +234,42 @@ clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitone
   if(climvar2 == "mgdd0")Xlab2 <- expression(Growing~season~T~(degree*C))
   if(climvar2 == "MAT")Xlab2 <- expression(MAT~(degree*C))
   
+  Ylab2 <- expression(M[F]/A[S]~~(kg~m^-2))
+  Ylab1 <- expression(A[F]/A[S]~~(m^2~m^-2))
+  
   dataset$XVAR1 <- dataset[,climvar1]
   dataset$XVAR2 <- dataset[,climvar2]
   
-  par(mfrow=c(2,2), cex.lab=1.2, mar=c(5,5,1,1), las=1)
-  smoothplot(XVAR1, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+  par(mfrow=c(2,2), cex.lab=1.2, mar=c(0.3,0.3,0.3,0.3), las=1, oma=c(4.7,4.7,1,1))
+  smoothplot(XVAR1, lmlf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
              xlab=Xlab1, ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,
-             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
+             fitoneline=fitoneline,xlim=c(400,4400),
+             ylab="")
+  axis(1, labels=FALSE);magaxis(side=2, unlog=2);box()
   
   my_legend("bottomright", lab="long")
   
-  smoothplot(XVAR2, lmlf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab=Xlab2,ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,
-             ylab=expression(M[F]/A[S]~~(kg~m^-2)))
-  smoothplot(XVAR1, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab=Xlab1,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,ylim=c(2,4),
-             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
-  smoothplot(XVAR2, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab=Xlab2,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,ylim=c(2,4),
-             ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
+  smoothplot(XVAR2, lmlf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab="", ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,xlim=c(-5,30),
+             ylab="")
+  axis(1, labels=FALSE);magaxis(side=2, unlog=2, labels=FALSE);box()
+  
+  smoothplot(XVAR1, lalf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab="",polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,ylim=c(2,4),xlim=c(400,4400),
+             ylab="")
+  axis(1, labels=TRUE);magaxis(side=2, unlog=2, labels=TRUE);box()
+  smoothplot(XVAR2, lalf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
+             xlab="",polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=fitoneline,ylim=c(2,4),xlim=c(-5,30),
+             ylab="")
+  axis(1, labels=TRUE);magaxis(side=2, unlog=2, labels=FALSE);box()
+  mtext(side=1, at=0.25, line=3, text=Xlab1, outer=TRUE, las=0)
+  mtext(side=1, at=0.75, line=3, text=Xlab2, outer=TRUE, las=0)
+  mtext(side=2, at=0.25, line=3, text=Ylab1, outer=TRUE, las=0)
+  mtext(side=2, at=0.75, line=3, text=Ylab2, outer=TRUE, las=0)
+  
 }
 
 

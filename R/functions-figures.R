@@ -319,6 +319,7 @@ smoothplot <- function(x,y,g=NULL,data,
                             kgam=4,
                             R=NULL,
                             randommethod=c("lmer","aggregate"),
+                            axes=TRUE,
                             log="xy",
                             fitoneline=FALSE,
                             pointcols=NULL,
@@ -384,24 +385,26 @@ smoothplot <- function(x,y,g=NULL,data,
   if(plotit){
     with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
                     xlab=xlab, ylab=ylab, ...))
-
-    if(log=="xy")magaxis(side=1:2, unlog=1:2)
-    if(log=="x"){
-      magaxis(side=1, unlog=1)
-      axis(2)
-      box()
+  
+    if(axes){
+      if(log=="xy")magaxis(side=1:2, unlog=1:2)
+      if(log=="x"){
+        magaxis(side=1, unlog=1)
+        axis(2)
+        box()
+      }
+      if(log=="y"){
+        magaxis(side=2, unlog=2)
+        axis(1)
+        box()
+      }
+      if(log==""){
+        axis(1)
+        axis(2)
+        box()
+      }
     }
-    if(log=="y"){
-      magaxis(side=2, unlog=2)
-      axis(1)
-      box()
-    }
-    if(log==""){
-      axis(1)
-      axis(2)
-      box()
-    }
-
+    
     for(i in 1:length(fits)){
 
       if(fittype == "gam"){
