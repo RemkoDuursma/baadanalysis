@@ -15,7 +15,6 @@ make_table_pipemodel_varpart <- function(dataset2) {
   mlf_formulas <- list()
   mlf_formulas[["H"]]         <- lmlf_astba2 ~ log10(h.t) + (1|Group)
   mlf_formulas[["H, PFT"]]    <- lmlf_astba2 ~ log10(h.t)*pft + (1|Group)
-  mlf_formulas[["H, LMA"]] <- lmlf_astba2 ~ log10(h.t)*llma + (1|Group)
   mlf_formulas[["H, PFT, B"]] <- lmlf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group)
   
   mlf_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_mlf))
@@ -44,7 +43,6 @@ make_table_LMFLAR_varpart <- function(dataset2) {
   mlf_formulas <- list()
   mlf_formulas[["H"]]         <- log10(m.lf/m.so) ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group)
   mlf_formulas[["H, PFT"]]    <- log10(m.lf/m.so) ~ log10(h.t)*pft + pft:I(log10(h.t)^2)+ (1|Group)
-  mlf_formulas[["H, LMA"]] <- log10(m.lf/m.so) ~ llma*log10(h.t) +  llma:I(log10(h.t)^2) + (1|Group)
   mlf_formulas[["H, PFT, B"]] <- log10(m.lf/m.so) ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group)
 
   mlf_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_mlfmso))
@@ -68,7 +66,6 @@ make_table_LMA_varpart <- function(dataset2) {
   mlf_formulas <- list()
   mlf_formulas[["H"]]         <- llma ~ log10(h.t) + I(log10(h.t)^2)+ (1|Group)
   mlf_formulas[["H, PFT"]]    <- llma ~ log10(h.t)*pft + pft:I(log10(h.t)^2)+ (1|Group)
-  mlf_formulas[["H, LMA"]] <- llma ~ 1 + (1|Group)
   mlf_formulas[["H, PFT, B"]] <- llma ~ pft*log10(h.t)*bortemptrop + pft:I(log10(h.t)^2) + (1|Group)
   
   lma_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_lma))
@@ -109,8 +106,6 @@ make_table_varpart2 <- function(dataset2){
   df <- rbind(f(tab1), f(tab2), f(tab3))
   names(df)[2:ncol(df)] <- nm
   
-  # Drop LMA as predictor for LMA
-  df[["H, LMA"]][df$Variable == "$M_F/A_F$"] <- NA
 
   df <- cbind(data.frame(Description = c("Leaf mass fraction","Leaf area ratio",
                                          "Leaf mass / stem basal area","Leaf area / stem basal area",
@@ -177,8 +172,7 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 
     f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
     f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
-    f[[3]] <- as.formula(paste(yvar,"~ te(lh.t) + te(llma)"))
-    f[[4]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")",
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")",
                                if(mgdd0)" + te(",climvar2,", k=",kgam,")"))
 
     if(!ranef)
@@ -198,7 +192,7 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
                               }))))
 
   tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
-  names(tabg) <- c("Variable","H","H, PFT","H, LMA",paste0("H, PFT, ",climvar1,", ",climvar2))
+  names(tabg) <- c("Variable","H","H, PFT",paste0("H, PFT, ",climvar1,", ",climvar2))
 
   list(r2table=tabg, fits=gams)
 }
@@ -207,8 +201,6 @@ make_table_gamr2MIgdd0 <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4)$r2table
   g0$Variable <- c("$M_F/M_T$","$A_F/M_T$","$M_F/A_S$",
                    "$A_F/A_S$","$M_F/A_F$")
-  # Set LMA one to missing (makes no sense)
-  g0[["H, LMA"]][g0$Variable == "$M_F/A_F$"] <- NA
   
   
   g0 <- cbind(data.frame(Description = c("Leaf mass fraction","Leaf area ratio",
@@ -222,8 +214,6 @@ make_table_gamr2MATMAP <- function(dataset) {
   g0$Variable <- c("$M_F/M_T$","$A_F/M_T$","$M_F/A_S$",
                    "$A_F/A_S$","$M_F/A_F$")
   
-  # Set LMA one to missing (makes no sense)
-  g0[["H, LMA"]][g0$Variable == "$M_F/A_F$"] <- NA
   
   g0 <- cbind(data.frame(Description = c("Leaf mass fraction","Leaf area ratio",
                                          "Leaf mass / stem basal area","Leaf area / stem basal area",
