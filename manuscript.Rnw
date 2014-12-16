@@ -47,7 +47,7 @@
 library(knitr)
 opts_chunk$set(echo=FALSE)
 source("R/functions-ms.R")
-baad <- readRDS("data/baad.rds")
+baad <- readRDS("downloads/baad.rds")
 dataauthors <- author_details(baad, "data/contact.csv")
 @
 

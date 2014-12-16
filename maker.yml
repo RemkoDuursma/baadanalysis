@@ -151,7 +151,11 @@ targets:
   baad_climate1:
     command: addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
   baad_all:
-    command: readRDS("data/baad.rds")
+    command: readRDS("downloads/baad.rds")
+  downloads/baad.rds:
+    command: download_baad(target_name)
+    cleanup_level: purge
+
   cfg:
     command: extract_baad_dictionary(baad_all)
 
