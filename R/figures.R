@@ -269,11 +269,11 @@ clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitone
   gcol <- alpha("lightgrey",0.5)
   
   if(climvar1 == "MI")Xlab1 <- "Moisture Index (-)"
-  if(climvar1 == "MAP")Xlab1 <- "MAP (mm)"
+  if(climvar1 == "MAP")Xlab1 <- expression("Mean annual precipitation"~(mm))
   
   if(climvar2 == "mgdd0")Xlab2 <- expression(Growing~season~T~(degree*C))
-  if(climvar2 == "MAT")Xlab2 <- expression(MAT~(degree*C))
-  
+  if(climvar2 == "MAT")Xlab2 <- expression("Mean annual temperature"~(degree*C))
+
   Ylab2 <- expression(M[F]/A[S]~~(kg~m^-2))
   Ylab1 <- expression(A[F]/A[S]~~(m^2~m^-2))
   
