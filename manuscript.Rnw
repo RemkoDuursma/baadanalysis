@@ -170,7 +170,7 @@ library(xtable)
 
 <<results='asis'>>=
 print(xtable(table_gamr2MATMAP, label="table/gamr2table",
-      caption="Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables. Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."), 
+      caption="\\textbf{Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables.} Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."),
       include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
 @
 
@@ -178,7 +178,7 @@ print(xtable(table_gamr2MATMAP, label="table/gamr2table",
 
 <<results='asis'>>=
 print(xtable(table_varpart2, label="varpart2",
-             caption="Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area. The R2 shown is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type.  All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
+             caption="\\textbf{Explained variance in the ratio of leaf mass to basal stem area, and leaf area to basal stem area.} The $r^2$ shown is that explained by the fixed effects only (H = plant height, B = biome, PFT = plant functional type.  All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
       include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
 @
 
@@ -203,21 +203,21 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure2.pdf}
-    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost.  (a) Leaf mass fraction (LMF = leaf mass / aboveground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (b) and (c) Leaf mass fraction (LMF) and leaf area ratio (LAR) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
+    \caption{\textbf{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost. } (a) Leaf mass fraction (LMF = leaf mass / aboveground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (b) and (c) Leaf mass fraction (LMF) and leaf area ratio (LAR) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figure2}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.6\textwidth]{Figure3.pdf}
-    \caption{No biome differences in leaf mass per unit stem basal stem area for $M_F/A_S$ and weak, inconsistent effects of biome on leaf area per unit basal stem area ($A_F/A_S$). No leaf area estimates were available for boreal deciduous angiosperms. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$)}
+    \caption{\textbf{No biome differences in leaf mass per unit stem basal stem area for $M_F/A_S$ and weak, inconsistent effects of biome on leaf area per unit basal stem area ($A_F/A_S$)}. No leaf area estimates were available for boreal deciduous angiosperms. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$)}
     \label{fig:figure3}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure4.pdf}
-    \caption{Modest effects of climate (mean annual temperature, MAT, and mean annual precipitation, MAP) on leaf mass and area per unit stem basal area, compared to the very large effect of plant functional type on mass-based variables ($M_F/A_S$). Solid lines are generalized additive model (GAM) fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the GAM. To account for within-species and contributed dataset correlations, data were first averaged by species/dataset combination.}
+    \caption{\textbf{Modest effects of climate on leaf mass and area per unit stem basal area, compared to the very large effect of plant functional type on mass-based variables ($M_F/A_S$)}. Solid lines are generalized additive model (GAM) fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the GAM. To account for within-species and contributed dataset correlations, data were first averaged by species/dataset combination.}
   \label{fig:figure4}
 \end{figure}
 
@@ -235,28 +235,28 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
-    \caption{Global coverage of the climate space by the dataset. Methods are as in Fig. 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
+    \caption{\textbf{Global coverage of the climate space by the dataset.} Methods are as in Fig. 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
 \label{fig:figureS1}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
-    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_W$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant.}
+    \caption{\textbf{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_W$) for each of the PFTs, as a function of total plant height ($H$).} Each point is an individual plant.}
     \label{fig:figureS2}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
-    \caption{Leaf area ratio ($A_F/M_T$) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
+    \caption{\textbf{Leaf area ratio ($A_F/M_T$) by PFT.} Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
     \label{fig:figureS3}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
-    \caption{Relationship between aboveground biomass and basal stem area, each point is an individual plant. Lines are spline fits. The right panel shows least-square means of the ratio of aboveground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
+    \caption{\textbf{Relationship between aboveground biomass and basal stem area, each point is an individual plant.} Lines are spline fits. The right panel shows least-square means of the ratio of aboveground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
     \label{fig:figureS4}
 \end{figure}
 
@@ -264,7 +264,7 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
+    \caption{\textbf{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning.} Shown are histograms of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
     \label{fig:figures5}
 \end{figure}
 
@@ -272,7 +272,7 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS6.pdf}
-    \caption{Plant leaf mass as a function of basal stem area (left panel), and leaf area as a function of basal stem area (right panel). Individual plant data were averaged by species/study (the same species occuring in multiple datasets thus appears multiple times). Lines are linear regressions with 95\% confidence intervals. Both regressions were significant, but $R^2$ was 0.28 in the left panel, and only 0.02 in the right panel.}
+    \caption{\textbf{Plant leaf mass as a function of basal stem area (left panel), and leaf area as a function of basal stem area (right panel).} Individual plant data were averaged by species/study (the same species occuring in multiple datasets thus appears multiple times). Lines are linear regressions with 95\% confidence intervals. Both regressions were significant, but $R^2$ was 0.28 in the left panel, and only 0.02 in the right panel.}
   \label{fig:figureS6}
 \end{figure}
 
@@ -291,7 +291,7 @@ print(xtable(table_varpart2, label="varpart2",
 
 <<results='asis'>>=
 print(xtable(dataauthors,
-             caption="Co-authors in the BAAD consortium."
+             caption="\\textbf{Co-authors in the BAAD consortium.}"
              ), include.rownames=FALSE, tabular.environment='longtable', floating=FALSE, size="small",
       caption.placement="top")
 @
@@ -311,28 +311,28 @@ printit <- function(x, caption, label=NULL){
 <<results='asis'>>=
 printit(table_mlfastba,
         label="table:count1",
-        caption="Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$. Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="\\textbf{Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$.} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
 <<results='asis'>>=
 printit(table_alfastba,
         label="table:count2",
-        caption="Number of observations used in the analysis of $A_F/A_S$. Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="\\textbf{Number of observations used in the analysis of $A_F/A_S$.} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
 <<results='asis'>>=
 printit(table_lmf,
         label="table:count3",
-        caption="Number of observations used in the analysis of leaf mass fraction ($M_F/M_T$) and leaf area ratio ($A_F/M_T$). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="\\textbf{Number of observations used in the analysis of leaf mass fraction ($M_F/M_T$) and leaf area ratio ($A_F/M_T$).} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
 <<results='asis'>>=
 printit(table_lar,
         label="table:count4",
-        caption="Number of observations used in the analysis of leaf area ratio (LAR). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="\\textbf{Number of observations used in the analysis of leaf area ratio (LAR).} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
