@@ -229,10 +229,10 @@ clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitone
   gcol <- alpha("lightgrey",0.5)
   
   if(climvar1 == "MI")Xlab1 <- "Moisture Index (-)"
-  if(climvar1 == "MAP")Xlab1 <- "Mean annual precipitation (mm)"
+  if(climvar1 == "MAP")Xlab1 <- "MAP (mm)"
   
   if(climvar2 == "mgdd0")Xlab2 <- expression(Growing~season~T~(degree*C))
-  if(climvar2 == "MAT")Xlab2 <- expression(Mean~annual~temperature~~(degree*C))
+  if(climvar2 == "MAT")Xlab2 <- expression(MAT~(degree*C))
   
   dataset$XVAR1 <- dataset[,climvar1]
   dataset$XVAR2 <- dataset[,climvar2]
@@ -251,11 +251,11 @@ clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitone
              ylab=expression(M[F]/A[S]~~(kg~m^-2)))
   smoothplot(XVAR1, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
              xlab=Xlab1,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,
+             fitoneline=fitoneline,ylim=c(2,4),
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
   smoothplot(XVAR2, lalf_astba2, pft, dataset, log="y", kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
              xlab=Xlab2,polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,
+             fitoneline=fitoneline,ylim=c(2,4),
              ylab=expression(A[F]/A[S]~~(m^2~m^-2)))
 }
 
