@@ -45,10 +45,65 @@ my_legend <- function(where, labels=c("short","long"), bty='n', rev=TRUE, ...){
 #:: Main figures.
 
 
+figure1 <- function(baad_mapmat, world_mapmat, tree_image){
+
+  par(oma=c(3,1,1,1), mfrow=c(1,2), mar=c(1,1,2,1))
+  plot(1:2, type='n', ann=FALSE, axes=FALSE, xlim=c(-1,1), ylim=c(-1,1))
+  plotlabel("(a)", "topleft", inset.y= -0.08, inset.x = -0.04, xpd=NA)
+  # note we are only plotting to last viewport, but calls to other two needed to make figure work.
+  vps <- baseViewports()
+  pushViewport(vps$inner)
+  pushViewport(vps$figure)
+  pushViewport(vps$plot)
+ # grid.rect(gp=gpar(lwd=3, col="blue"))  # show grid
+  fig.tree(tree_image)
+
+  par(mar=c(1,4,2,1))
+  figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=TRUE,
+                        meanpoints=FALSE)
+  plotlabel("(b)", "topleft", inset.y= -0.08, inset.x = -0.3, xpd=NA)
+}
+
+fig.tree <- function(filename) {
+
+  x0 <- 0.35
+  gp0=gpar(cex=0.8)
+  img <- readPNG(filename)
+  grid.raster(img, unit(x0, "npc"),  y = unit(0.4, "npc"), just=c("centre"), height=unit(0.80, "npc"))
+
+  # height
+  grid.lines(x = c(0.02, 0.02), y = c(0.0, 0.8),arrow = arrow(ends = "last"), gp=gpar(lwd=2))
+  grid.text("H, height of plant", x = 0.05 , y = 0.85, just="left", gp=gp0)
+
+  # stems areas
+  grid.draw(ellipseGrob(x0 - 0.025, 0.03, size=6,ar=4,angle=0, def="npc"))
+  grid.text(expression(paste(A[S],", stem area at base")),
+    x = x0 + 0.03 , y = 0.03, just="left", gp=gp0)
+
+  grid.draw(ellipseGrob(x0 - 0.03, 0.08, size=4,ar=4,angle=0, def="npc"))
+  grid.text(expression(paste(A[Sbh],", stem area at breast height")),
+    x = x0 +0.023 , y = 0.08, just="left", gp=gp0)
+
+  grid.text(expression(paste(M[S],", mass of stem")),
+    x = x0 + 0.03 , y = 0.18, just="left", gp=gp0)
+
+  grid.text(expression(paste(M[T],", total mass (", M[F]+M[S],")")),
+    x = x0 + 0.03 , y = -0.1, just="left", gp=gp0)
+
+  # leaf
+  x1 <- x0 + 0.25
+  y1 <- 0.45
+  grid.text(expression(paste(M[F],", mass of foliage")),
+    x = x1, y = y1, just="left", gp=gp0)
+  grid.text(expression(paste(A[F],", area of foliage")),
+    x = x1, y = y1 + 0.25, just="left", gp=gp0)
+}
+
+
 # Figure 1. panel a.
 # MAP MAT vs. Worldclim
-figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft", 
-                                  col=my_cols_transparent(0.7), setpar=TRUE, 
+figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft",
+                                  col=my_cols_transparent(0.7), setpar=TRUE,
                                   legend1=TRUE,
                                   legend2=TRUE,
                                   meanpoints=TRUE,
@@ -78,48 +133,33 @@ figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft",
   if(setpar)par(pty='s', cex.lab=1.2)
   plot(cells, type='n', ylim=c(0,6000),
        xlab = xlab,
-       ylab = ylab)
+       ylab = ylab, xpd=NA)
   for(i in 1:nhex){
     Hexagon(cells$x[i], cells$y[i], xdiam=d$xdiam*2, ydiam=d$ydiam,
             border=NA,
             col=greyCols[hcut[i]])
   }
-  if(legend1)l <- legend("topleft", levels(hcut), fill=greyCols, cex=0.7, title="Nr cells", bty='n')
   box()
   with(baad_mapmat, points(MAT, MAP, pch=pch, col=col[Group], cex=1.1))
   if(meanpoints)with(mmpft, points(MAT.mean, MAP.mean, col=col[Group], pch=24, cex=1.5, bg="white", lwd=2))
+
+  l<- legend("topleft","", bty='n')
   if(legend2){
-    legend(l$rect$left + l$rect$w,
-           l$rect$top, title="Plant functional type",
-           c("Deciduous Angiosperm", 
-             "Evergreen Angiosperm", "Evergreen Gymnosperm"),
-           pch=19, col=hCols, pt.cex=1.2, cex=0.7, bty='n')
+    l<- legend(l$rect$left,l$rect$top,
+           c("Deciduous Angiosperm","Evergreen Angiosperm", "Evergreen Gymnosperm"),
+           pch=19, col=my_cols(), pt.cex=1.2, cex=0.7, bty='n')
+ if(legend1)
+    legend(l$rect$left,l$rect$top-l$rect$h, levels(hcut), fill=greyCols, cex=0.7,bty='n')
+
+
   }
 }
 
 
-figure1 <- function(baad_mapmat, world_mapmat){
-  
-  par(mfrow=c(1,2), mar=c(5,5,1,1), las=1, cex.axis=0.85)
-  
-  figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=FALSE,
-                        meanpoints=FALSE)
-  
-  img <- readPNG("data/crappytree.fw.png")
-  transparent <- img[,,4] == 0
-  img <- as.raster(img[,,1:3])
-  img[transparent] <- NA
-  par(mar=c(2,2,1,1))
-  plot(1:2, type='n', ann=FALSE, axes=FALSE)
-  rasterImage(img, 1.2, 1, 1.75, 2, interpolate=FALSE)
-  
-  
-}
-
 
 # Figure 2 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS.
 figure2 <- function(dataset, KGAM=4){
-  
+
   l <- layout(matrix(c(1,2,4,1,3,5), byrow=T, ncol=3),
               widths=c(1,0.67,0.67), heights=c(1,1))
 

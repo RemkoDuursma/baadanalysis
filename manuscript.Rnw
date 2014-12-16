@@ -147,10 +147,9 @@ We used a generalized additive model (GAM) to visualize the relationships betwee
 To test for direct climate effects in addition to the PFT effect, we used moisture index (rainfall / potential evapotranspiration) and growing season temperature (average air temperature during the period of the year when air temperature is larger than 0) as estimated by Lin et al. (in review). To assess the coverage of the global climate space by the dataset, we extracted mean annual temperature and precipitation from Worldclim \cite{worldclim}, excluding areas without woody vegetation (taken from the global land cover database GLC-SHARE \cite{lathamglobal}).
 
 
-
 \section{Acknowledgments}
 
-
+Figure 1 coutresy of Lana Heydon, IAN Image Library http://ian.umces.edu/imagelibrary.
 
 \section{Author contributions}
 
@@ -196,7 +195,7 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
-    \caption{(a) Global coverage of the climate space by the dataset. Hexagons are terrestrial observations, excluding areas without woody vegetation, colored by number of 0.5\degree~cells. (b) Schematic of a woody plant, and the variables considered in this study. H = plant height, $A_S$ basal stem area, $A_{sbh}$ stem area at 'breast height', $M_W$ woody biomass, $M_F$ leaf biomass (total aboveground biomass $M_T = M_F + M_W$), $A_F$ total leaf area.}
+    \caption{\textbf{Overview of the global biomass and allometry database.} (a) Variables were measured on \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominat woody functional types.}
     \label{fig:figure1}
 \end{figure}
 
