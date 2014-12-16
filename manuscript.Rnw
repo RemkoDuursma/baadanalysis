@@ -32,7 +32,7 @@
 \author[2]{Daniel S. Falster}
 \author[3]{the BAAD consortium}
 
-\affil[1]{1 Hawkesbury Insitute for the Environment, University of Western Sydney, Hawkesbury Campus, First Floor, Building L9, Locked Bag 1797, Penrith, NSW 2751, Australia}
+\affil[1]{1 Hawkesbury Insitute for the Environment, University of Western Sydney, Locked Bag 1797, Penrith, NSW 2751, Australia}
 \affil[2]{Biological Sciences, Macquarie University, North Ryde, NSW 2109, Australia}
 \affil[3]{See Supporting Information}
 
@@ -195,7 +195,7 @@ print(xtable(table_varpart2, label="varpart2",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
-    \caption{\textbf{Overview of the global biomass and allometry database.} (a) Variables were measured on \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominat woody functional types.}
+    \caption{\textbf{Overview of the global biomass and allometry database.} (a) Variables were measured on \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
     \label{fig:figure1}
 \end{figure}
 
@@ -351,7 +351,7 @@ $$
 \frac{dM_i}{dt} = a_i NPP - \tau_i M_i
 $$
 
-where $M_i$ is the biomass in some compartment (leaves, stems or roots), $a_i$ the annual allocation of NPP to that compartment, and $\tau_i$ the annual turnover of compartment $i$. It is thus easy to see that partitioning ($M_i/M_T$, where $M_T$ is total biomass) can be different from allocation ($a_i$) because turnover ($\tau_i$) differs strongly between compartments.
+where $M_i$ is the biomass in some compartment (leaves, stems or roots), $a_i$ the annual allocation of NPP to that compartment, and $\tau_i$ the annual turnover of compartment $i$. It is thus easy to see that partitioning ($M_i/M_T$, where $M_T$ is total biomass) can be different from allocation ($a_i$) because turnover ($\tau_i$) differs between leaf and wood biomass.
 
 
 
@@ -370,7 +370,7 @@ $$
 where $D_S$ is the basal stem diameter (m), $D_{Sbh}$ stem diameter at breast height, $H_{bh}$ the height at which $D_{Sbh}$ was measured (typically 1.3 or 1.34m), and $a$ was further expressed as a function of plant height:
 
 $$
-a = c_0H^c_1
+a = c_0H^{c_1}
 $$
 
 The estimated coefficients were $c_0$ = \Sexpr{signif(coef(basalafit)[1],3)}, $c_1$ = \Sexpr{signif(coef(basalafit)[2],3)}, root-mean square error = \Sexpr{signif(summary(basalafit)$sigma,3)}.
