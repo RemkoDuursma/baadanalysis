@@ -56,3 +56,19 @@ From @dekauwe2014:
 - Jones et al. (2013) showed a large spread in the simulated change in the land C-store of between ~250 and 400 Pg C by 2100 from a series of model simulations run as part of the Coupled Model Inter- comparison Project (CMIP5).
 - Most recently, Friend et al. (2014) attributed uncertainty in multi-model predictions of the future vegetation store to differ- ent residence times in models.
 
+
+
+McCarthy et al 2007 : "The relationships between leaf mass and leaf traits can be incorporated into the allometric coefficient of the leaf mass allometric regression such that ML=beta*MT^3/4, where beta = 1/LL.". They show that residuals from ML = f(MT) are correlated with leaf lifespan as well as SLA (but SLA was estimated from other data, not the actual plants). This is different from our interpretation, and they did not study scaling of leaf *area* with aboveground plant mass. 
+
+Wright et al 2004 : LMA and LL not isometric, scaling slope is 1.71 (R2 is only 0.42 though). So LMA is not a direct substititute for LL, in other words we would not expect MF/AS and LMF to be proportional to LL, in contrast to McCarthy's argument.
+
+
+
+
+
+
+
+
+
+
+
