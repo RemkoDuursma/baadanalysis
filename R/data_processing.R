@@ -1,4 +1,10 @@
 
+download_tree_png <- function(destination_filename) {
+  url <-
+    "http://ian.umces.edu/imagelibrary/albums/userpics/12789/normal_ian-symbol-eucalyptus-spp-1.png"
+  download.file(url, destination_filename)
+}
+
 extract_baad_data <- function(baad) {
   baad$data
 }

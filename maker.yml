@@ -30,6 +30,8 @@ packages:
   - rmarkdown
   - RCurl
   - png
+  - gridBase
+  - gridExtra
 
 sources:
   - R/data_processing.R
@@ -45,6 +47,9 @@ plot_options:
   tall:
     width: 4
     height: 8
+  extra_wide:
+    width: 10
+    height: 4
   wide:
     width: 8
     height: 4
@@ -81,6 +86,7 @@ targets:
       - table_gamr2MATMAP
       - basalafit
       - figures
+      - dataset
     knitr: TRUE
 
   data:
@@ -119,7 +125,7 @@ targets:
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
       - figures/FigureS6.pdf
-  
+
 
   # Data --------------------------------------
   baad_mapmat:
@@ -166,8 +172,9 @@ targets:
     command:  make_table_varpart2(dataset2)
 
   # Figures --------------------------------------
+
   figures/Figure1.pdf:
-    command: figure1(baad_mapmat, world_mapmat)
+    command: figure1(baad_mapmat, world_mapmat, "downloads/ian-symbol-eucalyptus-spp-1.png")
     plot: wide
   figures/Figure2.pdf:
     command: figure2(dataset)
@@ -196,4 +203,9 @@ targets:
   figures/FigureS6.pdf:
     command: figureS6(dataset)
     plot: wide
+
+
+  downloads/ian-symbol-eucalyptus-spp-1.png:
+    command: download_tree_png(target_name)
+    cleanup_level: purge
 
