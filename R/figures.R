@@ -172,22 +172,26 @@ figure2 <- function(dataset, KGAM=4){
 figure3 <- function(dataset2){
   
   Labs <- c(
-    "Boreal DA",
-    "Temp. DA",
-    "Trop. DA",
-    "Temp. EA",
-    "Trop. EA",
-    "Boreal EG",
-    "Temp. EG")
+    "Boreal",
+    "Temperate",
+    "Tropical",
+    "Temperate",
+    "Tropical",
+    "Boreal",
+    "Temperate")
   
-  par(cex.axis=0.85, mfrow=c(1,2), mar=c(8,5,1,1), cex=1.1, las=1, cex.axis=0.9)
+  par(cex.axis=0.85, mfrow=c(2,1), mar=c(0.35,5,7,1), pty="m", cex=1.1, las=1)
+  
   meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
              xvar=1:7,setpar=FALSE,
              addlegend=FALSE,
              Cols=c("dodgerblue2","blue", "lightskyblue", "red","hotpink2",
                     "forestgreen","chartreuse3"),
-             panel1.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
-             panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)},
+             panel1.exp={axis(1, at=1:7, labels=FALSE)
+                         plotlabel("(a)","topleft")
+                         par(mar=c(7,5,0.35,1))},
+             panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)
+                         plotlabel("(b)","topleft")},
              siglets="bottom",
              xlab="",
              axis1=FALSE,
@@ -196,6 +200,26 @@ figure3 <- function(dataset2){
              dataset=dataset2,
              xlim=c(0,8),
              ylim1=c(0,250),ylim2=c(0,2000))
+  mtext(side=1, at=c(2,4.5,6.5), text=c("DA","EA","EG"), line=5)
+  
+  plotBracket <- function(x0, x1, rely=0.3, uprely=0.05){
+      
+    h0 <- grconvertY(0, "ndc","user")
+    usr <- par("usr")
+    marh <- usr[3] - h0
+    y <- h0 + rely * marh
+    upy <- y + uprely * marh
+    
+    segments(x0=x0,x1=x1,y0=y,y1=y)
+    segments(x0=x0,x1=x0,y0=y,y1=upy)
+    segments(x0=x1,x1=x1,y0=y,y1=upy)
+    
+  }
+  par(xpd=NA)
+  plotBracket(1,3)
+  plotBracket(4,5)
+  plotBracket(6,7)
+  
 }
 
 # Figure 4.

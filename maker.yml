@@ -43,8 +43,8 @@ sources:
 
 plot_options:
   tall:
-    width: 3
-    height: 5
+    width: 4
+    height: 8
   wide:
     width: 8
     height: 4
@@ -174,7 +174,7 @@ targets:
     plot: wide
   figures/Figure3.pdf:
     command: figure3(dataset2)
-    plot: wide
+    plot: tall
   figures/Figure4.pdf:
     command: figure4(dataset)
     plot: med_square

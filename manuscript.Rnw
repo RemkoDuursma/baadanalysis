@@ -210,15 +210,15 @@ print(xtable(table_varpart2, label="varpart2",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure3.pdf}
-    \caption{Mean leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/A_S$) by PFT and major biome. No leaf area estimates were available for boreal deciduous angiosperms. DA = deciduous angiosperm, EA = evergreen angiosperm, EG = evergreen gymnosperm, Trop. = tropical, Temp. = temperate. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$)}
+    \includegraphics[width=0.6\textwidth]{Figure3.pdf}
+    \caption{No biome differences in leaf mass per unit stem basal stem area for $M_F/A_S$ and weak, inconsistent effects of biome on leaf area per unit basal stem area ($A_F/A_S$). No leaf area estimates were available for boreal deciduous angiosperms. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$)}
     \label{fig:figure3}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure4.pdf}
-    \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables (leaf mass per area, LMA, and $M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). See SI Methods for calculation of MI and growing season temperature. Solid lines are generalized additive model fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the gam after averaging each variable by species/dataset combination (but all raw individual plant data are shown in the plots).}
+    \caption{Modest effects of climate on three size-invariant variables, compared to the very large effect of plant functional type on mass-based variables ($M_F/A_S$), and convergence in area-based variables ($A_F/A_S$). Solid lines are generalized additive model (GAM) fits (with a base dimension of 3, larger values resulted in biologically implausible relationships). Grey areas are approximate 95\% confidence intervals, calculated by the GAM after averaging each variable by species/dataset combination.}
   \label{fig:figure4}
 \end{figure}
 
@@ -346,7 +346,7 @@ printit(table_lar,
 \subsection*{Methods S1 - Biomass partitioning terminology}
 \label{sec:partterm}
 
-The terms 'partitioning' and 'allocation' have been used in various ways, confusing comparisons between studies \cite{litton_carbon_2007}. Here, we define biomass partitioning as the actual distribution of biomass between compartments (e.g., leaves vs. stems), and biomass allocation as the proportion of net primary production (NPP) that is allocated to some compartment. The two processes are different because of continuous turnover of biomass, which differs strongly between compartments. We may write (cf. McMurtrie and Wolf 1983),
+The terms 'partitioning' and 'allocation' have been used in various ways, confusing comparisons between studies \cite{litton_carbon_2007}. Here, we define biomass partitioning as the actual distribution of biomass between compartments (e.g., leaves vs. stems), and biomass allocation as the proportion of net primary production (NPP) that is allocated to some compartment. The two processes are different because of continuous turnover of biomass, which differs strongly between compartments. We may write (cf. \cite{McMurtrieWolf1983}),
 
 $$
 \frac{dM_i}{dt} = a_i NPP - \tau_i M_i
