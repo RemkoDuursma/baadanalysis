@@ -58,7 +58,7 @@ figure1 <- function(baad_mapmat, world_mapmat, tree_image){
  # grid.rect(gp=gpar(lwd=3, col="blue"))  # show grid
   fig.tree(tree_image)
 
-  par(mar=c(1,4,2,1))
+  par(mar=c(1,4,2,1), cex.axis=0.7, las=1)
   figureMAPMATworldclim(baad_mapmat, world_mapmat, setpar=FALSE, legend2=TRUE,
                         meanpoints=FALSE)
   plotlabel("(b)", "topleft", inset.y= -0.08, inset.x = -0.3, xpd=NA)
@@ -67,12 +67,13 @@ figure1 <- function(baad_mapmat, world_mapmat, tree_image){
 fig.tree <- function(filename) {
 
   x0 <- 0.35
-  gp0=gpar(cex=0.8)
+  gp0 <- gpar(cex=0.8)
   img <- readPNG(filename)
   grid.raster(img, unit(x0, "npc"),  y = unit(0.4, "npc"), just=c("centre"), height=unit(0.80, "npc"))
 
   # height
-  grid.lines(x = c(0.02, 0.02), y = c(0.0, 0.8),arrow = arrow(ends = "last"), gp=gpar(lwd=2))
+  grid.lines(x = c(0.02, 0.02), y = c(0.0, 0.8),arrow = arrow(ends = "last", length=unit(0.15, "inches")), 
+             gp=gpar(lwd=2))
   grid.text("H, height of plant", x = 0.05 , y = 0.85, just="left", gp=gp0)
 
   # stems areas
@@ -87,8 +88,8 @@ fig.tree <- function(filename) {
   grid.text(expression(paste(M[S],", mass of stem")),
     x = x0 + 0.03 , y = 0.18, just="left", gp=gp0)
 
-  grid.text(expression(paste(M[T],", total mass (", M[F]+M[S],")")),
-    x = x0 + 0.03 , y = -0.1, just="left", gp=gp0)
+  grid.text(expression(paste(M[T],", total aboveground mass (", M[F]+M[S],")")),
+    x = x0 - 0.03 , y = -0.1, just="left", gp=gp0)
 
   # leaf
   x1 <- x0 + 0.25
