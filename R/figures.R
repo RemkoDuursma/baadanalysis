@@ -497,7 +497,7 @@ figureS6 <- function(dataset){
 
   with(agg, plot(llma, lalf_astba2, pch=19, col=my_cols_transparent()[pft], axes=FALSE, ylim=log10(c(90,10000)),
                  xlim=log10(c(0.01,1)),
-                 xlab=lmaLabel(), ylab=expression(A[F]/A[S]~~(kg~m^-2)),))
+                 xlab=lmaLabel_short(), ylab=expression(A[F]/A[S]~~(kg~m^-2)),))
   magaxis(1:2, unlog=1:2)
   predline(lm2)
   box()
