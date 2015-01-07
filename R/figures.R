@@ -2,7 +2,7 @@
 
 # Color settings
 my_cols <- function() {
-  c("blue","red","forestgreen")
+  c("#01ABE9","#1B346C","#F34B1A")  # Zissou palette, from http://wesandersonpalettes.tumblr.com/
 }
 
 my_cols_transparent <- function(a=0.4) {
@@ -10,7 +10,7 @@ my_cols_transparent <- function(a=0.4) {
 }
 
 my_linecols <- function() {
-  c("deepskyblue3","firebrick2","chartreuse3")
+  my_cols()
 }
 
 # Plot settings.
