@@ -54,9 +54,25 @@ targets:
 
   manuscript.pdf:
     depends:
-      - figures
       - "references.bib"
       - "manuscript.Rnw"
+      - figures/Figure1.pdf
+      - figures/Figure2.pdf
+      - figures/Figure3.pdf
+      - figures/Figure4.pdf
+      - figures/FigureS1.pdf
+      - figures/FigureS2.pdf
+      - figures/FigureS3.pdf
+      - figures/FigureS4.pdf
+      - figures/FigureS5.pdf
+      - figures/FigureS6.pdf
+      - table_varpart2
+      - table_mlfastba
+      - table_alfastba
+      - table_lmf
+      - table_lar
+      - table_gamr2MATMAP
+      - basalafit
     command: tex_2_pdf("manuscript.tex")
 
   manuscript.tex:
@@ -69,7 +85,6 @@ targets:
       - table_lar
       - table_gamr2MATMAP
       - basalafit
-      - figures
       - dataset
     knitr: TRUE
 
@@ -86,30 +101,6 @@ targets:
       - dat_mlfmso
       - baad_mapmat
       - world_mapmat
-
-  tables:
-    depends:
-      - table_varpart2
-      - table_mlfastba
-      - table_alfastba
-      - table_lmf
-      - table_lar
-      - table_gamr2MATMAP
-      - basalafit
-
-  figures:
-    depends:
-      - figures/Figure1.pdf
-      - figures/Figure2.pdf
-      - figures/Figure3.pdf
-      - figures/Figure4.pdf
-      - figures/FigureS1.pdf
-      - figures/FigureS2.pdf
-      - figures/FigureS3.pdf
-      - figures/FigureS4.pdf
-      - figures/FigureS5.pdf
-      - figures/FigureS6.pdf
-
 
   # Data --------------------------------------
   baad_mapmat:
