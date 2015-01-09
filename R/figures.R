@@ -203,127 +203,134 @@ figure2 <- function(dataset, KGAM=4){
              ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
              xlim=c(0,0.2),
              ylim1=c(0,250),ylim2=c(0,2000))
-  
-  
+
+
 }
 
 
 
 # Means of leaf mass, area per stem area by PFT - biome combination.
-figure3 <- function(dataset2){
-  
-  Labs <- c(
-    "Boreal",
-    "Temperate",
-    "Tropical",
-    "Temperate",
-    "Tropical",
-    "Boreal",
-    "Temperate")
-  
-  par(cex.axis=0.85, mfrow=c(2,1), mar=c(0.35,5,7,1), pty="m", cex=1.1, las=1)
-  
-  meansbypft("lmlf_astba2","lalf_astba2", "pftlong", panel1only=F,
-             xvar=1:7,setpar=FALSE,
-             addlegend=FALSE,
-             Cols=c("dodgerblue2","blue", "lightskyblue", "red","hotpink2",
-                    "forestgreen","chartreuse3"),
-             panel1.exp={axis(1, at=1:7, labels=FALSE)
-                         plotlabel("(a)","topleft")
-                         par(mar=c(7,5,0.35,1))},
-             panel2.exp={axis(1, at=1:7, labels=Labs, las=2, cex.axis=0.8)
-                         plotlabel("(b)","topleft")},
-             siglets="bottom",
-             xlab="",
-             axis1=FALSE,
-             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
-             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
-             dataset=dataset2,
-             xlim=c(0,8),
-             ylim1=c(0,250),ylim2=c(0,2000))
-  mtext(side=1, at=c(2,4.5,6.5), text=c("DA","EA","EG"), line=5)
-  
+figure3 <- function(dataset, dataset2){
+
+  par(cex.axis=0.85, mfrow=c(1,3), mar=c(0.2,0.2,0.2,0.2), pty="m", cex=1.1, las=1, oma=c(6,4,1,1))
+
+  ylim <- 10^c(0.5,3)
+
+  # By biome - mix means of Y variables.
+ 
+  xvar=1:7
+  X <- list(y = xvar, lci=rep(NA,length(xvar)), uci=rep(NA,length(xvar)))
+  y1 <- mixmean("lmlf_astba2","pftlong",dataset2)
+
+  Cols <- my_cols_transparent()[c(1,1,1,2,2,3,3)]
+  plot(X$y, y1$y, xlim=c(0,8),axes=FALSE, pch=19, col=Cols, cex=1.3,
+       ylim=ylim,xlab="",ylab="", ann=FALSE,
+       panel.first={
+         arrows(x0=X$lci, x1=X$uci, y0=y1$y,
+                y1=y1$y,code=3,angle=90,length=0.025,col=Cols)
+         arrows(x0=X$y, x1=X$y, y0=y1$lci,
+                y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
+       },
+       log="y")
+
+  axis(1, at=1:7, labels= c("Boreal", "Temperate","Tropical", "Temperate",
+    "Tropical", "Boreal", "Temperate"), las=2, cex.axis=0.8)
+  axis(1,labels=FALSE)
+  magaxis(side=2, unlog=2, labels=TRUE)
+  box()
+  plotlabel("(a)","topleft", log.y=TRUE)
+
+  # Multiple comparison letters.
+  u <- par()$usr
+  text(X$y, 2.5, y1$signifletters, pos=3, cex=0.9)
+
   plotBracket <- function(x0, x1, rely=0.3, uprely=0.05){
-      
+
     h0 <- grconvertY(0, "ndc","user")
     usr <- par("usr")
     marh <- usr[3] - h0
     y <- h0 + rely * marh
     upy <- y + uprely * marh
-    
-    segments(x0=x0,x1=x1,y0=y,y1=y)
-    segments(x0=x0,x1=x0,y0=y,y1=upy)
-    segments(x0=x1,x1=x1,y0=y,y1=upy)
-    
+
+    segments(x0=x0,x1=x1,y0=y,y1=y, xpd=NA)
+    segments(x0=x0,x1=x0,y0=y,y1=upy, xpd=NA)
+    segments(x0=x1,x1=x1,y0=y,y1=upy, xpd=NA)
+
   }
-  par(xpd=NA)
   plotBracket(1,3)
   plotBracket(4,5)
   plotBracket(6,7)
-  
-}
 
-# Figure 4.
-# Three size-invariant variables as a function of MI and mgdd0
-clim_figure <- function(dataset, KGAM=3, climvar1="MI", climvar2="mgdd0", fitoneline=FALSE, fittype="lm", R="Group"){
+  mtext(side=1, at=c(2,4.5,6.5), text=c("DA","EA","EG"), line=5, xpd=NA)
 
+  # Mean Annual temperature
   gcol <- alpha("lightgrey",0.5)
-  
-  if(climvar1 == "MI")Xlab1 <- "Moisture Index (-)"
-  if(climvar1 == "MAP")Xlab1 <- expression("Mean annual precipitation"~(mm))
-  
-  if(climvar2 == "mgdd0")Xlab2 <- expression(Growing~season~T~(degree*C))
-  if(climvar2 == "MAT")Xlab2 <- expression("Mean annual temperature"~(degree*C))
+  smoothplot(MAT, lmlf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
+             xlab="", ylim=log10(ylim),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=FALSE,xlim=c(-5,30),
+             ylab="")
+  axis(1, labels=TRUE)
+  magaxis(side=2, unlog=2, labels=FALSE)
+  box()
+  plotlabel("(b)","topleft", log.y=FALSE)
 
-  Ylab2 <- expression(M[F]/A[S]~~(kg~m^-2))
-  Ylab1 <- expression(A[F]/A[S]~~(m^2~m^-2))
-  
-  dataset$XVAR1 <- dataset[,climvar1]
-  dataset$XVAR2 <- dataset[,climvar2]
-  
-  par(mfrow=c(2,2), cex.lab=1.2, mar=c(0.3,0.3,0.3,0.3), las=1, oma=c(4.7,4.7,1,1))
-  smoothplot(XVAR1, lmlf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab=Xlab1, ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,xlim=c(400,4400),
+
+  # Mean annual precipitation
+  smoothplot(MAP, lmlf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
+             xlab="", ylim=log10(ylim),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=FALSE,xlim=c(400,4400),
              ylab="")
-  axis(1, labels=FALSE);magaxis(side=2, unlog=2);box()
-  
-  my_legend("bottomright", lab="long")
-  
-  smoothplot(XVAR2, lmlf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab="", ylim=c(0,3),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,xlim=c(-5,30),
-             ylab="")
-  axis(1, labels=FALSE);magaxis(side=2, unlog=2, labels=FALSE);box()
-  
-  smoothplot(XVAR1, lalf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab="",polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,ylim=c(2,4),xlim=c(400,4400),
-             ylab="")
-  axis(1, labels=TRUE);magaxis(side=2, unlog=2, labels=TRUE);box()
-  smoothplot(XVAR2, lalf_astba2, pft, dataset, axes=FALSE, kgam=KGAM, R=R, randommethod = "agg", fittype=fittype,
-             xlab="",polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=fitoneline,ylim=c(2,4),xlim=c(-5,30),
-             ylab="")
-  axis(1, labels=TRUE);magaxis(side=2, unlog=2, labels=FALSE);box()
-  mtext(side=1, at=0.25, line=3, text=Xlab1, outer=TRUE, las=0)
-  mtext(side=1, at=0.75, line=3, text=Xlab2, outer=TRUE, las=0)
-  mtext(side=2, at=0.25, line=3, text=Ylab1, outer=TRUE, las=0)
-  mtext(side=2, at=0.75, line=3, text=Ylab2, outer=TRUE, las=0)
-  
+  axis(1, labels=TRUE)
+  magaxis(side=2, unlog=2, labels=FALSE)
+  box()
+  plotlabel("(c)","topleft", log.y=FALSE)
+
+  mtext(side=1, at=3/6, line=3, text=expression("Mean annual temperature"~(degree*C)), outer=TRUE, las=0)
+  mtext(side=1, at=5/6, line=3, text=expression("Mean annual precipitation"~(mm)), outer=TRUE, las=0)
+  mtext(side=2, at=0.5, line=2, text= expression(M[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
 }
 
 
-figure4 <- function(dataset, climvar1="MAP", climvar2="MAT", fitoneline=FALSE, fittype="gam"){
-  clim_figure(dataset, climvar1=climvar1, climvar2=climvar2, fitoneline=fitoneline,fittype=fittype)  
+
+# SI6
+# MF/AS and AF/AS at species level by PFT.
+figure4<- function(dataset){
+  agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
+                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
+                   id=~pft)
+  agg <- subset(agg, !is.na(llma))
+
+  lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
+  lm2 <- lm(lmlf_astba2 ~ lalf_astba2, data=agg)
+
+  par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1)
+
+  with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
+                 axes=FALSE, ylim=log10(c(1,1000)),
+                 xlim=log10(c(0.01,1)),
+                 xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
+  magaxis(1:2, unlog=1:2)
+  predline(lm1)
+  box()
+  plotlabel("(a)","topleft", log.y=FALSE, log.x=FALSE)
+
+  with(agg, plot(lalf_astba2, lmlf_astba2, pch=19, col=my_cols_transparent()[pft], axes=FALSE, ylim=log10(c(1,1000)),
+                 xlim=log10(c(90,10000)),
+                 xlab=expression(A[F]/A[S]~~(kg~m^-2)),
+                 ylab=""))
+  magaxis(1, unlog=1)
+  magaxis(2, unlog=2, labels=FALSE)
+
+  predline(lm2)
+  box()
+  plotlabel("(b)","topleft", log.y=FALSE, log.x=FALSE)
+  my_legend("bottomright", cex=0.8, pt.cex=1)
+
+  mtext(side=2, at=0.5, line=2, text= expression(M[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
 }
 
-    
-  
-  
-  
-  
-  
+
+
 
 
 #:::::::::::::::::::::::::::::: Supporting Figures ::::::::::::::::::::::::::#
@@ -470,37 +477,3 @@ figureS5 <- function(dataset){
   mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
         outer=TRUE, at=5/6, cex=0.9)
 }
-
-
-# SI6
-# MF/AS and AF/AS at species level by PFT.
-figureS6 <- function(dataset){
-  agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
-                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
-                   id=~pft)
-  agg <- subset(agg, !is.na(llma))
-
-  lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
-  lm2 <- lm(lalf_astba2 ~ llma, data=agg)
-
-
-  par(mfrow=c(1,2), mar=c(5,5,2,2), cex.lab=1.1, las=1)
-
-  with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
-                 axes=FALSE, ylim=log10(c(1,1000)),
-                 xlim=log10(c(0.01,1)),
-                 xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
-  magaxis(1:2, unlog=1:2)
-  predline(lm1)
-  box()
-  my_legend("bottomright", cex=0.8, pt.cex=1)
-
-  with(agg, plot(llma, lalf_astba2, pch=19, col=my_cols_transparent()[pft], axes=FALSE, ylim=log10(c(90,10000)),
-                 xlim=log10(c(0.01,1)),
-                 xlab=lmaLabel_short(), ylab=expression(A[F]/A[S]~~(kg~m^-2)),))
-  magaxis(1:2, unlog=1:2)
-  predline(lm2)
-  box()
-}
-
-

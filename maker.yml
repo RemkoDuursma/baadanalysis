@@ -65,7 +65,6 @@ targets:
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
-      - figures/FigureS6.pdf
       - table_varpart2
       - table_mlfastba
       - table_alfastba
@@ -159,11 +158,11 @@ targets:
     command: figure2(dataset)
     plot: wide
   figures/Figure3.pdf:
-    command: figure3(dataset2)
-    plot: tall
+    command: figure3(dataset, dataset2)
+    plot: extra_wide
   figures/Figure4.pdf:
     command: figure4(dataset)
-    plot: med_square
+    plot: wide
   figures/FigureS1.pdf:
     command: figureS1(baad_mapmat, world_mapmat)
     plot: med_square
@@ -178,9 +177,6 @@ targets:
     plot: wide
   figures/FigureS5.pdf:
     command: figureS5(dataset)
-    plot: wide
-  figures/FigureS6.pdf:
-    command: figureS6(dataset)
     plot: wide
 
 
