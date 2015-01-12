@@ -294,15 +294,17 @@ figure3 <- function(dataset, dataset2){
 
 # SI6
 # MF/AS and AF/AS at species level by PFT.
-figure4<- function(dataset){
+figure4 <- function(dataset){
   agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
                    data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
                    id=~pft)
   agg <- subset(agg, !is.na(llma))
 
   lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
-  lm2 <- lm(lmlf_astba2 ~ lalf_astba2, data=agg)
-
+  
+  # For R2.
+  lm2s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ lalf_astba2, data=x))
+  
   par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1)
 
   with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
@@ -321,7 +323,7 @@ figure4<- function(dataset){
   magaxis(1, unlog=1)
   magaxis(2, unlog=2, labels=FALSE)
 
-  predline(lm2)
+  for(i in 1:3)predline(lm2s[[i]], col=my_linecols()[i])
   box()
   plotlabel("(b)","topleft", log.y=FALSE, log.x=FALSE)
   my_legend("bottomright", cex=0.8, pt.cex=1)
