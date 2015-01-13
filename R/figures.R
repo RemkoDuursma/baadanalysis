@@ -388,13 +388,13 @@ figureS2 <- function(dataset){
     box()
     legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
     if(i == 1){
-      legend(-2,4.5, c(expression(M[F]),expression(M[W])), pch=19,
+      legend(-2,4.5, c(expression(M[F]),expression(M[S])), pch=19,
              col=c("forestgreen","brown"), bty='n', pt.cex=1, cex=1.4)
     }
   }
 
   mtext(side=1, text="H (m)", line=3, outer=TRUE, las=0, cex=1.2)
-  mtext(side=2, text=expression(M[F]~or~M[W]~~(kg)), line=3, outer=TRUE, las=0, cex=1.2)
+  mtext(side=2, text=expression(M[F]~or~M[S]~~(kg)), line=3, outer=TRUE, las=0, cex=1.2)
 }
 
 

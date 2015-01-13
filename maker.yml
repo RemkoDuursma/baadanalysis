@@ -71,6 +71,7 @@ targets:
       - table_lmf
       - table_lar
       - table_gamr2MATMAP
+      - table_r2lmaforpft
       - basalafit
     command: tex_2_pdf("manuscript.tex")
 
@@ -83,6 +84,7 @@ targets:
       - table_lmf
       - table_lar
       - table_gamr2MATMAP
+      - table_r2lmaforpft
       - basalafit
       - dataset
     knitr: TRUE
@@ -137,9 +139,9 @@ targets:
   basalafit:
     command: BasalA_fit(baad_all)
   table_gamr2MATMAP:
-    command: make_table_gamr2MATMAP(dataset)
+    command:  make_table_gamr2MATMAP(dataset)
   table_mlfastba:
-    command: make_table_mlfastba(dat_mlf)
+    command:  make_table_mlfastba(dat_mlf)
   table_alfastba:
     command:  make_table_alfastba(dat_alf)
   table_lmf:
@@ -148,6 +150,8 @@ targets:
     command:  make_table_lar(dat_alfmso)
   table_varpart2:
     command:  make_table_varpart2(dataset2)
+  table_r2lmaforpft:
+    command:  make_table_lmaforpft(dataset2)
 
   # Figures --------------------------------------
 
