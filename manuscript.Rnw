@@ -47,7 +47,6 @@
 <<preload, echo=FALSE>>=
 library(knitr)
 opts_chunk$set(echo=FALSE)
-source("R/functions-ms.R")
 baad <- readRDS("downloads/baad.rds")
 @
 
