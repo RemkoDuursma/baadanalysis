@@ -31,6 +31,37 @@ make_table_pipemodel_varpart <- function(dataset2) {
 }
 
 
+
+
+
+make_table_lmaforpft <- function(dataset2){
+  
+  assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2))), envir = .GlobalEnv)
+  assign("dat_alf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2))), envir = .GlobalEnv)
+
+  
+  model1 <- lmer(lmlf_astba2 ~ pft + log10(h.t) + pft:log10(h.t) + I(log10(h.t)^2):pft + (1|Group),
+                 data=dat_mlf)
+  model2 <- lmer(lmlf_astba2 ~ llma + log10(h.t) + llma:log10(h.t) + I(log10(h.t)^2):llma + (1|Group),
+                 data=dat_mlf)
+  
+  model3 <- lmer(lmlf_mso ~ pft + log10(h.t) + pft:log10(h.t) + I(log10(h.t)^2):pft + (1|Group),
+                 data=dat_mlf)
+  model4 <- lmer(lmlf_mso ~ llma + log10(h.t) + llma:log10(h.t) + I(log10(h.t)^2):llma + (1|Group),
+                 data=dat_mlf)
+  
+  
+  r2 <- do.call(rbind,lapply(list(model1, model2, model3, model4),r.squared.merMod))
+  rownames(r2) <- c("mfas_pft","mfas_lma","lmf_pft","lmf_lma")
+return(r2)
+}
+
+
+
+
+
+
+
 make_table_LMFLAR_varpart <- function(dataset2) {
 
   assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2))), envir = .GlobalEnv)
