@@ -193,7 +193,7 @@ agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
                    data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
                    id=~pft)
 agg <- subset(agg, !is.na(llma))
-lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
+lm1 <- lm(lmlf_astba2 ~ llma * pft, data=agg)
 lm2 <- lm(lmlf_astba2 ~ lalf_astba2 * pft, data=agg)
 r2panela <- summary(lm1)$adj.r.squared
 r2panelb <- summary(lm2)$adj.r.squared

@@ -300,10 +300,13 @@ figure4 <- function(dataset){
                    id=~pft)
   agg <- subset(agg, !is.na(llma))
 
+  # Panel a
   lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
+  lm1s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ llma, data=x))
   
-  # For R2.
+  # Panel b
   lm2s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ lalf_astba2, data=x))
+  
   
   par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1)
 
@@ -312,7 +315,8 @@ figure4 <- function(dataset){
                  xlim=log10(c(0.01,1)),
                  xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
   magaxis(1:2, unlog=1:2)
-  predline(lm1)
+#   predline(lm1)
+  for(i in 1:3)predline(lm1s[[i]], col=my_linecols()[i])
   box()
   plotlabel("(a)","topleft", log.y=FALSE, log.x=FALSE)
 
