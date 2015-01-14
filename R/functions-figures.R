@@ -631,10 +631,36 @@ ablinepiece <- function(a=NULL,b=NULL,reg=NULL,from=NULL,to=NULL,...){
 }
 
 
-## Position label at a fractional x/y position on a plot
-label <- function(px, py, lab, ..., adj=c(0, 1)) {
-  usr <- par("usr")
-  text(usr[1] + px*(usr[2] - usr[1]),
-       usr[3] + py*(usr[4] - usr[3]),
-       lab, adj=adj, ...)
+
+# Simple axes function, bases on magaxis and code therein. 
+log10axes <- function(side=1:2, logged=NULL, labels=TRUE){
+  
+  magaxis(side=side, unlog=side, labels=FALSE)
+  
+  loggedaxes <- c(FALSE,FALSE)
+  if(!is.null(logged)){
+    loggedaxes[logged] <- TRUE  
+  }
+  
+  for(ii in side){
+    lims <- sort(par("usr")[(1 + (ii-1)*2):(2 + (ii-1)*2)])
+    sci.tick <- maglab(10^lims, n = 5, log = TRUE, exptext = TRUE, 
+                      crunch = TRUE, logpretty = TRUE, usemultloc = FALSE, 
+                      prettybase = 10, hersh = FALSE)
+    
+    if(labels){
+      lab <- do.call(expression, lapply(log10(sci.tick$labat), function(i) bquote(10^.(i))))
+      
+      if(loggedaxes[ii]){
+        axis(side = ii, at = sci.tick$labat, tick = FALSE, 
+                labels = lab, mgp = par("mgp"))
+      } else {
+        axis(side = ii, at = log10(sci.tick$labat), tick = FALSE, 
+             labels = lab, mgp = par("mgp"))
+      } 
+    }
+  }
 }
+
+# with(dataset, plot(llma, lmlf_astba2, pch=16, axes=FALSE, xlim=c(-2,0)))
+# log10axes(2)

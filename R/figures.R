@@ -165,10 +165,12 @@ figure2 <- function(dataset, KGAM=4){
               widths=c(1,0.67,0.67), heights=c(1,1))
 
   par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
-  obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=my_linecols(), pointcols=my_cols_transparent(),
+  obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=my_linecols(), 
+                     pointcols=my_cols_transparent(),axes=FALSE,
              xlab="Plant height (m)",kgam=KGAM,
              ylab=expression(M[F]/M[T]~~(kg~kg^-1))
   )
+  log10axes()
   my_legend("bottomleft", "long")
   box()
   plotlabel("(a)","topright")
@@ -212,31 +214,32 @@ figure2 <- function(dataset, KGAM=4){
 # Means of leaf mass, area per stem area by PFT - biome combination.
 figure3 <- function(dataset, dataset2){
 
-  par(cex.axis=0.85, mfrow=c(1,3), mar=c(0.2,0.2,0.2,0.2), pty="m", cex=1.1, las=1, oma=c(6,4,1,1))
-
-  ylim <- 10^c(0.5,3)
+  par(cex.axis=0.85, mfrow=c(1,3), mar=c(0.2,0.2,0.2,0.2), 
+      pty="m", cex=1.1, las=1, oma=c(6,4,1,1), mgp=c(2.3,0.5,0))
 
   # By biome - mix means of Y variables.
  
-  xvar=1:7
+  xvar <- 1:7
   X <- list(y = xvar, lci=rep(NA,length(xvar)), uci=rep(NA,length(xvar)))
   y1 <- mixmean("lmlf_astba2","pftlong",dataset2)
 
   Cols <- my_cols_transparent()[c(1,1,1,2,2,3,3)]
+  ylim <- 10^c(0.5,3)
   plot(X$y, y1$y, xlim=c(0,8),axes=FALSE, pch=19, col=Cols, cex=1.3,
-       ylim=ylim,xlab="",ylab="", ann=FALSE,
+       ylim= ylim,
+       xlab="",ylab="", ann=FALSE,
        panel.first={
          arrows(x0=X$lci, x1=X$uci, y0=y1$y,
                 y1=y1$y,code=3,angle=90,length=0.025,col=Cols)
          arrows(x0=X$y, x1=X$y, y0=y1$lci,
                 y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
-       },
-       log="y")
+       }, log="y"
+       )
 
   axis(1, at=1:7, labels= c("Boreal", "Temperate","Tropical", "Temperate",
     "Tropical", "Boreal", "Temperate"), las=2, cex.axis=0.8)
   axis(1,labels=FALSE)
-  magaxis(side=2, unlog=2, labels=TRUE)
+  log10axes(side=2, logged=2)
   box()
   plotlabel("(a)","topleft", log.y=TRUE)
 
@@ -270,7 +273,7 @@ figure3 <- function(dataset, dataset2){
              fitoneline=FALSE,xlim=c(-5,30),
              ylab="")
   axis(1, labels=TRUE)
-  magaxis(side=2, unlog=2, labels=FALSE)
+  log10axes(side=2, labels=FALSE)
   box()
   plotlabel("(b)","topleft", log.y=FALSE)
 
@@ -281,7 +284,7 @@ figure3 <- function(dataset, dataset2){
              fitoneline=FALSE,xlim=c(400,4400),
              ylab="")
   axis(1, labels=TRUE)
-  magaxis(side=2, unlog=2, labels=FALSE)
+  log10axes(side=2, labels=FALSE)
   box()
   plotlabel("(c)","topleft", log.y=FALSE)
 
@@ -308,14 +311,15 @@ figure4 <- function(dataset){
   lm2s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ lalf_astba2, data=x))
   
   
-  par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1)
+  par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1, mgp=c(2.3,0.5,0),
+      cex.axis=0.9)
 
   with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
                  axes=FALSE, ylim=log10(c(1,1000)),
                  xlim=log10(c(0.01,1)),
                  xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
-  magaxis(1:2, unlog=1:2)
-#   predline(lm1)
+  log10axes(1:2)
+
   for(i in 1:3)predline(lm1s[[i]], col=my_linecols()[i])
   box()
   plotlabel("(a)","topleft", log.y=FALSE, log.x=FALSE)
@@ -324,8 +328,8 @@ figure4 <- function(dataset){
                  xlim=log10(c(90,10000)),
                  xlab=expression(A[F]/A[S]~~(kg~m^-2)),
                  ylab=""))
-  magaxis(1, unlog=1)
-  magaxis(2, unlog=2, labels=FALSE)
+  log10axes(1)
+  log10axes(2, labels=FALSE)
 
   for(i in 1:3)predline(lm2s[[i]], col=my_linecols()[i])
   box()
@@ -387,8 +391,8 @@ figureS2 <- function(dataset){
     with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
                      col=alpha("forestgreen",0.5)))
 
-    magaxis(side=1, unlog=1, labels=TRUE)
-    magaxis(side=2, unlog=2, labels= i == 1)
+    log10axes(side=1,  labels=TRUE)
+    log10axes(side=2,  labels= i == 1)
     box()
     legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
     if(i == 1){
@@ -406,12 +410,13 @@ figureS2 <- function(dataset){
 # SI3
 # Leaf area ratio; raw data.
 figureS3 <- function(dataset, KGAM=4){
-  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1)
+  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1, mgp=c(2.3,0.5,0))
 
   x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group",
                   linecols=my_linecols(), pointcols=my_cols_transparent(),
-                  xlab="H (m)",kgam=KGAM,
+                  xlab="H (m)",kgam=KGAM,axes=FALSE,
                   ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
+  log10axes()
   box()
   my_legend("bottomleft")
 }
@@ -425,16 +430,19 @@ figureS4 <- function(dataset, KGAM=4){
   par(mfrow=c(1,3), mar=c(5,5,2,2), cex.axis=0.9, las=1)
 
   smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
+             axes=FALSE,
              linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
              ylab=expression(M[T]~~(kg)), cex=0.6, xlim=c(-8,2.5), ylim=c(-6,6))
+  log10axes()
   box()
   plotlabel("(a)","topright")
   my_legend("topleft")
 
   smoothplot(log10(h.t), log10(m.so/a.stba2), pft, dataset, xlab=expression(H~~(m)),
-             ylab=expression(M[T]/A[S]~~(kg~m^-2)), 
+             ylab=expression(M[T]/A[S]~~(kg~m^-2)), axes=FALSE,
              linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
              cex=0.6, xlim=c(-2,2.5), ylim=c(0,4.5))
+  log10axes()
   box()
   plotlabel("(b)","topright")
   
