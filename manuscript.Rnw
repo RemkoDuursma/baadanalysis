@@ -246,7 +246,7 @@ r2panelb <- summary(lm2)$adj.r.squared
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{\textbf{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning.} Shown are histograms of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
+    \caption{\textbf{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning.} Shown are histograms (as probability density functions) of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means (same as in Fig.~\ref{fig:figure2}).}
     \label{fig:figures5}
 \end{figure}
 
