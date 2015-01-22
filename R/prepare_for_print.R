@@ -2,7 +2,7 @@
 
 # Make all figures into JPG
 o <- getwd()
-setwd("manuscript/figures")
+setwd("figures")
 pdfs <- dir(pattern="[.]pdf")
 
 for(i in seq_along(pdfs)){
@@ -16,11 +16,10 @@ for(i in seq_along(pdfs)){
 setwd(o)
 
 # use .jpg in manuscript
-setwd("manuscript")
-shell("sed -i 's/.pdf/.jpg/g' draftpaper.Rnw")
-setwd(o)
+shell("sed -i 's/.pdf/.jpg/g' manuscript.Rnw")
+
 
 # Now compile the Rnw and print!
 
 # and go back,
-shell("sed -i 's/.jpg/.pdf/g' manuscript/draftpaper.Rnw")
+shell("sed -i 's/.jpg/.pdf/g' manuscript.Rnw")
