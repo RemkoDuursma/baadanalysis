@@ -10,6 +10,7 @@
 *.Rproj
 
 .maker
+.remake
 downloads
 
 *.log
