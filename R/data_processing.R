@@ -1,7 +1,7 @@
 
 download_baad <- function(destination_filename) {
   url <-
-    "https://github.com/dfalster/baad/releases/download/v2-Ecology-check/baad.rds"
+    "https://github.com/dfalster/baad/releases/download/v0.9.0/baad.rds"
   download(url, destination_filename, mode="wb")
   # download function from package downloader provides wrapper
   # to download file so that works for https and across platforms
