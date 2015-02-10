@@ -25,3 +25,4 @@ downloads
 *.dvi
 figures
 wordcount.txt
+*.bib.bak
