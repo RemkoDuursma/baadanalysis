@@ -239,7 +239,7 @@ FUNCTION {bbl.and}
 { "and"}
 
 FUNCTION {bbl.etal}
-{ "et~al." }
+{ "et~al" }
 
 FUNCTION {bbl.editors}
 { "eds." }
@@ -448,12 +448,20 @@ FUNCTION {format.names}
   numnames 'namesleft :=
     { namesleft #0 > }
     { s nameptr
-      "{vv~}{ll}{ jj}{ f{}}. " % comma added MK
+      "{vv~}{ll}{ jj}{ f{}}" % comma added MK
       format.name$
       bibinfo bibinfo.check
       't :=
-      nameptr #1 >
-        {
+       nameptr #1 >
+         {
+          nameptr #10
+          #1 + =
+          numnames #5
+          > and
+            { "others" 't :=
+              #1 'namesleft := }
+            'skip$
+          if$
           namesleft #1 >
             { ", " * t * }
             {
@@ -721,7 +729,7 @@ FUNCTION {format.date}
   if$
   extra.label *
   before.all 'output.state :=
-  " " swap$ * "" *
+  ". " swap$ * "" *
 }
 FUNCTION {format.btitle}
 { title "title" bibinfo.check

@@ -21,7 +21,7 @@
 
 
 \usepackage{natbib}
-\bibliographystyle{ecol_let}
+\bibliographystyle{newphyt}
 
 \begin{document}
 
