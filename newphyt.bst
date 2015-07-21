@@ -239,7 +239,7 @@ FUNCTION {bbl.and}
 { "and"}
 
 FUNCTION {bbl.etal}
-{ "et~al" }
+{ "et~al." }
 
 FUNCTION {bbl.editors}
 { "eds." }
