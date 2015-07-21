@@ -50,6 +50,7 @@ targets:
   all:
     depends:
       - manuscript.pdf
+      - manuscript_suppinfo.pdf
 
   manuscript.pdf:
     depends:
@@ -65,11 +66,6 @@ targets:
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
       - table_varpart2
-      - table_mlfastba
-      - table_alfastba
-      - table_lmf
-      - table_lar
-      - table_gamr2MATMAP
       - table_r2lmaforpft
       - basalafit
     command: tex_2_pdf("manuscript.tex")
@@ -78,15 +74,31 @@ targets:
     depends:
       - baad_all
       - table_varpart2
+      - table_r2lmaforpft
+      - basalafit
+      - dataset
+    knitr: TRUE
+  
+  manuscript_suppinfo.pdf:
+    depends:
+      - "references.bib"
+      - "manuscript.Rnw"
       - table_mlfastba
       - table_alfastba
       - table_lmf
       - table_lar
       - table_gamr2MATMAP
-      - table_r2lmaforpft
-      - basalafit
-      - dataset
+    command: tex_2_pdf("manuscript_suppinfo.tex")
+  
+  manuscript_suppinfo.tex:
+    depends:
+      - table_mlfastba
+      - table_alfastba
+      - table_lmf
+      - table_lar
+      - table_gamr2MATMAP
     knitr: TRUE
+
 
   data:
     depends:

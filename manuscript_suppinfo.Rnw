@@ -1,0 +1,119 @@
+\documentclass{article}
+
+\usepackage{amssymb,amsmath}
+\usepackage{palatino}
+\usepackage{geometry}
+\usepackage{authblk}
+\usepackage{gensymb}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+
+\usepackage{parskip}
+\usepackage{natbib}
+\bibliographystyle{newphyt}
+
+
+
+\begin{document}
+
+
+
+
+\clearpage
+\section*{Supporting Information}
+
+\renewcommand\thesubsection{S\arabic{subsection}}
+\setcounter{subsection}{0}
+
+
+\subsection{Sample sizes by plant functional type}
+
+
+\renewcommand\thetable{S\arabic{table}}
+\setcounter{table}{0}
+
+<<preload, echo=FALSE>>=
+library(knitr)
+library(xtable)
+opts_chunk$set(echo=FALSE)
+@
+
+<<results='asis'>>=
+print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
+      caption="\\textbf{Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables.} Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."),
+      include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
+@
+
+
+
+<<tablepreload1>>=
+printit <- function(x, caption, label=NULL){
+  print(xtable(x, align="rlll|l",
+               caption=caption, label=label
+               ), hline.after=c(0,3), caption.placement="top")
+
+}
+@
+
+<<results='asis'>>=
+printit(table_mlfastba,
+        label="table:count1",
+        caption="\\textbf{Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$.} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+@
+
+
+<<results='asis'>>=
+printit(table_alfastba,
+        label="table:count2",
+        caption="\\textbf{Number of observations used in the analysis of $A_F/A_S$.} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+@
+
+
+<<results='asis'>>=
+printit(table_lmf,
+        label="table:count3",
+        caption="\\textbf{Number of observations used in the analysis of leaf mass fraction ($M_F/M_T$) and leaf area ratio ($A_F/M_T$).} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+@
+
+
+<<results='asis'>>=
+printit(table_lar,
+        label="table:count4",
+        caption="\\textbf{Number of observations used in the analysis of leaf area ratio (LAR).} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+@
+
+
+
+
+
+
+\clearpage
+\subsection{Modelling of biomass partitioning in global vegetation models (GVMs)}
+\label{sec:gvmsummary}
+
+Most leading GVMs assume that biomass partitioning between leaves and woody stems differs between major plant functional types. However, there is no consensus on how these differences are parameterized, or whether they are linked to inherent differences in leaf mass per area (LMA) or leaf lifespan (LL). Typically, parameters related to biomass allocation differ between PFTs (often based on little empirical evidence), which then lead to differences in biomass partitioning. We briefly summarize three classes of biomass allocation models, and how differences in biomass partitioning between PFTs arises in each of them. We base this classification on a recent model intercomparison study \citep{dekauwe2014}. Note that we use 'partitioning' to indicate the actual distribution of biomass among plant components, and 'allocation' the fraction of net primary production to each component (see Methods in main text). Finally, we briefly summarize how current GVMs include effects of climate on biomass partitioning.
+
+\subsubsection*{Constant allocation fractions}
+
+Some models assume that a constant fraction of net primary production (NPP) is allocated to each component (leaves, stems, roots). CABLE, EALCO \citep{dekauwe2014} and IBIS \citep{foley1996} are examples of models that allocate a PFT-specific fraction of NPP to each plant component each timestep  (though, for both models, alternative model formulations have been used as well). Constant allocation fractions still give rise to differences in biomass partitioning between PFTs (see Methods in main text), since turnover of leaves (determined by LL) will always differ between at least deciduous and evergreen PFTs.
+
+
+\subsubsection*{Allometric constraints}
+
+In this class of models,  allometric (or other size-dependent) relationships between biomass components are used to calculate biomass allocation in each timestep. For example, in ED2 \citep{medvigy2009}, biomass partitioning to leaves, stem sapwood and roots is constrained by a set of equations with PFT-specific parameters, estimated through model calibration. Biomass allocation is then calculated at each timestep to satisfy these equations. Other models use leaf area as a constraint. For example, LPJ \citep{sitchetal2003} uses PFT-specific values of leaf area to sapwood area ratio to constrain estimates of biomass allocation. Further differences in biomass partitioning between PFTs are then the result of differences in LMA (leaf mass at a given leaf area), as well as LL (shorter lived leaves require higher annual allocation of biomass for upkeep).
+
+\subsubsection*{Optimality}
+
+Few GVMs use a scheme in which carbon allocation is determined by assuming biomass fractions are the result of optimization, however, this scheme is widely used in smaller-scale vegetation models \citep{valentinemakela2012,franklin2012}. One example of a global model is SDGVM \citep{woodward1995}, which optimizes leaf area index by considering the carbon balance of the lowest leaf layer in the canopy. As with LPJ described above, differences in biomass partitioning between PFTs then arise as a result of differences in LMA as well as LL.
+
+\subsubsection*{Climate effects}
+
+Models differ widely in how climate directly (or indirectly) affects biomass partitioning beyond differences between PFTs. In one class of models, biomass partitioning is modelled based on relative resource limitations, consistent with the idea that biomass allocation proceeds to the plant component most limited by the resource it acquires \citep{friedlingstein1999}. For example, in the allocation model of Arora and Boer \citep{aroraboer2005}, which is used in the ISAM model \citep{dekauwe2014}, allocation to leaves, stems and roots depends on relative limitations of light and water. Likewise, Friedlingstein et al. \citep{friedlingstein1999} developed a resource-limitation framework for the CASA model, where allocation depends on limitations of light, water and nutrients. It is clear that these types of models predict apparent climate effects on biomass partitioning along temperature and moisture gradients.
+
+Some models do not assume effects of stress on biomass allocation directly, but differences in allocation may result from effects of stress on biomass production, and subsequent priority rules for the allocation of biomass. For example, in LPJ \citep{sitchetal2003}, biomass production may be low enough in very dry years so that intended allocation to leaves and stem sapwood cannot be supported. In this case, allocation proceeds to leaves only. In dry climates, where water stress will be more common, this would gradually lead to different partitioning of biomass to leaves and stems.
+
+
+\bibliography{references}
+
+
+
+\end{document}
