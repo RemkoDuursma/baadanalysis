@@ -26,8 +26,6 @@
 \setcounter{subsection}{0}
 
 
-\subsection{Sample sizes by plant functional type}
-
 
 \renewcommand\thetable{S\arabic{table}}
 \setcounter{table}{0}
@@ -85,7 +83,6 @@ printit(table_lar,
 
 
 \clearpage
-\subsection{Supporting figures}
 
 
 \renewcommand\thefigure{S\arabic{figure}}
@@ -94,7 +91,7 @@ printit(table_lar,
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
-    \caption{Global coverage of the climate space by the dataset. Methods are as in Fig. 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
+    \caption{Global coverage of the climate space by the dataset, labelled by vegetation type. Methods for climate variables are as in Fig. 1 in main text. Symbols are colored by vegetation type as reported by the data contributors.}
 \label{fig:figureS1}
 \end{figure}
 
@@ -115,7 +112,7 @@ printit(table_lar,
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
-    \caption{Relationship between above-ground biomass and basal stem area, each point is an individual plant. Lines are spline fits. The right panel shows least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
+    \caption{Relationship between above-ground biomass and basal stem area. Each point is an individual plant. Lines are spline fits. The right panel shows least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
     \label{fig:figureS4}
 \end{figure}
 
@@ -132,8 +129,8 @@ printit(table_lar,
 
 
 \clearpage
-\subsection{Modelling of biomass partitioning in global vegetation models (GVMs)}
-\label{sec:gvmsummary}
+\subsection*{Notes S1. Modelling of biomass partitioning in global vegetation models (GVMs)}
+
 
 Most leading GVMs assume that biomass partitioning between leaves and woody stems differs between major plant functional types. However, there is no consensus on how these differences are parameterized, or whether they are linked to inherent differences in leaf mass per area (LMA) or leaf lifespan (LL). Typically, parameters related to biomass allocation differ between PFTs (often based on little empirical evidence), which then lead to differences in biomass partitioning. We briefly summarize three classes of biomass allocation models, and how differences in biomass partitioning between PFTs arises in each of them. We base this classification on a recent model intercomparison study \citep{dekauwe2014}. Note that we use 'partitioning' to indicate the actual distribution of biomass among plant components, and 'allocation' the fraction of net primary production to each component (see Methods in main text). Finally, we briefly summarize how current GVMs include effects of climate on biomass partitioning.
 
