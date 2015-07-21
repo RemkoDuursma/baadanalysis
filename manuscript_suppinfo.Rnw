@@ -6,12 +6,13 @@
 \usepackage{authblk}
 \usepackage{gensymb}
 \geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
-
+\graphicspath{ {./figures/} }
 \usepackage{parskip}
 \usepackage{natbib}
+
 \bibliographystyle{newphyt}
-
-
+\renewcommand{\figurename}{Fig.}
+\usepackage[labelfont=bf, labelsep=quad]{caption}
 
 \begin{document}
 
@@ -39,7 +40,7 @@ opts_chunk$set(echo=FALSE)
 
 <<results='asis'>>=
 print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
-      caption="\\textbf{Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables.} Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."),
+      caption="Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables. Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."),
       include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
 @
 
@@ -57,30 +58,74 @@ printit <- function(x, caption, label=NULL){
 <<results='asis'>>=
 printit(table_mlfastba,
         label="table:count1",
-        caption="\\textbf{Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$.} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$. Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
 <<results='asis'>>=
 printit(table_alfastba,
         label="table:count2",
-        caption="\\textbf{Number of observations used in the analysis of $A_F/A_S$.} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="Number of observations used in the analysis of $A_F/A_S$. Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
 <<results='asis'>>=
 printit(table_lmf,
         label="table:count3",
-        caption="\\textbf{Number of observations used in the analysis of leaf mass fraction ($M_F/M_T$) and leaf area ratio ($A_F/M_T$).} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="Number of observations used in the analysis of leaf mass fraction ($M_F/M_T$) and leaf area ratio ($A_F/M_T$). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
 
 <<results='asis'>>=
 printit(table_lar,
         label="table:count4",
-        caption="\\textbf{Number of observations used in the analysis of leaf area ratio (LAR).} Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
+        caption="Number of observations used in the analysis of leaf area ratio (LAR). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
 @
 
+
+
+\clearpage
+\subsection{Supporting figures}
+
+
+\renewcommand\thefigure{S\arabic{figure}}
+\setcounter{figure}{0}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS1.pdf}
+    \caption{Global coverage of the climate space by the dataset. Methods are as in Fig. 1 in main text, symbols are colored by vegetation type as reported by the data contributors.}
+\label{fig:figureS1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
+    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant.}
+    \label{fig:figureS2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
+    \caption{Leaf area ratio ($A_F/M_T$) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
+    \label{fig:figureS3}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
+    \caption{Relationship between above-ground biomass and basal stem area, each point is an individual plant. Lines are spline fits. The right panel shows least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
+    \label{fig:figureS4}
+\end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
+    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms (as probability density functions) of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means by PFT.}
+    \label{fig:figures5}
+\end{figure}
 
 
 

@@ -61,10 +61,6 @@ targets:
       - figures/Figure3.pdf
       - figures/Figure4.pdf
       - figures/FigureS1.pdf
-      - figures/FigureS2.pdf
-      - figures/FigureS3.pdf
-      - figures/FigureS4.pdf
-      - figures/FigureS5.pdf
       - table_varpart2
       - table_r2lmaforpft
       - basalafit
@@ -83,6 +79,10 @@ targets:
     depends:
       - "references.bib"
       - "manuscript.Rnw"
+      - figures/FigureS2.pdf
+      - figures/FigureS3.pdf
+      - figures/FigureS4.pdf
+      - figures/FigureS5.pdf
       - table_mlfastba
       - table_alfastba
       - table_lmf
