@@ -56,16 +56,19 @@ baad <- readRDS("downloads/baad.rds")
 
 \section*{Abstract}
 
-The partitioning of biomass into leaves and stems is one of the most uncertain  and influential components of  global vegetation models (GVMs), affecting the residence time and storage of carbon in ecosystems, and the response of net primary production to rising CO\textsubscript{2}\citep{dekauwe2014,friend2014,ise2010}. Although GVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical data have been lacking. Using a new global database on biomass partitioning from over 175 studies\citep{Falster2015}, we here show that partitioning between stems and leaves varies strongly between PFTs (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm). We show that major woody PFTs do not differ in the amount of leaf area supported, but rather the amount of leaf mass per unit above ground biomass. Moreover, we find that these differences relate to systematic shifts in leaf mass per area, a leading trait within the leaf economics spectrum \citep{wrightetal2004}. In addition, we show how a second trait, leaf area per stem basal area, explains additional variation in biomass partitioning among species; however this trait does not differ systematically among major woody PFTs. Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in current GVMs.
+The partitioning of biomass into leaves and stems is one of the most uncertain  and influential components of  global vegetation models (GVMs). Although GVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical data have been lacking. Using a new global database on biomass partitioning from over 175 studies, we here show that partitioning between stems and leaves varies strongly between PFTs (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm). We show that major woody PFTs do not differ in the amount of leaf area supported, but rather the amount of leaf mass per unit above ground biomass. Moreover, we find that these differences relate to systematic shifts in leaf mass per area, a leading trait within the leaf economics spectrum. In addition, we show how a second trait, leaf area per stem basal area, explains additional variation in biomass partitioning among species; however this trait does not differ systematically among major woody PFTs. Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in current GVMs.
 
 
 \section*{Introduction}
 
-The partitioning of forest biomass among leaves and stems strongly influences the productivity and carbon cycle of the world's vegetation \citep{ise2010}. Biomass stored in woody stems has a long residence time \citep{luyssaert2008}, whereas leaf biomass turns over quickly, entering the soil carbon cycle where the majority of carbon is released back to the atmosphere \citep{ryanlaw2005}. Globally, forests store approximately 360Pg of carbon in living biomass \citep{panetal2011}, equivalent to almost 40 years of current anthropogenic CO\textsubscript{2} emissions \citep{friedlingsteinetal2014}. Reducing uncertainties about biomass partitioning and carbon residence times in GVMs is therefore a priority for understanding the effects of climate and other environmental change on the global carbon cycle \citep{friend2014,dekauwe2014,negron2015}.
+The partitioning of forest biomass among leaves and stems strongly influences the productivity and carbon cycle of the world's vegetation \citep{ise2010}. It affects the residence time and storage of carbon in ecosystems, and the response of net primary production to rising CO\textsubscript{2}\citep{dekauwe2014,friend2014,ise2010}. Biomass stored in woody stems has a long residence time \citep{luyssaert2008}, whereas leaf biomass turns over quickly, entering the soil carbon cycle where the majority of carbon is released back to the atmosphere \citep{ryanlaw2005}. Globally, forests store approximately 360Pg of carbon in living biomass \citep{panetal2011}, equivalent to almost 40 years of current anthropogenic CO\textsubscript{2} emissions \citep{friedlingsteinetal2014}. Reducing uncertainties about biomass partitioning and carbon residence times in GVMs is therefore a priority for understanding the effects of climate and other environmental change on the global carbon cycle \citep{friend2014,dekauwe2014,negron2015}.
 
 Perhaps the biggest challenge for GVMs is to capture the combined responses of the more than 250,000 plant species comprising the world's vegetation. While most plants have the same basic resource requirements and physiological function, large differences exist among species in the amount of energy invested in different tissues (leaves, stems, roots). The approach taken by most GVMs for dealing with this functional diversity is to consider only a few archetypal plant functional types (PFTs) \citep{harrisonetal2010}, assumed to differ in key physiological attributes. While GVMs assume or predict differences in biomass partitioning between PFTs (Notes S1), these differences are constrained by limited empirical data. Moreover, there is little consensus on how biomass partitioning and allocation (see Methods \ref{sec:partterm} for terminology) should be modelled in GVMs \citep{franklin2012,dekauwe2014,friend2014}. These shortcomings largely reflect the lack of suitable datasets of global scope with which models can be tested, constrained and compared \citep{wolf2011}.
 
+Despite considerable advances in allometric theory (enquist etc. etc.) we don't have a clear picture of differences between PFTs. Instead, most of the work has focussed on understanding size-related shifts in biomass partitioning.  Longer leaf lifespan would logically lead to higher LMF (as argued by enquist, niklas) only if the annual allocation does not vary with leaf lifespan, but there is no a priori reason why this should be so. We take the view that a broader evidence base is needed to elucidate patterns which can subsequently be used to refine and improve existing models of allometry.
+
 In this paper we are primarily interested in the distribution of biomass ('partitioning') between leaves and stems, an important component of the residence time of carbon in ecosystems \citep{friend2014}. Previous work based on whole stands \citep{oneilldeangelis1981,enquistniklas2002,reich2014} and individual plants \citep{poorter2012}, reported differences between angiosperms and gymnosperms in the amount of leaf biomass per unit above-ground biomass (the 'leaf mass fraction', LMF). \citet{poorter2012} and \citet{enquistniklas2002} attributed higher LMF in gymnosperms to longer leaf lifespan (LL) compared to typical angiosperms, but this begs the question whether differences in LMF are also apparent between deciduous and evergreen functional types within angiosperms. It is also unknown whether PFTs with higher leaf biomass also have higher total leaf area, which is relevant because it drives total light interception and thus productivity. Several classic studies have assumed, based only on differences in measurements of leaf mass, that gymnosperms carry more leaf area than angiosperms \citep{chabothicks1982, bond1989}.  
+
 
 Little is known about global-scale patterns in LMF and LAR in relation to climate. It can be expected that biomass partitioning is correlated with precipitation or mean annual temperature \citep{reich2014} because short-term experiments (cite) and climate gradients \citep{callaway1994,poyatos2007} have shown responsiveness of biomass partitioning to environmental drivers. A recent study \citep{reich2014} also demonstrated that stand-scale biomass partitioning was related to mean annual temperature across diverse forest stands. Indeed, many GVMs assume that climate affects biomass partitioning within a given PFT, often through soil water stress or other abiotic stress factors (see Notes S1). Again, however, these models do not agree on the degree of plasticity in biomass partitioning, or which variables should it respond to. 
 
@@ -73,7 +76,6 @@ Here, we use a unique, new database \citep{Falster2015} (Fig. 1) to establish ge
 
 
 \section*{Materials and Methods}
-
 
 \subsection*{Terminology}
 \label{sec:partterm}
@@ -121,14 +123,9 @@ Despite the size of our dataset, the strong size-dependence of LMF greatly hinde
 
 We analyzed climate effects in two ways: with quantitative variables (mean annual precipitation, MAP; mean annual temperature, MAT), and by biome (tropical / temperate/ boreal), a simple classification taking into account both MAT and MAP (Fig. S1). 
 
-
-
 \section*{Results}
 
-
-Because of allometric relationships between the studied variables \citep{niklas1994}, there was a strong effect of plant height on LMF (Fig. 2a and S2). We corrected for plant height by estimating LMF at a common plant height, using a generalized additive model, a semi-parametric method that makes no assumption on the underlying functional relationships. We then found that LMF at a common height was proportional to the leaf construction cost, as measured by leaf mass per area (LMA) (Fig. 2b). As a consequence, LAR was invariant between PFTs (Eq. 1) (Fig. 2c and S3).
-
-Another key metric governing vegetation behavior is the amount of leaf maintained per unit cross-sectional area of stem ($A_S$).  Mirroring the results for LMF, we found that the amount of leaf mass per unit stem area ($M_F/A_S$) differs among the three PFTs, that these differences are also proportional to LMA (Fig. 2d), and that PFTs are similarly invariant in the amount of leaf area per unit stem area ($A_F/A_S$) (Fig. 2e).
+Because of allometric relationships between the studied variables \citep{niklas1994}, there was a strong effect of plant height on LMF (Fig. 2a and S2). We corrected for plant height by estimating LMF at a common plant height, using a generalized additive model, a semi-parametric method that makes no assumption on the underlying functional relationships \citep{wood2006}. We then found that LMF at a common height was proportional to the average leaf mass per area (LMA) across the three PFTs (Fig. 2b). As a consequence, LAR was invariant between PFTs, because LAR = LMF / LMA (Fig. 2c and S3). Mirroring the results for LMF, we found that the amount of leaf mass per unit stem area ($M_F/A_S$) differs among the three PFTs, that these differences are also proportional to LMA (Fig. 2d), and that PFTs are similarly invariant in the amount of leaf area per unit stem area ($A_F/A_S$) (Fig. 2e).
 
 The above results highlight how LMA drives differences in biomass partitioning among dominant woody PFTs. To assess whether LMA could replace PFT when predicting biomass partitioning, we fit a linear mixed-effects model to LMF and $M_F/A_S$ using PFT and plant height (and the quadratic term) as predictors (and all interactions). We then replaced PFT with LMA, and found that the model with LMA could explain almost as much variation in LMF as the model with PFT ($R^2$ = 0.74 with PFT vs. 0.62 with LMA) and $M_F/A_S$ ($R^2$ = 0.29 vs. 0.28). 
 
@@ -164,7 +161,6 @@ Climate (temperature, rainfall) did not appreciably affect biomass partitioning 
 We found that PFTs differed in LMF, and that LMF was proportional to LMA. It thus seems possible to integrate a key leaf trait with whole-plant modelling of biomass partitioning. Indeed, nearly as much variation was explained across species when using LMA instead of PFT in a statistical model. This is surprising because LMA only captures aspects of leaf morphology, in indirectly leaf lifespan and photosynthetic capacity via the leaf economics spectrum \citep{wrightetal2004}. We thus show that in a PFT-based classification, LMA is a good first estimate of biomass partitioning, however, more variation can be explained by another trait ($A_F/A_S$), which varies appreciably between species. These results suggest promising avenues for parameterizing and simplifying biomass partitioning routines in GVMs.
 
 Overall, our results establish general patterns about plant construction and thus lay an empirical base against which models can be benchmarked. A recent study compared allocation routines in a number of leading ecosystem models \citep{dekauwe2014}, and recommended constraining allocation by observed biomass fractions instead of using constant allocation fractions. Based on our findings, a first approximation within GVMs would be to assume leaf area to stem cross-sectional area a parameter that does not vary between PFTs (notwithstanding effects of plant height on this variable), and vary biomass allocation accordingly. LMA, already a parameter in most GVMs, then gives the ratio of leaf biomass to stem area. Some models already incorporate a similar algorithm (see Notes S1), while other algorithms may be tuned to yield similar patterns between PFTs as we have presented. In any case, the growing availability of large datasets on stand biomass and individual plant construction  \citep{Falster2015} suggest the time is ripe for rigorous benchmarking \citep{abramowitz_towards_2012, dekauwe2014} of GVMs against empirical data.
-
 
 
 
@@ -212,7 +208,6 @@ print(xtable(table_varpart2, label="table/varpartB",
     \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost. (a) Leaf mass fraction ($M_F/M_T$ = leaf mass / above-ground biomass) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits. (b) and (c) Leaf mass fraction and leaf area ratio ($A_F/M_T$) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figure2}
 \end{figure}
-
 
 
 <<echo=FALSE>>=
@@ -265,19 +260,5 @@ Additional supporting information may be found in the online version of this art
 \textbf{Notes S1} Modelling of biomass partitioning in global vegetation models (GVMs)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{document}
+
