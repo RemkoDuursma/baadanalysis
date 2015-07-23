@@ -42,6 +42,16 @@
 \renewcommand\Authands{ and }
 \maketitle
 
+Total number of words: \Sexpr{nrw$Total} \\
+Abstract: \Sexpr{nrw$Abstract} \\
+Introduction: \Sexpr{nrw$Introduction} \\
+Methods and Materials: \Sexpr{nrw$Methods} \\
+Results: \Sexpr{nrw$Results} \\
+Discussion: \Sexpr{nrw$Discussion} \\
+
+Number of figures: 4 (all in colour) \\
+Number of tables: 1 \\
+Supporting information : 5 Tables, 5 Figures and 1 Notes.
 
 %--------------------------------------------------------------------------------------------%
 
@@ -54,7 +64,7 @@ baad <- readRDS("downloads/baad.rds")
 
 
 
-
+\clearpage
 \section*{Abstract}
 
 The partitioning of biomass into leaves and stems is one of the most uncertain  and influential components of  global vegetation models (GVMs). Although GVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical studies have not been able to justify these differences. Using a new global database on biomass partitioning from over 175 studies, we here show that partitioning between stems and leaves varies strongly between PFTs (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm). We show that major woody PFTs do not differ in the amount of leaf area supported, but rather the amount of leaf mass per unit above ground biomass. Moreover, we find that these differences relate to systematic shifts in leaf mass per area, a leading trait within the leaf economics spectrum. In addition, we show how a second trait, leaf area per stem basal area, explains additional variation in biomass partitioning among species; however this trait does not differ systematically among major woody PFTs. Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in current GVMs.
@@ -127,7 +137,7 @@ because we found that the vast majority of size-related variation was captured b
 
 \section*{Results}
 
-Because of allometric relationships between the studied variables \citep{niklas1994}, there was a strong effect of plant height on LMF (Fig. 2a and S2). When corrected for plant height by estimating LMF at a common plant height, we found that LMF was proportional to the average leaf mass per area (LMA) across the three PFTs (Fig. 2b). As a consequence, LAR was invariant between PFTs, because LAR = LMF / LMA (Fig. 2c and S3). Mirroring the results for LMF, we found that the amount of leaf mass per unit stem area ($M_F/A_S$) differs among the three PFTs, that these differences are also proportional to LMA (Fig. 2d), and that PFTs are similarly invariant in the amount of leaf area per unit stem area ($A_F/A_S$) (Fig. 2e).
+Because of allometric relationships between the studied variables \citep{niklas1994}, there was a strong effect of plant height on LMF (Fig. 2a and Fig. S2). When corrected for plant height by estimating LMF at a common plant height, we found that LMF was proportional to the average leaf mass per area (LMA) across the three PFTs (Fig. 2b). As a consequence, LAR was invariant between PFTs, because LAR = LMF / LMA (Fig. 2c and Fig. S3). Mirroring the results for LMF, we found that the amount of leaf mass per unit stem area ($M_F/A_S$) differs among the three PFTs, that these differences are also proportional to LMA (Fig. 2d), and that PFTs are similarly invariant in the amount of leaf area per unit stem area ($A_F/A_S$) (Fig. 2e).
 
 The above results highlight how LMA drives differences in biomass partitioning among dominant woody PFTs. To assess whether LMA could replace PFT when predicting biomass partitioning, we fit a linear mixed-effects model to LMF and $M_F/A_S$ using PFT and plant height (and the quadratic term) as predictors (and all interactions). We then replaced PFT with LMA, and found that the model with LMA could explain almost as much variation in LMF as the model with PFT ($R^2$ = 0.74 with PFT vs. 0.62 with LMA) and $M_F/A_S$ ($R^2$ = 0.29 vs. 0.28). 
 

@@ -21,7 +21,6 @@ extract_baad_dictionary <- function(baad) {
   baad$dictionary
 }
 
-
 # Convert conifer leaf area to projected leaf area
 convertConiferLA <- function(baad) {
 
