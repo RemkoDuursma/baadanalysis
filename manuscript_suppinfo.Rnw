@@ -5,7 +5,7 @@
 \usepackage{geometry}
 \usepackage{authblk}
 \usepackage{gensymb}
-\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\geometry{verbose,tmargin=2.4cm,bmargin=2.4cm,lmargin=2.4cm,rmargin=2.4cm}
 \graphicspath{ {./figures/} }
 \usepackage{parskip}
 \usepackage{natbib}
@@ -112,7 +112,7 @@ printit(table_lar,
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
-    \caption{Relationship between above-ground biomass and basal stem area. Each point is an individual plant. Lines are spline fits. The right panel shows least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
+    \caption{Relationship between above-ground biomass and basal stem area. Each point is an individual plant. Lines are GAM fits by PFT. (a) Scaling of aboveground biomass ($M_T$) with basal stem area ($A_S$). (b) The ratio of $M_T/A_S$ as a function of plant height shows no clear differences between PFTs. The solid black line is a line with a slope of 1, which is expected if the aboveground biomass equation from \citet{chave2005} hold across the dataset. (c) Least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
     \label{fig:figureS4}
 \end{figure}
 

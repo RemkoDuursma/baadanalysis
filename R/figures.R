@@ -442,6 +442,8 @@ figureS4 <- function(dataset, KGAM=4){
              ylab=expression(M[T]/A[S]~~(kg~m^-2)), axes=FALSE,
              linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
              cex=0.6, xlim=c(-2,2.5), ylim=c(0,4.5))
+  abline(2.5,1)
+
   log10axes()
   box()
   plotlabel("(b)","topright")
