@@ -1,8 +1,10 @@
 
 
+
 \documentclass[a4paper]{article}
 
   %texcount manuscript.tex > wordcount.txt
+  %shell("texcount manuscript.tex > wordcount.txt")
   
 \renewcommand{\baselinestretch}{1.6}   % line spacing
 \usepackage{amssymb,amsmath}
@@ -42,25 +44,34 @@
 \renewcommand\Authands{ and }
 \maketitle
 
-Total number of words: \Sexpr{nrw$Total} \\
-Abstract: \Sexpr{nrw$Abstract} \\
-Introduction: \Sexpr{nrw$Introduction} \\
-Methods and Materials: \Sexpr{nrw$Methods} \\
-Results: \Sexpr{nrw$Results} \\
-Discussion: \Sexpr{nrw$Discussion} \\
-
-Number of figures: 4 (all in colour) \\
-Number of tables: 1 \\
-Supporting information : 5 Tables, 5 Figures and 1 Notes.
-
-%--------------------------------------------------------------------------------------------%
-
 
 <<preload, echo=FALSE>>=
 library(knitr)
 opts_chunk$set(echo=FALSE)
 baad <- readRDS("downloads/baad.rds")
 @
+
+
+%% uncomment this after compiling the ms, then compile again. This is a recursive dependency :(
+% Also, requires Perl.
+% #' <<>>=
+% #' shell("texcount manuscript.tex > wordcount.txt")
+% #' nrw <- get_wordcount("wordcount.txt")
+% #' @
+% #' 
+% #' Total number of words: \Sexpr{nrw$Total} \\
+% #' Abstract: \Sexpr{nrw$Abstract} \\
+% #' Introduction: \Sexpr{nrw$Introduction} \\
+% #' Methods and Materials: \Sexpr{nrw$Methods} \\
+% #' Results: \Sexpr{nrw$Results} \\
+% #' Discussion: \Sexpr{nrw$Discussion} \\
+% #' 
+% #' Number of figures: 4 (all in colour) \\
+% #' Number of tables: 1 \\
+% #' Supporting information : 5 Tables, 5 Figures and 1 Notes.
+
+%--------------------------------------------------------------------------------------------%
+
 
 
 

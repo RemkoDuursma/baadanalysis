@@ -74,7 +74,6 @@ targets:
       - table_r2lmaforpft
       - basalafit
       - dataset
-      - nrw
     knitr: TRUE
   
   manuscript_suppinfo.pdf:
@@ -141,8 +140,6 @@ targets:
     command: addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
   baad_all:
     command: readRDS("downloads/baad.rds")
-  nrw:
-    command: get_wordcount("wordcount.txt")
   downloads/baad.rds:
     command: download_baad(target_name)
     cleanup_level: purge
