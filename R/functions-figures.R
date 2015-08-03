@@ -548,7 +548,8 @@ addpoly <- function(x,y1,y2,col=alpha("lightgrey",0.8),...){
   x <- x[ii]
   polygon(c(x,rev(x)), c(y1, rev(y2)), col=col, border=NA,...)
 }
-predline <- function(fit, from=NULL, to=NULL, polycolor=alpha("lightgrey",0.8),...){
+predline <- function(fit, from=NULL, to=NULL, 
+                     polycolor=alpha("lightgrey",0.8),lty=1,...){
 
   if(is.null(from))from <- min(fit$model[,2], na.rm=TRUE)
   if(is.null(to))to <- max(fit$model[,2], na.rm=TRUE)
@@ -558,8 +559,13 @@ predline <- function(fit, from=NULL, to=NULL, polycolor=alpha("lightgrey",0.8),.
 
   pred <- as.data.frame(predict(fit, newdat, se.fit=TRUE, interval="confidence")$fit)
 
+  if(lty == -1){
+    pval <- summary(fit)$coefficients[2,4]
+    lty <- ifelse(pval < 0.05, 1, 5)
+  }
+  
   addpoly(newdat[[1]], pred$lwr, pred$upr, col=polycolor)
-  ablinepiece(fit, from=from, to=to, ...)
+  ablinepiece(fit, from=from, to=to,lty=lty, ...)
 
 }
 
