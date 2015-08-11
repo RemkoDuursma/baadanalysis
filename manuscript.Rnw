@@ -230,6 +230,20 @@ Our sincere thanks to everyone who contributed data to the Biomass and Allometry
 library(xtable)
 @
 
+<<results='asis'>>=
+bigtable <- rbind(cbind(c("LMF","","",""),c("DA","EA","EG","Sum"), table_lmf),
+                  cbind(c("LAR","","",""),c("DA","EA","EG","Sum"), table_lar), 
+                  cbind(c("MF/AS","","",""),c("DA","EA","EG","Sum"), table_mlfastba),
+                  cbind(c("AF/AS","","",""),c("DA","EA","EG","Sum"), table_alfastba))
+rownames(bigtable) <- NULL
+colnames(bigtable)[1:2] <- c("Variable","PFT")
+
+print(xtable(bigtable, align="llrlll|l",
+               caption="Sample sizes used in the analyses of the four variables considered in the study (LMF, LAR, MF/AS and AF/AS), by plant functional type (PFT) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
+             label="table:counttable"
+               ), hline.after=c(0,4,8,12,16), caption.placement="top",
+      include.rownames=FALSE)
+@
 
 
 <<results='asis'>>=

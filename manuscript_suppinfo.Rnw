@@ -44,41 +44,6 @@ print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
 
 
 
-<<tablepreload1>>=
-printit <- function(x, caption, label=NULL){
-  print(xtable(x, align="rlll|l",
-               caption=caption, label=label
-               ), hline.after=c(0,3), caption.placement="top")
-
-}
-@
-
-<<results='asis'>>=
-printit(table_mlfastba,
-        label="table:count1",
-        caption="Number of observations used in the analysis of $M_F/A_S$ and $A_F/A_S$. Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
-@
-
-
-<<results='asis'>>=
-printit(table_alfastba,
-        label="table:count2",
-        caption="Number of observations used in the analysis of $A_F/A_S$. Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
-@
-
-
-<<results='asis'>>=
-printit(table_lmf,
-        label="table:count3",
-        caption="Number of observations used in the analysis of leaf mass fraction ($M_F/M_T$) and leaf area ratio ($A_F/M_T$). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
-@
-
-
-<<results='asis'>>=
-printit(table_lar,
-        label="table:count4",
-        caption="Number of observations used in the analysis of leaf area ratio (LAR). Numbers denote individual plants, with number of species in parentheses. DA = Deciduous Angiosperm, EA = Evergreen Angiosperm, EG = Evergreen Gymnosperm.")
-@
 
 
 
