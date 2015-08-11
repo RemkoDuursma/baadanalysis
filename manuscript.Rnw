@@ -231,15 +231,15 @@ library(xtable)
 @
 
 <<results='asis'>>=
-bigtable <- rbind(cbind(c("LMF","","",""),c("DA","EA","EG","Sum"), table_lmf),
-                  cbind(c("LAR","","",""),c("DA","EA","EG","Sum"), table_lar), 
-                  cbind(c("MF/AS","","",""),c("DA","EA","EG","Sum"), table_mlfastba),
-                  cbind(c("AF/AS","","",""),c("DA","EA","EG","Sum"), table_alfastba))
+bigtable <- rbind(cbind(c("$M_F/M_T$","","",""),c("DA","EA","EG","Sum"), table_lmf),
+                  cbind(c("$A_F/M_T$","","",""),c("DA","EA","EG","Sum"), table_lar), 
+                  cbind(c("$M_F/A_S$","","",""),c("DA","EA","EG","Sum"), table_mlfastba),
+                  cbind(c("$A_F/A_S$","","",""),c("DA","EA","EG","Sum"), table_alfastba))
 rownames(bigtable) <- NULL
 colnames(bigtable)[1:2] <- c("Variable","PFT")
 
 print(xtable(bigtable, align="llrlll|l",
-               caption="Sample sizes used in the analyses of the four variables considered in the study (LMF, LAR, MF/AS and AF/AS), by plant functional type (PFT) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
+               caption="Sample sizes used in the analyses of the four variables considered in the study by plant functional type (PFT) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
              label="table:counttable"
                ), hline.after=c(0,4,8,12,16), caption.placement="top",
       include.rownames=FALSE)
@@ -269,8 +269,15 @@ print(xtable(table_varpart2, label="table/varpartB",
 
 \begin{figure}[h!]
     \centering
+    \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
+    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table~\ref{table:counttable}}
+    \label{fig:figureS2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
     \includegraphics[width=0.99\textwidth]{Figure2.pdf}
-    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf construction cost. (a) Leaf mass fraction ($M_F/M_T$ = leaf mass / above-ground biomass) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) Leaf mass fraction and leaf area ratio ($A_F/M_T$) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
+    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf mass per area. (a) Leaf mass fraction ($M_F/M_T$ = leaf mass / above-ground biomass) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) Leaf mass fraction and leaf area ratio ($A_F/M_T$) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figure2}
 \end{figure}
 

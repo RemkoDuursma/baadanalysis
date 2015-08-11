@@ -62,13 +62,6 @@ print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
-    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant.}
-    \label{fig:figureS2}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
     \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
     \caption{Leaf area ratio ($A_F/M_T$) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
     \label{fig:figureS3}
