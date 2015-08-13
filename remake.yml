@@ -62,6 +62,10 @@ targets:
       - figures/Figure3.pdf
       - figures/Figure4.pdf
       - figures/FigureS1.pdf
+      - table_lmf
+      - table_lar
+      - table_mlfastba
+      - table_alfastba
       - table_varpart2
       - table_r2lmaforpft
       - basalafit
@@ -70,6 +74,10 @@ targets:
   manuscript.tex:
     depends:
       - baad_all
+      - table_lmf
+      - table_lar
+      - table_mlfastba
+      - table_alfastba
       - table_varpart2
       - table_r2lmaforpft
       - basalafit
@@ -84,10 +92,6 @@ targets:
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
-      - table_mlfastba
-      - table_alfastba
-      - table_lmf
-      - table_lar
       - table_gamr2MATMAP
     command: tex_2_pdf("manuscript_suppinfo.tex")
   
