@@ -241,9 +241,10 @@ rownames(bigtable) <- NULL
 colnames(bigtable)[1:2] <- c("Variable","PFT")
 
 print(xtable(bigtable, align="llrlll|l",
-               caption="Sample sizes used in the analyses of the four variables considered in the study by plant functional type (PFT) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
-             label="table:counttable"
-               ), hline.after=c(0,4,8,12,16), caption.placement="top",
+               caption="Sample sizes used in the analyses of the four variables considered in the study by plant functional type (PFT, DA = deciduous angiosperm, EA = evergreen angiosperm, EG = evergreen gymnosperm) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
+             label="table:counttable"), 
+      hline.after=c(0,4,8,12,16), caption.placement="top",
+      sanitize.text.function=function(x){x},
       include.rownames=FALSE)
 @
 
