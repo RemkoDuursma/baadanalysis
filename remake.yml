@@ -62,6 +62,7 @@ targets:
       - figures/Figure3.pdf
       - figures/Figure4.pdf
       - figures/FigureS1.pdf
+      - figures/FigureS5.pdf
       - table_lmf
       - table_lar
       - table_mlfastba
@@ -91,7 +92,6 @@ targets:
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
-      - figures/FigureS5.pdf
       - table_gamr2MATMAP
     command: tex_2_pdf("manuscript_suppinfo.tex")
   

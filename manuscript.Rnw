@@ -88,9 +88,9 @@ baad <- readRDS("downloads/baad.rds")
 % #' Results: \Sexpr{nrw$Results} \\
 % #' Discussion: \Sexpr{nrw$Discussion} \\
 % #' 
-% #' Number of figures: 4 (all in colour) \\
-% #' Number of tables: 1 \\
-% #' Supporting information : 5 Tables, 5 Figures and 1 Notes.
+% #' Number of figures: 6 (all in colour) \\
+% #' Number of tables: 2 \\
+% #' Supporting information : 1 Tables, 3 Figures and 1 Notes.
 
 %--------------------------------------------------------------------------------------------%
 
@@ -281,6 +281,13 @@ print(xtable(table_varpart2, label="table/varpartB",
     \includegraphics[width=0.99\textwidth]{Figure2.pdf}
     \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf mass per area. (a) Leaf mass fraction ($M_F/M_T$ = leaf mass / above-ground biomass) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) Leaf mass fraction and leaf area ratio ($A_F/M_T$) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figlmf}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
+    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms (as probability density functions) of leaf mass per area ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three PFTs. Arrows indicate means by PFT.}
+    \label{fig:fighist}
 \end{figure}
 
 

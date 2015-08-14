@@ -63,7 +63,7 @@ print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
-    \caption{Leaf area ratio ($A_F/M_T$) by PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
+    \caption{Leaf area ratio ($A_F/M_T$) by plant height (H) and PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
     \label{fig:figureS3}
 \end{figure}
 
@@ -75,12 +75,7 @@ print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
 \end{figure}
 
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms (as probability density functions) of leaf mass per area (an index of leaf construction cost) ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three major plant functional types. Arrows indicate means by PFT.}
-    \label{fig:figures5}
-\end{figure}
+
 
 
 
