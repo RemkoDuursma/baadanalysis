@@ -13,6 +13,7 @@ alpha <- function (colour, alpha = NA) {
         }
     }
     alpha[is.na(alpha)] <- col[4, ][is.na(alpha)]
+    
     new_col <- rgb(col[1, ], col[2, ], col[3, ], alpha)
     new_col[is.na(colour)] <- NA
     new_col
