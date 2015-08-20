@@ -27,28 +27,6 @@
 
 
 
-\renewcommand\thetable{S\arabic{table}}
-\setcounter{table}{0}
-
-<<preload, echo=FALSE>>=
-library(knitr)
-library(xtable)
-opts_chunk$set(echo=FALSE)
-@
-
-<<results='asis'>>=
-print(xtable(table_gamr2MATMAP, label="table/varpartMAPMAT",
-      caption="Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables. Each variable was added as a smooth term in a generalized additive model, with the exception of PFT (a categorical variable)."),
-      include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
-@
-
-
-
-
-
-
-\clearpage
-
 
 \renewcommand\thefigure{S\arabic{figure}}
 \setcounter{figure}{0}
