@@ -17,7 +17,6 @@
 \usepackage{geometry}
 \usepackage{authblk}
 \usepackage{gensymb}
-\usepackage{longtable}
 \usepackage{lineno}
 \geometry{verbose,tmargin=2.4cm,bmargin=2.4cm,lmargin=2.4cm,rmargin=2.4cm}
 \usepackage{natbib}
@@ -163,9 +162,9 @@ We found that LMF differs predictably among PFTs, however there was considerable
 
 The ratio $M_F/A_S$ is relevant because plant leaf mass is frequently estimated from $A_S$ with allometric equations \citep{shinozaki1964b, chave2005}, using records of stem diameter commonly recorded on long-term monitoring plots. The correlation between $M_F/A_S$ and LMA was found to hold also within PFTs (Fig.~\ref{fig:figlmfspecies}a), explaining 30\% of the variation in $M_F/A_S$ across species. The regressions across species by PFT were broad and overlapping, with a more general relationship extending across the entire LMA axis. A larger fraction of the variation in $M_F/A_S$ was explained by species-level differences in $A_F/A_S$ (Fig.~\ref{fig:figlmfspecies}b). As previously noted, $A_F/A_S$ does not differ systematically among PFTs (Fig.~\ref{fig:figlmf}e), but does vary close to two orders of magnitude across species. In Fig.~\ref{fig:figlmfspecies}b, the separation among PFTs in $M_F/A_S$ arises due to differences in LMA. 
 
-We found that decomposing LMF and LAR as shown in Eq. \ref{eq:M1} was very useful to study climate effects because the second term ($A_S/M_T$) absorbs nearly all of the size related variation in LMF (Tables \ref{table/varpartB}, Table S1 and Fig. S3) and is otherwise fairly conserved across PFTs (Fig.~\ref{fig:fighist}). As shown in Fig.~\ref{fig:figlmfspecies}b and Fig.~\ref{fig:figlmf}d, the term $M_F/A_S$ exhibits comparable differences between PFTs to LMF, but unlike LMF, $M_F/A_S$ is nearly independent of plant height (Tables \ref{table/varpartB} and Table S1). $M_F/A_S$ is thus a useful proxy for LMF that can be compared across species and sites. 
+We found that decomposing LMF and LAR as shown in Eq. \ref{eq:M1} was very useful to study climate effects because the second term ($A_S/M_T$) absorbs nearly all of the size related variation in LMF (Table 2 and Fig. S3) and is otherwise fairly conserved across PFTs (Fig.~\ref{fig:fighist}). As shown in Fig.~\ref{fig:figlmfspecies}b and Fig.~\ref{fig:figlmf}d, the term $M_F/A_S$ exhibits comparable differences between PFTs to LMF, but unlike LMF, $M_F/A_S$ is nearly independent of plant height (Table 2). $M_F/A_S$ is thus a useful proxy for LMF that can be compared across species and sites. 
 
-Regardless of how we analyzed the data, we found only weak climatic effects on biomass partitioning within PFTs (Fig.~\ref{fig:figclimate}). Biome consistently explained very little variation when added to a statistical model in addition to PFT and plant height ($R^2$ increased by only 0.01 - 0.06, see Table \ref{table/varpartB}). Likewise, we found weak and inconsistent effects of climate variables (MAP and MAT) (Fig.~\ref{fig:figclimate}b-c). These variables explained little variation when added to a statistical model in addition to PFT and plant height ($R^2$ increased by 0.01 and 0.11, respectively, see Table S1).
+Regardless of how we analyzed the data, we found only weak climatic effects on biomass partitioning within PFTs (Fig.~\ref{fig:figclimate}). Biome consistently explained very little variation when added to a statistical model in addition to PFT and plant height ($R^2$ increased by only 0.01 - 0.06, see Table 2). Likewise, we found weak and inconsistent effects of climate variables (MAP and MAT) (Fig.~\ref{fig:figclimate}b-c). These variables explained little variation when added to a statistical model in addition to PFT and plant height ($R^2$ increased by 0.01 and 0.11, respectively, see Table 2).
 
 
 \section*{Discussion}
@@ -182,7 +181,7 @@ $$M_T = F \rho A_S H_T$$
 
 where $F$ is a form factor, and $\rho$ wood density (kg m$^3$). After rearranging, we find that this equation predicts that $M_T/A_S$ is proportional to plant height. We found some support for this prediction (Fig. S3). It is timely to use database made public by \citet{falster2015} (BAAD) and \citet{poorter2015} to develop more general equations to estimate individual plant aboveground biomass across the globe.
 
-We found that climate did not appreciably affect biomass partitioning between leaves and stems. This finding is in contrast with a recent study where LMF was found to increase with MAT across the globe \citep{reich2014}. One explanation for this difference is that our measurements were taken on individual plants, whereas in  \citet{reich2014} they were on whole stands. This suggests climatic effects on stand-level biomass partitioning occur primarily by altering the size-distribution and stand density (number of individuals per unit area), rather than partitioning within individual plants. With the caveats that there is still variation between species and studies unaccounted for (Fig.~\ref{fig:fighist}), and that coarse climate variables such as MAT and MAP may mask small-scale climate effects on biomass partitioning, our results strongly suggest the effects of PFT are stronger than any direct climate effect on biomass partitioning within individual plants (Tables \ref{table/varpartB} and Table S1).
+We found that climate did not appreciably affect biomass partitioning between leaves and stems. This finding is in contrast with a recent study where LMF was found to increase with MAT across the globe \citep{reich2014}. One explanation for this difference is that our measurements were taken on individual plants, whereas in  \citet{reich2014} they were on whole stands. This suggests climatic effects on stand-level biomass partitioning occur primarily by altering the size-distribution and stand density (number of individuals per unit area), rather than partitioning within individual plants. With the caveats that there is still variation between species and studies unaccounted for (Fig.~\ref{fig:fighist}), and that coarse climate variables such as MAT and MAP may mask small-scale climate effects on biomass partitioning, our results strongly suggest the effects of PFT are stronger than any direct climate effect on biomass partitioning within individual plants (Table 2).
 
 Our results indicate that it is possible to integrate a key leaf trait with whole-plant modelling of biomass partitioning. Indeed, nearly as much variation was explained across species when using LMA instead of PFT in a statistical model. This is surprising because LMA only captures one aspect of functional differentiation among PFT -- leaf morphology (but including correlated effects on leaf lifespan and photosynthetic capacity via the leaf economics spectrum \citep{wrightetal2004}). We thus show that in a PFT-based classification, LMA is a good first estimate of biomass partitioning, however, more variation can be explained by another trait ($A_F/A_S$), which varies appreciably between species. These results suggest promising avenues for parameterising and simplifying biomass partitioning routines in GVMs.
 
@@ -267,7 +266,7 @@ print(xtable(tab, align="lrrrr",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
-    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table~\ref{table:counttable}}
+    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table 1}
     \label{fig:figrawdata}
 \end{figure}
 
@@ -324,8 +323,6 @@ r2panelb <- summary(lm2)$adj.r.squared
 \section*{Supporting Information}
 Additional supporting information may be found in the online version of this article.\\
 
-\textbf{Table S1} Explained variance by plant functional type (PFT), plant height (H), mean annual temperature (MAT) and mean annual precipitation (MAP), for five whole-plant variables.\\
-\textbf{Table S5} Number of observations used in the analysis of leaf area ratio (LAR).\\
 \textbf{Fig. S1} Global coverage of the climate space by the dataset, labelled by vegetation type.\\
 \textbf{Fig. S2} Leaf area ratio ($A_F/M_T$) by PFT.\\
 \textbf{Fig. S3} Relationship between above-ground biomass and basal stem area.\\
