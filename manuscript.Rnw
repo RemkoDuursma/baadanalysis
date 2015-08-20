@@ -1,29 +1,5 @@
 
 
-% Notes on Poorter et al. 2015.
-% - we have to demonstrate that our work is still novel
-% - their focus is firstly on the size-related shifts in biomass partitioning, we don't study that in detail, and can now justify that by referring back to Poorter.
-% - they don't have SLA data for the same plants, and in fact predict what we found: 
-% "It is also known that, on average, the specific
-% leaf area (SLA; leaf area per unit leaf mass) of evergreen woody
-% species is 2–3 times higher than that of deciduous species
-% (Poorter et al., 2009). Hence, all else being equal, the 2–3 times
-% lower SLA in evergreens would have to be compensated by a 2–3
-% time higher LMF to arrive at the more or less similar LAI."
-% - so basically we can say in the intro that we wish to test this hypothesis (as we already say), and also that Poorter speculated that this may be so (although here they contrast deciduous vs. evergreen, and not angiosperm vs. gymnosperm, so our results are still novel in that case as well)
-
-% - we have to clearly state that our data has *no overlap* whatsoever with Poorter, this is a good thing.
-% - their data includes potted plants in glass houses and field-grown, as well as stand biomass data divided by stocking. Our data are more homogenous, with only field-grown plants, individual estimates.
-% - we have larger trees included; in fact the largest in the world, we need to state that in the intro to again show the novelty (our max mass is ca. 300t, theirs is 1t)
-% - they don't actually show LMF vs. plant size split by PFT (their Fig 2a), so our result is also not scooped there.
-% - they found no difference in the LMF residual between evergreen angiosperm and gymnosperm (Fig. 4), or at least I don't think so.
-
-
-
-
-
-
-
 \documentclass[a4paper]{article}
 
   %texcount manuscript.tex > wordcount.txt
@@ -196,9 +172,7 @@ Regardless of how we analyzed the data, we found only weak climatic effects on b
 
 We found that PFTs differed in LMF, and that LMF was proportional to LMA. This conclusion was particularly strong across the three PFTs studied, but it also held across species within PFT. The implication is that the amount of leaf area supported per unit biomass (leaf area ratio, LAR) does not differ between PFTs. This result seems robust, as our data include individual plants spanning the entire size range of woody plants in natural forests (0.1-100m) (Fig.~\ref{fig:figlmf}a). Previous studies have demonstrated a large difference in LMF between angiosperms and gymnosperms \citep{poorter2012,poorter2015}, but have not further separated functional types into deciduous vs. evergreen angiosperms, or provided an explanation in terms of leaf traits. We show that LMA -- a central trait of the leaf economics spectrum (LES) \citep{wrightetal2004} -- explains these differences in a consistent manner. 
 
-A previous compilation of plant biomass partitioning \citep{poorter2012} (which included many non field-grown plants) did not find a correlation between LMF and LMA across 8 PFTs (including non-woody PFTs). One possible reason for this discrepancy, apart from differences in sample size and growing conditions, is that they did not correct for plant size in their comparison between LMF and LMA. We found that, as expected, plant size strongly influences LMF (Fig.~\ref{fig:figlmf}) and LAR (Fig. S2) (see also \citet{poorter2012}). It is thus necessary to correct for plant size when comparing biomass partitioning parameters, as has been noted many times \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both LMF and LAR showed very non-linear patterns with plant height, even on a logarithmic scale. 
-
-% Is it really necessary to invoke differences in LL? 
+We found that, as expected, plant size strongly influences LMF (Fig.~\ref{fig:figlmf}) and LAR (Fig. S2) (see also \citet{poorter2012,poorter2015}). It is thus necessary to correct for plant size when comparing biomass partitioning parameters, as has been noted many times \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both LMF and LAR showed very non-linear patterns with plant height, even on a logarithmic scale, consistent with \citet{poorter2015}. 
 
 The finding that LMF is proportional to LMA across PFTs implies that LAR does not differ systematically between PFTs. One explanation for this pattern lies in the strong positive correlation between LMA and leaf lifespan (LL) \citep{wrightetal2004}. Both \cite{poorter2012} and \citet{enquistniklas2002} explained higher LMF in gymnosperms by higher LL; plants simply maintain more cohorts of foliage, but this explanation demands that all else is equal. Yet it is not self-evident that everything else is indeed equal, that is, annual production of foliage could differ between PFTs. Nonetheless, further supporting this explanation, \citet{reich1992} showed a positive correlation between LL and total stand leaf biomass across diverse forest stands. Another, not mutually exclusive, possible explanation is that plants may allocate biomass in a manner that targets a more constant LAR rather than LMF. Canopy size scales with $M_T$ \citep{duursma2010}, and a larger canopy means higher light interception per unit total biomass \citep{duursma2007}. It can thus be argued that an optimal LAR exists that balances investment in supporting woody biomass (reflected by $M_T$) and the efficiency of foliage in terms of light interception. 
 
@@ -248,12 +222,6 @@ print(xtable(bigtable, align="llrlll|l",
 @
 
 
-<<results='asis'>>=
-print(xtable(table_varpart2, label="table/varpartB",
-             caption="Explained variance by plant functional type (PFT), plant height (H) and biome (B), for five whole-plant variables. Each variable was added to a linear mixed-effects model, using species within dataset as a random effect. The $R^2$ shown is that explained by the fixed effects only. All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
-      include.rownames=FALSE, caption.placement="top", sanitize.text.function=function(x){x})
-@
-
 
 <<results='asis'>>=
 tab1 <- table_varpart2
@@ -275,7 +243,7 @@ tab2 <- tidytab(tab2, "GAM")
 tab <- rbind(tab1, tab2)
 
 print(xtable(tab, align="lrrrr",
-             caption="Explained variance by plant functional type (PFT), plant height (H) and biome (B), for five whole-plant variables. Each variable was added to a linear mixed-effects model, using species within dataset as a random effect. The $R^2$ shown is that explained by the fixed effects only. All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models."),
+             caption="Explained variance by plant functional type (PFT), plant height (H) and climate variables (either biome (B), or MAP and MAT) for five whole-plant variables. For the analysis with biome, each variable was added to a linear mixed-effects model, using species within dataset as a random effect. The $R^2$ shown is that explained by the fixed effects only. All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models. For the analysis with continuous climate variables MAP and MAT, each variable was added as a smooth term in a generalized additive model (GAM), with the exception of PFT (a categorical variable). Note that explained variance for the linear mixed-effects model and GAM is not necessarily the same even with the same predictors, due to different methods for fitting and estimating the explained variance."),
              hline.after=c(0,1,7,8,14),
              include.rownames=FALSE, 
              include.colnames=FALSE, 
@@ -291,7 +259,7 @@ print(xtable(tab, align="lrrrr",
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
-    \caption{Overview of the data. (a) Variables were measured on \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
+    \caption{Overview of the data. (a) Variables were measured on up to \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
     \label{fig:figoverview}
 \end{figure}
 
