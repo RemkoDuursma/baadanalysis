@@ -81,6 +81,7 @@ targets:
       - table_alfastba
       - table_varpart2
       - table_r2lmaforpft
+      - table_gamr2MATMAP
       - basalafit
       - dataset
     knitr: TRUE
@@ -101,7 +102,6 @@ targets:
       - table_alfastba
       - table_lmf
       - table_lar
-      - table_gamr2MATMAP
     knitr: TRUE
 
 

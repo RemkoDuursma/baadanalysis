@@ -74,13 +74,15 @@ baad <- readRDS("downloads/baad.rds")
 
 
 \clearpage
-\section*{Abstract}
+\section*{Summary}
 
 % 200 word max.
-(1) The partitioning of biomass into leaves and stems is one of the most uncertain  and influential components of  global vegetation models (GVMs). Although GVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical studies have not been able to justify these differences. Here we test for differences between PFTs in partitioning of biomass between leaves and stems.
-(2) We use the recently published Biomass And Allometry Database (BAAD), a large database including observations for individual plants. The database covers the global climate space, allowing us to test for direct climate effects in addition to PFT. 
-(3) The leaf mass fraction (LMF, leaf / total aboveground biomass) varied strongly between PFTs (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm). We found that LMF, once corrected for plant height, was proportional to leaf mass per area across PFTs. As a result, the PFTs did not differ in the amount of leaf area supported per unit above ground biomass. We found only weak and inconsistent effects of climate on biomass partitioning.
-(4) Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in GVMs.
+\begin{enumerate}
+\item The partitioning of biomass into leaves and stems is one of the most uncertain  and influential components of  global vegetation models (GVMs). Although GVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical studies have not been able to justify these differences. Here we test for differences between PFTs in partitioning of biomass between leaves and stems.
+\item We use the recently published Biomass And Allometry Database (BAAD), a large database including observations for individual plants. The database covers the global climate space, allowing us to test for direct climate effects in addition to PFT. 
+\item The leaf mass fraction (LMF, leaf / total aboveground biomass) varied strongly between PFTs (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm). We found that LMF, once corrected for plant height, was proportional to leaf mass per area across PFTs. As a result, the PFTs did not differ in the amount of leaf area supported per unit above ground biomass. We found only weak and inconsistent effects of climate on biomass partitioning.
+\item Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in GVMs.
+\end{enumerate}
 
 \emph{Keywords}: allocation, plant allometry, biomass estimation, specific leaf area, dynamic global vegetation model
 
