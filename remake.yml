@@ -2,20 +2,20 @@ packages:
   # dataset construction
   - downloader
   - stringr
-  - multcomp #cld
-  - doBy  #summaryBy
-  # tables
-  - mgcv  #gam
+  # statistics
+  - multcomp  #cld
+  - doBy      #summaryBy
+  - mgcv      #gam
   - lmerTest
   # plotting
   - magicaxis #magaxis
   - RColorBrewer
-  - hexbin
-  - xtable
+  - hexbin    # Fig S1
+  - xtable    # tables
   - knitr
-  - png
-  - gridBase
-  - gridExtra
+  - png       # Fig1a
+  - gridBase  # Fig1a
+  - gridExtra # Fig1a
 
 sources:
   - R/data_processing.R
@@ -56,7 +56,6 @@ targets:
   manuscript.pdf:
     depends:
       - "references.bib"
-      - "manuscript.Rnw"
       - figures/Figure1.pdf
       - figures/Figure2.pdf
       - figures/Figure3.pdf
@@ -85,17 +84,16 @@ targets:
       - basalafit
       - dataset
     knitr: TRUE
-  
+
   manuscript_suppinfo.pdf:
     depends:
       - "references.bib"
-      - "manuscript.Rnw"
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
       - table_gamr2MATMAP
     command: tex_2_pdf("manuscript_suppinfo.tex")
-  
+
   manuscript_suppinfo.tex:
     depends:
       - table_mlfastba
