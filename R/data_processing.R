@@ -140,7 +140,7 @@ addWorldClimMAPMAT <- function(baad, climate_path) {
 addMImgdd0 <- function(baad, MI_mGDDD_path){
 
 
-  clim <- read.csv(MI_mGDDD_path, stringsAsFactors=FALSE)
+  clim <- readRDS(MI_mGDDD_path)
   names(clim)[names(clim)  == "MAP"] <- "MAPclim"
   names(clim)[names(clim)  == "MAT"] <- "MATclim"
 
@@ -299,7 +299,7 @@ prepare_baadmapmat <- function(baad){
 }
 
 prepare_worldmapmat <- function(data_path){
-  climspace <- read.csv(data_path)
+  climspace <- readRDS(data_path)
   # Exclude Greenland
   climspace <- subset(climspace, landcover != 18)
 

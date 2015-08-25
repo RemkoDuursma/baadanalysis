@@ -121,7 +121,7 @@ targets:
   baad_mapmat:
     command: prepare_baadmapmat(baad_climate1)
   world_mapmat:
-    command: prepare_worldmapmat("data/Worldclim_landcover_climspace_withcover.csv")
+    command: prepare_worldmapmat("data/Worldclim_landcover_climspace_withcover.rds")
   dat_alfmso:
     command: prepare_dat_alfmso(dataset2)
   dat_mlfmso:
@@ -137,7 +137,7 @@ targets:
   datroot:
     command: prepare_dataset_roots(dataset)
   baad_climate2:
-    command: addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.csv")
+    command: addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.rds")
   baad_climate1:
     command: addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
   baad_all:
