@@ -272,21 +272,21 @@ print(xtable(tab, align="lrrrr",
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure2.pdf}
     \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table \ref{table:counttable}}
     \label{fig:figrawdata}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure2.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure3.pdf}
     \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf mass per area. (a) Leaf mass fraction ($M_F/M_T$ = leaf mass / above-ground biomass) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) Leaf mass fraction and leaf area ratio ($A_F/M_T$) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figlmf}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure4.pdf}
     \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms (as probability density functions) of leaf mass per area ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three PFTs. Arrows indicate means by PFT. Colours as in Fig. \ref{fig:figlmf}.}
     \label{fig:fighist}
 \end{figure}
@@ -305,7 +305,7 @@ r2panelb <- summary(lm2)$adj.r.squared
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure4.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure5.pdf}
      \caption{Leaf and stem traits capture variation in biomass partitioning across species. Individual plant data were averaged by species and study combinations. Lines are linear regressions with 95\% confidence intervals. Both regressions were significant ($P \textless 0.01$). $R^2$ for fitted relationships are \Sexpr{round(100*r2panela,1)}\% in panel (a) and \Sexpr{round(100*r2panelb,1)}\% in panel (b) (for a linear regression model including PFT as a factor variable).}
   \label{fig:figlmfspecies}
 \end{figure}
@@ -313,7 +313,7 @@ r2panelb <- summary(lm2)$adj.r.squared
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{Figure3.pdf}
+    \includegraphics[width=0.99\textwidth]{Figure6.pdf}
     \caption{Beyond influencing the distribution of PFTs, climate only modestly influences biomass partitioning. a) Leaf mass per unit stem cross-sectional area ($M_F/A_S$) for each PFT within three different biomes.  DA: deciduous angiosperms, EA: evergreen angiosperms, EG: evergreen gymnosperms. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$). b-c) Relationships between climate and $M_F/A_S$ within each PFT. Solid lines are generalised additive model (GAM) fits (with a base dimension of 3); with grey areas indicating the 95\% confidence interval around the GAM.}
     \label{fig:figclimate}
 \end{figure}

@@ -77,11 +77,11 @@ fig.tree <- function(filename) {
   grid.text("H, height of plant", x = 0.05 , y = 0.85, just="left", gp=gp0)
 
   # stems areas
-  grid.draw(ellipseGrob(x0 - 0.025, 0.03, size=6,ar=4,angle=0, def="npc"))
+  grid.draw(ellipseGrob(x0 - 0.023, 0.024, size=1.8,rho=1/3,angle=0, def="npc"))
   grid.text(expression(paste(A[S],", stem area at base")),
     x = x0 + 0.03 , y = 0.03, just="left", gp=gp0)
 
-  grid.draw(ellipseGrob(x0 - 0.03, 0.08, size=4,ar=4,angle=0, def="npc"))
+  grid.draw(ellipseGrob(x0 - 0.03, 0.08, size=1.1,rho=1/3,angle=0, def="npc"))
   grid.text(expression(paste(A[Sbh],", stem area at breast height")),
     x = x0 +0.023 , y = 0.08, just="left", gp=gp0)
 
@@ -101,7 +101,7 @@ fig.tree <- function(filename) {
 }
 
 
-# Figure 1. panel a.
+# Figure 1. panel b.
 # MAP MAT vs. Worldclim
 figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft",
                                   col=my_cols_transparent(0.7), setpar=TRUE,
@@ -157,9 +157,40 @@ figureMAPMATworldclim <- function(baad_mapmat, world_mapmat, groupvar="pft",
 }
 
 
+# Leaf mass, woody mass raw data
+figure2 <- function(dataset){
+  
+  par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
+  labels <- c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
+  
+  for(i in 1:3){
+    p <- levels(dataset$pft)[i]
+    dat <- dataset[dataset$pft == p,]
+    
+    with(dat, plot(log10(h.t), log10(m.st), pch=16,cex=0.5,
+                   xlim=log10(c(0.01,105)), ylim=c(-6,6),
+                   col=alpha("brown",0.5),
+                   axes=FALSE))
+    with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
+                     col=alpha("forestgreen",0.5)))
+    
+    log10axes(side=1,  labels=TRUE)
+    log10axes(side=2,  labels= i == 1)
+    box()
+    legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
+    if(i == 1){
+      legend(-2,4.5, c(expression(M[F]),expression(M[S])), pch=19,
+             col=c("forestgreen","brown"), bty='n', pt.cex=1, cex=1.4)
+    }
+  }
+  
+  mtext(side=1, text="H (m)", line=3, outer=TRUE, las=0, cex=1.2)
+  mtext(side=2, text=expression(M[F]~or~M[S]~~(kg)), line=3, outer=TRUE, las=0, cex=1.2)
+}
 
-# Figure 2 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS.
-figure2 <- function(dataset, KGAM=4){
+
+# Figure 3 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS.
+figure3 <- function(dataset, KGAM=4){
 
   l <- layout(matrix(c(1,2,4,1,3,5), byrow=T, ncol=3),
               widths=c(1,0.67,0.67), heights=c(1,1))
@@ -211,8 +242,86 @@ figure2 <- function(dataset, KGAM=4){
 
 
 
+# Figure SI5. Histograms of MF/AS and AF/AS.
+figure4 <- function(dataset){
+  
+  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,3), mgp=c(3,1.5,0))
+  
+  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("llma","pft",dataset),cicol=alpha("grey",0.5),
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(a)","topleft")
+  
+  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("grey",0.5),
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(b)","topleft")
+  
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
+            legend.text=rep("",3), meanlinecol=my_linecols())
+  plotlabel("(c)","topleft")
+  
+  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
+        outer=TRUE, at=1/6, cex=0.9)
+  mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
+        outer=TRUE, at=3/6, cex=0.9)
+  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
+        outer=TRUE, at=5/6, cex=0.9)
+}
+
+
+# MF/AS and AF/AS at species level by PFT.
+figure5 <- function(dataset){
+  agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
+                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
+                   id=~pft)
+  agg <- subset(agg, !is.na(llma))
+  
+  # Panel a
+  lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
+  lm1s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ llma, data=x))
+  
+  # Panel b
+  lm2s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ lalf_astba2, data=x))
+  
+  
+  par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1, mgp=c(2.3,0.5,0),
+      cex.axis=0.9)
+  
+  with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
+                 axes=FALSE, ylim=log10(c(1,1000)),
+                 xlim=log10(c(0.01,1)),
+                 xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
+  log10axes(1:2)
+  
+  for(i in 1:3)predline(lm1s[[i]], col=my_linecols()[i])
+  box()
+  plotlabel("(a)","topleft", log.y=FALSE, log.x=FALSE)
+  
+  with(agg, plot(lalf_astba2, lmlf_astba2, pch=19, col=my_cols_transparent()[pft], axes=FALSE, ylim=log10(c(1,1000)),
+                 xlim=log10(c(90,10000)),
+                 xlab=expression(A[F]/A[S]~~(kg~m^-2)),
+                 ylab=""))
+  log10axes(1)
+  log10axes(2, labels=FALSE)
+  
+  for(i in 1:3)predline(lm2s[[i]], col=my_linecols()[i])
+  box()
+  plotlabel("(b)","topleft", log.y=FALSE, log.x=FALSE)
+  my_legend("bottomright", cex=0.8, pt.cex=1)
+  
+  mtext(side=2, at=0.5, line=2, text= expression(M[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
+}
+
+
+
+
 # Means of leaf mass, area per stem area by PFT - biome combination.
-figure3 <- function(dataset, dataset2){
+figure6 <- function(dataset, dataset2){
 
   par(cex.axis=0.85, mfrow=c(1,3), mar=c(0.2,0.2,0.2,0.2),
       pty="m", cex=1.1, las=1, oma=c(6,4,1,1), mgp=c(2.3,0.5,0))
@@ -295,50 +404,6 @@ figure3 <- function(dataset, dataset2){
 
 
 
-# SI6
-# MF/AS and AF/AS at species level by PFT.
-figure4 <- function(dataset){
-  agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
-                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
-                   id=~pft)
-  agg <- subset(agg, !is.na(llma))
-
-  # Panel a
-  lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
-  lm1s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ llma, data=x))
-
-  # Panel b
-  lm2s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ lalf_astba2, data=x))
-
-
-  par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1, mgp=c(2.3,0.5,0),
-      cex.axis=0.9)
-
-  with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
-                 axes=FALSE, ylim=log10(c(1,1000)),
-                 xlim=log10(c(0.01,1)),
-                 xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
-  log10axes(1:2)
-
-  for(i in 1:3)predline(lm1s[[i]], col=my_linecols()[i])
-  box()
-  plotlabel("(a)","topleft", log.y=FALSE, log.x=FALSE)
-
-  with(agg, plot(lalf_astba2, lmlf_astba2, pch=19, col=my_cols_transparent()[pft], axes=FALSE, ylim=log10(c(1,1000)),
-                 xlim=log10(c(90,10000)),
-                 xlab=expression(A[F]/A[S]~~(kg~m^-2)),
-                 ylab=""))
-  log10axes(1)
-  log10axes(2, labels=FALSE)
-
-  for(i in 1:3)predline(lm2s[[i]], col=my_linecols()[i])
-  box()
-  plotlabel("(b)","topleft", log.y=FALSE, log.x=FALSE)
-  my_legend("bottomright", cex=0.8, pt.cex=1)
-
-  mtext(side=2, at=0.5, line=2, text= expression(M[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
-}
-
 
 
 
@@ -373,43 +438,11 @@ figureS1 <- function(baad_mapmat, world_mapmat){
 
 
 
-# SI 2
-# Leaf mass, woody mass raw data
-figureS2 <- function(dataset){
-
-  par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(5,5,2,2), las=1)
-  labels <- c("Deciduous Angiosperm", "Evergreen Angiosperm", "Evergreen Gymnosperm")
-
-  for(i in 1:3){
-    p <- levels(dataset$pft)[i]
-    dat <- dataset[dataset$pft == p,]
-
-    with(dat, plot(log10(h.t), log10(m.st), pch=16,cex=0.5,
-                   xlim=log10(c(0.01,105)), ylim=c(-6,6),
-                   col=alpha("brown",0.5),
-                   axes=FALSE))
-    with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
-                     col=alpha("forestgreen",0.5)))
-
-    log10axes(side=1,  labels=TRUE)
-    log10axes(side=2,  labels= i == 1)
-    box()
-    legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
-    if(i == 1){
-      legend(-2,4.5, c(expression(M[F]),expression(M[S])), pch=19,
-             col=c("forestgreen","brown"), bty='n', pt.cex=1, cex=1.4)
-    }
-  }
-
-  mtext(side=1, text="H (m)", line=3, outer=TRUE, las=0, cex=1.2)
-  mtext(side=2, text=expression(M[F]~or~M[S]~~(kg)), line=3, outer=TRUE, las=0, cex=1.2)
-}
 
 
-
-# SI3
+# SI2
 # Leaf area ratio; raw data.
-figureS3 <- function(dataset, KGAM=4){
+figureS2 <- function(dataset, KGAM=4){
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1, mgp=c(2.3,0.5,0))
 
   x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group",
@@ -423,10 +456,10 @@ figureS3 <- function(dataset, KGAM=4){
 
 
 
-# SI 4
+# SI 3
 # Woody mass per unit basal stem area
 # - Least-square means because not isometric scaling
-figureS4 <- function(dataset, KGAM=4){
+figureS3 <- function(dataset, KGAM=4){
   par(mfrow=c(1,3), mar=c(5,5,2,2), cex.axis=0.9, las=1)
 
   smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
@@ -463,33 +496,3 @@ figureS4 <- function(dataset, KGAM=4){
 
 
 
-# Figure SI5. Histograms of MF/AS and AF/AS.
-figureS5 <- function(dataset){
-
-  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,3), mgp=c(3,1.5,0))
-
-  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("llma","pft",dataset),cicol=alpha("grey",0.5),
-            legend.text="", meanlinecol=my_linecols())
-  plotlabel("(a)","topleft")
-
-  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("grey",0.5),
-            legend.text="", meanlinecol=my_linecols())
-  plotlabel("(b)","topleft")
-
-  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
-            legend.text=rep("",3), meanlinecol=my_linecols())
-  plotlabel("(c)","topleft")
-
-  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
-        outer=TRUE, at=1/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
-        outer=TRUE, at=3/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
-        outer=TRUE, at=5/6, cex=0.9)
-}

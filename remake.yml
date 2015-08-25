@@ -14,6 +14,7 @@ packages:
   - xtable    # tables
   - knitr
   - png       # Fig1a
+  - grid
   - gridBase  # Fig1a
   - gridExtra # Fig1a
 
@@ -60,8 +61,8 @@ targets:
       - figures/Figure2.pdf
       - figures/Figure3.pdf
       - figures/Figure4.pdf
-      - figures/FigureS1.pdf
-      - figures/FigureS5.pdf
+      - figures/Figure5.pdf
+      - figures/Figure6.pdf
       - table_lmf
       - table_lar
       - table_mlfastba
@@ -88,9 +89,9 @@ targets:
   manuscript_suppinfo.pdf:
     depends:
       - "references.bib"
+      - figures/FigureS1.pdf
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
-      - figures/FigureS4.pdf
       - table_gamr2MATMAP
     command: tex_2_pdf("manuscript_suppinfo.tex")
 
@@ -176,11 +177,17 @@ targets:
     command: figure2(dataset)
     plot: wide
   figures/Figure3.pdf:
-    command: figure3(dataset, dataset2)
-    plot: extra_wide
+    command: figure3(dataset)
+    plot: wide
   figures/Figure4.pdf:
     command: figure4(dataset)
     plot: wide
+  figures/Figure5.pdf:
+    command: figure5(dataset)
+    plot: wide
+  figures/Figure6.pdf:
+    command: figure6(dataset, dataset2)
+    plot: extra_wide
   figures/FigureS1.pdf:
     command: figureS1(baad_mapmat, world_mapmat)
     plot: med_square
@@ -190,12 +197,7 @@ targets:
   figures/FigureS3.pdf:
     command: figureS3(dataset)
     plot: wide
-  figures/FigureS4.pdf:
-    command: figureS4(dataset)
-    plot: wide
-  figures/FigureS5.pdf:
-    command: figureS5(dataset)
-    plot: wide
+
 
 
   downloads/ian-symbol-eucalyptus-spp-1.png:

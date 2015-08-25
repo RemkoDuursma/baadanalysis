@@ -40,14 +40,14 @@
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
+    \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
     \caption{Leaf area ratio ($A_F/M_T$) by plant height (H) and PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
     \label{fig:figureS3}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
+    \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
     \caption{Relationship between above-ground biomass and basal stem area. Each point is an individual plant. Lines are GAM fits by PFT. (a) Scaling of aboveground biomass ($M_T$) with basal stem area ($A_S$). (b) The ratio of $M_T/A_S$ as a function of plant height shows no clear differences between PFTs. The solid black line is a line with a slope of 1, which is expected if the aboveground biomass equation from \citet{chave2005} hold across the dataset. (c) Least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
     \label{fig:figureS4}
 \end{figure}
