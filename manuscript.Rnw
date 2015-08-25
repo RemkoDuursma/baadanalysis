@@ -33,7 +33,7 @@
 
 \begin{document}
 
-\linenumbers
+% \linenumbers
 
 \title{Leaf traits drive differences in biomass partitioning among major plant functional types}
 
@@ -226,7 +226,7 @@ colnames(bigtable)[1:2] <- c("Variable","PFT")
 print(xtable(bigtable, align="llrlll|l",
                caption="Sample sizes used in the analyses of the four variables considered in the study by plant functional type (PFT, DA = deciduous angiosperm, EA = evergreen angiosperm, EG = evergreen gymnosperm) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
              label="table:counttable"), 
-      hline.after=c(0,4,8,12,16), caption.placement="top",
+      hline.after=0:16, caption.placement="top",  #c(0,4,8,12,16)
       sanitize.text.function=function(x){x},
       include.rownames=FALSE)
 @
@@ -255,7 +255,7 @@ tab <- rbind(tab1, tab2)
 print(xtable(tab, align="lrrrr",
              caption="Explained variance by plant functional type (PFT), plant height (H) and climate variables (either biome (B), or MAP and MAT) for five whole-plant variables. For the analysis with biome, each variable was added to a linear mixed-effects model, using species within dataset as a random effect. The $R^2$ shown is that explained by the fixed effects only. All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models. For the analysis with continuous climate variables MAP and MAT, each variable was added as a smooth term in a generalized additive model (GAM), with the exception of PFT (a categorical variable). Note that explained variance for the linear mixed-effects model and GAM is not necessarily the same even with the same predictors, due to different methods for fitting and estimating the explained variance.",
              label="table:statstable"),
-             hline.after=c(0,1,7,8,14),
+             hline.after=0:14, #c(0,1,7,8,14),
              include.rownames=FALSE, 
              include.colnames=FALSE, 
              caption.placement="top", sanitize.text.function=function(x){x})
