@@ -13,7 +13,9 @@ devtools::install_github("richfitz/remake", dependencies=TRUE)
 
 (run `install.packages("devtools")` to install devtools if needed.)
 
-Compilation also requires pandoc, or the `rmarkdown` renderer will fail with a cryptic error (version 0.5.1 at least), and a reasonably complete LaTeX installation (e.g. MacTeX). On windows we recommend using XXX.
+Compilation also requires pandoc, or the `rmarkdown` renderer will fail with a cryptic error (version 0.5.1 at least). If you are working within RStudio then you can simply install the [current release](http://www.rstudio.com/ide/download/preview) of RStudio (both the rmarkdown package and pandoc are included). You'll also require a reasonably complete LaTeX installation (e.g. [MacTeX](https://tug.org/mactex/) for OSX or [MikTex](http://miktex.org/) for windows).
+
+Next you need to clone this repository, and then open an R session with working directory set to the root of this project.
 
 We use a number of packages, these can be installed by remake:
 
