@@ -8,7 +8,6 @@
 \renewcommand{\baselinestretch}{1.6}   % line spacing
 \usepackage{amssymb,amsmath}
 \usepackage{palatino}
-\usepackage{framed}
 \usepackage{parskip}
 \usepackage{graphicx}
 \usepackage{fixltx2e}
