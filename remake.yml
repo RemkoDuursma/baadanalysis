@@ -103,6 +103,17 @@ targets:
       - table_lar
     knitr: TRUE
 
+  figures:
+    depends:
+      - figures/Figure1.pdf
+      - figures/Figure2.pdf
+      - figures/Figure3.pdf
+      - figures/Figure4.pdf
+      - figures/Figure5.pdf
+      - figures/Figure6.pdf
+      - figures/FigureS1.pdf
+      - figures/FigureS2.pdf
+      - figures/FigureS3.pdf
 
   data:
     depends:
