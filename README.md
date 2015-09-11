@@ -3,7 +3,7 @@ Leaf traits drive differences in biomass partitioning among major plant function
 
 This code repository contains code needed to reproduce the article:
 
-Duursma RA & Falster DS, "Leaf traits drive differences in biomass partitioning among major plant functional types".
+Duursma RA & Falster DS, "Leaf traits drive differences in biomass partitioning among major plant functional types". doi: [10.1101/025361](http://dx.doi.org/10.1101/025361)
 
 All analyses were done in `R`. To compile the paper, including figures and supplementary material we use the [remake](https://github.com/richfitz/remake) package for R. You can install remake using the `devtools` package:
 
