@@ -1,3 +1,21 @@
+library(downloader)
+library(stringr)
+library(multcomp)
+library(doBy)
+library(mgcv)
+library(lmerTest)
+library(magicaxis)
+library(RColorBrewer)
+library(hexbin)
+library(xtable)
+library(knitr)
+library(png)
+library(grid)
+library(gridBase)
+library(gridExtra)
+
+library(hier.part)
+
 source("R/data_processing.R")
 source("R/tables_stats.R")
 source("R/rsquaredglmm.R")
@@ -11,8 +29,8 @@ dir.create("downloads", FALSE, TRUE)
 dir.create("figures", FALSE, TRUE)
 
 # data
-download_baad("downloads/baad.rds")
-download_tree_png("downloads/ian-symbol-eucalyptus-spp-1.png")
+# download_baad("downloads/baad.rds")
+# download_tree_png("downloads/ian-symbol-eucalyptus-spp-1.png")
 world_mapmat <- prepare_worldmapmat("data/Worldclim_landcover_climspace_withcover.rds")
 baad_all <- readRDS("downloads/baad.rds")
 baad_climate1 <- addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
@@ -35,9 +53,17 @@ table_lar <- make_table_lar(dat_alfmso)
 table_varpart2 <- make_table_varpart2(dataset2)
 table_r2lmaforpft <- make_table_lmaforpft(dataset2)
 
+# new
+table_hierpart <- make_table_hierpart(dataset)
+
+
 # ms.
-knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
+# knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
 knitr::knit("manuscript.Rnw", "manuscript.tex")
+
+# ms SuppInfo
+tex_2_pdf("manuscript.tex")
+# tex_2_pdf("manuscript_suppinfo.tex")
 
 
 # new figures
@@ -47,36 +73,9 @@ dev.off()
 
 
 
-df <- dataset2[,c("lmlf_mst", "lh.t","MAP","MAT","pft")]
-df <- df[complete.cases(df),]
-
-y <- df[,"lmlf_mst"]
-m <- df[,c("lh.t","MAP","MAT","pft")]
-
-library(hier.part)
-hier.part(y, m)
 
 
-do_hierpart <- function(dep, indep, data, ...){
-  
-  df <- data[,c(dep,indep)]
-  df <- df[complete.cases(df),]
-  
-  y <- df[,dep]
-  m <- df[,indep]
-  
-  h <- hier.part(y, m, ...) 
-  
-  h$N <- nrow(df)
-  
-return(h)
-}
 
-do_hierpart("lmlf_mst", c("pft","lh.t","MAP","MAT"), dataset)
-do_hierpart("lalf_mst", c("pft","lh.t","MAP","MAT"), dataset)
-
-do_hierpart("lmlf_mst", c("pft","lh.t","bortemptrop"), dataset2)
-do_hierpart("lmlf_mst", c("pft","lh.t","vegetation"), dataset2)
 
 
 
@@ -110,8 +109,6 @@ pdf("figures/FigureS3.pdf", width = 8L, height = 4L)
 figureS3(dataset)
 dev.off()
 
-# ms SuppInfo
-tex_2_pdf("manuscript_suppinfo.tex")
 
 
 

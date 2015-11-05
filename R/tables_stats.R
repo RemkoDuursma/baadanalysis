@@ -1,4 +1,43 @@
 
+do_hierpart <- function(dep, indep, data, ...){
+  
+  df <- data[,c(dep,indep)]
+  df <- df[complete.cases(df),]
+  
+  y <- df[,dep]
+  m <- df[,indep]
+  
+  h <- hier.part(y, m, ...) 
+  
+  h$N <- nrow(df)
+  
+  return(h)
+}
+
+make_table_hierpart <- function(dataset){
+  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  indep_vars <- c("lh.t","pft","MAT","MAP","MATMAP")
+  hp <- lapply(vars, function(x){
+    do_hierpart(x, indep_vars, dataset, gof="Rsqu", barplot=FALSE)
+  })
+  
+  hp_maketablerow <- function(x){
+    iperc <- c(x$I.perc[c("lh.t","pft"),], sum(x$I.perc[c("MAP","MAT","MATMAP"),]))
+    r2 <- max(x$gfs)
+    
+    ipercrel <- r2* iperc / 100
+    
+    c(ipercrel,r2)
+  }
+  
+  tab <- as.data.frame(t(sapply(hp, hp_maketablerow)))
+  tab <- cbind(c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$"), tab)
+  colnames(tab) <- c("Variable","$H_T$","PFT","Climate","$R^2$ total")
+  tab <- as.data.frame(tab)
+  return(tab)
+}
+
+
 make_r2_table <- function(data,  variable_name ){
   data.frame(Variable = c(variable_name, rep(NA, length(data)-1)),
     Predictors=names(data),
