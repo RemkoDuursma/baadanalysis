@@ -218,6 +218,7 @@ prepare_dataset_1 <- function(baad){
     lmlf_astba2 <- log10(m.lf/a.stba2)
     lalf_astba2 <- log10(a.lf/a.stba2)
     lmso_astba2 <- log10(m.so / a.stba2)
+    lastba2_mst <- log10(a.stba2 / m.st)
     lastba2 <- log10(a.stba2)
     })
 

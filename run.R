@@ -44,17 +44,25 @@ dat_mlf <- prepare_dat_mlf(dataset2)
 dat_alf <- prepare_dat_alf(dataset2)
 basalafit <- BasalA_fit(baad_all)
 
-# tables
-table_gamr2MATMAP <- make_table_gamr2MATMAP(dataset)
-table_mlfastba <- make_table_mlfastba(dat_mlf)
-table_alfastba <- make_table_alfastba(dat_alf)
-table_lmf <- make_table_lmf(dat_mlfmso)
-table_lar <- make_table_lar(dat_alfmso)
-table_varpart2 <- make_table_varpart2(dataset2)
-table_r2lmaforpft <- make_table_lmaforpft(dataset2)
+# # tables
+# table_gamr2MATMAP <- make_table_gamr2MATMAP(dataset)
+# table_mlfastba <- make_table_mlfastba(dat_mlf)
+# table_alfastba <- make_table_alfastba(dat_alf)
+# table_lmf <- make_table_lmf(dat_mlfmso)
+# table_lar <- make_table_lar(dat_alfmso)
+# table_varpart2 <- make_table_varpart2(dataset2)
+# table_r2lmaforpft <- make_table_lmaforpft(dataset2)
 
 # new
 table_hierpart <- make_table_hierpart(dataset)
+
+
+
+# new figures
+pdf("figures/Figure3new.pdf", width = 8L, height = 4L)
+figure3new(dataset)
+dev.off()
+
 
 
 # ms.
@@ -64,14 +72,6 @@ knitr::knit("manuscript.Rnw", "manuscript.tex")
 # ms SuppInfo
 tex_2_pdf("manuscript.tex")
 # tex_2_pdf("manuscript_suppinfo.tex")
-
-
-# new figures
-pdf("figures/Figure3new.pdf", width = 8L, height = 4L)
-figure3new(dataset)
-dev.off()
-
-
 
 
 

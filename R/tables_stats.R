@@ -15,6 +15,10 @@ do_hierpart <- function(dep, indep, data, ...){
 }
 
 make_table_hierpart <- function(dataset){
+  
+  # interaction
+  dataset$MATMAP <- with(dataset, MAT*MAP)
+  
   vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
   indep_vars <- c("lh.t","pft","MAT","MAP","MATMAP")
   hp <- lapply(vars, function(x){

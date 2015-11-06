@@ -189,6 +189,8 @@ figure2 <- function(dataset){
 }
 
 
+
+
 # Figure 3 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS
 figure3 <- function(dataset, KGAM=4){
 
@@ -243,14 +245,14 @@ figure3 <- function(dataset, KGAM=4){
 
 figure3new <- function(dataset, KGAM=4){
   
-  l <- layout(matrix(c(1,2,4,1,3,5), byrow=T, ncol=3),
-              widths=c(1,0.67,0.67), heights=c(1,1))
+  l <- layout(matrix(c(1,2,1,3), byrow=T, ncol=2),
+              widths=c(1,0.67), heights=c(1,1))
   
-  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
+  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.2, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
   obj1 <- smoothplot(lh.t, lmlf_mst, pft, dataset, R="Group",linecols=my_linecols(),
                      pointcols=my_cols_transparent(),axes=FALSE, ylim=c(-3,1),
                      xlab="Plant height (m)",kgam=KGAM,
-                     ylab=expression(M[F]/M[W]~~(kg~kg^-1))
+                     ylab=expression(M[F]/M[W]~(kg~kg^-1))
   )
   log10axes()
   my_legend("bottomleft", "long")
@@ -262,7 +264,7 @@ figure3new <- function(dataset, KGAM=4){
   
   xpred <- mean(dataset$lh.t, na.rm=TRUE)
   plotGamPred(obj1, dataset, xpred=xpred,
-              ylab=expression(M[F]/M[W]~~(kg~kg^-1)),ylim=c(0,0.5),
+              ylab=expression(M[F]/M[W]~(kg~kg^-1)),ylim=c(0,0.5),
               xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
   plotlabel("(b)","topright")
   
@@ -270,24 +272,9 @@ figure3new <- function(dataset, KGAM=4){
   
   obj2 <- smoothplot(lh.t, lalf_mst, pft, dataset, R="Group",plotit=FALSE)
   plotGamPred(obj2, dataset, xpred=xpred,
-              ylab=expression(A[F]/M[W]~~(kg~kg^-1)),ylim=c(0,4),
+              ylab=expression(A[F]/M[W]~(kg~kg^-1)),ylim=c(0,4),
               xlim=c(0,0.2), xlab=lmaLabel_short())
   plotlabel("(c)","topright")
-  
-  par(mar=c(0.35,4,4,1), pty="m")
-  meansbypft("lmlf_astba2","lalf_astba2", "pft",
-             xvar="llma",
-             dataset=dataset,
-             setpar=FALSE,
-             addlegend=FALSE,
-             panel1.expr={axis(2);plotlabel("(d)","topleft");par(mar=c(4,4,0.35,1))},
-             panel2.expr={axis(1);axis(2);plotlabel("(e)","topleft")},
-             Cols=my_cols(),
-             xlab=lmaLabel_short(),
-             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
-             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
-             xlim=c(0,0.2),
-             ylim1=c(0,250),ylim2=c(0,2000))
   
   
 }
