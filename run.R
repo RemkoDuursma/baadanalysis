@@ -58,9 +58,18 @@ table_hierpart <- make_table_hierpart(dataset)
 
 
 
-# new figures
-pdf("figures/Figure3new.pdf", width = 8L, height = 4L)
-figure3new(dataset)
+# Figures
+pdf("figures/Figure1.pdf", width = 8L, height = 4L)
+figure1(baad_mapmat, world_mapmat, "downloads/ian-symbol-eucalyptus-spp-1.png")
+dev.off()
+pdf("figures/Figure2.pdf", width = 8L, height = 4L)
+figure2(dataset)
+dev.off()
+pdf("figures/Figure3.pdf", width = 8L, height = 4L)
+figure3(dataset)
+dev.off()
+pdf("figures/Figure4.pdf", width = 8L, height = 4L)
+figure4(dataset)
 dev.off()
 
 
@@ -80,18 +89,8 @@ tex_2_pdf("manuscript.tex")
 
 
 # old figures
-pdf("figures/Figure1.pdf", width = 8L, height = 4L)
-figure1(baad_mapmat, world_mapmat, "downloads/ian-symbol-eucalyptus-spp-1.png")
-dev.off()
-pdf("figures/Figure2.pdf", width = 8L, height = 4L)
-figure2(dataset)
-dev.off()
-pdf("figures/Figure3.pdf", width = 8L, height = 4L)
-figure3(dataset)
-dev.off()
-pdf("figures/Figure4.pdf", width = 8L, height = 4L)
-figure4(dataset)
-dev.off()
+
+
 pdf("figures/Figure5.pdf", width = 8L, height = 4L)
 figure5(dataset)
 dev.off()

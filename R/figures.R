@@ -191,59 +191,8 @@ figure2 <- function(dataset){
 
 
 
-# Figure 3 - a) leaf mass fraction by PFT, b) average LMF and LAR at mean H by PFT, c) average MF/AS and AF/AS
+
 figure3 <- function(dataset, KGAM=4){
-
-  l <- layout(matrix(c(1,2,4,1,3,5), byrow=T, ncol=3),
-              widths=c(1,0.67,0.67), heights=c(1,1))
-
-  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.3, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
-  obj1 <- smoothplot(lh.t, lmlf_mso, pft, dataset, R="Group",linecols=my_linecols(),
-                     pointcols=my_cols_transparent(),axes=FALSE,
-             xlab="Plant height (m)",kgam=KGAM,
-             ylab=expression(M[F]/M[T]~~(kg~kg^-1))
-  )
-  log10axes()
-  my_legend("bottomleft", "long")
-  box()
-  plotlabel("(a)","topright")
-
-  obj2 <- smoothplot(lh.t, lalf_mso, pft, dataset, R="Group",plotit=FALSE)
-
-  par(mar=c(0.35,4,4,1), pty="m") #, oma=c(0,0,0,0))
-
-  xpred <- mean(dataset$lh.t, na.rm=TRUE)
-  plotGamPred(obj1, dataset, xpred=xpred,
-              ylab=expression(M[F]/M[T]~~(kg~kg^-1)),ylim=c(0,0.35),
-              xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
-  plotlabel("(b)","topright")
-
-  par(mar=c(4,4,0.35,1)) #, oma=c(0,0,0,0))
-  plotGamPred(obj2, dataset, xpred=xpred,
-              ylab=expression(A[F]/M[T]~~(kg~kg^-1)),ylim=c(0,2.5),
-              xlim=c(0,0.2), xlab=lmaLabel_short())
-  plotlabel("(c)","topright")
-
-  par(mar=c(0.35,4,4,1), pty="m")
-  meansbypft("lmlf_astba2","lalf_astba2", "pft",
-             xvar="llma",
-             dataset=dataset,
-             setpar=FALSE,
-             addlegend=FALSE,
-             panel1.expr={axis(2);plotlabel("(d)","topleft");par(mar=c(4,4,0.35,1))},
-             panel2.expr={axis(1);axis(2);plotlabel("(e)","topleft")},
-             Cols=my_cols(),
-             xlab=lmaLabel_short(),
-             ylab2=expression(A[F]/A[S]~~(m^2~m^-2)),
-             ylab1=expression(M[F]/A[S]~~(kg~m^-2)),
-             xlim=c(0,0.2),
-             ylim1=c(0,250),ylim2=c(0,2000))
-
-
-}
-
-
-figure3new <- function(dataset, KGAM=4){
   
   l <- layout(matrix(c(1,2,1,3), byrow=T, ncol=2),
               widths=c(1,0.67), heights=c(1,1))
@@ -284,7 +233,7 @@ figure3new <- function(dataset, KGAM=4){
 # Figure SI5. Histograms of MF/AS and AF/AS.
 figure4 <- function(dataset){
   
-  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,3), mgp=c(3,1.5,0))
+  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,2), mgp=c(3,1.5,0))
   
   histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
             xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
@@ -292,24 +241,17 @@ figure4 <- function(dataset){
             legend.text="", meanlinecol=my_linecols())
   plotlabel("(a)","topleft")
   
-  histbypft(lmlf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("lmlf_astba2","pft",dataset),cicol=alpha("grey",0.5),
-            legend.text="", meanlinecol=my_linecols())
-  plotlabel("(b)","topleft")
-  
   histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
             xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
             Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
             legend.text=rep("",3), meanlinecol=my_linecols())
-  plotlabel("(c)","topleft")
+  plotlabel("(b)","topleft")
   
   mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
-        outer=TRUE, at=1/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(M[F]/A[S]~~(kg~m^-2)),
-        outer=TRUE, at=3/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
-        outer=TRUE, at=5/6, cex=0.9)
+        outer=TRUE, at=1/4, cex=0.9)
+  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(kg~m^-2)),
+        outer=TRUE, at=3/4, cex=0.9)
+
 }
 
 
@@ -366,28 +308,26 @@ figure6 <- function(dataset, dataset2){
       pty="m", cex=1.1, las=1, oma=c(6,4,1,1), mgp=c(2.3,0.5,0))
 
   # By biome - mix means of Y variables.
-
-  xvar <- 1:7
+  
+  xvar <- 1:length(unique(dataset2$vegetation))
   X <- list(y = xvar, lci=rep(NA,length(xvar)), uci=rep(NA,length(xvar)))
-  y1 <- mixmean("lmlf_astba2","pftlong",dataset2)
+  y1 <- mixmean("lalf_astba2","vegetation",dataset2)
 
-  Cols <- my_cols_transparent()[c(1,1,1,2,2,3,3)]
-  ylim <- 10^c(0.5,3)
-  plot(X$y, y1$y, xlim=c(0,8),axes=FALSE, pch=19, col=Cols, cex=1.3,
-       ylim= ylim,
+  Cols <- rainbow(5)
+  plot(X$y, y1$y, xlim=c(0,6), pch=19, col=Cols, cex=1.3,
+       ylim= c(0,2500),
+       axes=FALSE,
        xlab="",ylab="", ann=FALSE,
        panel.first={
          arrows(x0=X$lci, x1=X$uci, y0=y1$y,
                 y1=y1$y,code=3,angle=90,length=0.025,col=Cols)
          arrows(x0=X$y, x1=X$y, y0=y1$lci,
                 y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
-       }, log="y"
-       )
+       })
 
-  axis(1, at=1:7, labels= c("Boreal", "Temperate","Tropical", "Temperate",
-    "Tropical", "Boreal", "Temperate"), las=2, cex.axis=0.8)
+  axis(1, at=1:5, labels= y1$vegetation, las=2, cex.axis=0.8)
   axis(1,labels=FALSE)
-  log10axes(side=2, logged=2)
+  axis(2)
   box()
   plotlabel("(a)","topleft", log.y=TRUE)
 
@@ -416,7 +356,7 @@ figure6 <- function(dataset, dataset2){
 
   # Mean Annual temperature
   gcol <- alpha("lightgrey",0.5)
-  smoothplot(MAT, lmlf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
+  smoothplot(MAT, lalf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
              xlab="", ylim=log10(ylim),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
              fitoneline=FALSE,xlim=c(-5,30),
              ylab="")

@@ -89,6 +89,7 @@ baad <- readRDS("downloads/baad.rds")
 \item Can follow reviewer 1's suggestion to partition MF/MS like this: $\frac{M_F}{M_S} = \frac{A_F}{A_S}\frac{M_F}{A_F}\frac{A_S}{M_S}$
 \item Reviewer 2 has some strange comments about MS/AS, in that we expect them to be correlated. Yes, but we need to make the point more clearly that there could be PFT effects in this correlation, largely through wood density (and tree shape). In fact we bring this up, but partitioning the variance as above may make this stand out more.
 \item "The methods do not describe if the individual data points came from trees in closed-canopy or open stands.  That would also make a huge difference." (Reviewer 3)
+\item We used MAT, MAP as well as the interaction. Probably better climate variables out there, but having the interaction in a model does distinguish between warm-dry and warm-wet climates (just like aridity indices). Because we found no appreciable effects of climate, we did not think it was worthwhile testing all possible climate variables.
 \end{enumerate}
 
 \section{New list of figures}
