@@ -74,6 +74,15 @@ dev.off()
 
 
 
+# SuppInfo???
+pdf("figures/Figure5.pdf", width = 8L, height = 4L)
+figure5(dataset, dataset2)
+dev.off()
+
+
+
+
+
 # ms.
 # knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
 knitr::knit("manuscript.Rnw", "manuscript.tex")
@@ -81,32 +90,6 @@ knitr::knit("manuscript.Rnw", "manuscript.tex")
 # ms SuppInfo
 tex_2_pdf("manuscript.tex")
 # tex_2_pdf("manuscript_suppinfo.tex")
-
-
-
-
-
-
-
-# old figures
-
-
-pdf("figures/Figure5.pdf", width = 8L, height = 4L)
-figure5(dataset)
-dev.off()
-pdf("figures/Figure6.pdf", width = 10L, height = 4L)
-figure6(dataset, dataset2)
-dev.off()
-tex_2_pdf("manuscript.tex")
-pdf("figures/FigureS1.pdf", width = 6L, height = 6L)
-figureS1(baad_mapmat, world_mapmat)
-dev.off()
-pdf("figures/FigureS2.pdf", width = 8L, height = 4L)
-figureS2(dataset)
-dev.off()
-pdf("figures/FigureS3.pdf", width = 8L, height = 4L)
-figureS3(dataset)
-dev.off()
 
 
 

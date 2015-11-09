@@ -255,134 +255,98 @@ figure4 <- function(dataset){
 }
 
 
-# MF/AS and AF/AS at species level by PFT.
-figure5 <- function(dataset){
-  agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
-                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
-                   id=~pft)
-  agg <- subset(agg, !is.na(llma))
-  
-  # Panel a
-  lm1 <- lm(lmlf_astba2 ~ llma, data=agg)
-  lm1s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ llma, data=x))
-  
-  # Panel b
-  lm2s <- lapply(split(agg, agg$pft), function(x)lm(lmlf_astba2 ~ lalf_astba2, data=x))
-  
-  
-  par(mfrow=c(1,2), mar=c(4,0.2,0.2,0.2),oma=c(1,4,1,1), cex.lab=1.1, las=1, mgp=c(2.3,0.5,0),
-      cex.axis=0.9)
-  
-  with(agg, plot(llma, lmlf_astba2, pch=19, col=my_cols_transparent()[pft],
-                 axes=FALSE, ylim=log10(c(1,1000)),
-                 xlim=log10(c(0.01,1)),
-                 xlab=lmaLabel_short(), ylab=expression(M[F]/A[S]~~(kg~m^-2))))
-  log10axes(1:2)
-  
-  for(i in 1:3)predline(lm1s[[i]], col=my_linecols()[i])
-  box()
-  plotlabel("(a)","topleft", log.y=FALSE, log.x=FALSE)
-  
-  with(agg, plot(lalf_astba2, lmlf_astba2, pch=19, col=my_cols_transparent()[pft], axes=FALSE, ylim=log10(c(1,1000)),
-                 xlim=log10(c(90,10000)),
-                 xlab=expression(A[F]/A[S]~~(kg~m^-2)),
-                 ylab=""))
-  log10axes(1)
-  log10axes(2, labels=FALSE)
-  
-  for(i in 1:3)predline(lm2s[[i]], col=my_linecols()[i])
-  box()
-  plotlabel("(b)","topleft", log.y=FALSE, log.x=FALSE)
-  my_legend("bottomright", cex=0.8, pt.cex=1)
-  
-  mtext(side=2, at=0.5, line=2, text= expression(M[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
-}
 
 
+# MAP, MAT
+figure5 <- function(dataset, dataset2){
 
-
-# Means of leaf mass, area per stem area by PFT - biome combination.
-figure6 <- function(dataset, dataset2){
-
-  par(cex.axis=0.85, mfrow=c(1,3), mar=c(0.2,0.2,0.2,0.2),
+  par(cex.axis=0.85, mfrow=c(1,2), mar=c(0.2,0.2,0.2,0.2),
       pty="m", cex=1.1, las=1, oma=c(6,4,1,1), mgp=c(2.3,0.5,0))
-
-  # By biome - mix means of Y variables.
-  
-  xvar <- 1:length(unique(dataset2$vegetation))
-  X <- list(y = xvar, lci=rep(NA,length(xvar)), uci=rep(NA,length(xvar)))
-  y1 <- mixmean("lalf_astba2","vegetation",dataset2)
-
-  Cols <- rainbow(5)
-  plot(X$y, y1$y, xlim=c(0,6), pch=19, col=Cols, cex=1.3,
-       ylim= c(0,2500),
-       axes=FALSE,
-       xlab="",ylab="", ann=FALSE,
-       panel.first={
-         arrows(x0=X$lci, x1=X$uci, y0=y1$y,
-                y1=y1$y,code=3,angle=90,length=0.025,col=Cols)
-         arrows(x0=X$y, x1=X$y, y0=y1$lci,
-                y1=y1$uci,code=3,angle=90,length=0.025,col=Cols)
-       })
-
-  axis(1, at=1:5, labels= y1$vegetation, las=2, cex.axis=0.8)
-  axis(1,labels=FALSE)
-  axis(2)
-  box()
-  plotlabel("(a)","topleft", log.y=TRUE)
-
-  # Multiple comparison letters.
-  u <- par()$usr
-  text(X$y, 2.5, y1$signifletters, pos=3, cex=0.9)
-
-  plotBracket <- function(x0, x1, rely=0.3, uprely=0.05){
-
-    h0 <- grconvertY(0, "ndc","user")
-    usr <- par("usr")
-    marh <- usr[3] - h0
-    y <- h0 + rely * marh
-    upy <- y + uprely * marh
-
-    segments(x0=x0,x1=x1,y0=y,y1=y, xpd=NA)
-    segments(x0=x0,x1=x0,y0=y,y1=upy, xpd=NA)
-    segments(x0=x1,x1=x1,y0=y,y1=upy, xpd=NA)
-
-  }
-  plotBracket(1,3)
-  plotBracket(4,5)
-  plotBracket(6,7)
-
-  mtext(side=1, at=c(2,4.5,6.5), text=c("DA","EA","EG"), line=5, xpd=NA)
 
   # Mean Annual temperature
   gcol <- alpha("lightgrey",0.5)
   smoothplot(MAT, lalf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
-             xlab="", ylim=log10(ylim),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             xlab="", ylim=c(2,4), polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
              fitoneline=FALSE,xlim=c(-5,30),
+             ylab="")
+  axis(1, labels=TRUE)
+  log10axes(side=2, labels=TRUE)
+  box()
+  plotlabel("(a)","topleft", log.y=FALSE)
+
+
+  # Mean annual precipitation
+  smoothplot(MAP, lalf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
+             xlab="", ylim=c(2,4), polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
+             fitoneline=FALSE,xlim=c(400,4400),
              ylab="")
   axis(1, labels=TRUE)
   log10axes(side=2, labels=FALSE)
   box()
   plotlabel("(b)","topleft", log.y=FALSE)
 
-
-  # Mean annual precipitation
-  smoothplot(MAP, lmlf_astba2, pft, dataset, axes=FALSE, kgam=3, R="Group", randommethod = "agg", fittype="gam",
-             xlab="", ylim=log10(ylim),polycolor=gcol,pointcols=my_cols_transparent(),linecols=my_linecols(),
-             fitoneline=FALSE,xlim=c(400,4400),
-             ylab="")
-  axis(1, labels=TRUE)
-  log10axes(side=2, labels=FALSE)
-  box()
-  plotlabel("(c)","topleft", log.y=FALSE)
-
-  mtext(side=1, at=3/6, line=3, text=expression("Mean annual temperature"~(degree*C)), outer=TRUE, las=0)
-  mtext(side=1, at=5/6, line=3, text=expression("Mean annual precipitation"~(mm)), outer=TRUE, las=0)
-  mtext(side=2, at=0.5, line=2, text= expression(M[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
+  mtext(side=1, at=1/4, line=3, text=expression("Mean annual temperature"~(degree*C)), outer=TRUE, las=0)
+  mtext(side=1, at=3/4, line=3, text=expression("Mean annual precipitation"~(mm)), outer=TRUE, las=0)
+  mtext(side=2, at=0.5, line=2, text= expression(A[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
 }
 
 
 
+df <- subset(dataset, a.stbh > 0.005 & a.stbh < 1)
+smoothplot(log10(a.stbh), log10(m.st), pft, df, xlab=expression(A[S]~~(m^2)),
+           axes=FALSE,
+           linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
+           ylab=expression(M[T]~~(kg)), cex=0.6)
+
+
+smoothplot(log10(a.stba), log10(m.st), pft, dataset, xlab=expression(A[S]~~(m^2)),
+           axes=FALSE,
+           linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
+           ylab=expression(M[T]~~(kg)), cex=0.6)
+
+
+with(dataset, plot(log10(a.stba), log10(m.st), pch=19, col=my_cols_transparent()[pft]))
+
+with(dataset, identify(log10(a.stba), log10(m.st)))
+
+
+
+# Woody mass per unit basal stem area
+# - Least-square means because not isometric scaling
+figureS3 <- function(dataset, KGAM=4){
+  par(mfrow=c(1,3), mar=c(5,5,2,2), cex.axis=0.9, las=1)
+  
+  smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
+             axes=FALSE,
+             linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
+             ylab=expression(M[T]~~(kg)), cex=0.6, xlim=c(-8,2.5), ylim=c(-6,6))
+  log10axes()
+  box()
+  plotlabel("(a)","topright")
+  my_legend("topleft")
+  
+  smoothplot(log10(h.t), log10(m.so/a.stba2), pft, dataset, xlab=expression(H~~(m)),
+             ylab=expression(M[T]/A[S]~~(kg~m^-2)), axes=FALSE,
+             linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
+             cex=0.6, xlim=c(-2,2.5), ylim=c(0,4.5))
+  abline(2.5,1)
+  
+  log10axes()
+  box()
+  plotlabel("(b)","topright")
+  
+  lmer_BA <- lmer(lmso_astba2 ~ pft*lastba2 + pft:I(lastba2^2) + (1|Group),
+                  data=dataset, na.action=na.omit)
+  lba <- lmerTest::lsmeans(lmer_BA, "pft")
+  lsmeansPlot(lba, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,800),
+              xlab="",axes=FALSE,col=my_cols(),
+              ylab=expression(M[T]/A[S]~~(kg~m^-2)))
+  
+  plotlabel("(c)","topright")
+  axis(1, at=1:3, labels=levels(dataset$pft))
+  axis(2)
+  box()
+}
 
 
 
@@ -435,43 +399,6 @@ figureS2 <- function(dataset, KGAM=4){
 
 
 
-# SI 3
-# Woody mass per unit basal stem area
-# - Least-square means because not isometric scaling
-figureS3 <- function(dataset, KGAM=4){
-  par(mfrow=c(1,3), mar=c(5,5,2,2), cex.axis=0.9, las=1)
-
-  smoothplot(log10(a.stba2), log10(m.so), pft, dataset, xlab=expression(A[S]~~(m^2)),
-             axes=FALSE,
-             linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
-             ylab=expression(M[T]~~(kg)), cex=0.6, xlim=c(-8,2.5), ylim=c(-6,6))
-  log10axes()
-  box()
-  plotlabel("(a)","topright")
-  my_legend("topleft")
-
-  smoothplot(log10(h.t), log10(m.so/a.stba2), pft, dataset, xlab=expression(H~~(m)),
-             ylab=expression(M[T]/A[S]~~(kg~m^-2)), axes=FALSE,
-             linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
-             cex=0.6, xlim=c(-2,2.5), ylim=c(0,4.5))
-  abline(2.5,1)
-
-  log10axes()
-  box()
-  plotlabel("(b)","topright")
-
-  lmer_BA <- lmer(lmso_astba2 ~ pft*lastba2 + pft:I(lastba2^2) + (1|Group),
-                  data=dataset, na.action=na.omit)
-  lba <- lmerTest::lsmeans(lmer_BA, "pft")
-  lsmeansPlot(lba, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,800),
-              xlab="",axes=FALSE,col=my_cols(),
-              ylab=expression(M[T]/A[S]~~(kg~m^-2)))
-
-  plotlabel("(c)","topright")
-  axis(1, at=1:3, labels=levels(dataset$pft))
-  axis(2)
-  box()
-}
 
 
 
