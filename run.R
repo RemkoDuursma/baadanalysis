@@ -96,6 +96,7 @@ tex_2_pdf("manuscript.tex")
 
 d1 <- subset(dataset, !is.na(a.stba) & is.na(a.stbh))
 d2 <- subset(dataset, !is.na(a.stbh) & h.t > 2)
+subs <- subset(d2, a.stbh*h.t > 0.01 & a.stbh*h.t < 100 )
 
 with(d1, plot(log10(a.stba), log10(m.st), pch=19, col=my_cols_transparent()[pft]))
 
@@ -123,7 +124,7 @@ smoothplot(log10(a.stba * h.t), log10(m.st), pft, data=d1, pointcols=my_cols_tra
 smoothplot(log10(a.stbh * h.t), log10(m.st), pft, data=d2, pointcols=my_cols_transparent(),
            pch=17)
 
-subs <- subset(d2, a.stbh*h.t > 0.01 & a.stbh*h.t < 10 )
+
 
 with(subs, plot(log10(a.stbh * h.t), log10(m.st), pch=16, col=my_cols_transparent()[pft]))
 
@@ -133,26 +134,40 @@ smoothplot(log10(a.stbh * h.t), log10(m.st), pft, subs, pointcols=my_cols_transp
 library(smatr)
 subs$astbhht <- with(subs, a.stbh * h.t)
 subs$lastbhht <- log10(subs$astbhht)
+subs$mstastbht <- with(subs, log10(m.st / (a.stbh * h.t)))
 f1 <- sma(m.st ~ astbhht * pft, data=subs, log="xy")
 
 windows(8,4)
 par(mfrow=c(1,2), mar=c(5,5,2,2))
-with(subs, plot(log10(astbhht), log10(m.st), pch=16, col=my_cols_transparent()[pft]))
+
+windows()
+with(subs, plot(log10(astbhht), log10(m.so), pch=16, 
+                xlab=expression(A[S]*H[T]~~(m^3)),
+                ylab=expression(M[S]~~(kg)),
+                axes=FALSE,
+                col=my_cols_transparent()[pft]))
+with(sq, points(log10(astbhht), log10(m.st), col="green", pch=15))
+
+log10axes()
 p <- coef(f1)
 for(i in 1:3){
   abline(p[i,1], p[i,2], col=my_cols()[i], lwd=2)
 }
-
-lmer_astmst <- lmer(lmst ~ pft*lastbhht + (1|Group),
-                data=subs, na.action=na.omit)
-lmst <- lmerTest::lsmeans(lmer_astmst, "pft")
-lsmeansPlot(lmst, 1:3,  xlim=c(0.5, 3.5), ylim=c(0,60),
-            xlab="",axes=FALSE,col=my_cols(),
-            ylab=expression(M[S]/(A[S]*H[T])~~(kg~m^-3)))
-
-axis(1, at=1:3, labels=levels(dataset$pft))
-axis(2)
 box()
+
+m <- mixmean("mstastbht","pft",subs)
+plot(1:3, m$y , ylim=c(0,400), col=my_cols(), pch=19,
+     ylab=expression(M[S]/(H[T]*A[S])~~(kg~m^-3)),
+     xlab="",
+     axes=FALSE, xlim=c(0.5, 3.5),
+     panel.first= arrows(x0=1:3, x1=1:3, y0=m$lci, y1=m$uci, angle=90, code=3,
+                         length=0.025, col=my_cols()))
+u <- par()$usr
+text(1:3, u[3] + 0.0*(u[4]-u[3]), m$signifletters, pos=3, cex=0.9)
+axis(1, at=1:3, labels=m$pft)
+box()
+axis(2)
+
 
 
 
