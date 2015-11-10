@@ -355,6 +355,9 @@ smoothplot <- function(x,y,g=NULL,data,
                             xlab=NULL, ylab=NULL,
                             polycolor=alpha("lightgrey",0.7),
                             plotit=TRUE,
+                            pch=16,
+                            add=FALSE,
+                            plotpoints=TRUE,
                             ...){
 
   fittype <- match.arg(fittype)
@@ -411,9 +414,23 @@ smoothplot <- function(x,y,g=NULL,data,
   }
 
   if(plotit){
-    with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
-                    xlab=xlab, ylab=ylab, ...))
-  
+    
+    if(!add){
+      if(plotpoints){
+        with(data, plot(X, Y, axes=FALSE, pch=pch, col=pointcols[G],
+                      xlab=xlab, ylab=ylab, ...))
+      } else {
+        with(data, plot(X, Y, axes=FALSE, type='n', 
+                        xlab=xlab, ylab=ylab, ...))
+      }
+    } else {
+      if(plotpoints){
+        with(data, points(X, Y, pch=pch, col=pointcols[G],...))
+      }
+    }
+    
+    
+    
     if(axes){
       if(log=="xy")magaxis(side=1:2, unlog=1:2)
       if(log=="x"){

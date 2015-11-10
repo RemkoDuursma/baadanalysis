@@ -290,27 +290,6 @@ figure5 <- function(dataset, dataset2){
   mtext(side=2, at=0.5, line=2, text= expression(A[F]/A[S]~~(kg~m^-2)), outer=TRUE, las=0)
 }
 
-
-
-df <- subset(dataset, a.stbh > 0.005 & a.stbh < 1)
-smoothplot(log10(a.stbh), log10(m.st), pft, df, xlab=expression(A[S]~~(m^2)),
-           axes=FALSE,
-           linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
-           ylab=expression(M[T]~~(kg)), cex=0.6)
-
-
-smoothplot(log10(a.stba), log10(m.st), pft, dataset, xlab=expression(A[S]~~(m^2)),
-           axes=FALSE,
-           linecols=my_linecols(), pointcols=my_cols_transparent(), R="Group",kgam=KGAM,
-           ylab=expression(M[T]~~(kg)), cex=0.6)
-
-
-with(dataset, plot(log10(a.stba), log10(m.st), pch=19, col=my_cols_transparent()[pft]))
-
-with(dataset, identify(log10(a.stba), log10(m.st)))
-
-
-
 # Woody mass per unit basal stem area
 # - Least-square means because not isometric scaling
 figureS3 <- function(dataset, KGAM=4){
