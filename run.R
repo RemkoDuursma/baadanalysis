@@ -13,6 +13,7 @@ library(png)
 library(grid)
 library(gridBase)
 library(gridExtra)
+library(smatr)
 
 library(hier.part)
 
@@ -64,10 +65,12 @@ dataset2 <- delsmallbh(dataset2)
 # table_varpart2 <- make_table_varpart2(dataset2)
 # table_r2lmaforpft <- make_table_lmaforpft(dataset2)
 
-# new
+# new variance partitioning
 table_hierpart <- make_table_hierpart(dataset)
 
 table_varpart_gam <- make_table_gamr2MATMAP(dataset)
+
+table_varpart_lmer <- mixedr2(dataset)
 
 
 # Figures

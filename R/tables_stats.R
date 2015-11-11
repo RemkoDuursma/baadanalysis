@@ -43,37 +43,6 @@ make_table_hierpart <- function(dataset){
 }
 
 
-make_r2_table <- function(data,  variable_name ){
-  data.frame(Variable = c(variable_name, rep(NA, length(data)-1)),
-    Predictors=names(data),
-    r2=sapply(data,function(x) x[,"Marginal"]))
-}
-
-
-make_table_pipemodel_varpart <- function(dataset2) {
-
-  # Datasets with NAs removed, of key variables.
-  assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2))), envir = .GlobalEnv)
-  assign("dat_alf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2))), envir = .GlobalEnv)
-
-  mlf_formulas <- list()
-  mlf_formulas[["H"]]         <- lmlf_astba2 ~ log10(h.t) + (1|Group)
-  mlf_formulas[["H, PFT"]]    <- lmlf_astba2 ~ log10(h.t)*pft + (1|Group)
-  mlf_formulas[["H, PFT, B"]] <- lmlf_astba2 ~ log10(h.t)*pft*bortemptrop + (1|Group)
-  
-  mlf_lmer_fits <- lapply(mlf_formulas, function(x) lmer(x, data=dat_mlf))
-  mlf_lmer_r2 <- lapply( mlf_lmer_fits, r.squared.merMod)
-
-  alf_formulas <- gsub("lmlf_astba2", "lalf_astba2", mlf_formulas)
-  names(alf_formulas) <-   names(mlf_formulas)
-  alf_lmer_fits <- lapply(alf_formulas, function(x) lmer(x, data=dat_alf))
-  alf_lmer_r2 <- lapply( alf_lmer_fits, r.squared.merMod)
-
-  rm(dat_mlf, dat_alf, envir = .GlobalEnv)
-  rbind(make_r2_table(mlf_lmer_r2, "$M_F/A_S$"),
-        make_r2_table(alf_lmer_r2, "$A_F/A_S$"))
-}
-
 
 
 mixedr2 <- function(data){
@@ -93,98 +62,24 @@ mixedr2 <- function(data){
   }
   
   vars <- c("lmlf_mst","lalf_mst","lalf_astba2","llma","lastba2_mst")
+  varlabel <- c("$M_F/M_S$","$A_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+  
   mods <- lapply(vars, runmixmodels, dat=data)
-  return(mods)
   
   # r.squared.merMod
+  xr2 <- function(x)unlist(sapply(x,  r.squared.merMod)["Marginal",])
+  r2g <- as.data.frame(t(sapply(mods, xr2)))
   
-  tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
-  names(tabg) <- c("Variable","H","H, PFT",paste0("H, PFT, ",climvar1,", ",climvar2))
   
-  list(r2table=tabg, fits=gams)
+  tabg <- cbind(as.data.frame(varlabel), r2g)
+  names(tabg) <- c("Variable","H","H, PFT","H, PFT, MAP, MAT")
+  
+return(tabg)
 }
 
 
 
 
-
-
-
-
-make_table_lmaforpft <- function(dataset2){
-  
-  assign("dat_mlf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2))), envir = .GlobalEnv)
-  assign("dat_alf", droplevels(subset(dataset2, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2))), envir = .GlobalEnv)
-
-  
-  model1 <- lmer(lmlf_astba2 ~ pft + log10(h.t) + pft:log10(h.t) + I(log10(h.t)^2):pft + (1|Group),
-                 data=dat_mlf)
-  model2 <- lmer(lmlf_astba2 ~ llma + log10(h.t) + llma:log10(h.t) + I(log10(h.t)^2):llma + (1|Group),
-                 data=dat_mlf)
-  
-  model3 <- lmer(lmlf_mso ~ pft + log10(h.t) + pft:log10(h.t) + I(log10(h.t)^2):pft + (1|Group),
-                 data=dat_mlf)
-  model4 <- lmer(lmlf_mso ~ llma + log10(h.t) + llma:log10(h.t) + I(log10(h.t)^2):llma + (1|Group),
-                 data=dat_mlf)
-  
-  
-  r2 <- do.call(rbind,lapply(list(model1, model2, model3, model4),r.squared.merMod))
-  rownames(r2) <- c("mfas_pft","mfas_lma","lmf_pft","lmf_lma")
-return(r2)
-}
-
-
-
-
-
-
-
-# Count number of observations.
-tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
-
-  x <- x[complete.cases(x[,vars]),]
-  x$pft <- x[,pftvar]
-  x$veg <- x[,vegvar]
-
-  xt <- addmargins(xtabs( ~ pft + veg, data=x))
-  names(dimnames(xt)) <- c(pftvar,vegvar)
-
-  x <- x[!duplicated(x$species,x$pft,x$veg),]
-  xs <- addmargins(xtabs( ~ pft + veg, data=x))
-
-  m <- matrix(paste0(xt, " (", xs, ")"), ncol=ncol(xt))
-  dimnames(m) <- dimnames(xt)
-
-  m[m == "0 (0)"] <- NA
-
-return(m)
-}
-
-make_table_mlfastba <- function(x) tabFun(x, c("lmlf_astba2","h.t"))
-make_table_alfastba  <- function(x) tabFun(x, c("lalf_astba2","h.t"))
-make_table_lmf  <- function(x) tabFun(x, c("lmlf_mso","h.t"))
-make_table_lar  <- function(x) tabFun(x, c("lalf_mso","h.t"))
-
-
-# #-----------------------------------------------------------------------------------------#
-
-# # Test of effect of MAT and MAP on leaf - stem scaling
-
-# # Data subset
-# d <- droplevels(subset(dataset2, !is.na(m.st) & !is.na(m.lf) & !is.na(MAT)))
-
-# mlfmst_lme0 <- lme(log10(m.lf) ~ log10(m.st)*pft, random=~log10(m.st)|Group, data=d,method="ML",
-#             na.action=na.omit)
-# mlfmst_lme1 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAT, random=~log10(m.st)|Group, data=d,method="ML",
-#             na.action=na.omit)
-# mlfmst_lme2 <- lme(log10(m.lf) ~ log10(m.st)*pft*MAP, random=~log10(m.st)|Group, data=d,method="ML",
-#             na.action=na.omit)
-
-# save(d, mlfmst_lme0,mlfmst_lme1,mlfmst_lme2,
-#      file="manuscript/tables/Fits_lme_mlfmst_MAPMAT.RData")
-
-
-# #------------------------------------------------------------------------------------#
 
 # GAM explained variance with mgdd0 and MI
 gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
@@ -228,3 +123,29 @@ make_table_gamr2MATMAP <- function(dataset) {
   g0
 }
 
+
+
+
+
+
+
+# Count number of observations.
+tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
+  
+  x <- x[complete.cases(x[,vars]),]
+  x$pft <- x[,pftvar]
+  x$veg <- x[,vegvar]
+  
+  xt <- addmargins(xtabs( ~ pft + veg, data=x))
+  names(dimnames(xt)) <- c(pftvar,vegvar)
+  
+  x <- x[!duplicated(x$species,x$pft,x$veg),]
+  xs <- addmargins(xtabs( ~ pft + veg, data=x))
+  
+  m <- matrix(paste0(xt, " (", xs, ")"), ncol=ncol(xt))
+  dimnames(m) <- dimnames(xt)
+  
+  m[m == "0 (0)"] <- NA
+  
+  return(m)
+}
