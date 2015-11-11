@@ -73,6 +73,10 @@ table_varpart_gam <- make_table_gamr2MATMAP(dataset)
 table_varpart_lmer <- mixedr2(dataset)
 
 
+lmers <- mixedr2(dataset, returnfit=TRUE)
+
+
+
 # Figures
 pdf("figures/Figure1.pdf", width = 8L, height = 4L)
 figure1(baad_mapmat, world_mapmat, "downloads/ian-symbol-eucalyptus-spp-1.png")

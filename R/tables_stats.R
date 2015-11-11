@@ -45,16 +45,16 @@ make_table_hierpart <- function(dataset){
 
 
 
-mixedr2 <- function(data){
+mixedr2 <- function(data, returnfit=FALSE){
   
   runmixmodels <- function(yvar, dat){
     
     f <- list()
     dat <- dat[!is.na(dat$lh.t) & !is.na(dat$pft) & !is.na(dat$MAP) & !is.na(dat$MAT),]
     
-    f[[1]] <- as.formula(paste(yvar,"~ lh.t*lh.t^2 + (1|Group)"))
-    f[[2]] <- as.formula(paste(yvar,"~ lh.t*lh.t^2*pft + (1|Group)"))
-    f[[3]] <- as.formula(paste(yvar,"~ lh.t*lh.t^2*pft*MAP*MAT + (1|Group)"))
+    f[[1]] <- as.formula(paste(yvar,"~ lh.t*I(lh.t^2) + (1|Group)"))
+    f[[2]] <- as.formula(paste(yvar,"~ lh.t*I(lh.t^2)*pft + (1|Group)"))
+    f[[3]] <- as.formula(paste(yvar,"~ lh.t*I(lh.t^2)*pft*MAP*MAT + (1|Group)"))
                                
     g <- lapply(f, function(x)lmer(formula=x, data=dat))
     
@@ -65,6 +65,14 @@ mixedr2 <- function(data){
   varlabel <- c("$M_F/M_S$","$A_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
   
   mods <- lapply(vars, runmixmodels, dat=data)
+  if(returnfit){
+    mods <- unlist(mods)
+    indepvar <- c("H","H-PFT","H-PFT-CLIM")
+    e <- expand.grid(indepvar, vars)
+    names(mods) <- paste(e[[2]], e[[1]], sep="-")
+    
+    return(mods)
+  }
   
   # r.squared.merMod
   xr2 <- function(x)unlist(sapply(x,  r.squared.merMod)["Marginal",])
