@@ -79,18 +79,6 @@ baad <- readRDS("downloads/baad.rds")
 \clearpage
 
 
-\section*{Revision notes}
-\begin{enumerate}
-\item Reduce focus on GVMs in introduction (Reviewer 2).
-\item Better linking to Poorter 2015 and Reich 2014 (editor, reviewer 2, reviewer 3, poorter pers comm).
-\item Remove LMF and LAR, and only analyze MF/MS and AF/MS. This avoids confusion of the terms LMF and LAR which normally include root biomass. We should more clearly focus on above-ground biomass distribution patterns (editor + reviewer 2).
-\item Partition variance in MF/MS directly, not the proxy variable MF/AS. We did that for statistical convenience, as reviewer 1 is correct in pointing out. But we can look at partitioning variance in MF/MS directly, to plant height, PFT and climate. Reviewer 3 (though incorrectly) says 'also have the same variable in the numerator and denominator, which causes statistical issues' - but then we can say we avoid this apparent problem.
-\item We claim that climate does not affect biomass distribution, but reviewer 1 correctly points out that climate affects plant height, so it may have an indirect effect. Our dataset is not appropriate for testing effects of climate on typical (or maximum) plant height, because individuals of all kinds of sizes were sampled; there will be sampling bias. Moles et al. 2009 reported that maximum plant height shows a strong latitudinal pattern (taller plants at low latitude), and is correlated with climate variables. We just have to describe their results.
-\item Can follow reviewer 1's suggestion to partition MF/MS like this: $\frac{M_F}{M_S} = \frac{A_F}{A_S}\frac{M_F}{A_F}\frac{A_S}{M_S}$
-\item Reviewer 2 has some strange comments about MS/AS, in that we expect them to be correlated. Yes, but we need to make the point more clearly that there could be PFT effects in this correlation, largely through wood density (and tree shape). In fact we bring this up, but partitioning the variance as above may make this stand out more.
-\item "The methods do not describe if the individual data points came from trees in closed-canopy or open stands.  That would also make a huge difference." (Reviewer 3)
-\item We used MAT, MAP as well as the interaction. Probably better climate variables out there, but having the interaction in a model does distinguish between warm-dry and warm-wet climates (just like aridity indices). Because we found no appreciable effects of climate, we did not think it was worthwhile testing all possible climate variables.
-\end{enumerate}
 
 \section{New list of figures}
 \begin{enumerate}
@@ -99,7 +87,7 @@ baad <- readRDS("downloads/baad.rds")
 \item (a) MF/MS vs. plant height by PFT (was LMF) (b) and (c) as before, except for MF/MS. Reviewer 2 wants us to remove panels d and e, which we can do because we won't need MF/AS as a proxy anymore (should be put in SuppInfo instead).
 \item AF vs. AS by pft, for all data, with fitted SMA. This shows AF is proportional to AS (approx, except larger plants), and no/very very small effect of PFT.
 \item Stem mass as function of AS, PFT and height. a) Raw data (to link to main equation) show no clear PFT effect. b) MS / AS is nearly proportional to H, as expected from simple stem mass equation. c) for larger plants (H*AS > 0.01m3), there is a significant PFT effect, with EG having lower MS / (AS*H) (see d) for averages across entire subset shown in c). This can be explained from differences in wood density; gymnosperms have lower wood density on average.
-\item Histograms of the three main variables: AF/AS, MF/AF, and height-corrected stem mass index, MS/(AS*H).
+\item Histograms of the three main variables: AF/AS, MF/AF, and height-corrected stem mass index, MS/(AS*H). Recaps PFT differences and highlights large amount of variation yet to explain.
 \end{enumerate}
 
 
@@ -110,7 +98,6 @@ baad <- readRDS("downloads/baad.rds")
 
 \section*{Summary}
 
-Much too long, of course!
 % 200 word max.
 \begin{enumerate}
 \item The partitioning of biomass into leaves and stems is an important component of  global vegetation models (GVMs).
@@ -134,15 +121,15 @@ Much too long, of course!
  
 \begin{itemize}
 \item Biomass allocation is important; need to improve GVMs and make them more consistently benchmarked against global observations. 
-\item Plant functional types; can expect differences in biomass partitioning and leaf area relationships. Useful from viewpoint of ecology (functional consequences of angiosperm vs. gymnosperm divide; evergreen vs. deciduous?). Also useful for GVMs which use PFT for parameterization.
-\item Enquist&Niklas showed differences in leaf mass at given stem mass between gymnosperms and angiosperms.Poorter2015 showed X. Reich2014 showed Y. Open questions are 1,2,3. One major gap is that these previous studies did not include estimates of whole-plant leaf area. Leaf area is relevant because bla, but may follow very different patterns from leaf mass. Poorter2015 speculated that X.
-\item What about climate? We know from small-scale experiments and observational studies that biomass distribution varies with climate drivers. But unclear if global patterns persist. Reich2014 showed X, consistent with glasshouse stuff from Poorter2015. 
+\item Plant functional types; can expect differences in biomass partitioning and leaf area relationships. Useful from viewpoint of ecology (functional consequences of angiosperm vs. gymnosperm divide; evergreen vs. deciduous). Also useful for GVMs which use PFT for parameterization.
+\item Enquist&Niklas showed differences in leaf mass at given stem mass between gymnosperms and angiosperms.Poorter2015 showed X. Reich2014 showed Y. Open questions are 1,2,3. One major gap is that these previous studies did not include estimates of whole-plant leaf area. Leaf area is relevant because of light interception. It may follow very different patterns from leaf mass. Poorter2015 speculated that differences in leaf mass fraction are related to PFT-differences in specific leaf area, but did not have the data to directly test this prediction.
+\item What about climate? We know from small-scale experiments and observational studies that biomass distribution varies with climate drivers. But unclear if global patterns persist. Reich2014 showed X, consistent with glasshouse stuff from Poorter2015/2012. 
 \item We have the following objectives:
 \begin{enumerate}
-\item Test whether MF/MS is proportional to leaf mass per area (as suggested by Poorter)
-\item Partition the variance of leaf/stem biomass distribution into component variables, and into plant height (which is important, obviously!), plant functional type and climate. 
+\item Test whether MF/MS is proportional to leaf mass per area across plant functional types (as suggested by Poorter)
+\item Partition the variance of leaf/stem biomass distribution into component variables with the objective to determine which aspects of plant allometry drive differences in biomass distributions between PFTs and with plant size. 
+\item Partition variance of component variables into plant height, plant functional type and climate. 
 \end{enumerate}
-
 \end{itemize}
 
 
@@ -197,30 +184,41 @@ All analyses were conducted in R v3.2.0 \citep{R-2015}. GAMs were fitted using \
 \item Dataset covers climate space pretty well. 
 \item MF and MS are non-linearly related to plant height (Fig 2), as expected. Also note stem mass increases with height more quickly than leaf mass.
 \item Leaf/stem biomass distribution was very different between PFTs (Fig 3a), and proportional to LMA when estimated at a common height, so that leaf area ratio did not differ between PFTs. Consistent with variance partitioning: MF/MS mostly explained by H and PFT, but LAR not much explained by PFT.
-\item 
+\item Partitioning MF/MS into three component variables, and partition each of the four into H, PFT and climate.
+\item First one is AF/AS, which is neither related to height (and, apart from large trees, AF is proportional to AS) or PFT, and weakly to climate. 
+\item Stem mass should be proportional to basal area, height, and the product of wood density and stem shape. Across all data, the relationship between MS and AS was not related to PFT, but nearly proportional to height (as expected). For larger trees, MS at a given AS*H was clearly lower for evergreen gymnosperms, reflecting differences in wood density. Again no climate effects
+\item Histograms summarize the findings, for three variables that do not, or weakly, depend on height. Large PFT effects on LMA, small ones on stem mass index, none on AF/AS. 
 \end{itemize}
 
 
 
 \section*{Discussion}
 
-We found that PFTs differed in LMF, and that LMF was proportional to LMA. This conclusion was particularly strong across the three PFTs studied, but it also held across species within PFT. The implication is that the amount of leaf area supported per unit biomass (leaf area ratio, LAR) does not differ between PFTs. This result seems robust, as our data include individual plants spanning the entire size range of woody plants in natural forests (0.1-100m) (Fig.~\ref{fig:figlmf}a). Previous studies have demonstrated a large difference in LMF between angiosperms and gymnosperms \citep{poorter2012,poorter2015}, but have not been able to explain these differences in terms of leaf traits. We show that LMA -- a central trait of the leaf economics spectrum (LES) \citep{wrightetal2004} -- explains differences in LMF in a consistent manner. 
+\begin{itemize}
+\item MF/MS differed strongly between PFTs and was proportional to leaf mass per area, and steeply declined with plant height as expected.
+\item This was driven by 
 
-We found that, as expected, plant size strongly influences LMF (Fig.~\ref{fig:figlmf}) and LAR (Fig. S2) (see also \citet{poorter2012,poorter2015}). It is thus necessary to correct for plant size when comparing biomass partitioning parameters, as has been noted many times \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both LMF and LAR showed very non-linear patterns with plant height, even on a logarithmic scale, consistent with recent other results \citep{poorter2015}. 
+\end{itemize}
 
-The finding that LMF is proportional to LMA across PFTs implies that LAR does not differ systematically between PFTs. One explanation for this pattern lies in the strong positive correlation between LMA and leaf lifespan (LL) \citep{wrightetal2004}. Both \cite{poorter2012} and \citet{enquistniklas2002} explained higher LMF in gymnosperms by higher LL; plants simply maintain more cohorts of foliage, but this explanation demands that all else is equal. Yet it is not self-evident that everything else is indeed equal, that is, annual production of foliage could differ between PFTs. Nonetheless, further supporting this explanation, \citet{reich1992} showed a positive correlation between LL and total stand leaf biomass across diverse forest stands. Another, not mutually exclusive, possible explanation is that plants may allocate biomass in a manner that targets a more constant LAR rather than LMF. Canopy size scales with $M_T$ \citep{duursma2010}, and a larger canopy means higher light interception per unit total biomass \citep{duursma2007}. It can thus be argued that an optimal LAR exists that balances investment in supporting woody biomass (reflected by $M_T$) and the efficiency of foliage in terms of light interception. 
 
-We found that patterns in $M_F/A_S$ across PFTs mirrored those of LMF (Fig.~\ref{fig:figlmf}). Because LMF may be decomposed into the terms $M_F/A_S$ and $M_T/A_S$ (eq. \ref{eq:M2}), this result suggests that $M_T/A_S$ does not vary between PFTs (see also Fig. S3). If this result holds, it means that aboveground biomass may be estimated across PFTs with a single equation that does not differ between PFTs. For tropical forests, \citet{chave2005} showed that aboveground biomass can be estimated as,
 
-$$M_T = F \rho A_S H_T$$
-
-where $F$ is a form factor, and $\rho$ wood density (kg m$^3$). After rearranging, this equation predicts that $M_T/A_S$ is proportional to plant height. We found some support for this prediction (Fig. S3), suggesting further improvements could be made by incorporating this dependence. It is timely to use database made public by \citet{falster2015} (BAAD) and \citet{poorter2015} to develop more general equations to estimate individual plant aboveground biomass across the globe.
-
-We found that climate did not appreciably affect biomass partitioning between leaves and stems. This finding is in contrast with a recent study where LMF was found to increase with MAT across the globe \citep{reich2014}. One explanation for this difference is that our measurements were taken on individual plants, whereas in  \citet{reich2014} they were on whole stands. This suggests climatic effects on stand-level biomass partitioning occur primarily by altering the size-distribution and stand density (number of individuals per unit area), rather than partitioning within individual plants. With the caveats that there is still variation between species and studies unaccounted for (Fig.~\ref{fig:fighist}), and that coarse climate variables such as MAT and MAP may mask small-scale climate effects on biomass partitioning, our results strongly suggest the effects of PFT are stronger than any direct climate effect on biomass partitioning within individual plants (Table \ref{table:statstable}).
-
-Our results indicate that it is possible to integrate a key leaf trait with whole-plant modelling of biomass partitioning. Indeed, nearly as much variation was explained across species when using LMA instead of PFT in a statistical model. This is surprising because LMA only captures one aspect of functional differentiation among PFT -- leaf morphology (but including correlated effects on leaf lifespan and photosynthetic capacity via the leaf economics spectrum \citep{wrightetal2004}). We thus show that in a PFT-based classification, LMA is a good first estimate of biomass partitioning, however, more variation can be explained by another trait ($A_F/A_S$), which varies appreciably between species. These results suggest promising avenues for parameterising and simplifying biomass partitioning routines in GVMs.
-
-Overall, our results establish general patterns about plant construction and thus lay an empirical base against which models can be benchmarked. A recent study compared allocation routines in a number of leading ecosystem models \citep{dekauwe2014}, and recommended constraining allocation by observed biomass fractions instead of using constant allocation fractions. Based on our findings, a first approximation within GVMs would be to assume leaf area to stem cross-sectional area a parameter that does not vary between PFTs (notwithstanding effects of plant height on this variable), and vary biomass allocation accordingly. LMA, already a parameter in most GVMs, then gives the ratio of leaf biomass to stem area. Some models already incorporate a similar algorithm (see Notes S1), while other algorithms may be tuned to yield similar patterns between PFTs as we have presented. In any case, the growing availability of large datasets on stand biomass and individual plant construction  \citep{falster2015} suggest the time is ripe for rigorous benchmarking \citep{abramowitz2012, dekauwe2014} of GVMs against empirical data.
+% We found that PFTs differed in LMF, and that LMF was proportional to LMA. This conclusion was particularly strong across the three PFTs studied, but it also held across species within PFT. The implication is that the amount of leaf area supported per unit biomass (leaf area ratio, LAR) does not differ between PFTs. This result seems robust, as our data include individual plants spanning the entire size range of woody plants in natural forests (0.1-100m) (Fig.~\ref{fig:figlmf}a). Previous studies have demonstrated a large difference in LMF between angiosperms and gymnosperms \citep{poorter2012,poorter2015}, but have not been able to explain these differences in terms of leaf traits. We show that LMA -- a central trait of the leaf economics spectrum (LES) \citep{wrightetal2004} -- explains differences in LMF in a consistent manner. 
+% 
+% We found that, as expected, plant size strongly influences LMF (Fig.~\ref{fig:figlmf}) and LAR (Fig. S2) (see also \citet{poorter2012,poorter2015}). It is thus necessary to correct for plant size when comparing biomass partitioning parameters, as has been noted many times \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both LMF and LAR showed very non-linear patterns with plant height, even on a logarithmic scale, consistent with recent other results \citep{poorter2015}. 
+% 
+% The finding that LMF is proportional to LMA across PFTs implies that LAR does not differ systematically between PFTs. One explanation for this pattern lies in the strong positive correlation between LMA and leaf lifespan (LL) \citep{wrightetal2004}. Both \cite{poorter2012} and \citet{enquistniklas2002} explained higher LMF in gymnosperms by higher LL; plants simply maintain more cohorts of foliage, but this explanation demands that all else is equal. Yet it is not self-evident that everything else is indeed equal, that is, annual production of foliage could differ between PFTs. Nonetheless, further supporting this explanation, \citet{reich1992} showed a positive correlation between LL and total stand leaf biomass across diverse forest stands. Another, not mutually exclusive, possible explanation is that plants may allocate biomass in a manner that targets a more constant LAR rather than LMF. Canopy size scales with $M_T$ \citep{duursma2010}, and a larger canopy means higher light interception per unit total biomass \citep{duursma2007}. It can thus be argued that an optimal LAR exists that balances investment in supporting woody biomass (reflected by $M_T$) and the efficiency of foliage in terms of light interception. 
+% 
+% We found that patterns in $M_F/A_S$ across PFTs mirrored those of LMF (Fig.~\ref{fig:figlmf}). Because LMF may be decomposed into the terms $M_F/A_S$ and $M_T/A_S$ (eq. \ref{eq:M2}), this result suggests that $M_T/A_S$ does not vary between PFTs (see also Fig. S3). If this result holds, it means that aboveground biomass may be estimated across PFTs with a single equation that does not differ between PFTs. For tropical forests, \citet{chave2005} showed that aboveground biomass can be estimated as,
+% 
+% $$M_T = F \rho A_S H_T$$
+% 
+% where $F$ is a form factor, and $\rho$ wood density (kg m$^3$). After rearranging, this equation predicts that $M_T/A_S$ is proportional to plant height. We found some support for this prediction (Fig. S3), suggesting further improvements could be made by incorporating this dependence. It is timely to use database made public by \citet{falster2015} (BAAD) and \citet{poorter2015} to develop more general equations to estimate individual plant aboveground biomass across the globe.
+% 
+% We found that climate did not appreciably affect biomass partitioning between leaves and stems. This finding is in contrast with a recent study where LMF was found to increase with MAT across the globe \citep{reich2014}. One explanation for this difference is that our measurements were taken on individual plants, whereas in  \citet{reich2014} they were on whole stands. This suggests climatic effects on stand-level biomass partitioning occur primarily by altering the size-distribution and stand density (number of individuals per unit area), rather than partitioning within individual plants. With the caveats that there is still variation between species and studies unaccounted for (Fig.~\ref{fig:fighist}), and that coarse climate variables such as MAT and MAP may mask small-scale climate effects on biomass partitioning, our results strongly suggest the effects of PFT are stronger than any direct climate effect on biomass partitioning within individual plants (Table \ref{table:statstable}).
+% 
+% Our results indicate that it is possible to integrate a key leaf trait with whole-plant modelling of biomass partitioning. Indeed, nearly as much variation was explained across species when using LMA instead of PFT in a statistical model. This is surprising because LMA only captures one aspect of functional differentiation among PFT -- leaf morphology (but including correlated effects on leaf lifespan and photosynthetic capacity via the leaf economics spectrum \citep{wrightetal2004}). We thus show that in a PFT-based classification, LMA is a good first estimate of biomass partitioning, however, more variation can be explained by another trait ($A_F/A_S$), which varies appreciably between species. These results suggest promising avenues for parameterising and simplifying biomass partitioning routines in GVMs.
+% 
+% Overall, our results establish general patterns about plant construction and thus lay an empirical base against which models can be benchmarked. A recent study compared allocation routines in a number of leading ecosystem models \citep{dekauwe2014}, and recommended constraining allocation by observed biomass fractions instead of using constant allocation fractions. Based on our findings, a first approximation within GVMs would be to assume leaf area to stem cross-sectional area a parameter that does not vary between PFTs (notwithstanding effects of plant height on this variable), and vary biomass allocation accordingly. LMA, already a parameter in most GVMs, then gives the ratio of leaf biomass to stem area. Some models already incorporate a similar algorithm (see Notes S1), while other algorithms may be tuned to yield similar patterns between PFTs as we have presented. In any case, the growing availability of large datasets on stand biomass and individual plant construction  \citep{falster2015} suggest the time is ripe for rigorous benchmarking \citep{abramowitz2012, dekauwe2014} of GVMs against empirical data.
 
 
 
