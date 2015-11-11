@@ -203,6 +203,7 @@ prepare_dataset_1 <- function(baad){
     lmso <- log10(m.so)
     lmrt <- log10(m.rt)
     lmlf <- log10(m.lf)
+    lalf <- log10(a.lf)
     lmst <- log10(m.st)
     lsla <- log10(a.lf / m.lf)
     llma <- log10(m.lf / a.lf)
@@ -220,6 +221,8 @@ prepare_dataset_1 <- function(baad){
     lmso_astba2 <- log10(m.so / a.stba2)
     lastba2_mst <- log10(a.stba2 / m.st)
     lastba2 <- log10(a.stba2)
+    mstastbht <- log10(m.st / (a.stba2 * h.t)) # stem index
+    
     })
 
   dataset

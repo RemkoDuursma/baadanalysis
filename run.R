@@ -44,6 +44,17 @@ dat_mlf <- prepare_dat_mlf(dataset2)
 dat_alf <- prepare_dat_alf(dataset2)
 basalafit <- BasalA_fit(baad_all)
 
+# see new small plant test figure
+delsmallbh <- function(d){
+  
+  # plants close to breast-height height but no basal diameter; delete
+  d$a.stba2[d$h.t < 1.8 & is.na(d$d.ba) & !is.na(d$d.bh)] <- NA
+  
+return(d)
+}
+dataset <- delsmallbh(dataset)
+dataset2 <- delsmallbh(dataset2)
+
 # # tables
 # table_gamr2MATMAP <- make_table_gamr2MATMAP(dataset)
 # table_mlfastba <- make_table_mlfastba(dat_mlf)
@@ -56,6 +67,7 @@ basalafit <- BasalA_fit(baad_all)
 # new
 table_hierpart <- make_table_hierpart(dataset)
 
+table_varpart_gam <- make_table_gamr2MATMAP(dataset)
 
 
 # Figures
@@ -68,20 +80,32 @@ dev.off()
 pdf("figures/Figure3.pdf", width = 8L, height = 4L)
 figure3(dataset)
 dev.off()
-pdf("figures/Figure4.pdf", width = 8L, height = 4L)
+
+pdf("figures/Figure4.pdf", width = 6L, height = 5L)
 figure4(dataset)
 dev.off()
 
+pdf("figures/Figure5.pdf", width = 8L, height = 8L)
+figure5(dataset)
+dev.off()
 
-
-# SuppInfo???
-pdf("figures/Figure5.pdf", width = 8L, height = 4L)
-figure5(dataset, dataset2)
+pdf("figures/Figure6.pdf", width = 8L, height = 4L)
+figure6(dataset, nbin=75)
 dev.off()
 
 
+# SI
+pdf("figures/FigureS1.pdf", width = 6L, height = 6L)
+figureS1(baad_mapmat, world_mapmat)
+dev.off()
 
+pdf("figures/FigureS2.pdf", width = 6L, height = 5L)
+figureS2(dataset)
+dev.off()
 
+pdf("figures/FigureS3.pdf", width = 5L, height = 4L)
+figureS3(dataset)
+dev.off()
 
 # ms.
 # knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
@@ -93,80 +117,6 @@ tex_2_pdf("manuscript.tex")
 
 
 
-
-d1 <- subset(dataset, !is.na(a.stba) & is.na(a.stbh))
-d2 <- subset(dataset, !is.na(a.stbh) & h.t > 2)
-subs <- subset(d2, a.stbh*h.t > 0.01 & a.stbh*h.t < 100 )
-
-with(d1, plot(log10(a.stba), log10(m.st), pch=19, col=my_cols_transparent()[pft]))
-
-with(d1, plot(log10(a.stba), log10(m.so), pch=19, col=my_cols_transparent()[pft]))
-
-with(d1, plot(log10(a.stba * h.t), log10(m.st), pch=19, col=my_cols_transparent()[pft]))
-
-
-with(d1, plot(log10(a.stba * h.t), log10(m.st), pch=16, col=my_cols_transparent()[pft],
-              xlim=c(-8,3), ylim=c(-6,4.5)  ))
-with(d2, points(log10(a.stbh * h.t), log10(m.st), pch=17, col=my_cols_transparent()[pft]))
-
-
-palette(my_cols())
-smoothplot(log10(a.stba * h.t), log10(m.st), pft, data=d1, pointcols=my_cols_transparent(),
-           xlim=c(-8,3), ylim=c(-6,5)  )
-smoothplot(log10(a.stbh * h.t), log10(m.st), pft, data=d2, pointcols=my_cols_transparent(),
-           pch=17, add=TRUE)
-
-
-windows(9,5)
-par(mfrow=c(1,2), mar=c(5,5,1,1))
-palette(my_cols())
-smoothplot(log10(a.stba * h.t), log10(m.st), pft, data=d1, pointcols=my_cols_transparent())
-smoothplot(log10(a.stbh * h.t), log10(m.st), pft, data=d2, pointcols=my_cols_transparent(),
-           pch=17)
-
-
-
-with(subs, plot(log10(a.stbh * h.t), log10(m.st), pch=16, col=my_cols_transparent()[pft]))
-
-smoothplot(log10(a.stbh * h.t), log10(m.st), pft, subs, pointcols=my_cols_transparent())
-
-
-library(smatr)
-subs$astbhht <- with(subs, a.stbh * h.t)
-subs$lastbhht <- log10(subs$astbhht)
-subs$mstastbht <- with(subs, log10(m.st / (a.stbh * h.t)))
-f1 <- sma(m.st ~ astbhht * pft, data=subs, log="xy")
-
-windows(8,4)
-par(mfrow=c(1,2), mar=c(5,5,2,2))
-
-windows()
-with(subs, plot(log10(astbhht), log10(m.so), pch=16, 
-                xlab=expression(A[S]*H[T]~~(m^3)),
-                ylab=expression(M[S]~~(kg)),
-                axes=FALSE,
-                col=my_cols_transparent()[pft]))
-with(sq, points(log10(astbhht), log10(m.st), col="green", pch=15))
-
-log10axes()
-p <- coef(f1)
-for(i in 1:3){
-  abline(p[i,1], p[i,2], col=my_cols()[i], lwd=2)
-}
-box()
-
-m <- mixmean("mstastbht","pft",subs)
-plot(1:3, m$y , ylim=c(0,400), col=my_cols(), pch=19,
-     ylab=expression(M[S]/(H[T]*A[S])~~(kg~m^-3)),
-     xlab="",
-     axes=FALSE, xlim=c(0.5, 3.5),
-     panel.first= arrows(x0=1:3, x1=1:3, y0=m$lci, y1=m$uci, angle=90, code=3,
-                         length=0.025, col=my_cols()))
-u <- par()$usr
-text(1:3, u[3] + 0.0*(u[4]-u[3]), m$signifletters, pos=3, cex=0.9)
-axis(1, at=1:3, labels=m$pft)
-box()
-axis(2)
 
 
 

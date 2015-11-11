@@ -481,6 +481,7 @@ histbypft <- function(yvar, pftvar, dataset,
                       xlab=NULL,
                       ylab="Nr. individuals",
                       ylim=NULL,
+                      xlim=NULL,
                       legend.text=NULL,
                       legend.cex=1,
                       xaxis=NULL,
@@ -512,11 +513,13 @@ histbypft <- function(yvar, pftvar, dataset,
 
     h <- hist(Y, breaks=br, plot=FALSE)
     if(is.null(ylim))
-      Ylim <- c(0,max(h[[plotwhat]]))
+      ylim <- c(0,max(h[[plotwhat]]))
     else
       Ylim <- ylim
     
-    if(!overlay || (overlay & i == 1))plot(br, br, ylim=Ylim, axes=FALSE, type='n')
+    if(!overlay || (overlay & i == 1)){
+      plot(br, br, ylim=ylim, xlim=xlim, axes=FALSE, type='n')
+    }
     for(j in 1:length(h[[plotwhat]])){
       n <- h[[plotwhat]][j]
       m <- h$mids[j]
