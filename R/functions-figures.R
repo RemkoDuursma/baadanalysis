@@ -360,6 +360,7 @@ smoothplot <- function(x,y,g=NULL,data,
                             plotpoints=TRUE,
                             ...){
 
+  if(add)axes <- FALSE
   fittype <- match.arg(fittype)
   randommethod <- match.arg(randommethod)
 

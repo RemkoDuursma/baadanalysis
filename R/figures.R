@@ -167,12 +167,14 @@ figure2 <- function(dataset){
     p <- levels(dataset$pft)[i]
     dat <- dataset[dataset$pft == p,]
     
-    with(dat, plot(log10(h.t), log10(m.st), pch=16,cex=0.5,
+    with(dat, plot(lh.t, lmst, pch=16,cex=0.5,
                    xlim=log10(c(0.01,105)), ylim=c(-6,6),
-                   col=alpha("brown",0.5),
+                   col=alpha("darkgoldenrod4",0.5),
                    axes=FALSE))
-    with(dat, points(log10(h.t), log10(m.lf), pch=16,cex=0.5,
+    with(dat, points(lh.t, lmlf, pch=16,cex=0.5,
                      col=alpha("forestgreen",0.5)))
+    smoothplot(lh.t, lmlf, data=dat, linecol="green3", add=TRUE, plotpoints=FALSE)
+    smoothplot(lh.t, lmst, data=dat, linecol="darkgoldenrod", add=TRUE, plotpoints=FALSE)
     
     log10axes(side=1,  labels=TRUE)
     log10axes(side=2,  labels= i == 1)
@@ -180,7 +182,7 @@ figure2 <- function(dataset){
     legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
     if(i == 1){
       legend(-2,4.5, c(expression(M[F]),expression(M[S])), pch=19,
-             col=c("forestgreen","brown"), bty='n', pt.cex=1, cex=1.4)
+             col=c("forestgreen","darkgoldenrod4"), bty='n', pt.cex=1, cex=1.4)
     }
   }
   
