@@ -79,54 +79,76 @@ lmers <- mixedr2(dataset, returnfit=TRUE)
 
 
 
-
+figlabel <- function(txt)title(txt, outer=TRUE, line=-0.5, cex.main=0.6, font.main=3)
 
 # Figures
 pdf("figures/Figure1.pdf", width = 8L, height = 4L)
 figure1(baad_mapmat, world_mapmat, "downloads/ian-symbol-eucalyptus-spp-1.png")
+figlabel("Figure 1")
 dev.off()
+
 pdf("figures/Figure2.pdf", width = 8L, height = 4L)
 figure2(dataset)
+figlabel("Figure 2")
 dev.off()
+
 pdf("figures/Figure3.pdf", width = 8L, height = 4L)
 figure3(dataset)
+figlabel("Figure 3")
 dev.off()
 
 pdf("figures/Figure4.pdf", width = 6L, height = 5L)
 figure4(dataset)
+figlabel("Figure 4")
 dev.off()
 
 pdf("figures/Figure5.pdf", width = 8L, height = 8L)
 figure5(dataset)
+figlabel("Figure 5")
 dev.off()
 
 pdf("figures/Figure6.pdf", width = 8L, height = 4L)
 figure6(dataset, nbin=75)
+figlabel("Figure 6")
 dev.off()
 
 
 # SI
 pdf("figures/FigureS1.pdf", width = 6L, height = 6L)
 figureS1(baad_mapmat, world_mapmat)
+figlabel("Figure S1")
 dev.off()
 
 pdf("figures/FigureS2.pdf", width = 6L, height = 5L)
 figureS2(dataset)
+figlabel("Figure S2")
 dev.off()
 
 pdf("figures/FigureS3.pdf", width = 5L, height = 4L)
-figureS3(dataset)
+figureS3(dataset, basalafit)
+figlabel("Figure S3")
 dev.off()
 
 pdf("figures/FigureS4.pdf", width = 8L, height = 8L)
 figureS4(dataset)
+figlabel("Figure S4")
 dev.off()
 
 pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
 figureS5(table_hierpart,table_varpart_gam,table_varpart_lmer)
+figlabel("Figure S5")
 dev.off()
 
 
+# If you have pdftk installed, combine PDFs like this
+combine <- TRUE
+if(combine){
+  figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:6), collapse=" ")
+  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:5), collapse=" ")
+  cmd <- sprintf("pdftk %s %s cat output Figures%s.pdf",figs,SIfigs,
+                 format(as.Date(Sys.time()),"%Y-%m-%d"))
+  system(cmd)
+}
 
 # ms.
 # knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")

@@ -240,7 +240,7 @@ figure4 <- function(dataset){
                      pch=16, axes=FALSE,
                      xlab=expression(A[S]~~(m^2)),
                      ylab=expression(A[F]~~(m^2))))
-  plot(f, col=palette(), lwd=2, type='l', add=TRUE)
+  plot(f, col=my_cols(), lwd=2, type='l', add=TRUE)
   log10axes()
   box()
 }
@@ -261,12 +261,14 @@ figure5 <- function(dataset){
              xlab=expression(A[S]~~(m^2)),
              ylab=expression(M[S]~~(kg)),
              pointcols=my_cols_transparent(),
+             linecols=my_cols(),
              pch=16)
   box()
   plotlabel("(a)", "topleft")
   
   smoothplot(log10(h.t), log10(m.st / a.stba2), pft, data=dataset, 
              pointcols=my_cols_transparent(),
+             linecols=my_cols(),
              xlab=expression(H[T]~~(m)),
              ylab=expression(M[S]/A[S]~~(kg~m^-2)),
              pch=16)
@@ -377,14 +379,15 @@ figureS1 <- function(baad_mapmat, world_mapmat){
 # Leaf area ratio; raw data.
 figureS2 <- function(dataset, KGAM=4){
   
+  # randomly reorder rows
   dataset <- dataset[sample(nrow(dataset)),]
   
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1, mgp=c(2.3,0.5,0))
 
-  x <- smoothplot(lh.t, lalf_mso, pft, dataset,  R="Group",
+  x <- smoothplot(lh.t, lalf_mst, pft, dataset,  R="Group",
                   linecols=my_linecols(), pointcols=my_cols_transparent(),
                   xlab="H (m)",kgam=KGAM,axes=FALSE,
-                  ylab=expression(A[F]/M[T]~~(m^2~kg^-1)))
+                  ylab=expression(A[F]/M[S]~~(m^2~kg^-1)))
   log10axes()
   box()
   my_legend("bottomleft")
@@ -408,7 +411,7 @@ figureS3 <- function(dataset, basalafit){
   axis(2)
   box()
   with(test, abline(h=median(d.ba/d.bh), lty=5))
-  
+  with(test, points(h.t, d.bapred/d.bh, pch=17, col="red"))
 }
 
 
