@@ -395,8 +395,11 @@ figureS2 <- function(dataset, KGAM=4){
 
 # based on this figure, we should exclude plants with height < 1.8 that have a BH but not BA measurement.
 # test for small plants
-figureS3 <- function(dataset){
+figureS3 <- function(dataset, basalafit){
   test <- subset(dataset, !is.na(d.ba) & !is.na(d.bh) & h.t < 2.5 & h.bh >= 1.3 & h.bh <= 1.4)
+  
+  test$d.bapred <- predict(basalafit, test)
+  
   smoothplot(h.t, d.ba/d.bh, data=test, axes=FALSE, pointcols=alpha("black", 0.5), linecols="black",
              fitoneline=TRUE,
              ylab=expression(D[BA]/D[BH]~~("-")), xlab=expression(H[T]~(m)),
@@ -409,7 +412,71 @@ figureS3 <- function(dataset){
 }
 
 
-
+figureS4 <- function(dataset){
+  
+  
+  m_afas <- lme(lalf_astba2 ~ pft + lh.t + MAP + MAT + I(MAP^2) + I(MAT^2) + MAP:pft,
+                random= ~1|Group,
+                data=dataset, na.action=na.omit)
+  
+  m_lma <- lme(llma ~ pft + lh.t + MAP + MAT + I(MAP^2) + I(MAT^2) + MAP:pft + MAT:pft,
+               random= ~1|Group,
+               data=dataset, na.action=na.omit)
+  
+  par(mfrow=c(2,2), mar=c(4.5,4.5,0.5,0.5), mgp=c(2.5,1,0))
+  visreg(m_afas, "MAP", by="pft", overlay=TRUE, 
+         legend=FALSE,
+         axes=FALSE,
+         xlab="MAP (mm)",
+         ylab=expression(f(MAP)~"-"~A[F]/A[S]~(m^2~m^-2)),
+         line.par=list(col=my_cols()),
+         fill.par=list(col=my_cols_transparent()),
+         points.par=list(col=my_cols()))
+  log10axes(2)
+  axis(1)
+  box()
+  plotlabel("(a)","topleft")
+  visreg(m_afas, "MAT", by="pft", overlay=TRUE, 
+         legend=FALSE,
+         axes=FALSE,
+         xlab=expression(MAT~~(degree*C)),
+         ylab=expression(f(MAT)~"-"~A[F]/A[S]~(m^2~m^-2)),
+         line.par=list(col=my_cols()),
+         fill.par=list(col=my_cols_transparent()),
+         points.par=list(col=my_cols()))
+  log10axes(2)
+  axis(1)
+  box()
+  plotlabel("(b)","topleft")
+  
+  visreg(m_lma, "MAP", by="pft", overlay=TRUE, 
+         legend=FALSE,
+         axes=FALSE,
+         xlab="MAP (mm)",
+         ylab=expression(f(MAP)~"-"~M[F]/A[F]~(kg~m^-2)),
+         line.par=list(col=my_cols()),
+         fill.par=list(col=my_cols_transparent()),
+         points.par=list(col=my_cols()))
+  log10axes(2)
+  axis(1)
+  box()
+  plotlabel("(c)","topleft")
+  visreg(m_lma, "MAT", by="pft", overlay=TRUE, 
+         legend=FALSE,
+         axes=FALSE,
+         xlab=expression(MAT~~(degree*C)),
+         ylab=expression(f(MAT)~"-"~M[F]/A[F]~(kg~m^-2)),
+         line.par=list(col=my_cols()),
+         fill.par=list(col=my_cols_transparent()),
+         points.par=list(col=my_cols()))
+  log10axes(2)
+  axis(1)
+  box()
+  plotlabel("(d)","topleft")
+  
+  my_legend("bottomright")
+  
+}
 
 
 

@@ -75,9 +75,8 @@ mixedr2 <- function(data, returnfit=FALSE){
   }
   
   # r.squared.merMod
-  xr2 <- function(x)unlist(sapply(x,  r.squared.merMod)["Marginal",])
+  xr2 <- function(x)unlist(sapply(x,  r.squaredGLMM)["R2m",])
   r2g <- as.data.frame(t(sapply(mods, xr2)))
-  
   
   tabg <- cbind(as.data.frame(varlabel), r2g)
   names(tabg) <- c("Variable","H","H, PFT","H, PFT, MAP, MAT")

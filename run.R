@@ -14,6 +14,7 @@ library(grid)
 library(gridBase)
 library(gridExtra)
 library(smatr)
+library(MuMIn)
 
 library(hier.part)
 
@@ -72,8 +73,10 @@ table_varpart_gam <- make_table_gamr2MATMAP(dataset)
 
 table_varpart_lmer <- mixedr2(dataset)
 
-
+# To check diagnostics, predictions, etc., if needed.
 lmers <- mixedr2(dataset, returnfit=TRUE)
+
+
 
 
 
@@ -113,6 +116,11 @@ dev.off()
 pdf("figures/FigureS3.pdf", width = 5L, height = 4L)
 figureS3(dataset)
 dev.off()
+
+pdf("figures/FigureS4.pdf", width = 8L, height = 8L)
+figureS4(dataset)
+dev.off()
+
 
 # ms.
 # knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
