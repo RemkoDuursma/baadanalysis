@@ -73,6 +73,7 @@ table_varpart_gam <- make_table_gamr2MATMAP(dataset)
 
 table_varpart_lmer <- mixedr2(dataset)
 
+
 # To check diagnostics, predictions, etc., if needed.
 lmers <- mixedr2(dataset, returnfit=TRUE)
 
@@ -120,6 +121,11 @@ dev.off()
 pdf("figures/FigureS4.pdf", width = 8L, height = 8L)
 figureS4(dataset)
 dev.off()
+
+pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
+figureS5(table_hierpart,table_varpart_gam,table_varpart_lmer)
+dev.off()
+
 
 
 # ms.

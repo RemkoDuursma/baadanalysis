@@ -480,6 +480,52 @@ figureS4 <- function(dataset){
 
 
 
+figureS5 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
+  
+  # compare three methods variance partitioning
+  convertm <- function(tab){
+    
+    # row function
+    f <- function(x){
+      x <- as.numeric(unlist(x)[2:4])
+      c(x[1], diff(x[1:3]))
+    }
+    t(apply(tab,1,f))
+  }
+  gamt <- convertm(table_varpart_gam)
+  mixt <- convertm(table_varpart_lmer)
+  hiert <- as.matrix(table_hierpart[,2:4])
+  
+  plotcols <- c("forestgreen","red","blue")
+  Cols <- rep(plotcols, each=5)
+  pchs <- c(19,15,17,1,6)
+  Pchs <- rep(pchs, 3)
+  
+  par(mfrow=c(1,3))
+  plot(as.vector(gamt), as.vector(mixt),
+       pch=Pchs, col=Cols,
+       xlab="GAM var components", ylab="LMM var components")
+  abline(0,1)
+  l <- legend("topleft", c("Height","PFT","Climate"), fill=plotcols, bty='n',
+              title="Variance component")
+  legend(l$rect$left, l$rect$top - l$rect$h,
+         c(expression(M[F]/M[S]),
+           expression(A[F]/M[S]),
+           expression(A[F]/A[S]),
+           expression(M[F]/A[F]),
+           expression(M[S]/A[S])),
+         col="black", pch=pchs, bty='n', title="Variable")
+  plot(as.vector(gamt), as.vector(hiert),
+       pch=Pchs, col=Cols,
+       xlab="GAM var components", ylab="IEA var components")
+  abline(0,1)
+  plot(as.vector(mixt), as.vector(hiert),
+       pch=Pchs, col=Cols,
+       xlab="LMM var components", ylab="IEA var components")
+  abline(0,1)
+  
+}
+
 
 
 
