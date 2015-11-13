@@ -88,8 +88,8 @@ fig.tree <- function(filename) {
   grid.text(expression(paste(M[S],", Mass of stem")),
     x = x0 + 0.03 , y = 0.18, just="left", gp=gp0)
 
-  grid.text(expression(paste(M[T],", total aboveground mass (", M[F]+M[S],")")),
-    x = x0 - 0.03 , y = -0.1, just="left", gp=gp0)
+#   grid.text(expression(paste(M[T],", total aboveground mass (", M[F]+M[S],")")),
+#     x = x0 - 0.03 , y = -0.1, just="left", gp=gp0)
 
   # leaf
   x1 <- x0 + 0.25
@@ -173,8 +173,8 @@ figure2 <- function(dataset){
                    axes=FALSE))
     with(dat, points(lh.t, lmlf, pch=16,cex=0.5,
                      col=alpha("forestgreen",0.5)))
-    smoothplot(lh.t, lmlf, data=dat, linecol="green3", add=TRUE, plotpoints=FALSE)
-    smoothplot(lh.t, lmst, data=dat, linecol="darkgoldenrod", add=TRUE, plotpoints=FALSE)
+    smoothplot(lh.t, lmlf, data=dat, linecol="green3", R="Group", add=TRUE, plotpoints=FALSE)
+    smoothplot(lh.t, lmst, data=dat, linecol="darkgoldenrod", R="Group", add=TRUE, plotpoints=FALSE)
     
     log10axes(side=1,  labels=TRUE)
     log10axes(side=2,  labels= i == 1)
@@ -271,13 +271,13 @@ figure5 <- function(dataset){
   smoothplot(log10(h.t), log10(m.st / a.stba2), pft, data=dataset, 
              pointcols=my_cols_transparent(),
              linecols=my_cols(),
-             xlab=expression(H[T]~~(m)),
+             xlab=expression(H~~(m)),
              ylab=expression(M[S]/A[S]~~(kg~m^-2)),
              pch=16)
   box()
   plotlabel("(b)", "topleft")
   with(subs, plot(log10(a.stba2 * h.t), log10(m.st), pch=16, 
-                  xlab=expression(A[S]*H[T]~~(m^3)),
+                  xlab=expression(A[S]*H~~(m^3)),
                   ylab=expression(M[S]~~(kg)),
                   axes=FALSE,
                   col=my_cols_transparent()[pft]))
@@ -289,7 +289,7 @@ figure5 <- function(dataset){
   
   m <- mixmean("mstastbht2","pft",subs)
   plot(1:3, m$y , ylim=c(0,250), col=my_cols(), pch=19,cex=1.3,
-       ylab=expression(M[S]/(H[T]*A[S])~~(kg~m^-3)),
+       ylab=expression(M[S]/(H*A[S])~~(kg~m^-3)),
        xlab="",
        axes=FALSE, xlim=c(0.5, 3.5),
        panel.first= arrows(x0=1:3, x1=1:3, y0=m$lci, y1=m$uci, angle=90, code=3,
@@ -335,7 +335,7 @@ figure6 <- function(dataset, nbin=100){
         outer=TRUE, at=1/6, cex=0.9)
   mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
         outer=TRUE, at=3/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(M[S]/(A[S]*H[T])~~(kg~m^-3)),
+  mtext(side=1, line=3, text=expression(M[S]/(A[S]*H)~~(kg~m^-3)),
         outer=TRUE, at=5/6, cex=0.9)
   
 }
@@ -407,7 +407,7 @@ figureS3 <- function(dataset, basalafit){
   
   smoothplot(h.t, d.ba/d.bh, data=test, axes=FALSE, pointcols=alpha("black", 0.5), linecols="black",
              fitoneline=TRUE,
-             ylab=expression(D[BA]/D[BH]~~("-")), xlab=expression(H[T]~(m)),
+             ylab=expression(D[BA]/D[BH]~~("-")), xlab=expression(H~(m)),
              ylim=c(0,15))
   axis(1)
   axis(2)
@@ -532,5 +532,27 @@ figureS5 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
 }
 
 
+figureS6 <- function(dataset){
+  
+  # randomly reorder rows
+  dataset <- dataset[sample(nrow(dataset)),]
+  
+  
+  par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
+  smoothplot(lmso, lmlf, pft, data=dataset, linecols=my_cols(),R="Group",
+             pointcols=my_cols_transparent(),
+             xlab=expression(M[F]+M[S]~~(kg)),
+             ylab=expression(M[F]~(kg)))
+  box()
+  plotlabel("(a)","topleft")
+  smoothplot(lmso, lalf, pft, data=dataset, linecols=my_cols(),R="Group",
+             pointcols=my_cols_transparent(),
+             xlab=expression(M[F]+M[S]~~(kg)),
+             ylab=expression(A[F]~(kg)))
+  box()
+  plotlabel("(b)","topleft")
+  
+  
+}
 
 

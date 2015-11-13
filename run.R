@@ -13,10 +13,12 @@ library(png)
 library(grid)
 library(gridBase)
 library(gridExtra)
+
+# new 
 library(smatr)
 library(MuMIn)
-
 library(hier.part)
+library(visreg)
 
 source("R/data_processing.R")
 source("R/tables_stats.R")
@@ -75,10 +77,7 @@ table_varpart_lmer <- mixedr2(dataset)
 
 
 # To check diagnostics, predictions, etc., if needed.
-lmers <- mixedr2(dataset, returnfit=TRUE)
-
-
-
+#lmers <- mixedr2(dataset, returnfit=TRUE)
 figlabel <- function(txt)title(txt, outer=TRUE, line=-0.5, cex.main=0.6, font.main=3)
 
 # Figures
@@ -138,6 +137,12 @@ pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
 figureS5(table_hierpart,table_varpart_gam,table_varpart_lmer)
 figlabel("Figure S5")
 dev.off()
+
+pdf("figures/FigureS6.pdf", width = 9L, height = 5L)
+figureS6(dataset)
+figlabel("Figure S6")
+dev.off()
+
 
 
 # If you have pdftk installed, combine PDFs like this

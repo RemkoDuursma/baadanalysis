@@ -48,7 +48,7 @@
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
-    \caption{Relationship between above-ground biomass and basal stem area. Each point is an individual plant. Lines are GAM fits by PFT. (a) Scaling of aboveground biomass ($M_T$) with basal stem area ($A_S$). (b) The ratio of $M_T/A_S$ as a function of plant height shows no clear differences between PFTs. The solid black line is a line with a slope of 1, which is expected if the aboveground biomass equation from \citet{chave2005} hold across the dataset. (c) Least-square means of the ratio of above-ground biomass to basal stem area, estimated from a linear mixed-effects model with basal stem area (linear and squared terms) and PFT. }
+    \caption{\emph{May not go in manuscript, just for notes at the moment}. Estimation of basal stem diameter from diameter at breast height for small plants. Because 36\% of the dataset is for plants with a height less than 1.3m, we used basal stem area in all analyses. For a subset of the data, dbh was measured but not d.ba, even though the plants were only marginally taller than breast height. In this figure, black points are the measured ratio of d.ba/d.bh (for plants where both were measured), red the predicted ratio from the fitted nonlinear model. Below 1.8m, the variance of the ratio d.ba/d.bh increases drastically, so we excluded those plants from the analysis (unless d.ba was actually measured).}
     \label{fig:figureS4}
 \end{figure}
 
