@@ -149,7 +149,7 @@ dev.off()
 combine <- TRUE
 if(combine){
   figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:6), collapse=" ")
-  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:5), collapse=" ")
+  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:6), collapse=" ")
   cmd <- sprintf("pdftk %s %s cat output Figures%s.pdf",figs,SIfigs,
                  format(as.Date(Sys.time()),"%Y-%m-%d"))
   system(cmd)
@@ -161,7 +161,7 @@ knitr::knit("manuscript.Rnw", "manuscript.tex")
 
 # ms SuppInfo
 tex_2_pdf("manuscript.tex")
-# tex_2_pdf("manuscript_suppinfo.tex")
+tex_2_pdf("manuscript_suppinfo.tex")
 
 
 
