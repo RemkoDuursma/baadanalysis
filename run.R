@@ -155,11 +155,11 @@ if(combine){
   system(cmd)
 }
 
-# ms.
-# knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
+# tex
 knitr::knit("manuscript.Rnw", "manuscript.tex")
+knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
 
-# ms SuppInfo
+# pdf
 tex_2_pdf("manuscript.tex")
 tex_2_pdf("manuscript_suppinfo.tex")
 
