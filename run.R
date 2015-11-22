@@ -22,7 +22,6 @@ library(visreg)
 
 source("R/data_processing.R")
 source("R/tables_stats.R")
-source("R/rsquaredglmm.R")
 source("R/figures.R")
 source("R/functions-figures.R")
 source("R/signifletters.R")
@@ -162,6 +161,7 @@ knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
 # pdf
 tex_2_pdf("manuscript.tex")
 tex_2_pdf("manuscript_suppinfo.tex")
+
 
 
 
