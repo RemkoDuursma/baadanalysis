@@ -196,6 +196,9 @@ figure2 <- function(dataset){
 # Main partitioning figure (MF/MS)
 figure3 <- function(dataset, KGAM=4){
   
+  set.seed(42) # Ensure plot looks same each time
+  dataset <- dataset[sample(nrow(dataset)),]
+
   l <- layout(matrix(c(1,2,1,3), byrow=T, ncol=2),
               widths=c(1,0.67), heights=c(1,1))
   
@@ -203,8 +206,8 @@ figure3 <- function(dataset, KGAM=4){
   obj1 <- smoothplot(lh.t, lmlf_mst, pft, dataset, R="Group",linecols=my_linecols(),
                      pointcols=my_cols_transparent(),axes=FALSE, ylim=c(-3,1),
                      xlab="Plant height (m)",kgam=KGAM,
-                     ylab=expression(M[F]/M[S]~(kg~kg^-1))
-  )
+                     ylab=expression(M[F]/M[S]~(kg~kg^-1)),
+                     cex=0.6)
   log10axes()
   my_legend("bottomleft", "long")
   box()
