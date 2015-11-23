@@ -196,7 +196,8 @@ figure2 <- function(dataset){
 # Main partitioning figure (MF/MS)
 figure3 <- function(dataset, KGAM=4){
   
-  set.seed(42) # Ensure plot looks same each time
+  # randomly reorder rows, so that colours shown in proportion to abundance
+  set.seed(42) # Set seed to ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
 
   l <- layout(matrix(c(1,2,1,3), byrow=T, ncol=2),
@@ -236,7 +237,8 @@ figure3 <- function(dataset, KGAM=4){
 # new figure 4
 figure4 <- function(dataset){
   
-  # random reorder dataset to avoid plotting artefact
+  # randomly reorder rows, so that colours shown in proportion to abundance
+  set.seed(12) # Ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
   
   f <- sma(lalf ~ lastba2*pft, data=dataset)
@@ -255,6 +257,11 @@ figure4 <- function(dataset){
 figure5 <- function(dataset){
   
   par(mfrow=c(1,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1)
+
+  # randomly reorder rows, so that colours shown in proportion to abundance
+  set.seed(1) # Set seed to ensure plot looks same each time
+  dataset <- dataset[sample(nrow(dataset)),]
+  
   smoothplot(log10(a.stba2), log10(m.st), pft, data=dataset, 
              xlab=expression(A[S]~~(m^2)),
              ylab=expression(M[S]~~(kg)),
@@ -362,7 +369,8 @@ figureS1 <- function(baad_mapmat, world_mapmat){
 # Leaf area ratio; raw data.
 figureS2 <- function(dataset, KGAM=4){
   
-  # randomly reorder rows
+  # randomly reorder rows, so that colours shown in proportion to abundance
+  set.seed(1) # Set seed to ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
   
   par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1, mgp=c(2.3,0.5,0))
@@ -386,6 +394,10 @@ figureS3 <- function(dataset, basalafit){
   
   test$d.bapred <- predict(basalafit, test)
   
+  # randomly reorder rows, so that colours shown in proportion to abundance
+  set.seed(1) # Set seed to ensure plot looks same each time
+  dataset <- dataset[sample(nrow(dataset)),]
+ 
   smoothplot(h.t, d.ba/d.bh, data=test, axes=FALSE, pointcols=alpha("black", 0.5), linecols="black",
              fitoneline=TRUE,
              ylab=expression(D[BA]/D[BH]~~("-")), xlab=expression(H~(m)),
@@ -515,9 +527,9 @@ figureS5 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
 
 figureS6 <- function(dataset){
   
-  # randomly reorder rows
+  # randomly reorder rows, so that colours shown in proportion to abundance
+  set.seed(100) # Set seed to ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
-  
   
   par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
   smoothplot(lmso, lmlf, pft, data=dataset, linecols=my_cols(),R="Group",
