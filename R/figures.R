@@ -181,8 +181,8 @@ figure2 <- function(dataset){
     box()
     legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
     if(i == 1){
-      legend(-2,4.5, c(expression(M[F]),expression(M[S])), pch=19,
-             col=c("#6b937f","#705e57"), bty='n', pt.cex=1, cex=1.4)
+      legend(-2,4.5, c(expression(M[S]),expression(M[F])), pch=19,
+             col=c("#705e57","#6b937f"), bty='n', pt.cex=1, cex=1.4)
     }
   }
   
@@ -206,7 +206,7 @@ figure3 <- function(dataset, KGAM=4){
   par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.2, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
   obj1 <- smoothplot(lh.t, lmlf_mst, pft, dataset, R="Group",linecols=my_linecols(),
                      pointcols=my_cols_transparent(),axes=FALSE, ylim=c(-3,1),
-                     xlab="Plant height (m)",kgam=KGAM,
+                     xlab="H (m)",kgam=KGAM,
                      ylab=expression(M[F]/M[S]~(kg~kg^-1)),
                      cex=0.6)
   log10axes()
@@ -241,13 +241,13 @@ figure4 <- function(dataset){
   set.seed(12) # Ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
   
-  f <- sma(lalf ~ lastba2*pft, data=dataset)
   par(mar=c(5,5,1,1), cex.lab=1.2)
-  with(dataset, plot(lastba2, lalf, col=my_cols_transparent()[pft], 
+  smoothplot(lastba2, lalf, pft, data=dataset, R="Group",
                      pch=16, axes=FALSE,
+                     pointcols=my_cols_transparent(),
+                     linecols=my_cols(),
                      xlab=expression(A[S]~~(m^2)),
-                     ylab=expression(A[F]~~(m^2))))
-  plot(f, col=my_cols(), lwd=2, type='l', add=TRUE)
+                     ylab=expression(A[F]~~(m^2)))
   log10axes()
   box()
 }
@@ -255,6 +255,10 @@ figure4 <- function(dataset){
 
 
 figure5 <- function(dataset){
+  
+  # x and y limits of panel b (zoomed in)
+  xl <- c(-3, log10(0.8))
+  yl <- c(0.1,4)
   
   par(mfrow=c(1,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1)
 
@@ -265,17 +269,21 @@ figure5 <- function(dataset){
   smoothplot(log10(a.stba2), log10(m.st), pft, data=dataset, 
              xlab=expression(A[S]~~(m^2)),
              ylab=expression(M[S]~~(kg)),
+             panel.first=rect(xl[1],yl[1],xl[2],yl[2],border=NA,col="lightgrey"),
              pointcols=my_cols_transparent(),
              linecols=my_cols(),
              pch=16)
   box()
   plotlabel("(a)", "topleft")
+  ay <- 0.3*(yl[2]-yl[1])+yl[1]
+  arrows(xl[2],ay,xl[2]+1.3,ay,col="lightgrey",lwd=2,length=0.08)
+  
   
   smoothplot(log10(a.stba2), log10(m.st), pft, data=dataset, 
              xlab=expression(A[S]~~(m^2)),
              ylab=expression(M[S]~~(kg)),
-             xlim=c(-3, log10(0.8)),
-             ylim=c(0.1,4),
+             xlim=xl,
+             ylim=yl,
              pointcols=my_cols_transparent(),
              linecols=my_cols(),
              pch=16)
