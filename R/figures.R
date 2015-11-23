@@ -251,14 +251,7 @@ figure4 <- function(dataset){
 
 figure5 <- function(dataset){
   
-  # larger trees; clear EG effect on stem mass index
-  subs <- subset(dataset, a.stbh*h.t > 0.01 & !is.na(a.stbh) & h.t > 2)
-  subs$astbaht <- with(subs, a.stba2 * h.t)
-  subs$lastbaht <- log10(subs$astbaht)
-  subs$mstastbht2 <- with(subs, log10(m.st / (a.stba2 * h.t)))
-  
-  
-  par(mfrow=c(2,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1)
+  par(mfrow=c(1,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1)
   smoothplot(log10(a.stba2), log10(m.st), pft, data=dataset, 
              xlab=expression(A[S]~~(m^2)),
              ylab=expression(M[S]~~(kg)),
@@ -268,40 +261,25 @@ figure5 <- function(dataset){
   box()
   plotlabel("(a)", "topleft")
   
-  smoothplot(log10(h.t), log10(m.st / a.stba2), pft, data=dataset, 
+  smoothplot(log10(a.stba2), log10(m.st), pft, data=dataset, 
+             xlab=expression(A[S]~~(m^2)),
+             ylab=expression(M[S]~~(kg)),
+             xlim=c(-3, log10(0.8)),
+             ylim=c(0.1,4),
              pointcols=my_cols_transparent(),
              linecols=my_cols(),
-             xlab=expression(H~~(m)),
-             ylab=expression(M[S]/A[S]~~(kg~m^-2)),
              pch=16)
   box()
   plotlabel("(b)", "topleft")
-  with(subs, plot(log10(a.stba2 * h.t), log10(m.st), pch=16, 
-                  xlab=expression(A[S]*H~~(m^3)),
-                  ylab=expression(M[S]~~(kg)),
-                  axes=FALSE,
-                  col=my_cols_transparent()[pft]))
-  log10axes()
-  plotlabel("(c)", "topleft")
-  f1 <- sma(lmst ~ lastbaht * pft, data=subs)
-  plot(f1, add=TRUE, type='l', lwd=2, col=my_cols())
-  box()
-  
-  m <- mixmean("mstastbht2","pft",subs)
-  plot(1:3, m$y , ylim=c(0,250), col=my_cols(), pch=19,cex=1.3,
-       ylab=expression(M[S]/(H*A[S])~~(kg~m^-3)),
-       xlab="",
-       axes=FALSE, xlim=c(0.5, 3.5),
-       panel.first= arrows(x0=1:3, x1=1:3, y0=m$lci, y1=m$uci, angle=90, code=3,
-                           length=0.025, col=my_cols()))
-  u <- par()$usr
-  text(1:3, u[3] + 0.0*(u[4]-u[3]), m$signifletters, pos=3, cex=0.9)
-  axis(1, at=1:3, labels=m$pft)
-  box()
-  axis(2)
-  plotlabel("(d)", "topleft")
   
 }
+
+
+
+  
+  
+  
+
 
 # Histograms of MF/AS, AF/AS, and MS/(AS*H)
 figure6 <- function(dataset, nbin=100){

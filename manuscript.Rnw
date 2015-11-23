@@ -35,7 +35,7 @@
 
 % \linenumbers
 
-\title{Leaf traits drive differences in above-ground biomass distribution among woody plant functional types}
+\title{Leaf traits and size drive differences in above-ground biomass distribution among woody plant functional types}
 
 \author[1]{Remko A. Duursma}
 \author[2]{Daniel S. Falster}

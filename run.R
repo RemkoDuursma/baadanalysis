@@ -100,7 +100,7 @@ figure4(dataset)
 figlabel("Figure 4")
 dev.off()
 
-pdf("figures/Figure5.pdf", width = 8L, height = 8L)
+pdf("figures/Figure5.pdf", width = 8L, height = 4L)
 figure5(dataset)
 figlabel("Figure 5")
 dev.off()
