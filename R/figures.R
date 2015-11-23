@@ -169,12 +169,12 @@ figure2 <- function(dataset){
     
     with(dat, plot(lh.t, lmst, pch=16,cex=0.5,
                    xlim=log10(c(0.01,105)), ylim=c(-6,6),
-                   col=alpha("darkgoldenrod4",0.5),
+                   col=alpha("#8b7f82",0.5),
                    axes=FALSE))
     with(dat, points(lh.t, lmlf, pch=16,cex=0.5,
-                     col=alpha("forestgreen",0.5)))
-    smoothplot(lh.t, lmlf, data=dat, linecol="green3", R="Group", add=TRUE, plotpoints=FALSE)
-    smoothplot(lh.t, lmst, data=dat, linecol="darkgoldenrod", R="Group", add=TRUE, plotpoints=FALSE)
+                     col=alpha("#85a088",0.5)))
+    smoothplot(lh.t, lmlf, data=dat, linecol="#6b937f", R="Group", add=TRUE, plotpoints=FALSE)
+    smoothplot(lh.t, lmst, data=dat, linecol="#705e57", R="Group", add=TRUE, plotpoints=FALSE)
     
     log10axes(side=1,  labels=TRUE)
     log10axes(side=2,  labels= i == 1)
@@ -182,7 +182,7 @@ figure2 <- function(dataset){
     legend("topleft", labels[i], bty='n', cex=1.2, text.font=3)
     if(i == 1){
       legend(-2,4.5, c(expression(M[F]),expression(M[S])), pch=19,
-             col=c("forestgreen","darkgoldenrod4"), bty='n', pt.cex=1, cex=1.4)
+             col=c("#6b937f","#705e57"), bty='n', pt.cex=1, cex=1.4)
     }
   }
   
