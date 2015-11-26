@@ -17,6 +17,7 @@ packages:
   - grid
   - gridBase  # Fig1a
   - gridExtra # Fig1a
+  - callr     # calling system for latex
 
 sources:
   - R/data_processing.R
@@ -56,7 +57,6 @@ targets:
 
   manuscript.pdf:
     depends:
-      - "references.bib"
       - figures/Figure1.pdf
       - figures/Figure2.pdf
       - figures/Figure3.pdf
@@ -70,7 +70,7 @@ targets:
       - table_varpart2
       - table_r2lmaforpft
       - basalafit
-    command: tex_2_pdf("manuscript.tex")
+    command: latex_build("manuscript.tex", bibliography = "references.bib")
 
   manuscript.tex:
     depends:
@@ -88,12 +88,11 @@ targets:
 
   manuscript_suppinfo.pdf:
     depends:
-      - "references.bib"
       - figures/FigureS1.pdf
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
       - table_gamr2MATMAP
-    command: tex_2_pdf("manuscript_suppinfo.tex")
+    command: latex_build ("manuscript_suppinfo.tex", bibliography = "references.bib")
 
   manuscript_suppinfo.tex:
     depends:
