@@ -170,7 +170,7 @@ addMImgdd0 <- function(baad, MI_mGDDD_path){
 
 
 
-prepare_dataset_1 <- function(baad){
+prepare_dataset_1 <- function(baad, plantations=TRUE){
 
   # Prepare dataset for analysis.
   # - remove non-field grown plants, deciduous gymnosperms
@@ -225,6 +225,12 @@ prepare_dataset_1 <- function(baad){
     
     })
 
+  # Exclude plantations, maybe
+  if(!plantations){
+    dataset <- subset(dataset, growingCondition %in% c("FE","FW"))
+  }
+  
+  
   dataset
 }
 

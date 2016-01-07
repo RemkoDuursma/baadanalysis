@@ -41,7 +41,8 @@ baad_all <- readRDS("downloads/baad.rds")
 baad_climate1 <- addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
 baad_mapmat <- prepare_baadmapmat(baad_climate1)
 baad_climate2 <- addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.rds")
-dataset <- prepare_dataset_1(baad_climate2)
+
+dataset <- prepare_dataset_1(baad_climate2, plantations=TRUE)
 dataset2 <- prepare_dataset_2(dataset)
 dat_alfmso <- prepare_dat_alfmso(dataset2)
 dat_mlfmso <- prepare_dat_mlfmso(dataset2)
@@ -154,7 +155,7 @@ dev.off()
 # If you have pdftk installed, combine PDFs like this
 combine <- TRUE
 if(combine){
-  figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:6), collapse=" ")
+  figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:7), collapse=" ")
   SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:6), collapse=" ")
   cmd <- sprintf("pdftk %s %s cat output Figures%s.pdf",figs,SIfigs,
                  format(as.Date(Sys.time()),"%Y-%m-%d"))
