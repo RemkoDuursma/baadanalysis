@@ -349,19 +349,21 @@ figure7 <- function(dataset){
     x <- 10^eval(parse(text=lv[i]))
     labs[i] <- sprintf("%.2f - %.2f", x[1], x[2])
   }
-  labs[1] <- paste("H =",labs[1])
+  labs[1] <- paste("H (m) =",labs[1])
   
-  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
   lmes <- lapply(data_ht, function(x){
     lme(lmlf_mst ~ pft2*MAT, random=~1|Group, data=x, na.action=na.omit)
   })
+  pvals <- reichstyle_climate_pvals(dataset)
 
+  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
   for(i in 1:length(lmes)){
     
     v <- visreg(lmes[[i]], "MAT", by="pft2", 
            xlim=c(0,30), overlay=TRUE, axes=FALSE,
-           ylim=c(-2,1.2),legend=FALSE,
-           line.par=list(col=c("red","blue")))
+           ylim=c(-2,1.2),legend=FALSE,band=FALSE,
+           line.par=list(col=c("red","blue"),
+                         lty=c(2,1)[as.integer(pvals[i,2:3] < 0.05)+1]))
     axis(1)
     magaxis(2, labels = i == 1, unlog=2)
     
@@ -374,7 +376,6 @@ figure7 <- function(dataset){
   legend("topright", unique(dataset$pft2), lty=1, lwd=2, 
          col=c("blue","red"), bty='n', cex=1.2)
 }
-
 
 
 

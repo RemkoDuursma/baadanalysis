@@ -159,22 +159,36 @@ tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
 
 
 
-reichstyle_climate <- function(dataset){
+reichstyle_climate_pvals <- function(dataset){
+
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
   
-  lmesp <- function(x){
-    df <- subset(dataset, pft2 == x)
+  lmesp <- function(PFT){
+
+    df <- subset(dataset, pft2 == PFT)
     dfsp <- split(df, df$lhtclass)
     
-    lmesangio <- lapply(dfsp, function(x){
-      lme(lmlf_mst ~ MAT, random=~1|Group, data=x, na.action=na.omit)
-    })
-    pv <- sapply(lapply(lmesangio,Anova,test.statistic="F"), "[[", 3)
+    
+    pv <- c()
+    for(i in 1:length(dfsp)){
+      
+      assign("dat", dfsp[[i]], envir=.GlobalEnv)
+      fit <- lme(lmlf_mst ~ MAT, random=~1|Group, data=dat, na.action=na.omit)
+      pv[i] <- Anova(fit, test.statistic="F")[[3]]
+    }
+    
     return(pv)
   }
-  lmesp("Angiosperm")
-  lmesp("Gymnosperm")
+  
+  data.frame(lhtclass=levels(dataset$lhtclass),
+             pval_angio = lmesp("Angiosperm"),
+             pval_gymno = lmesp("Gymnosperm"))
 
 }
+
+
+
+
+
 

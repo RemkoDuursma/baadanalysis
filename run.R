@@ -20,6 +20,7 @@ library(MuMIn)
 library(hier.part)
 library(visreg)
 library(gtools)
+library(car)
 
 source("R/data_processing.R")
 source("R/tables_stats.R")
