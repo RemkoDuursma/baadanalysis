@@ -298,6 +298,17 @@ print(xtable(table_hierpart),sanitize.text.function=function(x){x},
 \end{figure}
 
 
+\begin{figure}[h!]
+    \centering
+    \ifincludefigs 
+    \includegraphics[width=0.99\textwidth]{Figure7.pdf}
+    \fi
+    \caption{Climate effects as per Reich et al. (2014).}
+    \label{fig:figreichclimate}
+\end{figure}
+
+
+
 
 
 
