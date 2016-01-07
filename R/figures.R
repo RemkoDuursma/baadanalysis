@@ -458,75 +458,9 @@ figureS3 <- function(dataset, basalafit){
 }
 
 
-figureS4 <- function(dataset){
-  
-  
-  m_afas <- lme(lalf_astba2 ~ pft + lh.t + MAP + MAT + I(MAP^2) + I(MAT^2) + MAP:pft,
-                random= ~1|Group,
-                data=dataset, na.action=na.omit)
-  
-  m_lma <- lme(llma ~ pft + lh.t + MAP + MAT + I(MAP^2) + I(MAT^2) + MAP:pft + MAT:pft,
-               random= ~1|Group,
-               data=dataset, na.action=na.omit)
-  
-  par(mfrow=c(2,2), mar=c(4.5,4.5,0.5,0.5), mgp=c(2.5,1,0))
-  visreg(m_afas, "MAP", by="pft", overlay=TRUE, 
-         legend=FALSE,
-         axes=FALSE,
-         xlab="MAP (mm)",
-         ylab=expression(f(MAP)~"-"~A[F]/A[S]~(m^2~m^-2)),
-         line.par=list(col=my_cols()),
-         fill.par=list(col=my_cols_transparent()),
-         points.par=list(col=my_cols()))
-  log10axes(2)
-  axis(1)
-  box()
-  plotlabel("(a)","topleft")
-  visreg(m_afas, "MAT", by="pft", overlay=TRUE, 
-         legend=FALSE,
-         axes=FALSE,
-         xlab=expression(MAT~~(degree*C)),
-         ylab=expression(f(MAT)~"-"~A[F]/A[S]~(m^2~m^-2)),
-         line.par=list(col=my_cols()),
-         fill.par=list(col=my_cols_transparent()),
-         points.par=list(col=my_cols()))
-  log10axes(2)
-  axis(1)
-  box()
-  plotlabel("(b)","topleft")
-  
-  visreg(m_lma, "MAP", by="pft", overlay=TRUE, 
-         legend=FALSE,
-         axes=FALSE,
-         xlab="MAP (mm)",
-         ylab=expression(f(MAP)~"-"~M[F]/A[F]~(kg~m^-2)),
-         line.par=list(col=my_cols()),
-         fill.par=list(col=my_cols_transparent()),
-         points.par=list(col=my_cols()))
-  log10axes(2)
-  axis(1)
-  box()
-  plotlabel("(c)","topleft")
-  visreg(m_lma, "MAT", by="pft", overlay=TRUE, 
-         legend=FALSE,
-         axes=FALSE,
-         xlab=expression(MAT~~(degree*C)),
-         ylab=expression(f(MAT)~"-"~M[F]/A[F]~(kg~m^-2)),
-         line.par=list(col=my_cols()),
-         fill.par=list(col=my_cols_transparent()),
-         points.par=list(col=my_cols()))
-  log10axes(2)
-  axis(1)
-  box()
-  plotlabel("(d)","topleft")
-  
-  my_legend("bottomright")
-  
-}
 
 
-
-figureS5 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
+figureS4 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
   
   # compare three methods variance partitioning
   convertm <- function(tab){
@@ -573,7 +507,7 @@ figureS5 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
 }
 
 
-figureS6 <- function(dataset){
+figureS5 <- function(dataset){
   
   # randomly reorder rows, so that colours shown in proportion to abundance
   set.seed(100) # Set seed to ensure plot looks same each time

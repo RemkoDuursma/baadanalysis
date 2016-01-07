@@ -135,19 +135,14 @@ figureS3(dataset, basalafit)
 figlabel("Figure S3")
 dev.off()
 
-pdf("figures/FigureS4.pdf", width = 8L, height = 8L)
-figureS4(dataset)
+pdf("figures/FigureS4.pdf", width = 9L, height = 5L)
+figureS4(table_hierpart,table_varpart_gam,table_varpart_lmer)
 figlabel("Figure S4")
 dev.off()
 
 pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
-figureS5(table_hierpart,table_varpart_gam,table_varpart_lmer)
+figureS5(dataset)
 figlabel("Figure S5")
-dev.off()
-
-pdf("figures/FigureS6.pdf", width = 9L, height = 5L)
-figureS6(dataset)
-figlabel("Figure S6")
 dev.off()
 
 
@@ -156,7 +151,7 @@ dev.off()
 combine <- TRUE
 if(combine){
   figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:7), collapse=" ")
-  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:6), collapse=" ")
+  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:5), collapse=" ")
   cmd <- sprintf("pdftk %s %s cat output Figures%s.pdf",figs,SIfigs,
                  format(as.Date(Sys.time()),"%Y-%m-%d"))
   system(cmd)
