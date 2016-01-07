@@ -230,7 +230,7 @@ figure3 <- function(dataset, KGAM=4){
 }
 
 
-# new figure 4
+# LA vs. AS
 figure4 <- function(dataset){
   
   # random reorder dataset to avoid plotting artefact
@@ -248,7 +248,7 @@ figure4 <- function(dataset){
 }
 
 
-
+# MST vs. AS
 figure5 <- function(dataset){
   
   par(mfrow=c(1,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1)
@@ -273,12 +273,6 @@ figure5 <- function(dataset){
   plotlabel("(b)", "topleft")
   
 }
-
-
-
-  
-  
-  
 
 
 # Histograms of MF/AS, AF/AS, and MS/(AS*H)
@@ -318,8 +312,45 @@ figure6 <- function(dataset, nbin=100){
   
 }
 
+# new climate figure, cf. Reich
 
+figure7 <- function(dataset){
 
+  dataset$lhtclass <- quantcut(dataset$lh.t, 5)
+  dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
+  
+  # Like Reich, no MAP
+  lv <- levels(dataset$lhtclass)
+  lv <- gsub("]",")",lv)
+  lv <- gsub("\\[","(",lv)
+  lv <- paste0("c",lv)
+  labs <- c()
+  for(i in 1:length(lv)){
+    x <- 10^eval(parse(text=lv[i]))
+    labs[i] <- sprintf("%.2f - %.2f", x[1], x[2])
+  }
+  labs[1] <- paste("H =",labs[1])
+  
+  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
+  lmes <- lapply(data_ht, function(x){
+    lme(lmlf_mst ~ pft2*MAT, random=~1|Group, data=x, na.action=na.omit)
+  })
+  for(i in 1:length(lmes)){
+    visreg(lmes[[i]], "MAT", by="pft2", ylim=c(-2,0.5), 
+           xlim=c(0,30), overlay=TRUE, legend=FALSE, axes=FALSE,
+           line.par=list(col=c("red","blue")),
+           ylim=c(-2,1.2))
+    axis(1)
+    magaxis(2, labels = i == 1, unlog=2)
+  }
+  mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
+  mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
+  for(i in 1:length(lmes)){
+    mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
+  }
+  legend("topright", rev(unique(dataset$pft2)), lty=1, lwd=2, 
+         col=rev(c("red","blue")), bty='n', cex=1.2)
+}
 
 
 

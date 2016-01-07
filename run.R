@@ -19,6 +19,7 @@ library(smatr)
 library(MuMIn)
 library(hier.part)
 library(visreg)
+library(gtools)
 
 source("R/data_processing.R")
 source("R/tables_stats.R")
@@ -108,6 +109,11 @@ dev.off()
 pdf("figures/Figure6.pdf", width = 8L, height = 4L)
 figure6(dataset, nbin=75)
 figlabel("Figure 6")
+dev.off()
+
+pdf("figures/Figure7.pdf", width = 9L, height = 5L)
+figure7(dataset)
+figlabel("Figure 7")
 dev.off()
 
 
