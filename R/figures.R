@@ -337,7 +337,9 @@ figure7 <- function(dataset){
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
   
-  # Like Reich, no MAP
+  data_ht <- split(dataset, dataset$lhtclass)
+  
+  # Labels for height classes.
   lv <- levels(dataset$lhtclass)
   lv <- gsub("]",")",lv)
   lv <- gsub("\\[","(",lv)
@@ -353,22 +355,28 @@ figure7 <- function(dataset){
   lmes <- lapply(data_ht, function(x){
     lme(lmlf_mst ~ pft2*MAT, random=~1|Group, data=x, na.action=na.omit)
   })
+
   for(i in 1:length(lmes)){
-    visreg(lmes[[i]], "MAT", by="pft2", ylim=c(-2,0.5), 
-           xlim=c(0,30), overlay=TRUE, legend=FALSE, axes=FALSE,
-           line.par=list(col=c("red","blue")),
-           ylim=c(-2,1.2))
+    
+    v <- visreg(lmes[[i]], "MAT", by="pft2", 
+           xlim=c(0,30), overlay=TRUE, axes=FALSE,
+           ylim=c(-2,1.2),legend=FALSE,
+           line.par=list(col=c("red","blue")))
     axis(1)
     magaxis(2, labels = i == 1, unlog=2)
+    
   }
   mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
   mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
   for(i in 1:length(lmes)){
     mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
   }
-  legend("topright", rev(unique(dataset$pft2)), lty=1, lwd=2, 
-         col=rev(c("red","blue")), bty='n', cex=1.2)
+  legend("topright", unique(dataset$pft2), lty=1, lwd=2, 
+         col=c("blue","red"), bty='n', cex=1.2)
 }
+
+
+
 
 
 
