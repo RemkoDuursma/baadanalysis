@@ -351,30 +351,38 @@ figure7 <- function(dataset){
   }
   labs[1] <- paste("H (m) =",labs[1])
   
-  lmes <- lapply(data_ht, function(x){
-    lme(lmlf_mst ~ pft2*MAT, random=~1|Group, data=x, na.action=na.omit)
-  })
-  pvals <- reichstyle_climate_pvals(dataset)
-
-  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
-  for(i in 1:length(lmes)){
+  plotpanel <- function(x, ...){
     
-    v <- visreg(lmes[[i]], "MAT", by="pft2", 
-           xlim=c(0,30), overlay=TRUE, axes=FALSE,
-           ylim=c(-2,1.2),legend=FALSE,band=FALSE,
-           line.par=list(col=c("red","blue"),
-                         lty=c(2,1)[as.integer(pvals[i,2:3] < 0.05)+1]))
+    pv <- function(obj)summary(obj)$coefficients[2,4]
+    
+    df <- summaryBy(. ~ Group, data=x, FUN=mean, keep.names=TRUE, id=~pft2+pft)
+    
+    fg <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Gymnosperm")
+    fa <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Angiosperm")
+    
+    with(x, plot(MAT, lmlf_mst, pch=16, cex=0.8, col=my_cols_transparent()[as.factor(pft)], 
+                 axes=FALSE, ylim=c(-3,1), xlim=c(0,30),...))
+    predline(fa, polycolor=alpha("blue",0.4), col="blue", lwd=2, lty=if(pv(fa) < 0.05)1 else 2)
+    predline(fg, polycolor=alpha("red",0.4), col="red", lwd=2, lty=if(pv(fg) < 0.05)1 else 2)
+    
+  }
+  
+  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
+  for(i in seq_along(data_ht)){
+    
+    plotpanel(data_ht[[i]])
+    
     axis(1)
     magaxis(2, labels = i == 1, unlog=2)
     
   }
   mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
   mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
-  for(i in 1:length(lmes)){
+  for(i in seq_along(data_ht)){
     mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
   }
   legend("topright", unique(dataset$pft2), lty=1, lwd=2, 
-         col=c("blue","red"), bty='n', cex=1.2)
+         col=c("red","blue"), bty='n', cex=1.2)
 }
 
 
