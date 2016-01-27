@@ -539,3 +539,56 @@ figureS5 <- function(dataset){
 }
 
 
+
+figureS6 <- function(dataset){
+  
+  dataset$lhtclass <- quantcut(dataset$lh.t, 5)
+  data_ht <- split(dataset, dataset$lhtclass)
+  
+  # Labels for height classes.
+  lv <- levels(dataset$lhtclass)
+  lv <- gsub("]",")",lv)
+  lv <- gsub("\\[","(",lv)
+  lv <- paste0("c",lv)
+  labs <- c()
+  for(i in 1:length(lv)){
+    x <- 10^eval(parse(text=lv[i]))
+    labs[i] <- sprintf("%.2f - %.2f", x[1], x[2])
+  }
+  labs[1] <- paste("H (m) =",labs[1])
+  
+  plotpanel <- function(x, ...){
+    
+    pv <- function(obj)summary(obj)$coefficients[2,4]
+    df <- summaryBy(. ~ Group, data=x, FUN=mean, keep.names=TRUE, id=~pft2+pft)
+    
+    fg <- lm(lmlf_mst ~ MAT, data=df, subset=pft=="EG")
+    fa <- lm(lmlf_mst ~ MAT, data=df, subset=pft=="EA")
+    fd <- lm(lmlf_mst ~ MAT, data=df, subset=pft=="DA")
+    
+    with(x, plot(MAT, lmlf_mst, pch=16, cex=0.8, col=my_cols_transparent()[pft], 
+                 axes=FALSE, ylim=c(-3,1), xlim=c(-10,30),...))
+    predline(fd, polycolor=my_cols_transparent()[1], col=my_cols()[1], lwd=2, lty=if(pv(fd) < 0.05)1 else 2)
+    predline(fa, polycolor=my_cols_transparent()[2], col=my_cols()[2], lwd=2, lty=if(pv(fa) < 0.05)1 else 2)
+    predline(fg, polycolor=my_cols_transparent()[3], col=my_cols()[3], lwd=2, lty=if(pv(fg) < 0.05)1 else 2)
+    
+  }
+  
+  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
+  for(i in seq_along(data_ht)){
+    
+    plotpanel(data_ht[[i]])
+    
+    axis(1)
+    magaxis(2, labels = i == 1, unlog=2)
+    
+  }
+  mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
+  mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
+  for(i in seq_along(data_ht)){
+    mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
+  }
+  legend("topright", levels(dataset$pft), lty=1, lwd=2, 
+         col=my_cols(), bty='n', cex=1.2)
+}
+

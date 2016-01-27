@@ -145,6 +145,10 @@ figureS5(dataset)
 figlabel("Figure S5")
 dev.off()
 
+pdf("figures/FigureS6.pdf", width = 9L, height = 5L)
+figureS6(dataset)
+figlabel("Figure S6")
+dev.off()
 
 
 # If you have pdftk installed, combine PDFs like this
