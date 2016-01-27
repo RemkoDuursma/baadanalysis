@@ -113,10 +113,6 @@ figure6(dataset, nbin=75)
 figlabel("Figure 6")
 dev.off()
 
-pdf("figures/Figure7.pdf", width = 9L, height = 5L)
-figure7(dataset)
-figlabel("Figure 7")
-dev.off()
 
 
 # SI
@@ -130,32 +126,32 @@ figureS2(dataset)
 figlabel("Figure S2")
 dev.off()
 
-pdf("figures/FigureS3.pdf", width = 5L, height = 4L)
-figureS3(dataset, basalafit)
-figlabel("Figure S3")
-dev.off()
-
-pdf("figures/FigureS4.pdf", width = 9L, height = 5L)
+pdf("figures/FigureS3.pdf", width = 9L, height = 4L)
 figureS4(table_hierpart,table_varpart_gam,table_varpart_lmer)
 figlabel("Figure S4")
 dev.off()
 
-pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
+pdf("figures/FigureS4.pdf", width = 9L, height = 5L)
 figureS5(dataset)
 figlabel("Figure S5")
 dev.off()
 
-pdf("figures/FigureS6.pdf", width = 9L, height = 5L)
-figureS6(dataset)
+pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
+figureS6_part1(dataset)
 figlabel("Figure S6")
+dev.off()
+
+pdf("figures/FigureS6.pdf", width = 9L, height = 5L)
+figureS6_part2(dataset)
+figlabel("Figure S7")
 dev.off()
 
 
 # If you have pdftk installed, combine PDFs like this
 combine <- TRUE
 if(combine){
-  figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:7), collapse=" ")
-  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:5), collapse=" ")
+  figs <- paste(sprintf("%sFigure%i.pdf","figures/", 1:6), collapse=" ")
+  SIfigs <- paste(sprintf("%sFigureS%i.pdf", "figures/", 1:6), collapse=" ")
   cmd <- sprintf("pdftk %s %s cat output Figures%s.pdf",figs,SIfigs,
                  format(as.Date(Sys.time()),"%Y-%m-%d"))
   system(cmd)

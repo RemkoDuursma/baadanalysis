@@ -330,60 +330,6 @@ figure6 <- function(dataset, nbin=100){
   
 }
 
-# new climate figure, cf. Reich
-
-figure7 <- function(dataset){
-
-  dataset$lhtclass <- quantcut(dataset$lh.t, 5)
-  dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
-  
-  data_ht <- split(dataset, dataset$lhtclass)
-  
-  # Labels for height classes.
-  lv <- levels(dataset$lhtclass)
-  lv <- gsub("]",")",lv)
-  lv <- gsub("\\[","(",lv)
-  lv <- paste0("c",lv)
-  labs <- c()
-  for(i in 1:length(lv)){
-    x <- 10^eval(parse(text=lv[i]))
-    labs[i] <- sprintf("%.2f - %.2f", x[1], x[2])
-  }
-  labs[1] <- paste("H (m) =",labs[1])
-  
-  plotpanel <- function(x, ...){
-    
-    pv <- function(obj)summary(obj)$coefficients[2,4]
-    
-    df <- summaryBy(. ~ Group, data=x, FUN=mean, keep.names=TRUE, id=~pft2+pft)
-    
-    fg <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Gymnosperm")
-    fa <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Angiosperm")
-    
-    with(x, plot(MAT, lmlf_mst, pch=16, cex=0.8, col=my_cols_transparent()[as.factor(pft)], 
-                 axes=FALSE, ylim=c(-3,1), xlim=c(0,30),...))
-    predline(fa, polycolor=alpha("blue",0.4), col="blue", lwd=2, lty=if(pv(fa) < 0.05)1 else 2)
-    predline(fg, polycolor=alpha("red",0.4), col="red", lwd=2, lty=if(pv(fg) < 0.05)1 else 2)
-    
-  }
-  
-  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
-  for(i in seq_along(data_ht)){
-    
-    plotpanel(data_ht[[i]])
-    
-    axis(1)
-    magaxis(2, labels = i == 1, unlog=2)
-    
-  }
-  mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
-  mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
-  for(i in seq_along(data_ht)){
-    mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
-  }
-  legend("topright", unique(dataset$pft2), lty=1, lwd=2, 
-         col=c("red","blue"), bty='n', cex=1.2)
-}
 
 
 
@@ -540,7 +486,7 @@ figureS5 <- function(dataset){
 
 
 
-figureS6 <- function(dataset){
+figureS6_part1 <- function(dataset){
   
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   data_ht <- split(dataset, dataset$lhtclass)
@@ -560,7 +506,7 @@ figureS6 <- function(dataset){
   plotpanel <- function(x, ...){
     
     pv <- function(obj)summary(obj)$coefficients[2,4]
-    df <- summaryBy(. ~ Group, data=x, FUN=mean, keep.names=TRUE, id=~pft2+pft)
+    df <- summaryBy(. ~ Group, data=x, FUN=mean, keep.names=TRUE, id=~pft)
     
     fg <- lm(lmlf_mst ~ MAT, data=df, subset=pft=="EG")
     fa <- lm(lmlf_mst ~ MAT, data=df, subset=pft=="EA")
@@ -591,4 +537,85 @@ figureS6 <- function(dataset){
   legend("topright", levels(dataset$pft), lty=1, lwd=2, 
          col=my_cols(), bty='n', cex=1.2)
 }
+
+# new climate figure, cf. Reich
+figureS6_part2 <- function(dataset){
+  
+  dataset$lhtclass <- quantcut(dataset$lh.t, 5)
+  dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
+  
+  data_ht <- split(dataset, dataset$lhtclass)
+  
+  # Labels for height classes.
+  lv <- levels(dataset$lhtclass)
+  lv <- gsub("]",")",lv)
+  lv <- gsub("\\[","(",lv)
+  lv <- paste0("c",lv)
+  labs <- c()
+  for(i in 1:length(lv)){
+    x <- 10^eval(parse(text=lv[i]))
+    labs[i] <- sprintf("%.2f - %.2f", x[1], x[2])
+  }
+  labs[1] <- paste("H (m) =",labs[1])
+  
+  plotpanel <- function(x, ...){
+    
+    pv <- function(obj)summary(obj)$coefficients[2,4]
+    
+    df <- summaryBy(. ~ Group, data=x, FUN=mean, keep.names=TRUE, id=~pft2+pft)
+    
+    fg <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Gymnosperm")
+    fa <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Angiosperm")
+    
+    with(x, plot(MAT, lmlf_mst, pch=16, cex=0.8, col=my_cols_transparent()[as.factor(pft)], 
+                 axes=FALSE, ylim=c(-3,1), xlim=c(0,30),...))
+    predline(fa, polycolor=alpha("blue",0.4), col="blue", lwd=2, lty=if(pv(fa) < 0.05)1 else 2)
+    predline(fg, polycolor=alpha("red",0.4), col="red", lwd=2, lty=if(pv(fg) < 0.05)1 else 2)
+    
+  }
+  
+  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
+  for(i in seq_along(data_ht)){
+    
+    plotpanel(data_ht[[i]])
+    
+    axis(1)
+    magaxis(2, labels = i == 1, unlog=2)
+    
+  }
+  mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
+  mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
+  for(i in seq_along(data_ht)){
+    mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
+  }
+  legend("topright", unique(dataset$pft2), lty=1, lwd=2, 
+         col=c("red","blue"), bty='n', cex=1.2)
+}
+
+
+
+# 
+# figureS6 <- function(dataset){
+#   
+#   
+#   library(gridExtra)
+#   library(gridGraphics)
+#   grab_grob <- function(){
+#     grid.echo()
+#     grid.grab()
+#   }
+#   
+#   figureS6_part1(dataset)
+#   g1 <- grab_grob()
+#   figureS6_part2(dataset)
+#   g2 <- grab_grob()
+#   
+#   # This very nearly works (axis top figure is cut off!)
+#   pdf("test.pdf", width=10, height=16)
+#   #grid.newpage()
+#   grid.arrange(g1,g2)
+#   dev.off()
+#   
+#   
+# }
 
