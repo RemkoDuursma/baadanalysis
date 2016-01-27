@@ -130,3 +130,20 @@ figure_mat_h <- function(dataset){
 }
 
 
+figure_compare_baad_reich <- function(dataset,reich){
+  
+  par(mfrow=c(1,2), mar=c(4,4,3,1), mgp=c(2,0.5,0), cex.axis=0.9)
+  smoothplot(lh.t, lmlf_mst, pft, data=dataset, 
+             xlab="H (m)", ylab=expression(M[F]/M[S]~~(kg~kg^-1)),
+             linecols=my_cols(), ylim=c(-3,1.1), xlim=c(-1,log10(50)))
+  mtext(side=3, text="BAAD", line=2)
+  with(dataset, plot(lh.t, lmlf_mst, pch=16, col="grey", cex=0.5, ylim=c(-3,1.1), xlim=c(-1,log10(50)),
+                     xlab="H (m)", ylab=expression(M[F]/M[S]~~(kg~kg^-1)),
+                     axes=FALSE))
+  magaxis(1:2, unlog=1:2)
+  mtext(side=3, text="Reich et al. 2014", line=2)
+  smoothplot(lh.t, lmlf_mst, pft, data=reich, linecols=my_cols(), add=TRUE)
+  legend("topright", "BAAD", pch=16, pt.cex=0.5, col="grey", bty='n', cex=0.8)
+  
+}
+

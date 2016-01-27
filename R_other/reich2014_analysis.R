@@ -12,6 +12,7 @@ reich$tm.lf <- reich[,"Foliage (t/ha dry mass)"]
 reich$tm.so <- reich[,"TOTAL Aboveground (t/ha dry mass)"]
 reich$tm.st <- reich[,"StemM(t/ha)"]
 reich$h.t <- reich[,"Tree height (m)"]
+reich$lh.t <- log10(reich$h.t)
 
 # Ratio of leaf to woody above ground biomas
 reich$lmlf_mst <- with(reich, log10(tm.lf/ (tm.so - tm.lf)))
@@ -49,7 +50,10 @@ figure_mat_h(reich)
 dev.off()
 
 
-
-
+# MF/MS vs. H for BAAD and Reich2014.
+palette(my_cols_transparent())
+pdf("R_other/reich_baad_h_mfmst.pdf", width=9, height=4)
+figure_compare_baad_reich(dataset, reich)
+dev.off()
 
 
