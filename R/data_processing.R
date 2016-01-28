@@ -169,6 +169,21 @@ addMImgdd0 <- function(baad, MI_mGDDD_path){
 }
 
 
+addPET <- function(baad, pet_path){
+  
+  pet <- readRDS(pet_path)
+  
+  data <- baad$data
+  data$latlong <- paste(data$latitude,data$longitude)
+  
+  pet$latlong <- paste(pet$latitude,pet$longitude)
+  baad$data <- merge(data, pet[,c("latlong","PET")], by="latlong", all=TRUE)
+  baad$data$latlong <- NULL
+
+baad
+}
+
+
 
 prepare_dataset_1 <- function(baad, plantations=TRUE){
 

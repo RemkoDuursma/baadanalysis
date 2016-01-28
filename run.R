@@ -38,11 +38,14 @@ dir.create("figures", FALSE, TRUE)
 # download_tree_png("downloads/ian-symbol-eucalyptus-spp-1.png")
 world_mapmat <- prepare_worldmapmat("data/Worldclim_landcover_climspace_withcover.rds")
 baad_all <- readRDS("downloads/baad.rds")
+
 baad_climate1 <- addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
 baad_mapmat <- prepare_baadmapmat(baad_climate1)
 baad_climate2 <- addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.rds")
 
-dataset <- prepare_dataset_1(baad_climate2, plantations=TRUE)
+baad_climate3 <- addPET(baad_climate2, "data/zomerpet.rds")
+
+dataset <- prepare_dataset_1(baad_climate3, plantations=TRUE)
 dataset2 <- prepare_dataset_2(dataset)
 dat_alfmso <- prepare_dat_alfmso(dataset2)
 dat_mlfmso <- prepare_dat_mlfmso(dataset2)
