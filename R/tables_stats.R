@@ -189,6 +189,38 @@ reichstyle_climate_pvals <- function(dataset){
 
 
 
+m1 <- gamm(lmlf_mst ~ pft + te(lh.t, by=pft), random=list(Group=~1), data=dataset)
+m2 <- gamm(lmlf_mst ~ te(lh.t), random=list(Group=~1), data=dataset)
+
+
+get_gamr2 <- function(x)summary(x$gam)$r.sq
+
+af_as_stat <- function(dataset){
+  m0 <- gamm(lalf ~ te(a.stba2), random=list(Group=~1), data=dataset)
+  m1 <- gamm(lalf ~ pft + te(a.stba2, by=pft), random=list(Group=~1), data=dataset)
+  lik <- anova(m0$lme, m1$lme)
+  list(LRT=lik, R2a=get_gamr2(m0), R2b=get_gamr2(m1))
+}
+
+ms_as_stat <- function(dataset){
+  m0 <- gamm(lmst ~ te(a.stba2), random=list(Group=~1), data=dataset)
+  m1 <- gamm(lmst ~ pft + te(a.stba2, by=pft), random=list(Group=~1), data=dataset)
+  lik <- anova(m0$lme, m1$lme)
+  list(LRT=lik, R2a=get_gamr2(m0), R2b=get_gamr2(m1))
+}
+
+
+dataset$lmst_astba2 <- with(dataset, log10(m.st / a.stba2))
+x <- sma(lmst_astba2 ~ lh.t*pft, data=dataset)
+coef(x)
+
+dataset$stemindex <- with(dataset, a.stba2 * h.t)
+x <- sma(m.st ~ stemindex*pft, log="xy", data=dataset)
+coef(x)
+
+
+
+
 
 
 

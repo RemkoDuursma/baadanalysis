@@ -78,6 +78,10 @@ table_varpart_gam <- make_table_gamr2MATMAP(dataset)
 table_varpart_lmer <- mixedr2(dataset)
 
 
+# stats for AF as function of AS (fig 4)
+afas <- af_as_stat(dataset)
+
+
 # To check diagnostics, predictions, etc., if needed.
 #lmers <- mixedr2(dataset, returnfit=TRUE)
 figlabel <- function(txt)title(txt, outer=TRUE, line=-0.5, cex.main=0.6, font.main=3)
@@ -137,12 +141,12 @@ figlabel("Figure S5")
 dev.off()
 
 pdf("figures/FigureS5.pdf", width = 9L, height = 5L)
-figureS6_part1(dataset)
+figureS6(dataset)
 figlabel("Figure S6")
 dev.off()
 
 pdf("figures/FigureS6.pdf", width = 9L, height = 5L)
-figureS6_part2(dataset)
+figureS7(dataset)
 figlabel("Figure S7")
 dev.off()
 

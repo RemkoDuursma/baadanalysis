@@ -67,5 +67,15 @@
 \end{figure}
 
 
+\begin{figure}[h!]
+    \centering
+    \ifincludefigs 
+    \includegraphics[width=0.99\textwidth]{Figure7.pdf}
+    \fi
+    \caption{Relationships between leaf - stem biomass distribution ($M_F/M_S$) and mean annual temperature (MAT) (degree*C). Similar to Reich et al. (2014), we divided the data into five bins of plant size (bins were chosen so that each bin had equal sample size), and used only evergreen vs. deciduous plant functional types. Lines are fits from mixed-effects models (with species within study as random effect, and only MAT and evergreen/deciduous classification as fixed effects). Solid lines are significant (p < 0.05), dashed lines are not (p > 0.05). Symbols are partial residuals as calculated with the visreg package in R.}
+    \label{fig:figreichclimate}
+\end{figure}
+
+
 
 \end{document}
