@@ -16,7 +16,6 @@ downloads
 *.log
 *.pdf
 *.synctex.gz
-*.rds
 *.html
 *.tex
 *.bbl
