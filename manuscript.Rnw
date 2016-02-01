@@ -232,6 +232,7 @@ library(xtable)
 
 <<results='asis'>>=
 print(xtable(table_samplesize,
+             label="counttable",
              caption="Sample sizes used for the four studied whole-plant variables, by plant functional type. Numbers indicate individual plants, with number of unique species between parentheses. Sample sized differed between variables because not all included studied measured all variables ("),
       sanitize.text.function=function(x){x},
       include.rownames=TRUE, caption.placement = "top")
@@ -241,9 +242,15 @@ print(xtable(table_samplesize,
 <<results='asis'>>=
 names(table_varpart_gam)[1] <- ""
 print(xtable(table_varpart_gam,
-             caption="Explained variance in four plant biomass variables by plant height (H), plant functional type (PFT) and climate. Shown are $R^2$ estimated with generalized additive models (GAM), with four set of predictors. All variables except PFT were added as smooth terms to the GAMs, avoiding the need to assume linear partial responses to the predictor variables, or search for best-fitting transformations. Climate variables included were either MAT or aridity index (calculated as the of PET to MAP)."),sanitize.text.function=function(x){x},
+             label="varparttable",
+             caption="Explained variance in four plant biomass variables by plant height (H), plant functional type (PFT) and climate. Shown are adjusted $R^2$ estimated with generalized additive models (GAM), with four sets of predictors. All variables except PFT were added as smooth terms to the GAMs, avoiding the need to assume linear partial responses to the predictor variables, or search for best-fitting transformations. Climate variables included were either MAT or aridity index (calculated as the of PET to MAP). P-values not shown because all smooth terms were always highly significant (p < 0.01), with the exception of aridity index in the model for $M_F/M_S$ (p = 0.057)."),sanitize.text.function=function(x){x},
       include.rownames=FALSE, caption.placement = "top")
 
+# p-values not added for clarity. For H and PFT, p-values always very, very small.
+# For climate variables, calculate as follows:
+# g0 <- gamr2(dataset, kgam=4, ranef=TRUE, climvar1="MAT", climvar2="aridity") # slow
+# f <- function(x)anova(x$gam)$s.pv[4]
+# t(sapply(g0$fits, function(x)sapply(x,f)))  # third column MAT, fourth column aridity.
 @
 
 
@@ -257,7 +264,7 @@ print(xtable(table_varpart_gam,
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
     \fi
-    \caption{Overview of the data. (a) Variables were measured on up to \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
+    \caption{Overview of the database. (a) Variables were measured on up to \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
     \label{fig:figoverview}
 \end{figure}
 
@@ -267,7 +274,7 @@ print(xtable(table_varpart_gam,
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure2.pdf}
     \fi
-    \caption{Raw data for leaf biomass ($M_F$) and above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table \ref{table:counttable}. Lines are generalized additive model fits to visualize the highly non-linear relationships.}
+    \caption{Raw data for leaf biomass ($M_F$) and above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table \ref{table:counttable}. Lines are generalized additive model fits to visualize the highly non-linear relationships. Note the logarithmic scale.}
     \label{fig:figrawdata}
 \end{figure}
 
@@ -287,7 +294,7 @@ print(xtable(table_varpart_gam,
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure4.pdf}
     \fi
-    \caption{Total plant leaf area ($A[L]$) is approximately proportional to basal stem area ($A_S$), and this relationship is similar between PFTs. Lines are standardized major axis fits. Coefficients are shown on the figure (X), only evergreen gymnosperms showed a slightly more than proportional slope (1.05).}
+    \caption{Total plant leaf area ($A_F$) is approximately proportional to basal stem area ($A_S$), and this relationship is similar between PFTs. Lines are generalised additive model fits, with grey areas approximate 95\% confidence intervals.}
     \label{fig:alas}
 \end{figure}
 
@@ -296,7 +303,7 @@ print(xtable(table_varpart_gam,
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure5.pdf}
     \fi
-    \caption{Relationships between above-ground woody biomass ($M_S$), basal stem area ($A_S$) and plant height (H). (a) $M_S$ as a function of $A_S$ for the entire dataset. Lines are generalized additive model fits. (b) Much additional variation in $M_S$ can be explained by H. Shown is the ratio $M_S/A_S$ as a function of H, with generalized additive model fits. (c) Stem mass as a function of $A_S*H$ for a subset of the data in panels a and b, where the product of H and $A_S$ was larger than 0.01. For this subset of larger trees, stem mass was nearly proportional to $A_S*H$ (SMA fits). (d) From the data in panel c, the average ratio $M_S/(A_S*H)$ differs between plant functional types, with a lower value for gymnosperms compared to angiosperms.}
+    \caption{Above-ground woody biomass ($M_S$) scales with basal stem area ($A_S$), similarly for the three PFTs. (a) $M_S$ as a function of $A_S$ for the entire dataset. Lines are generalized additive model fits. (b) A close view of a portion of the data shown in panel (a), where evergreen gymnosperms displayed significantly lower woody biomass at a given stem basal area.}
     \label{fig:stemmassindex}
 \end{figure}
 
@@ -321,10 +328,12 @@ print(xtable(table_varpart_gam,
 \section*{Supporting Information}
 Additional supporting information may be found in the online version of this article.\\
 
-% \textbf{Fig. S1} Global coverage of the climate space by the dataset, labelled by vegetation type.\\
-% \textbf{Fig. S2} Leaf area ratio ($A_F/M_T$) by PFT.\\
-% \textbf{Fig. S3} Relationship between above-ground biomass and basal stem area.\\
-% \textbf{Notes S1} Modelling of biomass partitioning in global vegetation models (GVMs)
+\textbf{Fig. S1} Global coverage of the climate space by the dataset, labelled by vegetation type.\\
+\textbf{Fig. S2} Leaf area ratio ($A_F/M_T$) by PFT.\\
+\textbf{Fig. S3} Comparison of three methods for variance partitioning of the four studied variables \\
+\textbf{Fig. S4} Whole-plant leaf mass ($M_F$) and leaf area ($A_F$) as a function of total aboveground biomass. \\ 
+\textbf{Fig. S5} Relationships between leaf - stem biomass distribution ($M_F/M_S$) and mean annual temperature (MAT) (\degree C). \\
+\textbf{Fig. S6} As Fig S5 but with angiosperms split up into evergreen and deciduous. \\
 
 
 \end{document}
