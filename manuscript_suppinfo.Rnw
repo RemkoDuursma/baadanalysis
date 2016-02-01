@@ -48,34 +48,31 @@
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
-    \caption{\emph{May not go in manuscript, just for notes at the moment}. Estimation of basal stem diameter from diameter at breast height for small plants. Because 36\% of the dataset is for plants with a height less than 1.3m, we used basal stem area in all analyses. For a subset of the data, dbh was measured but not d.ba, even though the plants were only marginally taller than breast height. In this figure, black points are the measured ratio of d.ba/d.bh (for plants where both were measured), red the predicted ratio from the fitted nonlinear model. Below 1.8m, the variance of the ratio d.ba/d.bh increases drastically, so we excluded those plants from the analysis (unless d.ba was actually measured).}
-    \label{fig:figureS3}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
     \caption{Comparison of three methods for variance partitioning of the five studied variables (see legend) by total plant height, plant functional type and climate (MAP, MAT and interaction). \textbf{GAM}: variance component as estimated with a generalized additive model, as the reduction in R2 when the independent variable (i.e. PFT, climate or height) was excluded from a model. Note that a GAM does not include interactions. \textbf{LMM}: linear mixed model with all interactions, and squared terms for the continuous variables, where the variance component was again estimated as the reduction in R2 when the independent variable (and all its interactions) were removed from the model. R2 was calculated following Nakagawa and Schielzeth (2013) using the MuMIn R package (excluding random effects). Note that LMM and GAM give very similar ranking, and even absolute variance components, for nearly all variables. Both methods identified AF/AS and MF/AF as the only variables with a practically significant dependence on climate (variance component > 0.1), see Fig S4. \textbf{IEA}: independent effects analysis (aka hierarchical partitioning), using the algorithm by Chevan and Sutherland (1991) as implemented in the hier.part R package. Note that this method does not include interactions or squared terms, yet gave similar results to GAM and LMM (except for variables that explained little variation).}
     \label{fig:figureS4}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{\emph{Should come earlier}. A reviewer asked to see MF and AF as a function of total above-ground biomass. This also shows that MF at given MT diverges between PFTs (except for very small plants), but largely overlaps for AF/MT. Exception is for very (very) large trees, but we only have two datasets there.}
+    \includegraphics[width=0.99\textwidth]{FigureS4.pdf}
+    \caption{A reviewer asked to see MF and AF as a function of total above-ground biomass. This also shows that MF at given MT diverges between PFTs (except for very small plants), but largely overlaps for AF/MT. Exception is for very (very) large trees, but we only have two datasets there.}
     \label{fig:figureS5}
 \end{figure}
 
 
 \begin{figure}[h!]
     \centering
-    \ifincludefigs 
-    \includegraphics[width=0.99\textwidth]{Figure7.pdf}
-    \fi
+    \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
     \caption{Relationships between leaf - stem biomass distribution ($M_F/M_S$) and mean annual temperature (MAT) (degree*C). Similar to Reich et al. (2014), we divided the data into five bins of plant size (bins were chosen so that each bin had equal sample size), and used only evergreen vs. deciduous plant functional types. Lines are fits from mixed-effects models (with species within study as random effect, and only MAT and evergreen/deciduous classification as fixed effects). Solid lines are significant (p < 0.05), dashed lines are not (p > 0.05). Symbols are partial residuals as calculated with the visreg package in R.}
     \label{fig:figreichclimate}
 \end{figure}
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.99\textwidth]{FigureS6.pdf}
+    \caption{As Fig S5 but with angiosperms split up into evergreen and deciduous. Note how climate effects have disappeared.}
+    \label{fig:figreichclimate2}
+\end{figure}
 
 
 \end{document}

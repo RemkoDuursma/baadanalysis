@@ -19,7 +19,7 @@ make_table_hierpart <- function(dataset){
   # interaction
   dataset$MATMAP <- with(dataset, MAT*MAP)
   
-  vars <- c("lmlf_mst","lalf_mst", "lalf_astba2","llma","lastba2_mst")
+  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
   indep_vars <- c("lh.t","pft","MAT","MAP","MATMAP")
   hp <- lapply(vars, function(x){
     do_hierpart(x, indep_vars, dataset, gof="Rsqu", barplot=FALSE)
@@ -36,7 +36,7 @@ make_table_hierpart <- function(dataset){
   
   tab <- as.data.frame(t(sapply(hp, hp_maketablerow)))
   
-  tab <- cbind(c("$M_F/M_S$","$A_F/M_S$", "$A_F/A_S$","$M_F/A_F$","$M_S/A_S$"), tab)
+  tab <- cbind(c("$M_F/M_S$", "$A_F/A_S$","$M_F/A_F$","$M_S/A_S$"), tab)
   colnames(tab) <- c("Variable","$H_T$","PFT","Climate","$R^2$ total")
   tab <- as.data.frame(tab)
   return(tab)
@@ -61,8 +61,8 @@ mixedr2 <- function(data, returnfit=FALSE){
     return(g)
   }
   
-  vars <- c("lmlf_mst","lalf_mst","lalf_astba2","llma","lastba2_mst")
-  varlabel <- c("$M_F/M_S$","$A_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  varlabel <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
   
   mods <- lapply(vars, runmixmodels, dat=data)
   if(returnfit){
@@ -88,17 +88,17 @@ return(tabg)
 
 
 
-# GAM explained variance with mgdd0 and MI
+# GAM explained variance with various combinations of predictors
 gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 
-  testmapmatgam2 <- function(yvar, mgdd0=TRUE){
+  testmapmatgam2 <- function(yvar){
 
     f <- list()
 
     f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
     f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
-    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")",
-                               if(mgdd0)" + te(",climvar2,", k=",kgam,")"))
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")"))
+    f[[4]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar2,", k=",kgam,")"))
 
     if(!ranef)
       g <- lapply(f, function(x)gam(formula=x, data=data))
@@ -108,8 +108,8 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
     return(g)
   }
 
-  vars <- c("lmlf_mst","lalf_mst","lalf_astba2","llma","lastba2_mst")
-  gams <- lapply(vars, testmapmatgam2, mgdd0=TRUE)
+  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  gams <- lapply(vars, testmapmatgam2)
 
   r2g <- do.call(rbind,lapply(1:length(vars),
                               function(i)unlist(sapply(gams[[i]],function(x){
@@ -117,22 +117,76 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
                               }))))
 
   tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
-  names(tabg) <- c("Variable","H","H, PFT",paste0("H, PFT, ",climvar1,", ",climvar2))
+  names(tabg) <- c("Variable","H","H, PFT",paste0("H, PFT, ",climvar1),paste0("H, PFT, ",climvar2))
 
   list(r2table=tabg, fits=gams)
 }
 
+# GAM explained variance with various combinations of predictors
+gamr2old <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
+  
+  testmapmatgam2 <- function(yvar){
+    
+    f <- list()
+    
+    f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
+    f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,
+                               ") + te(",climvar2,", k=",kgam,")"))
+
+    if(!ranef)
+      g <- lapply(f, function(x)gam(formula=x, data=data))
+    else
+      g <- lapply(f, function(x)gamm(formula=x, random=list(Group=~1), data=data))
+    
+    return(g)
+  }
+  
+  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  gams <- lapply(vars, testmapmatgam2)
+  
+  r2g <- do.call(rbind,lapply(1:length(vars),
+                              function(i)unlist(sapply(gams[[i]],function(x){
+                                if(ranef)summary(x$gam)$r.sq else summary(x)$r.sq
+                              }))))
+  
+  tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
+  names(tabg) <- c("Variable","H","H, PFT",paste0("H, PFT, ",climvar1,climvar2))
+  
+  list(r2table=tabg, fits=gams)
+}
+
+make_table_gamr2MATMAP_old <- function(dataset) {
+  g0 <- gamr2old(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
+  g0$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
+  
+  
+  g0
+}
+
 make_table_gamr2MATMAP <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
-  g0$Variable <- c("$M_F/M_S$","$A_F/M_S$", "$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
+  g0$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
 
   
   g0
 }
 
+make_table_gamr2MATARID <- function(dataset) {
+  g0 <- gamr2(dataset, kgam=4, ranef=TRUE, climvar1="MAT", climvar2="aridity")
+  
+  r2table <- g0$r2table
+  r2table$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
 
-
-
+  # AIC does not seem to be compatible with R2 results  
+  # aicf <- function(x){
+  #   aic <- sapply(x, function(x)AIC(x$lme))
+  #   aic - aic[1]
+  # }
+  # aictable <- t(sapply(g0$fits, aicf))
+  
+r2table
+}
 
 
 

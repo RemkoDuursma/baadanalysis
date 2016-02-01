@@ -431,8 +431,8 @@ figureS4 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
   hiert <- as.matrix(table_hierpart[,2:4])
   
   plotcols <- c("forestgreen","red","blue")
-  Cols <- rep(plotcols, each=5)
-  pchs <- c(19,15,17,1,6)
+  Cols <- rep(plotcols, each=4)
+  pchs <- c(19,15,17,6)
   Pchs <- rep(pchs, 3)
   
   par(mfrow=c(1,3))
@@ -444,7 +444,6 @@ figureS4 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
               title="Variance component")
   legend(l$rect$left, l$rect$top - l$rect$h,
          c(expression(M[F]/M[S]),
-           expression(A[F]/M[S]),
            expression(A[F]/A[S]),
            expression(M[F]/A[F]),
            expression(M[S]/A[S])),

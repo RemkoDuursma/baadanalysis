@@ -76,7 +76,10 @@ dataset2 <- delsmallbh(dataset2)
 # new variance partitioning
 table_hierpart <- make_table_hierpart(dataset)
 
-table_varpart_gam <- make_table_gamr2MATMAP(dataset)
+
+table_varpart_gam <- make_table_gamr2MATARID(dataset)
+
+table_varpart_gam_old <- make_table_gamr2MATMAP_old(dataset)
 
 table_varpart_lmer <- mixedr2(dataset)
 
@@ -84,6 +87,8 @@ table_varpart_lmer <- mixedr2(dataset)
 # stats for AF as function of AS (fig 4)
 afas <- af_as_stat(dataset)
 
+# stats for MS as function of AS (fig 5)
+msas <- ms_as_stat(dataset)
 
 # To check diagnostics, predictions, etc., if needed.
 #lmers <- mixedr2(dataset, returnfit=TRUE)
@@ -134,7 +139,7 @@ figlabel("Figure S2")
 dev.off()
 
 pdf("figures/FigureS3.pdf", width = 9L, height = 4L)
-figureS4(table_hierpart,table_varpart_gam,table_varpart_lmer)
+figureS4(table_hierpart,table_varpart_gam_old,table_varpart_lmer)
 figlabel("Figure S4")
 dev.off()
 
@@ -166,10 +171,12 @@ if(combine){
 
 # tex
 knitr::knit("manuscript.Rnw", "manuscript.tex")
+tex_2_pdf("manuscript.tex")
+
+
 knitr::knit("manuscript_suppinfo.Rnw", "manuscript_suppinfo.tex")
 
 # pdf
-tex_2_pdf("manuscript.tex")
 tex_2_pdf("manuscript_suppinfo.tex")
 
 

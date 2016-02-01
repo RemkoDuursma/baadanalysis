@@ -172,7 +172,7 @@ From the variance partitioning (Table 1), it is evident that $A_F/A_S$ did not v
 
 Likewise, the ratio of stem basal area to stem mass ($A_S/M_S$) apparently varied little between PFTs (Table 1). To illustrate this further, when we plotted $M_S$ as a function of $A_S$ it revealed a remarkably tight relationship, with little apparent difference between PFTs (Fig 5a). The only exception was for large gymnosperm trees, which consistently showed a lower $M_S$ at a given $A_S$ (Fig. 5b). We fitted a GAM of $M_S$ as a function of $A_S$ (added as a smooth term) with or without PFT as a covariate. Again PFT was formally significant (likelihood ratio test, p < 0.001), but the $R^2$ increased only marginally from 80.8 to 82.5\%, again showing little practical significance of PFT in explaining this variable. 
 
-Taken together, these results demonstrate that 1) the majority of PFT-related variation in $M_F/M_S$ results from variation in LMA (not $A_F/A_S$ or $A_S/M_S$), and 2) the majority of height-related variation in $M_F/M_S$ results from variation in $A_S/M_S$ (not LMA or $A_F/A_S$). It is however important to note that there is very large variation between individuals even after accounting for PFT (Fig. 6). There we expressed the stem mass ratio as $M_S/(H \cdot A_S)$ because we expect from basic geometry that M_S is proportional to H and A_S ($M_S = \phi \rho A_S H$, where $\phi$ a stem shape parameter, $\rho$ wood density). The histograms summarize that PFT effects are very evident in LMA (Fig. 6a), not in $A_F/A_S$, and only a bit for $M_S/A_S$, which is entirely driven by large gymnosperm trees. 
+Taken together, these results demonstrate that 1) the majority of PFT-related variation in $M_F/M_S$ results from variation in LMA (not $A_F/A_S$ or $A_S/M_S$), and 2) the majority of height-related variation in $M_F/M_S$ results from variation in $A_S/M_S$ (not LMA or $A_F/A_S$). It is however important to note that there is very large variation between individuals even after accounting for PFT (Fig. 6). There we expressed the stem mass ratio as $M_S/(H \cdot A_S)$ because we expect from basic geometry that $M_S$ is proportional to H and $A_S$ ($M_S = \phi \rho A_S H$, where $\phi$ a stem shape parameter, $\rho$ wood density). The histograms summarize that PFT effects are very evident in LMA (Fig. 6a), not in $A_F/A_S$, and only a bit for $M_S/A_S$, which is entirely driven by large gymnosperm trees. 
 
 Climate variables consistently added little explanatory power to the models when added to a model that included PFT and height (1 - 2.8 \%) (Table 1). Since this result is in contrast with recent finding of \citep{reich2014}, we also analyzed climate effects with methods similar to that study. When we tested for MAT effects on $M_F/M_S$ when only considering gymnosperms and angiosperms (thus grouping decidous and evergreen species), we found a significant and consistent positive relationship with MAT (Fig. S6) for angiosperms for most size classes (but never for gymnosperms). We found, however, that this was largely due to the fact that at higher MAT, an increasing proportion of angiosperms are evergreen (Fig. 1), which have higher $M_F/M_S$. When analyzed separately for deciduous and evergreen angiosperms, few and weaker significant relationships were found (Fig. S7).
 
@@ -236,6 +236,15 @@ library(xtable)
 print(xtable(table_hierpart),sanitize.text.function=function(x){x},
       include.rownames=FALSE)
 
+@
+
+
+<<results='asis'>>=
+library(stargazer)
+m0 <- lme(lmlf_mst ~ lh.t, random=~1|Group, data=dataset, na.action=na.omit)
+m1 <- lme(lmlf_mst ~ lh.t*pft, random=~1|Group, data=dataset, na.action=na.omit)
+
+stargazer(m0,m1)
 @
 
 
