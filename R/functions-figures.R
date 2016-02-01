@@ -690,5 +690,3 @@ log10axes <- function(side=1:2, logged=NULL, labels=TRUE){
   }
 }
 
-# with(dataset, plot(llma, lmlf_astba2, pch=16, axes=FALSE, xlim=c(-2,0)))
-# log10axes(2)

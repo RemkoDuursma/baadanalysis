@@ -1,4 +1,5 @@
 
+# Independent effects analysis (IEA)
 do_hierpart <- function(dep, indep, data, ...){
   
   df <- data[,c(dep,indep)]
@@ -44,7 +45,7 @@ make_table_hierpart <- function(dataset){
 
 
 
-
+# Explained variance with mixed-effects models with various combinations of predictors 
 mixedr2 <- function(data, returnfit=FALSE){
   
   runmixmodels <- function(yvar, dat){
@@ -86,9 +87,7 @@ return(tabg)
 
 
 
-
-
-# GAM explained variance with various combinations of predictors
+# Explained variance with GAMS with various combinations of predictors
 gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 
   testmapmatgam2 <- function(yvar){
@@ -123,6 +122,7 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 }
 
 # GAM explained variance with various combinations of predictors
+# - this version is for SuppInfo methods comparisons.
 gamr2old <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
   
   testmapmatgam2 <- function(yvar){
@@ -212,7 +212,7 @@ tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
 }
 
 
-
+# For SuppInfo Figs. S5 and S6
 reichstyle_climate_pvals <- function(dataset){
 
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)

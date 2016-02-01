@@ -260,35 +260,6 @@ prepare_dataset_1 <- function(baad, plantations=TRUE){
   dataset
 }
 
-# Second dataset, simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes
-prepare_dataset_2 <- function(dataset){
-
-  # Also keep only data where leaf area and leaf mass were measured.
-  dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")))
-
-  # Boreal, temperate or tropical
-  sw <- function(type){
-    switch(type,
-       BorF = "boreal",
-       TempF = "temperate",
-       TempRF = "temperate",
-       TropRF = "tropical",
-       TropSF = "tropical"
-       )
-}
-  dataset2$bortemptrop <- as.factor(as.vector(sapply(dataset2$vegetation, sw)))
-  dataset2$pftlong <- as.factor(with(dataset2, paste(pft, bortemptrop, sep='-')))
-
-  dataset2
-}
-
-# Root dataset, excluding three studies with very poor root estimates
-prepare_dataset_roots <- function(dataset){
-
-  subset(dataset, !is.na(m.rt) & !is.na(m.so) &
-                    !studyName %in% c("Gargaglione2010","Rodriguez2003","Albrektson1984"))
-}
-
 BasalA_fit <- function(baad){
 
   # Predicted basal diameter. See R/predict_dba...R
@@ -306,22 +277,6 @@ predictBasalA <- function(dat, baad){
   d.ba2[!is.na(dat$d.ba)] <- dat$d.ba[!is.na(dat$d.ba)]
 
   (pi/4)*d.ba2^2
-}
-
-prepare_dat_mlf <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2)))
-}
-
-prepare_dat_alf <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2)))
-}
-
-prepare_dat_mlfmso <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso)))
-}
-
-prepare_dat_alfmso <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
 }
 
 
