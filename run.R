@@ -18,7 +18,6 @@ library(gridExtra)
 library(smatr)
 library(MuMIn)
 library(hier.part)
-library(visreg)
 library(gtools)
 library(car)
 
@@ -46,11 +45,6 @@ baad_climate2 <- addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.rds
 baad_climate3 <- addPET(baad_climate2, "data/zomerpet.rds")
 
 dataset <- prepare_dataset_1(baad_climate3, plantations=TRUE)
-dataset2 <- prepare_dataset_2(dataset)
-dat_alfmso <- prepare_dat_alfmso(dataset2)
-dat_mlfmso <- prepare_dat_mlfmso(dataset2)
-dat_mlf <- prepare_dat_mlf(dataset2)
-dat_alf <- prepare_dat_alf(dataset2)
 basalafit <- BasalA_fit(baad_all)
 
 # see new small plant test figure
@@ -75,7 +69,6 @@ dataset2 <- delsmallbh(dataset2)
 
 # new variance partitioning
 table_hierpart <- make_table_hierpart(dataset)
-
 
 table_varpart_gam <- make_table_gamr2MATARID(dataset)
 

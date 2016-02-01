@@ -233,20 +233,10 @@ library(xtable)
 
 <<results='asis'>>=
 
-print(xtable(table_hierpart),sanitize.text.function=function(x){x},
+print(xtable(table_varpart_gam),sanitize.text.function=function(x){x},
       include.rownames=FALSE)
 
 @
-
-
-<<results='asis'>>=
-library(stargazer)
-m0 <- lme(lmlf_mst ~ lh.t, random=~1|Group, data=dataset, na.action=na.omit)
-m1 <- lme(lmlf_mst ~ lh.t*pft, random=~1|Group, data=dataset, na.action=na.omit)
-
-stargazer(m0,m1)
-@
-
 
 \clearpage
 \section{Figures}

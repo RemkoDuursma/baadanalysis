@@ -247,6 +247,16 @@ prepare_dataset_1 <- function(baad, plantations=TRUE){
   }
   
   
+  # see new small plant test figure
+  delsmallbh <- function(d){
+    
+    # plants close to breast-height height but no basal diameter; delete
+    d$a.stba2[d$h.t < 1.8 & is.na(d$d.ba) & !is.na(d$d.bh)] <- NA
+    
+    return(d)
+  }
+  dataset <- delsmallbh(dataset)
+  
   dataset
 }
 

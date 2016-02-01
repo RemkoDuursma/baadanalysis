@@ -388,33 +388,7 @@ figureS2 <- function(dataset, KGAM=4){
 
 
 
-
-# based on this figure, we should exclude plants with height < 1.8 that have a BH but not BA measurement.
-# test for small plants
-figureS3 <- function(dataset, basalafit){
-  test <- subset(dataset, !is.na(d.ba) & !is.na(d.bh) & h.t < 2.5 & h.bh >= 1.3 & h.bh <= 1.4)
-  
-  test$d.bapred <- predict(basalafit, test)
-  
-  # randomly reorder rows, so that colours shown in proportion to abundance
-  set.seed(1) # Set seed to ensure plot looks same each time
-  dataset <- dataset[sample(nrow(dataset)),]
- 
-  smoothplot(h.t, d.ba/d.bh, data=test, axes=FALSE, pointcols=alpha("black", 0.5), linecols="black",
-             fitoneline=TRUE,
-             ylab=expression(D[BA]/D[BH]~~("-")), xlab=expression(H~(m)),
-             ylim=c(0,15))
-  axis(1)
-  axis(2)
-  box()
-  with(test, abline(h=median(d.ba/d.bh), lty=5))
-  with(test, points(h.t, d.bapred/d.bh, pch=17, col="red"))
-}
-
-
-
-
-figureS4 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
+figureS3 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
   
   # compare three methods variance partitioning
   convertm <- function(tab){
@@ -460,7 +434,7 @@ figureS4 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
 }
 
 
-figureS5 <- function(dataset){
+figureS4 <- function(dataset){
   
   # randomly reorder rows, so that colours shown in proportion to abundance
   set.seed(100) # Set seed to ensure plot looks same each time
@@ -488,7 +462,7 @@ figureS5 <- function(dataset){
 
 
 # new climate figure, cf. Reich
-figureS6 <- function(dataset){
+figureS5 <- function(dataset){
   
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
@@ -542,7 +516,7 @@ figureS6 <- function(dataset){
 }
 
 
-figureS7 <- function(dataset){
+figureS6 <- function(dataset){
   
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   data_ht <- split(dataset, dataset$lhtclass)
