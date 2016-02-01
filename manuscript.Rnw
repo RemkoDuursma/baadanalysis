@@ -217,7 +217,7 @@ Perhaps the biggest challenge for GVMs is to capture the combined responses of t
 
 \section*{Acknowledgments}
 
-Our sincere thanks to everyone who contributed data to the Biomass and Allometry Database. We thank Martin De Kauwe and anonymous referees for comments on an earlier version of this paper. Thanks also to Rich FitzJohn for advice about using the remake package. Figure 2a uses an image by Lana Heydon, IAN Image Library http://ian.umces.edu/imagelibrary. 
+Our sincere thanks to everyone who contributed data to the Biomass and Allometry Database. We thank Martin De Kauwe and anonymous referees for comments on an earlier version of this paper. Thanks also to Rich FitzJohn for advice about using the remake package. Figure 2a uses an image by Lana Heydon, IAN Image Library http://ian.umces.edu/imagelibrary. Thanks to a small army of anonymous reviewers for suggestions that greatly improved the paper. Special thanks to Steve Zissou.
 
 
 \clearpage
@@ -233,8 +233,9 @@ library(xtable)
 
 <<results='asis'>>=
 
-print(xtable(table_varpart_gam),sanitize.text.function=function(x){x},
-      include.rownames=FALSE)
+print(xtable(table_varpart_gam,
+             caption="Explained variance in four plant biomass variables by plant height (H), plant functional type (PFT) and climate. Shown are $R^2$ estimated with generalized additive models (GAM), with four set of predictors. All variables except PFT were added as smooth terms to the GAMs, avoiding the need to assume linear partial responses to the predictor variables, or search for best-fitting transformations. Climate variables included were either MAT or aridity index (calculated as the of PET to MAP)."),sanitize.text.function=function(x){x},
+      include.rownames=FALSE, caption.placement = "top")
 
 @
 
