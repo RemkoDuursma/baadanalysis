@@ -67,6 +67,7 @@ targets:
       - figures/Figure5.pdf
       - figures/Figure6.pdf
       - table_varpart_gam
+      - table_samplesize
       - afas
       - msas
     command: tex_2_pdf("manuscript.tex")
@@ -77,6 +78,7 @@ targets:
       - table_varpart_gam
       - afas
       - msas
+      - table_samplesize
       - basalafit
       - dataset
     knitr: TRUE
@@ -162,6 +164,8 @@ targets:
     command: af_as_stat(dataset)
   msas:
     command: ms_as_stat(dataset)
+  table_samplesize:
+    command: make_samplesize_table(dataset)
 
   # Figures --------------------------------------
 

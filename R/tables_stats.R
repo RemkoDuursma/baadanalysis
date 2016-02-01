@@ -176,7 +176,7 @@ make_table_gamr2MATARID <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4, ranef=TRUE, climvar1="MAT", climvar2="aridity")
   
   r2table <- g0$r2table
-  r2table$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
+  r2table$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
 
   # AIC does not seem to be compatible with R2 results  
   # aicf <- function(x){
@@ -191,25 +191,32 @@ r2table
 
 
 # Count number of observations.
-tabFun <- function(x, vars, pftvar="pft", vegvar="bortemptrop"){
+tabFun <- function(x, vars, pftvar="pft"){
   
   x <- x[complete.cases(x[,vars]),]
   x$pft <- x[,pftvar]
-  x$veg <- x[,vegvar]
   
-  xt <- addmargins(xtabs( ~ pft + veg, data=x))
-  names(dimnames(xt)) <- c(pftvar,vegvar)
+  xt <- addmargins(xtabs( ~ pft, data=x))
+  names(dimnames(xt)) <- pftvar
   
-  x <- x[!duplicated(x$species,x$pft,x$veg),]
-  xs <- addmargins(xtabs( ~ pft + veg, data=x))
+  x <- x[!duplicated(x$species,x$pft),]
+  xs <- addmargins(xtabs( ~ pft, data=x))
   
-  m <- matrix(paste0(xt, " (", xs, ")"), ncol=ncol(xt))
-  dimnames(m) <- dimnames(xt)
+  m <- paste0(xt, " (", xs, ")")
   
   m[m == "0 (0)"] <- NA
   
   return(m)
 }
+
+make_samplesize_table <- function(dataset){
+  tb <- t(sapply(c("lmlf_mst","lalf_astba2","llma","lastba2_mst"),function(x)tabFun(dataset,x)))
+  rownames(tb) <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+  colnames(tb) <- c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno.","Total")
+  tb
+}
+
+
 
 
 # For SuppInfo Figs. S5 and S6
