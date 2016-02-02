@@ -70,7 +70,7 @@ baad <- readRDS("downloads/baad.rds")
 % #' 
 % #' Number of figures: 6 (all in colour) \\
 % #' Number of tables: 2 \\
-% #' Supporting information : 1 Tables, 3 Figures and 1 Notes.
+% #' Supporting information : 6 Figures (all in colour).
 
 %--------------------------------------------------------------------------------------------%
 
@@ -180,28 +180,34 @@ Climate variables consistently added little explanatory power to the models when
 
 \section*{Discussion}
 
-\begin{itemize}
-\item MF/MS differed strongly between PFTs and was proportional to leaf mass per area, and steeply declined with plant height as expected.
-\item We found that, as expected, plant size strongly influences LMF (Fig.~\ref{fig:figlmf}) and LAR (Fig. S2) (see also \citet{poorter2012,poorter2015}). It is thus necessary to correct for plant size when comparing biomass partitioning parameters, as has been noted many times \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both LMF and LAR showed very non-linear patterns with plant height, even on a logarithmic scale, consistent with recent other results \citep{poorter2015}. 
-\item We found that biomass distribution between leaves and stems was related to climate, but not when plant height and PFT - major confounding variables - were first accounted for. when PFT and height were first accounted for, we found weak and inconsistent effects of climate on all variables studied, with some exception for LMA. However, climate affects plant height, so we do expect global patterns in actual biomass distribution (Klein 2015, Simard 2011). Climate also affects, to some extent, distribution of major plant functional types (Fig. 1), explaining how our results are consistent with Reich et al. (2014), who reported shifts in biomass distribution with MAT. We found that for angiosperms, MF/MS increased with MAT, after splitting the dataset into five size classes This The significant relationship between MF/MS and MAT for angiosperms can be understood by the consistently higher proportion of evergreen angiosperms at higher MAT (Fig. 1), which, as a resutlt of higher LMA (Fig. 2) also have a higher MF/MS. However, based on a re-analysis of data in Reich et al. 2014 (not shown), this does not explain the pattern observed by them as it still held for gymnosperms and deciduous angiosperms. Whatever explains that different findings between us and Reich 2014, the main conclusions from the climate analysis are certainly that PFT and plant height are by far the most important factors, even explaining most climate effects on biomass distribution.
-\item Still lots and lots of variation to explain within PFTs; we do not argue for convergence, but rather that as a first step, we can understand differences between PFTs. This helps parameterize PFTs, and also perhaps this can help to place plants on a continuous scale rather than rely on fixed categories. This is an active area of research, but is yet to be extended to patterns in biomass distribution. Our work contributes a bit to this.
-\item Leaf area was just about proportional to AS, except for the largest trees. This decreases because of the formation of heartwood (and AF/sapwood may decrease a little with height, but AF/AS more because of crown rise). Note that we have many small plants in the dataset as well, and within individual datasets it is more likely to pick up small-scale effects like these. 
-\item Stem mass index: Chave biomass estimation. We find support for this, with MS/AS nearly proportional to height. Conifers diverged, for the subset of larger trees only. Not sure why these differences don't show up for small plants but variance was very high! For tropical forests, \citet{chave2005} showed that aboveground biomass can be estimated as,
+Using the largest database of individual woody plant allometry to date, we studied patterns in above-ground biomass distribution among major woody plant functional types (PFTs), plant size, and climate. We found that at a common plant height, the leaf / woody biomass ratio ($M_F/M_S$) was proportional to the leaf mass per area across three PFTs, so that leaf area per unit above-ground biomass did not vary between PFTs. We found very weak effects of climate (mean annual temperature and aridity) on biomass distribution, the vast majority of the variation in biomass distribution was explained by plant size and PFT. 
+
+As expected, $M_F/M_S$ steeply declined with plant height. It is well known that it is necessary to correct for plant size when comparing biomass distribution among groups \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both $M_F$ and $M_S$ showed very non-linear patterns with plant height (Fig. 2), or among biomass pools (Fig. S4), even on a logarithmic scale. This is consistent with recent results on an independently compiled large database of plant allometry \citep{poorter2015}, and further calls into question the generality of the often-assumed log-linear relationships between plant biomass pools and size metrics.
+
+After accounting for PFT and plant height, we found very weak and inconsistent effects of climate on all variables studied, with some exception for LMA (Table~\ref{table:varparttable}). Climate was represented as either mean annual temperature or an aridity index (PET/MAP), however, results were similarly inconclusive when studying other climate variables such as composite drought indices, growing season length, or mean annual precipitation (results not shown). This result appears to contradict \citet{reich2014} who reported consistent increases in foliage biomass ($M_F$) with MAT, when corrected for above-ground woody biomass ($M_S$). We were able to partly reconcile our findings with those of \citep{reich2014}: when we considered only angiosperms and gymnosperms (thus grouping deciduous and evergreens, as did Reich et al.) $M_F/M_S$ increased consistently with MAT for most size classes (Fig. S5), but not for gymnosperms. However, we found that for our database, this could be explained by the consistently higher proportion of evergreen angiosperms at higher MAT (Fig. 1), which, as a result of higher LMA (Fig. 2) also have a higher $M_F/M_S$. However, based on a re-analysis of data in Reich et al. 2014 (not shown), this shift in PFT with climate does not explain their observation of an increase in $M_F/M_S$ with MAT, as this pattern still held within gymnosperms and deciduous angiosperms. 
+
+Although we found no consistent effects of climate on biomass distribution after PFT and plant height were accounted for, 
+effects of climate may be mediated by plant height. At a global scale, average plant height is strongly related to climate, likely mediated by water availability \citet{klein2015,simard2011}. Since biomass distribution is strongly related to plant height (Figs. 2, 3), we do expect correlations between climate variables and observed biomass distribution. 
+
+
+
+
+
+Still lots and lots of variation to explain within PFTs; we do not argue for convergence, but rather that as a first step, we can understand differences between PFTs. This helps parameterize PFTs, and also perhaps this can help to place plants on a continuous scale rather than rely on fixed categories. This is an active area of research, but is yet to be extended to patterns in biomass distribution. Our work contributes a bit to this.
+
+Leaf area was just about proportional to AS, except for the largest trees. This decreases because of the formation of heartwood (and AF/sapwood may decrease a little with height, but AF/AS more because of crown rise). Note that we have many small plants in the dataset as well, and within individual datasets it is more likely to pick up small-scale effects like these. 
+
+Stem mass index: Chave biomass estimation. We find support for this, with MS/AS nearly proportional to height. Conifers diverged, for the subset of larger trees only. Not sure why these differences don't show up for small plants but variance was very high! For tropical forests, \citet{chave2005} showed that aboveground biomass can be estimated as,
 
 $$M_T = F \rho A_S H_T$$
 
 where $F$ is a form factor, and $\rho$ wood density (kg m$^3$). This explains why (for larger trees) at a given AS, conifers had lower stem mass (Fig. 5).
-\item Consequences for GVMs.
 
-\end{itemize}
-
+\emph{combine next two in shorter GVM paragraph}
 A recent study compared allocation routines in a number of leading ecosystem models \citep{dekauwe2014}, and recommended constraining allocation by observed biomass fractions instead of using constant allocation fractions. Based on our findings, a first approximation within GVMs would be to assume leaf area to stem cross-sectional area a parameter that does not vary between PFTs (notwithstanding effects of plant height on this variable), and vary biomass allocation accordingly. LMA, already a parameter in most GVMs, then gives the ratio of leaf biomass to stem area. Some models already incorporate a similar algorithm (see Notes S1), while other algorithms may be tuned to yield similar patterns between PFTs as we have presented. In any case, the growing availability of large datasets on stand biomass and individual plant construction  \citep{falster2015} suggest the time is ripe for rigorous benchmarking \citep{abramowitz2012, dekauwe2014} of GVMs against empirical data.
 
 Perhaps the biggest challenge for GVMs is to capture the combined responses of the more than 250,000 plant species comprising the world's vegetation. While most plants have the same basic resource requirements and physiological function, large differences exist among species in the amount of energy invested in different tissues (leaves, stems, roots). The approach taken by most GVMs for dealing with this functional diversity is to consider only a few archetypal plant functional types (PFTs) \citep{harrisonetal2010,wullschleger2014}, assumed to differ in key physiological attributes. While GVMs assume or predict differences in biomass partitioning between PFTs (Notes S1), these differences are poorly constrained, due to limited available data. Moreover, there is little consensus on how biomass partitioning and allocation (see Methods for terminology) should be modelled in GVMs \citep{franklin2012,dekauwe2014,friend2014}. These shortcomings largely reflect the lack of suitable datasets of global scope with which models can be tested, constrained and compared \citep{wolf2011}. Rather than to advance a specific model of biomass partitioning or allocation, our view is that a broader evidence base is needed first to elucidate patterns between PFTs. This should enable those building GVMs to refine algorithms and parameter values to more closely match the observations.
 
-\begin{itemize}
-\item Some paragraph on future work, for example reconcile Poorter2015 with Reich2014 with our data.
-\end{itemize}
 
 
 \section*{Acknowledgments}
