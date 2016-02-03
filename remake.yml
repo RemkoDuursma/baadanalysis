@@ -75,6 +75,7 @@ targets:
   manuscript.tex:
     depends:
       - baad_all
+      - baad_mapmat
       - table_varpart_gam
       - afas
       - msas

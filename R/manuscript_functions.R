@@ -15,10 +15,9 @@ get_wordcount <- function(fn){
     # for the section. So more work to make this general
     
     l <- list()
-    l$Abstract <- count("Abstract")
+    l$Abstract <- count("Summary")
     l$Introduction <- count("Introduction")
-    l$Methods <- count("Terminology") + count("Data")  + 
-                 count("Data analysis")
+    l$Methods <- count("Data") + count("Data analysis")
     l$Results <- count("Results")
     l$Discussion <- count("Discussion")
     
