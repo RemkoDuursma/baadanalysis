@@ -274,7 +274,7 @@ print(xtable(table_varpart_gam,
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure3.pdf}
     \fi
-    \caption{Dominant woody PFTs differ in above-ground biomass distribution due to underlying differences in leaf mass per area. (a) Leaf mass per unit woody above-ground biomass ($M_F/M_S$) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) $M_F/M_S$ and leaf area ratio ($A_F/M_S$) at the average plant height in the dataset, estimated from panel (a). Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
+    \caption{Dominant woody PFTs differ in above-ground biomass distribution due to underlying differences in leaf mass per area. (a) Leaf mass per unit woody above-ground biomass ($M_F/M_S$) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) $M_F/M_S$ and leaf area ratio ($A_F/M_S$) at the average plant height in the dataset, estimated from fitted models in panel (a). Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figlmf}
 \end{figure}
 
