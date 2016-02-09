@@ -169,8 +169,23 @@ addMImgdd0 <- function(baad, MI_mGDDD_path){
 }
 
 
+addPET <- function(baad, pet_path){
+  
+  pet <- readRDS(pet_path)
+  
+  data <- baad$data
+  data$latlong <- paste(data$latitude,data$longitude)
+  
+  pet$latlong <- paste(pet$latitude,pet$longitude)
+  baad$data <- merge(data, pet[,c("latlong","PET")], by="latlong", all=TRUE)
+  baad$data$latlong <- NULL
 
-prepare_dataset_1 <- function(baad){
+baad
+}
+
+
+
+prepare_dataset_1 <- function(baad, plantations=TRUE){
 
   # Prepare dataset for analysis.
   # - remove non-field grown plants, deciduous gymnosperms
@@ -195,12 +210,15 @@ prepare_dataset_1 <- function(baad){
     lmlf_astba <- log10(m.lf/a.stba)
     lalf_astba <- log10(a.lf/a.stba)
     lh.t <- log10(h.t)
+    lmlf_mst <- log10(m.lf / m.st)
     lmlf_mso <- log10(m.lf / m.so)
     lalf_mso <- log10(a.lf / m.so)
+    lalf_mst <- log10(a.lf / m.st)
     lmrt_mso <- log10(m.rt / m.so)
     lmso <- log10(m.so)
     lmrt <- log10(m.rt)
     lmlf <- log10(m.lf)
+    lalf <- log10(a.lf)
     lmst <- log10(m.st)
     lsla <- log10(a.lf / m.lf)
     llma <- log10(m.lf / a.lf)
@@ -216,39 +234,30 @@ prepare_dataset_1 <- function(baad){
     lmlf_astba2 <- log10(m.lf/a.stba2)
     lalf_astba2 <- log10(a.lf/a.stba2)
     lmso_astba2 <- log10(m.so / a.stba2)
+    lastba2_mst <- log10(a.stba2 / m.st)
     lastba2 <- log10(a.stba2)
+    mstastbht <- log10(m.st / (a.stba2 * h.t)) # stem index
+    aridity <- PET/MAP
+    
     })
 
+  # Exclude plantations, maybe
+  if(!plantations){
+    dataset <- subset(dataset, growingCondition %in% c("FE","FW"))
+  }
+  
+  
+  # see new small plant test figure
+  delsmallbh <- function(d){
+    
+    # plants close to breast-height height but no basal diameter; delete
+    d$a.stba2[d$h.t < 1.8 & is.na(d$d.ba) & !is.na(d$d.bh)] <- NA
+    
+    return(d)
+  }
+  dataset <- delsmallbh(dataset)
+  
   dataset
-}
-
-# Second dataset, simplified vegetation types, tossing ones that don't easily fit in temperate/boreal/tropical classes
-prepare_dataset_2 <- function(dataset){
-
-  # Also keep only data where leaf area and leaf mass were measured.
-  dataset2 <- droplevels(subset(dataset, vegetation %in% c("BorF","TempF","TempRF","TropRF","TropSF")))
-
-  # Boreal, temperate or tropical
-  sw <- function(type){
-    switch(type,
-       BorF = "boreal",
-       TempF = "temperate",
-       TempRF = "temperate",
-       TropRF = "tropical",
-       TropSF = "tropical"
-       )
-}
-  dataset2$bortemptrop <- as.factor(as.vector(sapply(dataset2$vegetation, sw)))
-  dataset2$pftlong <- as.factor(with(dataset2, paste(pft, bortemptrop, sep='-')))
-
-  dataset2
-}
-
-# Root dataset, excluding three studies with very poor root estimates
-prepare_dataset_roots <- function(dataset){
-
-  subset(dataset, !is.na(m.rt) & !is.na(m.so) &
-                    !studyName %in% c("Gargaglione2010","Rodriguez2003","Albrektson1984"))
 }
 
 BasalA_fit <- function(baad){
@@ -268,22 +277,6 @@ predictBasalA <- function(dat, baad){
   d.ba2[!is.na(dat$d.ba)] <- dat$d.ba[!is.na(dat$d.ba)]
 
   (pi/4)*d.ba2^2
-}
-
-prepare_dat_mlf <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_astba2)))
-}
-
-prepare_dat_alf <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lalf_astba2)))
-}
-
-prepare_dat_mlfmso <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lmlf_mso)))
-}
-
-prepare_dat_alfmso <- function(data) {
-  droplevels(subset(data, !is.na(h.t) & !is.na(pft) & !is.na(lalf_mso)))
 }
 
 

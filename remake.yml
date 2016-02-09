@@ -7,6 +7,10 @@ packages:
   - doBy      #summaryBy
   - mgcv      #gam
   - lmerTest
+  - car
+  - MuMIn
+  - hier.part
+  - gtools
   # plotting
   - magicaxis #magaxis
   - RColorBrewer
@@ -22,7 +26,6 @@ packages:
 sources:
   - R/data_processing.R
   - R/tables_stats.R
-  - R/rsquaredglmm.R
   - R/figures.R
   - R/functions-figures.R
   - R/signifletters.R
@@ -63,25 +66,20 @@ targets:
       - figures/Figure4.pdf
       - figures/Figure5.pdf
       - figures/Figure6.pdf
-      - table_lmf
-      - table_lar
-      - table_mlfastba
-      - table_alfastba
-      - table_varpart2
-      - table_r2lmaforpft
-      - basalafit
+      - table_varpart_gam
+      - table_samplesize
+      - afas
+      - msas
     command: latex_build("manuscript.tex", bibliography = "references.bib")
 
   manuscript.tex:
     depends:
       - baad_all
-      - table_lmf
-      - table_lar
-      - table_mlfastba
-      - table_alfastba
-      - table_varpart2
-      - table_r2lmaforpft
-      - table_gamr2MATMAP
+      - baad_mapmat
+      - table_varpart_gam
+      - afas
+      - msas
+      - table_samplesize
       - basalafit
       - dataset
     knitr: TRUE
@@ -91,15 +89,19 @@ targets:
       - figures/FigureS1.pdf
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
-      - table_gamr2MATMAP
-    command: latex_build ("manuscript_suppinfo.tex", bibliography = "references.bib")
+      - figures/FigureS4.pdf
+      - figures/FigureS5.pdf
+      - figures/FigureS6.pdf
+      - table_varpart_gam_old
+      - table_varpart_lmer
+      - table_hierpart
+    command: latex_build ("manuscript_suppinfo.tex")
 
   manuscript_suppinfo.tex:
     depends:
-      - table_mlfastba
-      - table_alfastba
-      - table_lmf
-      - table_lar
+      - table_varpart_gam_old
+      - table_varpart_lmer
+      - table_hierpart
     knitr: TRUE
 
   figures:
@@ -113,18 +115,15 @@ targets:
       - figures/FigureS1.pdf
       - figures/FigureS2.pdf
       - figures/FigureS3.pdf
+      - figures/FigureS4.pdf
+      - figures/FigureS5.pdf
+      - figures/FigureS6.pdf
 
   data:
     depends:
       - dataset
-      - dataset2
       - cfg
-      - datroot
       - baad_all
-      - dat_mlf
-      - dat_alf
-      - dat_alfmso
-      - dat_mlfmso
       - baad_mapmat
       - world_mapmat
 
@@ -133,50 +132,40 @@ targets:
     command: prepare_baadmapmat(baad_climate1)
   world_mapmat:
     command: prepare_worldmapmat("data/Worldclim_landcover_climspace_withcover.rds")
-  dat_alfmso:
-    command: prepare_dat_alfmso(dataset2)
-  dat_mlfmso:
-    command: prepare_dat_mlfmso(dataset2)
-  dat_mlf:
-    command: prepare_dat_mlf(dataset2)
-  dat_alf:
-    command: prepare_dat_alf(dataset2)
   dataset:
-    command: prepare_dataset_1(baad_climate2)
-  dataset2:
-    command: prepare_dataset_2(dataset)
-  datroot:
-    command: prepare_dataset_roots(dataset)
-  baad_climate2:
-    command: addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.rds")
+    command: prepare_dataset_1(baad_climate3, plantations=TRUE)
   baad_climate1:
     command: addWorldClimMAPMAT(baad_all, "data/worldclimmapmat.rds")
+  baad_climate2:
+    command: addMImgdd0(baad_climate1, "data/MI_mGDDD_landcover_filtered.rds")
+  baad_climate3:
+    command: addPET(baad_climate2, "data/zomerpet.rds")
   baad_all:
     command: readRDS("downloads/baad.rds")
   downloads/baad.rds:
     command: download_baad(target_name)
     cleanup_level: purge
-
   cfg:
     command: extract_baad_dictionary(baad_all)
 
   # Stats & tables --------------------------------------
   basalafit:
     command: BasalA_fit(baad_all)
-  table_gamr2MATMAP:
-    command:  make_table_gamr2MATMAP(dataset)
-  table_mlfastba:
-    command:  make_table_mlfastba(dat_mlf)
-  table_alfastba:
-    command:  make_table_alfastba(dat_alf)
-  table_lmf:
-    command:  make_table_lmf(dat_mlfmso)
-  table_lar:
-    command:  make_table_lar(dat_alfmso)
-  table_varpart2:
-    command:  make_table_varpart2(dataset2)
-  table_r2lmaforpft:
-    command:  make_table_lmaforpft(dataset2)
+    
+  table_varpart_gam_old:
+    command: make_table_gamr2MATMAP_old(dataset)
+  table_varpart_gam:
+    command: make_table_gamr2MATARID(dataset)
+  table_varpart_lmer:
+    command: mixedr2(dataset)
+  table_hierpart:
+    command: make_table_hierpart(dataset)
+  afas:
+    command: af_as_stat(dataset)
+  msas:
+    command: ms_as_stat(dataset)
+  table_samplesize:
+    command: make_samplesize_table(dataset)
 
   # Figures --------------------------------------
 
@@ -196,18 +185,26 @@ targets:
     command: figure5(dataset)
     plot: wide
   figures/Figure6.pdf:
-    command: figure6(dataset, dataset2)
-    plot: extra_wide
+    command: figure6(dataset, nbin=75)
+    plot: wide
   figures/FigureS1.pdf:
     command: figureS1(baad_mapmat, world_mapmat)
     plot: med_square
   figures/FigureS2.pdf:
     command: figureS2(dataset)
-    plot: wide
+    plot: med_square
   figures/FigureS3.pdf:
-    command: figureS3(dataset)
+    command: figureS3(table_hierpart,table_varpart_gam_old,table_varpart_lmer)
     plot: wide
-
+  figures/FigureS4.pdf:
+    command: figureS4(dataset)
+    plot: wide
+  figures/FigureS5.pdf:
+    command: figureS5(dataset)
+    plot: wide
+  figures/FigureS6.pdf:
+    command: figureS6(dataset)
+    plot: wide
 
 
   downloads/ian-symbol-eucalyptus-spp-1.png:

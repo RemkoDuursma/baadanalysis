@@ -1,22 +1,23 @@
-
+% Notes:
+% for submission, convert to Word docx using Adobe Acrobat Professional. To not include line numbers here, add them in Word. Also do not include figures. Word count can appear on first page; follow instructions further below.
 
 \documentclass[a4paper]{article}
 
-  %texcount manuscript.tex > wordcount.txt
-  %shell("texcount manuscript.tex > wordcount.txt")
-  
 \renewcommand{\baselinestretch}{1.6}   % line spacing
 \usepackage{amssymb,amsmath}
 \usepackage{palatino}
+\usepackage[default,osfigures,scale=0.95]{opensans}
+
 \usepackage{parskip}
 \usepackage{graphicx}
 \usepackage{fixltx2e}
-% \usepackage[default,osfigures,scale=0.95]{opensans}
 \graphicspath{ {./figures/} }
 \usepackage{geometry}
 \usepackage{authblk}
 \usepackage{gensymb}
 \usepackage{lineno}
+\usepackage{url}
+\usepackage{breakurl}
 \geometry{verbose,tmargin=2.4cm,bmargin=2.4cm,lmargin=2.4cm,rmargin=2.4cm}
 \usepackage{natbib}
 
@@ -28,18 +29,19 @@
 
 % Flag to include figures in the main text
 \newif\ifincludefigs
-\includefigsfalse  % or \includefigstrue
+\includefigstrue  % or \includefigsfalse
 
 \begin{document}
 
-% \linenumbers
+% Do not turn on if converting to Word later.
+%\linenumbers
 
-\title{Leaf traits drive differences in biomass partitioning among major plant functional types}
+\title{Leaf mass per area and plant size drive differences in above-ground biomass distribution among woody plant functional types}
 
 \author[1]{Remko A. Duursma}
 \author[2]{Daniel S. Falster}
 
-\affil[1]{Hawkesbury Institute for the Environment, University of Western Sydney, Locked Bag 1797, Penrith, NSW 2751, Australia}
+\affil[1]{Hawkesbury Institute for the Environment, Western Sydney University, Locked Bag 1797, Penrith, NSW 2751, Australia}
 \affil[2]{Biological Sciences, Macquarie University, North Ryde, NSW 2109, Australia}
 
 \renewcommand\Authands{ and }
@@ -52,24 +54,27 @@ opts_chunk$set(echo=FALSE)
 baad <- readRDS("downloads/baad.rds")
 @
 
+% Word count
+%% Uncomment this after compiling the ms, then compile again.
+% Requires Perl to be installed.
+%' <<echo=FALSE>>=
+%' #shell("texcount manuscript.tex > wordcount.txt")
+%' nrw <- get_wordcount("wordcount.txt")
+%' @
+%' Total number of words: \Sexpr{nrw$Total} \\
+%' Abstract: \Sexpr{nrw$Abstract} \\
+%' Introduction: \Sexpr{nrw$Introduction} \\
+%' Methods and Materials: \Sexpr{nrw$Methods} \\
+%' Results: \Sexpr{nrw$Results} \\
+%' Discussion: \Sexpr{nrw$Discussion} \\
+%' Number of figures: 6 (all in colour) \\
+%' Number of tables: 2 \\
+%' Supporting information : 6 Figures (all in colour).
 
-%% uncomment this after compiling the ms, then compile again. This is a recursive dependency :(
-% Also, requires Perl.
-% #' <<>>=
-% #' shell("texcount manuscript.tex > wordcount.txt")
-% #' nrw <- get_wordcount("wordcount.txt")
-% #' @
-% #' 
-% #' Total number of words: \Sexpr{nrw$Total} \\
-% #' Abstract: \Sexpr{nrw$Abstract} \\
-% #' Introduction: \Sexpr{nrw$Introduction} \\
-% #' Methods and Materials: \Sexpr{nrw$Methods} \\
-% #' Results: \Sexpr{nrw$Results} \\
-% #' Discussion: \Sexpr{nrw$Discussion} \\
-% #' 
-% #' Number of figures: 6 (all in colour) \\
-% #' Number of tables: 2 \\
-% #' Supporting information : 1 Tables, 3 Figures and 1 Notes.
+% Alternatively, in a shell,
+% 
+%texcount manuscript.tex > wordcount.txt
+%shell("texcount manuscript.tex > wordcount.txt")
 
 %--------------------------------------------------------------------------------------------%
 
@@ -77,131 +82,136 @@ baad <- readRDS("downloads/baad.rds")
 
 
 \clearpage
+
+
+
+
 \section*{Summary}
 
-% 200 word max.
-\begin{enumerate}
-\item The partitioning of biomass into leaves and stems is one of the most uncertain  and influential components of  global vegetation models (GVMs). Although GVMs typically assume that the major woody plant functional types (PFTs) differ in biomass partitioning, empirical studies have not been able to justify these differences. Here we test for differences between PFTs in partitioning of biomass between leaves and stems.
-\item We use the recently published Biomass And Allometry Database (BAAD), a large database including observations for individual plants. The database covers the global climate space, allowing us to test for direct climate effects in addition to PFT. 
-\item The leaf mass fraction (LMF, leaf / total aboveground biomass) varied strongly between PFTs (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm). We found that LMF, once corrected for plant height, was proportional to leaf mass per area across PFTs. As a result, the PFTs did not differ in the amount of leaf area supported per unit above ground biomass. We found only weak and inconsistent effects of climate on biomass partitioning.
-\item Combined, these results uncover fundamental rules in how plants are constructed and allow for systematic benchmarking of biomass partitioning routines in GVMs.
-\end{enumerate}
+%The Summary for research papers, which must be usable as a stand-alone document, must not exceed 200 words and should be organized using four bullet points to indicate (1) the research conducted, including the rationale, (2) methods, (3) key results and (4) the main conclusion, including the key points of discussion. 
+\begin{itemize}
+\item We tested the hypothesis that biomass distribution in leaves and stems is related to the leaf mass per area, an important leaf trait, across major woody plant functional types (PFTs) (as defined by deciduous vs. evergreen and gymnosperm vs. angiosperm).  
+\item We used a large compilation of plant biomass and size observations, including observations of \Sexpr{nrow(baad_all$data)} individuals on \Sexpr{length(unique(baad_all$data$speciesMatched))} species. We used a combination of semi-parametric methods and variance partitioning to test for influence of PFT, plant height, and climate on biomass distribution and three component variables.
+\item The ratio of leaf mass to woody above-ground mass ($M_F/M_S$) varied strongly between PFTs. We found that $M_F/M_S$, once corrected for plant height, was proportional to leaf mass per area across PFTs. As a result, the PFTs did not differ in the amount of leaf area supported per unit above ground biomass. Climate consistently explained very little additional variation in biomass distribution at a given plant size. 
+\item Combined, these results demonstrate consistent patterns in above-ground biomass distribution and leaf area relationships among major woody plant functional types, and can be used to further constrain global vegetation models.
+\end{itemize}
 
-\emph{Keywords}: allocation, plant allometry, biomass estimation, specific leaf area, dynamic global vegetation model
+\emph{Keywords}: allocation, plant allometry, biomass estimation, specific leaf area
+
 
 
 \clearpage
 \section*{Introduction}
 
-The partitioning of forest biomass among leaves and stems strongly influences the productivity and carbon cycle of the world's vegetation \citep{ise2010, dekauwe2014,friend2014}. Biomass stored in woody stems has a long residence time \citep{luyssaert2008}, whereas leaf biomass turns over quickly, entering the soil carbon cycle where the majority of carbon is released back to the atmosphere \citep{ryanlaw2005}. Globally, forests store approximately 360Pg of carbon in living biomass \citep{panetal2011}, equivalent to almost 40 years of current anthropogenic CO\textsubscript{2} emissions \citep{friedlingsteinetal2014}. Reducing uncertainties about biomass partitioning and carbon residence times in GVMs is therefore a priority for understanding the effects of climate and other environmental change on the global carbon cycle \citep{friend2014,dekauwe2014,negron2015}.
+The distribution of forest biomass among leaves and stems strongly influences the productivity and carbon cycle of the world's vegetation \citep{ise2010, dekauwe2014,friend2014}. Biomass stored in woody stems has a long residence time \citep{luyssaert2008}, whereas leaf biomass turns over quickly, entering the soil carbon cycle where the majority of carbon is released back to the atmosphere \citep{ryanlaw2005}. Globally, forests store approximately 360Pg of carbon in living biomass \citep{panetal2011}, equivalent to almost 40 years of current anthropogenic CO\textsubscript{2} emissions \citep{friedlingsteinetal2014}. Reducing uncertainties about biomass distributionand carbon residence times is a priority for understanding the effects of climate and other environmental change on the global carbon cycle \citep{friend2014,dekauwe2014,negron2015}, in particular because projections by global vegetation models (GVMs) are particularly sensitive to this component \citep{friend2014,ise2010}.
 
-Perhaps the biggest challenge for GVMs is to capture the combined responses of the more than 250,000 plant species comprising the world's vegetation. While most plants have the same basic resource requirements and physiological function, large differences exist among species in the amount of energy invested in different tissues (leaves, stems, roots). The approach taken by most GVMs for dealing with this functional diversity is to consider only a few archetypal plant functional types (PFTs) \citep{harrisonetal2010,wullschleger2014}, assumed to differ in key physiological attributes. While GVMs assume or predict differences in biomass partitioning between PFTs (Notes S1), these differences are poorly constrained, due to limited available data. Moreover, there is little consensus on how biomass partitioning and allocation (see Methods for terminology) should be modelled in GVMs \citep{franklin2012,dekauwe2014,friend2014}. These shortcomings largely reflect the lack of suitable datasets of global scope with which models can be tested, constrained and compared \citep{wolf2011}.
+Perhaps the biggest challenge is to capture the combined responses to environmental change of the more than 250,000 plant species comprising the world's vegetation. While most plants have the same basic resource requirements and physiological function, large differences exist among species in the amount of biomass invested in different tissues (leaves, stems, roots). To attempt to understand the source of this functional diversity, it is customary to consider only a few archetypal plant functional types (PFTs) \citep{harrisonetal2010,wullschleger2014}, assumed to differ in key attributes. Previous work has shown consistently large differences in biomass distribution and related traits among major PFTs \citep{poorter2009,enquistniklas2002,poorter2012,poorter2015,reich2014,mccarthyetal2007}, but these differences are yet to be fully understood.
 
-In this paper we are primarily interested in the distribution of biomass ('partitioning') between leaves and woody stems, an important component of the residence time of carbon in ecosystems \citep{friend2014}. Previous work based on either whole stands \citep{oneilldeangelis1981,enquistniklas2002,reich2014} and or a mix on stand-- and individual-based measurements \citep{poorter2012, poorter2015}, reported differences between angiosperms and gymnosperms in the amount of leaf biomass per unit above-ground biomass (the 'leaf mass fraction', LMF). \citet{poorter2012} and \citet{enquistniklas2002} attributed higher LMF in gymnosperms to longer leaf lifespan (LL) compared to typical angiosperms, but this begs the question whether differences in LMF are also apparent between deciduous and evergreen functional types within angiosperms. It is also unknown whether PFTs with higher leaf biomass also have higher total leaf area, which is relevant because leaf area drives total light interception and thus productivity. Some oft-cited studies have also assumed that gymnosperms carry more leaf area than angiosperms \citep{chabothicks1982, bond1989}.
+One puzzling aspect of the large variation in biomass distribution among PFTs is the much larger leaf mass in gymnosperms compared to angiosperms (at a given stem mass) \citep{oneilldeangelis1981,enquistniklas2002,reich2014,poorter2012, poorter2015}. A possible explanation is that gymnosperms compensate for their low leaf mass per area (LMA) \citep{poorter2009} by maintaining a large amount of leaf biomass, to maintain sufficient total leaf area. If this is the case, total leaf area per unit above-ground biomass would be less variable between angiosperms and gymnosperms than leaf mass. Some oft-cited studies have however assumed that gymnosperms carry more leaf area than angiosperms \citep{chabothicks1982, bond1989}, but recent large compilations on biomass distribution did not include measurements of leaf area in addition to mass to test this hypothesis \citep{poorter2012,poorter2015,reich2014}. The idea that high total leaf mass may compensate for low LMA would also explain the difference between evergreen (high LMA, high leaf mass) and deciduous (low LMA, low leaf mass) species \citep{poorter2015}. Here we set out to directly test the hypothesis that across PFTs, $M_F/M_S$ is related to LMA with a global database that includes observations of leaf area as well as leaf mass measured on the same plants. 
 
-Little is known about global-scale patterns in LMF and LAR in relation to climate. It can be expected that biomass partitioning is correlated with precipitation or mean annual temperature because smaller-scale comparisons have shown responsiveness of biomass partitioning to environmental drivers \citep{berninger1994,callaway1994,delucia2000,poyatos2007}. Moreover, a recent study by \citet{reich2014} demonstrated that stand-scale biomass partitioning was related to mean annual temperature across diverse forest stands. Indeed, many GVMs assume that climate affects biomass partitioning within a given PFT, often through soil water stress or other abiotic stress factors (see Notes S1). Again, however, these models do not agree on the degree of plasticity in biomass partitioning, or which climate variables it should respond to. 
+Little is known about global-scale patterns in biomass distribution in relation to climate. It can be expected that biomass distribution between leaves and stems is correlated with precipitation or mean annual temperature because smaller-scale comparisons have shown responses to environmental drivers \citep{berninger1994,callaway1994,delucia2000,poyatos2007}. Recently, \citet{reich2014} demonstrated that $M_F/M_S$ (for whole stands, either including or excluding below-ground components) increased with mean annual temperature, after separating the data into gymnosperm and angiosperm stands, and accounting for the large size-related variation in biomass distribution. Our second objective was thus to test for climate-related variation in above-ground biomass distribution, and specifically to test whether $M_F/M_S$ increases with mean annual temperature.
 
-Despite considerable advances in theory underlying allometric scaling in plants \citep{enquist2003, west1999, savage2010} we do not yet have a clear understanding of potential differences between PFTs in terms of biomass partitioning. Instead, most previous work has focussed on understanding size-related shifts in biomass partitioning, as governed by constraints including hydraulic supply and mechanical stability \citep{savage2010}. Rather than to advance a specific model of biomass partitioning or allocation, our view is that a broader evidence base is needed first to elucidate patterns between PFTs. This should enable those building GVMs to refine algorithms and parameter values to more closely match the observations. Here, we use a unique, new database \citep{falster2015} (Fig.~\ref{fig:figoverview}) to establish general rules on how biomass partitioning differs among three dominant woody PFTs across the globe: evergreen gymnosperms, evergreen angiosperms, and deciduous angiosperms. A recent compilation of plant biomass data \citep{poorter2015} speculated that differences between gymnosperms and angiosperms in distribution of biomass between leaves and stems is related to differences in leaf mass per area. Here we can directly test this hypothesis as our database, unlike those of \citet{enquistniklas2002}, \citet{reich2014}, and \cite{poorter2015}, includes many observations of leaf area as well as leaf mass measured on the same plants.
-
-A second objective was to study relationships between biomass partitioning and climate variables or biome at a global scale. The dataset includes observations of biomass and size metrics for individual plants, compiled from 175 studies across nine vegetation types (Fig. S1), across the three major biomes (boreal, temperate and tropical). In this paper we focus on field-grown woody plants, spanning the entire size range of woody plants (0.01 - \textgreater 100 m height). One key challenge is thus to account for the very large size variation commonly found in any allometric variable \citep{niklas1994}. We do this by fitting a semi-parametric data-driven statistical model, i.e. one that does not assume a particular functional form, thereby allowing us to study PFT patterns at a common plant height. 
+To test our hypotheses, we use a recently compiled large database \citep{falster2015} which includes observations of biomass and size metrics for individual plants (Fig. 1), compiled from 175 studies across nine vegetation types (Fig. S1), across the three major climate zones (boreal, temperate and tropical). In this paper we focus on field-grown woody plants, spanning the entire size range of woody plants (0.01 - \textgreater 100 m height). 
 
 
 \section*{Materials and Methods}
 
-\subsection*{Terminology}
-\label{sec:partterm}
-
-The terms 'partitioning' and 'allocation' have been used in various ways, confusing comparisons between studies \citep{litton2007}. Here, we define biomass partitioning as the actual distribution of biomass between compartments (e.g., leaves vs. stems), and biomass allocation as the proportion of net primary production (NPP) that is allocated to some compartment. The two processes are different because of continuous turnover of biomass, which differs strongly between compartments. We may write \citep{mcmurtriewolf1983},
-
-$$
-\frac{dM_i}{dt} = a_i \textrm{NPP} - \tau_i M_i
-$$
-
-where $M_i$ is the biomass in some compartment (leaves, stems or roots) remaining on the plant, $a_i$ the annual allocation of NPP to that compartment, and $\tau_i$ the annual turnover (or loss) of compartment $i$ from the plant. It is thus easy to see that partitioning ($M_i/M_T$, where $M_T$ is total biomass) can be different from allocation ($a_i$) because turnover ($\tau_i$) differs between leaf and wood biomass. Here, we present data on biomass partitioning, which can inform models of allocation only when estimates of turnover are available.
-
-
 \subsection*{Data}
 
-We used the recently compiled Biomass And Allometry Database (BAAD) \citep{falster2015}, which in total includes records for \Sexpr{nrow(baad_all$data)} individuals. The database has very limited overlap (n = 261, 1.7 \%) with the recent large compilation of \citet{poorter2015} and differs in that measurements are all for individual plants (where \citet{poorter2015} included many stand-based estimates converted back to invididuals). In this paper we restrict our analysis to records that include leaf mass ($M_F$), leaf area ($A_F$), above-ground woody biomass ($M_S$), plant height ($H$), and stem area measured at ground level ($A_S$), or at breast height (typically 1.3m) ($A_{Sbh}$) (n=\Sexpr{nrow(dataset)}). The database contains many more variables, for example root biomass for a much smaller subset of studies. Here we limit the analysis to patterns in aboveground biomass distribution. For each analysis, we used different subsets of the data because not all variables were measured in each study. Sample sizes by PFT are summarised in Table \ref{table:counttable}. We excluded glasshouse and common garden studies, including only field-grown woody plants (including natural vegetation, unmanaged and managed plantations). We considered three PFTs : evergreen angiosperms, evergreen gymnosperms, and deciduous angiosperms. We excluded  deciduous gymnosperms because few data were available. All locations were further separated into boreal (including sub-boreal), temperate, and tropical biomes. To assess the coverage of the global climate space by the dataset, we extracted mean annual temperature and precipitation from Worldclim \citep{worldclim}, excluding areas without woody vegetation (taken from the global land cover database GLC-SHARE \citep{lathamglobal}).
+We used the recently compiled Biomass And Allometry Database (BAAD) \citep{falster2015}, which in total includes records for \Sexpr{nrow(baad_all$data)} individuals on \Sexpr{length(unique(baad_all$data$speciesMatched))} species. The database has very limited overlap (n = 261 individuals, 1.7 \%) with the recent large compilation of \citet{poorter2015} and differs in that measurements are all for individual plants (where \citet{poorter2015} included many stand-based estimates converted back to invididuals). In this paper we restrict our analysis to records that include leaf mass ($M_F$), leaf area ($A_F$), above-ground woody biomass ($M_S$), plant height ($H$), and stem area measured at ground level ($A_S$), or at breast height (typically 1.3m) ($A_{Sbh}$) (n=\Sexpr{nrow(dataset)}). The database contains many more variables, for example root biomass for a much smaller subset of studies. Here we limit the analysis to patterns in aboveground biomass distribution. For each analysis, we used different subsets of the data because not all variables were measured in each study. Sample sizes by PFT are summarised in Table \ref{table:counttable}. 
 
-For the above-ground biomass pools, we calculated the leaf mass fraction ($M_F / M_T$, where $M_T$ is total above-ground biomass) and leaf area ratio ($A_F / M_T$). These variables are related by,
+We included only field-grown woody plants in our analysis (including natural vegetation, unmanaged and managed plantations), excluding glasshouse and common garden studies. Excluding plantations from the analysis did not affect the main result, but far fewer data were available for evergreen gymnosperms. We considered three PFTs : evergreen angiosperms, evergreen gymnosperms, and deciduous angiosperms. We excluded  deciduous gymnosperms because few data were available. To assess the coverage of the global climate space by the dataset, we extracted mean annual temperature (MAT) and precipitation (MAP) from Worldclim \citep{worldclim}, excluding areas without woody vegetation (taken from the global land cover database GLC-SHARE \citep{lathamglobal}). MAT and MAP were also extracted for all study locations. Potential evapotranspiration (PET) was extracted from the Global-PET database (http://www.cgiar-csi.org, \citet{zomer2008}), and an aridity index was calculated as PET/MAP.
 
-$$\textrm{LMF} = \frac{M_F}{M_T} = \left(\frac{M_F}{A_F}\right) \left(\frac{A_F}{M_T}\right) = \textrm{LMA} \times \textrm{LAR}.$$
+We only used leaf mass per area (LMA) directly estimated for the harvested plants (typically for a subsample of leaves, see \citet{falster2015} for details on the methods for each contributed study). For conifers, leaf area was converted to half-total surface area using the average of a set of published conversion factors \citep{barclay2000}, with  different conversion factors applied to pines (\emph{Pinus} spp.) and non-pines. This conversion was necessary because half-total surface area is most appropriate for comparison to flat leaves \citep{lang1991, chen1992}. 
 
-We only used LMA directly estimated for the harvested plants (typically for a subsample of leaves, see \citet{falster2015} for details on the methods for each contributed study). For conifers, leaf area was converted to half-total surface area using the average of a set of published conversion factors \citep{barclay2000}, with  different conversion factors applied to pines (\emph{Pinus} spp.) and non-pines. This conversion was necessary because half-total surface area is most appropriate for comparison to flat leaves \citep{lang1991, chen1992}. Stem cross-sectional area was measured either at breast height and/or at the base of the plant. For the subset of the data where both were measured, we estimated basal stem area ($A_S$) from breast height stem area ($A_{Sbh}$) using a non-linear regression model, as follows.
+Stem cross-sectional area was measured either at breast height (1.3 - 1.34m) and/or at the base of the plant. In all analyses, we used basal stem area because many plants (N=\Sexpr{nrow(dataset[dataset$h.t < 1.3,])}) were \textless 1.3m tall. For the subset of the data where both were measured, we estimated basal stem area ($A_S$) from breast height stem area ($A_{Sbh}$) by fitting the following equation, using non-linear regression.
 
-Using the subset of data where basal stem diameter ($A_S$) and diameter at breast height ($A_{Sbh}$) were measured (a total of \Sexpr{length(residuals(basalafit))} observations covering the three major PFTs), we developed a non-linear model to predict $A_S$ when only $A_{Sbh}$ and plant height ($H$) were measured. We fit the following equation, using non-linear regression.
+\begin{equation}
+D_S = D_{Sbh} H^c / (H - H_{bh})^c
+\end{equation}
 
-$$D_S = D_{Sbh} H^a / (H - H_{bh})^a$$
+where $D_S$ is the basal stem diameter (m), $D_{Sbh}$ stem diameter at breast height, $H_{bh}$ the height at which $D_{Sbh}$ was measured (typically 1.3 or 1.34m), and \emph{c} was further expressed as a function of plant height:
 
-where $D_S$ is the basal stem diameter (m), $D_{Sbh}$ stem diameter at breast height, $H_{bh}$ the height at which $D_{Sbh}$ was measured (typically 1.3 or 1.34m), and $a$ was further expressed as a function of plant height:
+\begin{equation}
+c = c_0H^{c_1}
+\end{equation}
 
-$$a = c_0H^{c_1}.$$
-
-The estimated coefficients were $c_0$ = \Sexpr{signif(coef(basalafit)[1],3)}, $c_1$ = \Sexpr{signif(coef(basalafit)[2],3)}, root-mean square error = \Sexpr{signif(summary(basalafit)$sigma,3)}.
+The estimated coefficients were $c_0$ = \Sexpr{signif(coef(basalafit)[1],3)}, $c_1$ = \Sexpr{signif(coef(basalafit)[2],3)}, root-mean square error = \Sexpr{signif(summary(basalafit)$sigma,3)}. The relationship was fit using a total of \Sexpr{length(residuals(basalafit))} observations covering the three major PFTs.
 
 \subsection*{Data analysis}
 
-We used generalised additive models (GAM) to capture  the relationships between biomass and plant size variables, and to estimate variables and their confidence intervals such as LMF at a common plant height. In all fitted GAMs, we used a cubic regression spline. For the smoothed term in the model (plant height), we used up to 3 or 4 degrees of freedom, which resulted in biologically realistic smoothed relationships. Within the GAM, we used a penalised regression smoother \citep{wood2006} to allow the final degree of smoothness to be estimated from the data. In all fitted GAMs, we used species-dataset combination as a random effect. All variables (except MAP and MAT) were log-transformed prior to analysis.
+\emph{might be moved to introduction}
+To better understand the mechanisms of PFT and climate-related variation in leaf-stem biomass distribution, we decomposed it into three component variables (Eq.~\ref{eq:mfmspart}),
 
-Variance explained by quantitative climate variables (MAP and MAT) were tested with GAMs where variables were sequentially added to the model, and the explained variance ($R^2$) calculated. For the test of biome effects on biomass partitioning, we used a linear mixed-effects model (because two factors and their interactions were tested), again with species-dataset as the random effect. We calculated the $R^2$ for linear mixed-effects models for the fixed effects only \citep{nakagawa2013}.
-
-Despite the exceptional size of our dataset, the strong size-dependence of LMF still hinders comparisons across climatic gradients, due to the small sample size available within each species or site when sampling at a common height. To study climate effects on biomass partitioning, we therefore further decomposed LMF as the product,
-
-\begin{equation}\label{eq:M1}
-\textrm{LMF} = \left(\frac{M_F}{A_S}\right) \left(\frac{A_S}{M_T}\right).
+\begin{equation}
+\label{eq:mfmspart}
+\frac{M_F}{M_S} = \frac{M_F}{A_F} \cdot \frac{A_F}{A_S} \cdot \frac{A_S}{M_S}
 \end{equation}
 
-This decomposition showed that the vast majority of size-related variation was captured by $A_S/M_T$ alone, indicating that comparisons among $M_F/A_S$ could be made without needing to compare at a common height. A similar decomposition  of LAR as the product of $A_F/A_S$ and $A_S/M_T$ produced the same outcome. We therefore analysed for climatic effects on $M_F/A_S$ and $A_F/A_S$ in two ways: with quantitative variables (mean annual precipitation, MAP; mean annual temperature, MAT), and by biome (tropical / temperate/ boreal), a simple classification taking into account both MAT and MAP (Fig. S1). In both cases we used PFT and plant height as covariates varying across climate space. 
+where $M_F/A_F$ is the leaf mass per area (LMA), $A_F/A_S$ the ratio of plant leaf area to basal stem area, and $A_S/M_S$ the ratio of stem basal area to total woody above-ground mass. Using variance partitioning, we quantify the contribution of plant height, plant functional type, and climate to the overall variation in $M_F/M_S$ and for all three component variables. 
 
-All analyses were conducted in R v3.2.0 \citep{R-2015}. GAMs were fitted using \emph{mgcv} package \citep{wood2006}. The code to replicate this analysis are available on GitHub at http://github.com/RemkoDuursma/baadanalysis.
+Because, similar to \citep{poorter2015}, none of the studied relationships were linear on a log-log scale, we did not use standard allometric equations to study relationships between size and biomass variables. Instead, we used generalised additive models (GAM), a semi-parametric modelling approach that makes no assumption about the shape of the relationships. GAMs were used to visualize the relationships between biomass and plant size variables, and to estimate variables and their confidence intervals such as $M_F/M_S$ at a common plant height. In all fitted GAMs, we used a cubic regression spline. For the smoothed term in the model (plant height), we used up to 3 or 4 degrees of freedom, which resulted in biologically realistic smoothed relationships. Within the GAM, we used a penalised regression smoother \citep{wood2006} to allow the final degree of smoothness to be estimated from the data. In all fitted GAMs, we used species-dataset combination as a random effect. To homogenize variance, all variables (except MAP and MAT) were log-transformed prior to analysis.
+
+Variance explained by quantitative climate variables (MAP and MAT) were tested with GAMs where variables were sequentially added to the model, and the explained variance ($R^2$) calculated. We compared this approach when using linear mixed-effects models instead of GAMs (calculating the the $R^2$ for linear mixed-effects models for the fixed effects only \citep{nakagawa2013}), as well as an independent method, independent effects analysis. The three methods generally agreed on the ranking of variable importance (see Fig. S5 and S6).
+
+All analyses were conducted in R 3.2.3 \citep{R-2015}. GAMs were fitted using the \emph{mgcv} package \citep{wood2006}. The code to replicate this analysis (and all figures) is available at \url{http://github.com/RemkoDuursma/baadanalysis} (doi: \emph{to be added}).
+
+
 
 \section*{Results}
 
-The raw data in Fig.~\ref{fig:figrawdata} show a steeper increase of woody aboveground biomass ($M_S$) with plant height compared to foliage biomass ($M_F$). As a result, LMF decreased with plant height, with the three plant functional types clearly differing in LMF across nearly the entire size range (Fig.~\ref{fig:figlmf}a). When we corrected for plant height by estimating LMF at a common plant height, we found that LMF was proportional to the average leaf mass per area (LMA) across the three PFTs (Fig.~\ref{fig:figlmf}b). As a consequence, LAR was invariant between PFTs, because LAR = LMF / LMA (Fig. ~\ref{fig:figlmf}c and Fig. S2). 
+<<echo=FALSE>>=
+qp <- with(baad_mapmat, tapply(MAT, pft, function(x)round(quantile(x, probs=c(0.25,0.75),na.rm=TRUE),1)))
+@
 
-Mirroring the results for LMF, we found that the amount of leaf mass per unit stem area ($M_F/A_S$) differed among the three PFTs, that these differences were also proportional to LMA (Fig. ~\ref{fig:figlmf}d), and that PFTs were similarly invariant in the amount of leaf area per unit stem area ($A_F/A_S$) (Fig.~\ref{fig:figlmf}e).
+The compiled dataset covered the global climate space well (defined by mean annual temperature, MAT; and mean annual precipitation, MAP) (Fig. 1). There was some separation between the three major PFTs in terms of climate space occupancy. Evergreen angiosperms occurred on average at a higher MAT (50\% of studies between \Sexpr{qp$EA[1]} and \Sexpr{qp$EA[2]} \textdegree C MAT) than deciduous angiosperms (\Sexpr{qp$DA[1]} - \Sexpr{qp$DA[2]} \textdegree C) and evergreen gymnosperms (\Sexpr{qp$EG[1]} - \Sexpr{qp$EG[2]} \textdegree C). Plant functional type and climate are thus at least partly confounded.
 
-The above results highlight how LMA drives differences in biomass partitioning among dominant woody PFTs. To assess whether LMA could replace PFT when predicting biomass partitioning, we fit a linear mixed-effects model to LMF and $M_F/A_S$ using PFT and plant height (and the quadratic term) as predictors (and all interactions). We then replaced PFT with LMA, and found that the model with LMA could explain almost as much variation in LMF as the model with PFT ($R^2$ = 0.74 with PFT vs. 0.62 with LMA), likewise for $M_F/A_S$ ($R^2$ = 0.29 vs. 0.28). 
+<<echo=FALSE>>=
+mfmssmall <- round(with(dataset, 10^mean(lmlf_mst[h.t < 0.1], na.rm=TRUE)),1)
+mfmslarge <- round(with(dataset, 10^mean(lmlf_mst[h.t > 30], na.rm=TRUE)),3)
+@
 
-There was considerable variation in all studied variables between species within PFTs (Fig. ~\ref{fig:fighist}). To understand whether we can improve on a PFT-based classification by including other traits that affect biomass partitioning, we decomposed $M_F/A_S$ into LMA ($M_F/A_F$), and the ratio of leaf area to stem cross-sectional area ($A_F/A_S$):
+As expected, both whole-plant leaf mass ($M_F$) and above-ground woody biomass ($M_S$) showed a strong depence on plant height (Fig. 2). For both variables the relationship was highly non-linear on a log-log scale, demonstrating departure from simple allometric relationships. It is also evident that $M_S$ increases much quicker with plant height than $M_F$. As a result, the ratio $M_F/M_S$ quickly decreased with plant height (Fig. 3a), from an average of \Sexpr{mfmssmall} for very small saplings (\textless 0.1m) to an average of \Sexpr{mfmslarge} for large trees (\textgreater 30m). 
 
-\begin{equation}\label{eq:M2}
-\frac{M_F}{A_S} = \left(\frac{M_F}{A_F}\right) \left(\frac{A_F}{A_S}\right).
-\end{equation}
+We found large differences between the three major PFTs in terms of above-ground biomass distribution (Fig. 3a). These differences were fairly consistent along the range in plant height, with a ranking of evergreen gymnosperm \textgreater evergreen angiosperm \textgreater deciduous angiosperm. Next we calculated $M_F/M_S$ at a common plant height for each of the PFTs. These three size-corrected $M_F/M_S$ values were highly significantly different between PFTs (p \textless 0.001), and were approximately proportional to the average LMA ($M_F/A_F$) across the PFTs (Fig. 3b). As a result, the amount of leaf area per unit woody above-ground biomass ($A_F/M_S$) did not differ between PFTs (all pair-wise comparisons p \textgreater 0.05, see Fig. 3c), because the differences in $M_F/A_S$ were exactly compensated by differences in LMA (see also Fig. S2 for $A_F/M_S$ as a function of plant height).
 
-The ratio $M_F/A_S$ is relevant because plant leaf mass is frequently estimated from $A_S$ with allometric equations \citep{shinozaki1964b, chave2005}, using records of stem diameter commonly recorded on long-term monitoring plots.  The correlation between $M_F/A_S$ and LMA was found to hold also within PFTs (Fig.~\ref{fig:figlmfspecies}a), explaining 30\% of the variation in $M_F/A_S$ across species. The regressions across species by PFT were broad and overlapping, with a more general relationship extending across the entire LMA axis. A larger fraction of the variation in $M_F/A_S$ was explained by species-level differences in $A_F/A_S$ (Fig.~\ref{fig:figlmfspecies}b). As previously noted, $A_F/A_S$ does not differ systematically among PFTs (Fig.~\ref{fig:figlmf}e), but does vary close to two orders of magnitude across species. In Fig.~\ref{fig:figlmfspecies}b, the separation among PFTs in $M_F/A_S$ arises due to differences in LMA. 
+Next, we decomposed $M_F/M_S$ into three component variables with distinct biological interpretation (Eq.\ref{eq:mfmspart}). For each of the component variables and $M_F/M_S$, we estimated the variance explained by plant height, PFT and climate variables (MAT or aridity) (Table~\ref{table:varparttable}). We did this by sequentially adding terms to a GAM, and calculating the $R^2$ for each fitted model. The first model included only plant height, and already explained much variation (65 - 79\%) in $M_F/M_S$ and $M_S/A_S$ but not LMA and $A_F/A_S$ (4 - 11 \%). When PFT was added to the model (as an intercept term as well as interaction with the smooth plant height term), the $R^2$ increased substantially for $M_F/M_S$ and $M_F/A_F$ but not $A_F/A_S$ or $A_S/M_S$, demonstrating that PFT differences entered largely in leaf mass-based variables. Additional variance explained by adding PFT was especially large for LMA, which is consistent with the large differences between PFTs in LMA shown in Fig. 3b,c. 
 
-We found that decomposing LMF and LAR as shown in Eq. \ref{eq:M1} was very useful to study climate effects because the second term ($A_S/M_T$) absorbed nearly all of the size-related variation in LMF (Table \ref{table:statstable} and Fig. S3) and is otherwise fairly conserved across PFTs (Fig. S3). As shown in Fig.~\ref{fig:figlmfspecies}b and Fig.~\ref{fig:figlmf}d, the term $M_F/A_S$ exhibits comparable differences between PFTs to LMF, but unlike LMF, $M_F/A_S$ is nearly independent of plant height (Table \ref{table:statstable}). $M_F/A_S$ is thus a useful proxy for LMF that can be compared across species and sites. 
+From the variance partitioning (Table 1), it is evident that $A_F/A_S$ did not vary appreciably between PFTs. Indeed, when all PFTs were plotted together, similar $A_F$ was attained at a given $A_S$ across the entire plant size range (with the exception of extremely large trees with \textgreater 1 $m^2$ stem basal area, for which comparatively little data was available) (Fig. 4). We fit a GAM of $A_F$ as a function of $A_S$ with or without PFT as another covariate (both as intercept and slope interaction), which showed PFT significantly improved model fit (likelihood ratio test, p \textless 0.001), however the $R^2$ increased only from \Sexpr{round(100*afas$R2a,2)} to \Sexpr{round(100*afas$R2b,2)}\%, and thus had little if any practical significance.
 
-Regardless of how we analysed the data, we found only weak climatic effects on biomass partitioning within PFTs (Fig.~\ref{fig:figclimate}). Biome consistently explained very little variation when added to a statistical model in addition to PFT and plant height ($R^2$ increased by only 0.01 - 0.06, see Table \ref{table:statstable}). Likewise, we found weak and inconsistent effects of climate variables (MAP and MAT) (Fig.~\ref{fig:figclimate}b-c). These variables explained little variation when added to a statistical model in addition to PFT and plant height ($R^2$ increased by 0.01 and 0.11, respectively, see Table \ref{table:statstable}).
+Likewise, the ratio of stem basal area to stem mass ($A_S/M_S$) apparently varied little between PFTs (Table~\ref{table:varparttable}). To illustrate this further, a plot of $M_S$ as a function of $A_S$ revealed a tight relationship, with little apparent difference between PFTs (Fig 5a). The only exception was for large gymnosperm trees, which consistently showed a lower $M_S$ at a given $A_S$ (Fig. 5b). We fitted a GAM of $M_S$ as a function of $A_S$ (added as a smooth term) with or without PFT as a covariate. Again PFT was formally significant (likelihood ratio test, p \textless 0.001), but the $R^2$ increased only marginally from \Sexpr{round(100*msas$R2a,2)} to \Sexpr{round(100*msas$R2b,2)}\%, again showing little practical significance of PFT in explaining this variable. 
+
+Taken together, these results demonstrate that 1) the majority of PFT-related variation in $M_F/M_S$ results from variation in LMA (not $A_F/A_S$ or $A_S/M_S$), and 2) the majority of height-related variation in $M_F/M_S$ results from variation in $A_S/M_S$ (not LMA or $A_F/A_S$). It is however important to note that there is very large variation between individuals even after accounting for PFT (Fig. 6). To correct for plant height effect on $M_S/A_S$, we expressed the stem mass ratio as $M_S/(H \cdot A_S)$ because we expect from basic geometry that $M_S$ is proportional to H and $A_S$ ($M_S = \phi \rho A_S H$, where $\phi$ a stem shape parameter, $\rho$ wood density). The histograms summarize that PFT effects are very evident in LMA (Fig. 6a), not in $A_F/A_S$, and only to some extent for $M_S/A_S$, which is entirely driven by large gymnosperm trees. However for all variables there was much unexplained variation between species (and individuals within species) within PFTs.
+
+Climate variables consistently added little explanatory power when added to a statistical model that included PFT and height (the adjusted R$^2$ frequently decreased, see Table~\ref{table:varparttable}). The only exception was LMA, for which a model that included MAT explained 53\% of the variation, compared to a model with height and PFT (45\%). Since the lack of climate effects on biomass distribution is in contrast with recent finding of \citep{reich2014}, we also analyzed climate effects with methods similar to that study. When we tested for MAT effects on $M_F/M_S$ when only considering gymnosperms and angiosperms (thus grouping decidous and evergreen species), we found a significant and consistent positive relationship with MAT (Fig. S5) for angiosperms for most size classes (but never for gymnosperms). We found, however, that this was largely due to the fact that at higher MAT, an increasing proportion of angiosperms are evergreen (Fig. 1), which have higher $M_F/M_S$. When analyzed separately for deciduous and evergreen angiosperms, few and weaker significant relationships were found (Fig. S6).
+
 
 
 \section*{Discussion}
 
-We found that PFTs differed in LMF, and that LMF was proportional to LMA. This conclusion was particularly strong across the three PFTs studied, but it also held across species within PFT. The implication is that the amount of leaf area supported per unit biomass (leaf area ratio, LAR) does not differ between PFTs. This result seems robust, as our data include individual plants spanning the entire size range of woody plants in natural forests (0.1-100m) (Fig.~\ref{fig:figlmf}a). Previous studies have demonstrated a large difference in LMF between angiosperms and gymnosperms \citep{poorter2012,poorter2015}, but have not been able to explain these differences in terms of leaf traits. We show that LMA -- a central trait of the leaf economics spectrum (LES) \citep{wrightetal2004} -- explains differences in LMF in a consistent manner. 
+Read \citep{bloom2016}; global patterns in inferred allocation and biomass pools (leaf / stem).
 
-We found that, as expected, plant size strongly influences LMF (Fig.~\ref{fig:figlmf}) and LAR (Fig. S2) (see also \citet{poorter2012,poorter2015}). It is thus necessary to correct for plant size when comparing biomass partitioning parameters, as has been noted many times \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both LMF and LAR showed very non-linear patterns with plant height, even on a logarithmic scale, consistent with recent other results \citep{poorter2015}. 
+Using the largest database of individual woody plant allometry to date, we studied patterns in above-ground biomass distribution among major woody plant functional types (PFTs), plant size, and climate. Our compilation is the first of its kind that also includes leaf area estimates on the same plants, allowing a direct test of the hypothesis that leaf and stem biomass distribution is related to the leaf mass per area. We found that at a common plant height, the leaf / woody biomass ratio ($M_F/M_S$) was proportional to the leaf mass per area across three PFTs, so that leaf area per unit above-ground biomass did not vary between PFTs. We found very weak effects of climate (mean annual temperature and aridity) on biomass distribution, so that the vast majority of the variation in biomass distribution was explained by plant size and PFT. 
 
-The finding that LMF is proportional to LMA across PFTs implies that LAR does not differ systematically between PFTs. One explanation for this pattern lies in the strong positive correlation between LMA and leaf lifespan (LL) \citep{wrightetal2004}. Both \cite{poorter2012} and \citet{enquistniklas2002} explained higher LMF in gymnosperms by higher LL; plants simply maintain more cohorts of foliage, but this explanation demands that all else is equal. Yet it is not self-evident that everything else is indeed equal, that is, annual production of foliage could differ between PFTs. Nonetheless, further supporting this explanation, \citet{reich1992} showed a positive correlation between LL and total stand leaf biomass across diverse forest stands. Another, not mutually exclusive, possible explanation is that plants may allocate biomass in a manner that targets a more constant LAR rather than LMF. Canopy size scales with $M_T$ \citep{duursma2010}, and a larger canopy means higher light interception per unit total biomass \citep{duursma2007}. It can thus be argued that an optimal LAR exists that balances investment in supporting woody biomass (reflected by $M_T$) and the efficiency of foliage in terms of light interception. 
+As expected, $M_F/M_S$ steeply declined with plant height. It is well known that it is necessary to correct for plant size when comparing biomass distribution among groups \citep{mcconnaughay1999}. We used a semi-parametric approach to account for plant size, which has the advantage that it does not require an \emph{a priori} assumption on the functional relationship. This was useful because both $M_F$ and $M_S$ showed very non-linear patterns with plant height (Fig. 2), or among biomass pools (Fig. S4), even on a logarithmic scale. This is consistent with recent results on an independently compiled large database of plant allometry \citep{poorter2015}, and further calls into question the generality of the often-assumed log-linear relationships between plant biomass pools and size metrics.
 
-We found that patterns in $M_F/A_S$ across PFTs mirrored those of LMF (Fig.~\ref{fig:figlmf}). Because LMF may be decomposed into the terms $M_F/A_S$ and $M_T/A_S$ (eq. \ref{eq:M2}), this result suggests that $M_T/A_S$ does not vary between PFTs (see also Fig. S3). If this result holds, it means that aboveground biomass may be estimated across PFTs with a single equation that does not differ between PFTs. For tropical forests, \citet{chave2005} showed that aboveground biomass can be estimated as,
+We have confirmed the hypothesis that leaf area is less variable between PFTs than leaf mass. \citet{poorter2015} hypothesized that this is because forests should converge to a similar leaf area index (LAI), as total light interception at some point saturates with LAI. Although we found remarkably similar leaf area per unit above-ground woody biomass ($M_F/M_S$) between the three PFTs studied (Fig. S2), this does not in itself imply that LAI is equally similar. In a global compilation of LAI for undisturbed forest stands, \citet{iio2014} reported a much higher LAI for evergreen gymnosperms compared to evergreen angiosperms, with deciduous angiosperms having intermediate and more variable LAI. To scale our results to stand- and landscape scales thus requires more information on differences in stand structure between PFTs.
 
-$$M_T = F \rho A_S H_T$$
+Previous interpretations of differences in $M_F/M_S$ between gymnosperms and angiosperms have focussed on differences in leaf life-span (LL) \citep{enquistniklas2002,poorter2012}. Indeed, if all else equal, longer LL in gymnosperms would result in higher total leaf mass. Further supporting this explanation, \citet{reich1992} showed a positive correlation between LL and total stand leaf biomass across diverse forest stands. It is however difficult to separate cause from effect in the relationships between LL, LMA, and $M_F/M_S$, particularly because LL and LMA are correlated across species and PFTs in a nearly proportional way \citet{wright2004}. 
 
-where $F$ is a form factor, and $\rho$ wood density (kg m$^3$). After rearranging, this equation predicts that $M_T/A_S$ is proportional to plant height. We found some support for this prediction (Fig. S3), suggesting further improvements could be made by incorporating this dependence. It is timely to use database made public by \citet{falster2015} (BAAD) and \citet{poorter2015} to develop more general equations to estimate individual plant aboveground biomass across the globe.
+After accounting for PFT and plant height, we found very weak and inconsistent effects of climate on all variables studied, with some exception for LMA (Table~\ref{table:varparttable}). Climate was represented as either mean annual temperature or an aridity index (PET/MAP), however, results were similarly inconclusive when studying other climate variables such as composite drought indices, growing season length, or mean annual precipitation (results not shown). This result appears to contradict \citet{reich2014} who reported consistent increases in foliage biomass ($M_F$) with MAT, when corrected for above-ground woody biomass ($M_S$). We were able to partly reconcile our findings with those of \citep{reich2014}: when we considered only angiosperms and gymnosperms (thus grouping deciduous and evergreens, as did Reich et al.) $M_F/M_S$ increased consistently with MAT for most size classes (Fig. S5), but not for gymnosperms. However, we found that for our database, this could be explained by the consistently higher proportion of evergreen angiosperms at higher MAT (Fig. 1), which, as a result of higher LMA (Fig. 2) also have a higher $M_F/M_S$. However, based on a re-analysis of data in Reich et al. 2014 (not shown), this shift in PFT with climate does not explain their observation of an increase in $M_F/M_S$ with MAT, as this pattern still held within gymnosperms and deciduous angiosperms. 
 
-We found that climate did not appreciably affect biomass partitioning between leaves and stems. This finding is in contrast with a recent study where LMF was found to increase with MAT across the globe \citep{reich2014}. One explanation for this difference is that our measurements were taken on individual plants, whereas in  \citet{reich2014} they were on whole stands. This suggests climatic effects on stand-level biomass partitioning occur primarily by altering the size-distribution and stand density (number of individuals per unit area), rather than partitioning within individual plants. With the caveats that there is still variation between species and studies unaccounted for (Fig.~\ref{fig:fighist}), and that coarse climate variables such as MAT and MAP may mask small-scale climate effects on biomass partitioning, our results strongly suggest the effects of PFT are stronger than any direct climate effect on biomass partitioning within individual plants (Table \ref{table:statstable}).
+Although we found no consistent effects of climate on biomass distribution after PFT and plant height were accounted for, effects of climate are likely mediated via plant height. At a global scale, average plant height is clearly related to climate via water availability \citet{klein2015,simard2011}. Since biomass distribution itself is steeply related to plant height (Figs. 2, 3), we expect correlations between climate variables and observed biomass distribution when plant height is not first accounted for. Our database did not lend itself well to a direct test of this hypothesis, due to uneven sampling across the range in plant height along climate gradients. 
 
-Our results indicate that it is possible to integrate a key leaf trait with whole-plant modelling of biomass partitioning. Indeed, nearly as much variation was explained across species when using LMA instead of PFT in a statistical model. This is surprising because LMA only captures one aspect of functional differentiation among PFT -- leaf morphology (but including correlated effects on leaf lifespan and photosynthetic capacity via the leaf economics spectrum \citep{wrightetal2004}). We thus show that in a PFT-based classification, LMA is a good first estimate of biomass partitioning, however, more variation can be explained by another trait ($A_F/A_S$), which varies appreciably between species. These results suggest promising avenues for parameterising and simplifying biomass partitioning routines in GVMs.
+We stress that although our results show some convergence between PFTs in leaf area relationships, we do not dismiss the very large residual variation that is yet to be explained (Fig. 6). Our purpose was to test hypotheses related to first-order differences between PFTs, plant height, and climate, yet clearly more work can be done to understand the variation between species and sites witin groups. Some of the residual variation is likely explained by site fertility \citet{vanninen2005}, differences in stand density \citet{ilomaki2003}, social status within stands \citet{makela2006}, or local differences in water availability (possibly mediated by seasonality at a given MAP). Future work will focus on smaller-scale explanatory variables such as the ones mentioned here.
 
-Overall, our results establish general patterns about plant construction and thus lay an empirical base against which models can be benchmarked. A recent study compared allocation routines in a number of leading ecosystem models \citep{dekauwe2014}, and recommended constraining allocation by observed biomass fractions instead of using constant allocation fractions. Based on our findings, a first approximation within GVMs would be to assume leaf area to stem cross-sectional area a parameter that does not vary between PFTs (notwithstanding effects of plant height on this variable), and vary biomass allocation accordingly. LMA, already a parameter in most GVMs, then gives the ratio of leaf biomass to stem area. Some models already incorporate a similar algorithm (see Notes S1), while other algorithms may be tuned to yield similar patterns between PFTs as we have presented. In any case, the growing availability of large datasets on stand biomass and individual plant construction  \citep{falster2015} suggest the time is ripe for rigorous benchmarking \citep{abramowitz2012, dekauwe2014} of GVMs against empirical data.
+Global vegetation models assume or predict differences in biomass distribution between PFTs. However, these differences are currently poorly constrained, due to limited available empirical data. Moreover, there is little consensus on how biomass distribution (and allocation) should be modelled in GVMs \citep{franklin2012,dekauwe2014,friend2014}. A recent study compared allocation routines in a number of leading ecosystem models \citep{dekauwe2014}, and recommended constraining allocation by observed biomass distribution instead of using constant allocation fractions. Our results can be used to further constrain biomass allocation routines in GVM, in particular, the finding that $M_F/M_S$ (at a given plant height) is approximately proportional to LMA can be tested against model predictions, or used directly to parameterize current algorithms. In any case, the growing availability of large datasets on stand biomass and individual plant construction  \citep{falster2015,poorter2015,reich2014} suggest the time is ripe for rigorous benchmarking \citep{abramowitz2012, dekauwe2014} of GVMs against empirical data.
 
 
 
 \section*{Acknowledgments}
 
-Our sincere thanks to everyone who contributed data to the Biomass and Allometry Database. We thank Martin De Kauwe and anonymous referees for comments on an earlier version of this paper. Thanks also to Rich FitzJohn for advice about using the remake package. Figure 2a uses an image by Lana Heydon, IAN Image Library http://ian.umces.edu/imagelibrary. 
+Our sincere thanks to everyone who contributed data to the Biomass and Allometry Database. We thank Martin De Kauwe and anonymous referees for comments on an earlier version of this paper. Thanks also to Rich FitzJohn for advice about using the remake package. Figure 2a uses an image by Lana Heydon, IAN Image Library (http://ian.umces.edu/imagelibrary). Thanks to anonymous reviewers for suggestions that greatly improved the paper. Special thanks to Steve Zissou.
 
 
 \clearpage
@@ -215,55 +225,32 @@ library(xtable)
 @
 
 <<results='asis'>>=
-bigtable <- rbind(cbind(c("$M_F/M_T$","","",""),c("DA","EA","EG","Sum"), table_lmf),
-                  cbind(c("$A_F/M_T$","","",""),c("DA","EA","EG","Sum"), table_lar), 
-                  cbind(c("$M_F/A_S$","","",""),c("DA","EA","EG","Sum"), table_mlfastba),
-                  cbind(c("$A_F/A_S$","","",""),c("DA","EA","EG","Sum"), table_alfastba))
-rownames(bigtable) <- NULL
-colnames(bigtable)[1:2] <- c("Variable","PFT")
-
-print(xtable(bigtable, align="llrlll|l",
-               caption="Sample sizes used in the analyses of the four variables considered in the study by plant functional type (PFT, DA = deciduous angiosperm, EA = evergreen angiosperm, EG = evergreen gymnosperm) and biome.  Sample sizes denote number of individuals, with number of unique species in parentheses. ",
-             label="table:counttable"), 
-      hline.after=0:16, caption.placement="top",  #c(0,4,8,12,16)
+print(xtable(table_samplesize,
+             label="table:counttable",
+             caption="Sample sizes used for the four studied whole-plant variables, by plant functional type. Numbers indicate individual plants, with number of unique species between parentheses. Sample sized differed between variables because not all included studied measured all variables ("),
       sanitize.text.function=function(x){x},
-      include.rownames=FALSE)
+      include.rownames=TRUE, caption.placement = "top")
 @
 
 
-
 <<results='asis'>>=
-tab1 <- table_varpart2
-tab2 <- table_gamr2MATMAP
+names(table_varpart_gam)[1] <- ""
+print(xtable(table_varpart_gam,
+             label="table:varparttable",
+             caption="Explained variance in four plant biomass variables by plant height (H), plant functional type (PFT) and climate. Shown are adjusted $R^2$ estimated with generalized additive models (GAM), with four sets of predictors. All variables except PFT were added as smooth terms to the GAMs, avoiding the need to assume linear partial responses to the predictor variables, or search for best-fitting transformations. Climate variables included were either MAT or aridity index (calculated as the of PET to MAP). P-values not shown because all smooth terms were always highly significant (p < 0.01), with the exception of aridity index in the model for $M_F/M_S$ (p = 0.057)."),sanitize.text.function=function(x){x},
+      include.rownames=FALSE, caption.placement = "top")
 
-tidytab <- function(x, labeltopleft=""){
-  names(x)[1] <- "Variable"
-  x[,1] <- paste0(x[,1],"(",x[,2],")")
-  x[,2] <- NULL
-  x[,2:ncol(x)] <- round(x[,2:ncol(x)], 2)  
-  x <- unname(rbind(names(x),as.matrix(x)))  
-  x <- rbind(c(labeltopleft,"","Predictors",""),x)
-return(x)
-}
-
-tab1 <- tidytab(tab1, "Mixed-effects model")
-tab2 <- tidytab(tab2, "GAM")
-
-tab <- rbind(tab1, tab2)
-
-print(xtable(tab, align="lrrrr",
-             caption="Explained variance by plant functional type (PFT), plant height (H) and climate variables (either biome (B), or MAP and MAT) for five whole-plant variables. For the analysis with biome, each variable was added to a linear mixed-effects model, using species within dataset as a random effect. The $R^2$ shown is that explained by the fixed effects only. All fixed effects were highly significant (P \\textless 0.001). In addition to the fixed effects shown, all interactions were added to each of the models. For the analysis with continuous climate variables MAP and MAT, each variable was added as a smooth term in a generalized additive model (GAM), with the exception of PFT (a categorical variable). Note that explained variance for the linear mixed-effects model and GAM is not necessarily the same even with the same predictors, due to different methods for fitting and estimating the explained variance.",
-             label="table:statstable"),
-             hline.after=0:14, #c(0,1,7,8,14),
-             include.rownames=FALSE, 
-             include.colnames=FALSE, 
-             caption.placement="top", sanitize.text.function=function(x){x})
+# p-values not added for clarity. For H and PFT, p-values always very, very small.
+# For climate variables, calculate as follows:
+# g0 <- gamr2(dataset, kgam=4, ranef=TRUE, climvar1="MAT", climvar2="aridity") # slow
+# f <- function(x)anova(x$gam)$s.pv[4]
+# t(sapply(g0$fits, function(x)sapply(x,f)))  # third column MAT, fourth column aridity.
 @
 
 
 
 \clearpage
-\section{Figures}
+\section*{Figures}
 
 
 \begin{figure}[h!]
@@ -271,7 +258,7 @@ print(xtable(tab, align="lrrrr",
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure1.pdf}
     \fi
-    \caption{Overview of the data. (a) Variables were measured on up to \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
+    \caption{Overview of the database. (a) Variables were measured on up to \Sexpr{nrow(dataset)} individual plants from \Sexpr{length(unique(dataset$species))} species. (b) Coverage of the dataset across global climate space. Grey hexagons indicate the number of 0.5\degree~cells with woody vegetation across the space. Colour symbols show the locations of sampled individuals for three dominant woody functional types.}
     \label{fig:figoverview}
 \end{figure}
 
@@ -281,57 +268,46 @@ print(xtable(tab, align="lrrrr",
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure2.pdf}
     \fi
-    \caption{Raw data for leaf biomass ($M_F$) and total above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table \ref{table:counttable}}
+    \caption{Raw data for leaf biomass ($M_F$) and above-ground woody biomass ($M_S$) for each of the PFTs, as a function of total plant height ($H$). Each point is an individual plant. Sample sizes are listed in Table \ref{table:counttable}. Lines are generalized additive model fits to visualize the highly non-linear relationships. Note the logarithmic scale.}
     \label{fig:figrawdata}
 \end{figure}
+
 
 \begin{figure}[h!]
     \centering
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure3.pdf}
     \fi
-    \caption{Dominant woody PFTs differ in leaf mass fraction due to underlying differences in leaf mass per area. (a) Leaf mass fraction ($M_F/M_T$ = leaf mass / above-ground biomass) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) Leaf mass fraction and leaf area ratio ($A_F/M_T$) at the average plant height in the dataset, estimated from panel (a). (d) Average leaf mass per unit basal stem area, and (e) leaf area per unit basal stem area for the three major PFTs confirm that the between-PFT variation in leaf mass fraction is due to leaf mass per unit basal area. Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
+    \caption{Dominant woody PFTs differ in above-ground biomass distribution due to underlying differences in leaf mass per area. (a) Leaf mass per unit woody above-ground biomass ($M_F/M_S$) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) $M_F/M_S$ and leaf area ratio ($A_F/M_S$) at the average plant height in the dataset, estimated from fitted models in panel (a). Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figlmf}
 \end{figure}
+
 
 \begin{figure}[h!]
     \centering
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure4.pdf}
     \fi
-    \caption{Plant functional types diverge strongly in mass-based partitioning, but converge in area-based partitioning. Shown are histograms (as probability density functions) of leaf mass per area ($M_F/A_F$), leaf mass per unit basal stem area ($M_F/A_S$) and leaf area per unit basal stem area ($A_F/M_S$) grouped by the three PFTs. Arrows indicate means by PFT. Colours as in Fig. \ref{fig:figlmf}.}
-    \label{fig:fighist}
+    \caption{Total plant leaf area ($A_F$) is approximately proportional to basal stem area ($A_S$), and this relationship is similar between PFTs. Lines are generalised additive model fits, with grey areas approximate 95\% confidence intervals.}
+    \label{fig:alas}
 \end{figure}
-
-
-<<echo=FALSE>>=
-agg <- summaryBy(lalf_astba2 + lmlf_astba2 + llma ~ Group,
-                   data=dataset, FUN=mean, na.rm=TRUE, keep.names=TRUE,
-                   id=~pft)
-agg <- subset(agg, !is.na(llma))
-lm1 <- lm(lmlf_astba2 ~ llma * pft, data=agg)
-lm2 <- lm(lmlf_astba2 ~ lalf_astba2 * pft, data=agg)
-r2panela <- summary(lm1)$adj.r.squared
-r2panelb <- summary(lm2)$adj.r.squared
-@
 
 \begin{figure}[h!]
     \centering
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure5.pdf}
     \fi
-     \caption{Leaf and stem traits capture variation in biomass partitioning across species. Individual plant data were averaged by species and study combinations. Lines are linear regressions with 95\% confidence intervals. Both regressions were significant ($P \textless 0.01$). $R^2$ for fitted relationships are \Sexpr{round(100*r2panela,1)}\% in panel (a) and \Sexpr{round(100*r2panelb,1)}\% in panel (b) (for a linear regression model including PFT as a factor variable).}
-  \label{fig:figlmfspecies}
+    \caption{Above-ground woody biomass ($M_S$) scales with basal stem area ($A_S$), similarly for the three PFTs. (a) $M_S$ as a function of $A_S$ for the entire dataset. Lines are generalized additive model fits. (b) A close view of a portion of the data shown in panel (a), where evergreen gymnosperms displayed significantly lower woody biomass at a given stem basal area.}
+    \label{fig:stemmassindex}
 \end{figure}
-
 
 \begin{figure}[h!]
     \centering
     \ifincludefigs 
     \includegraphics[width=0.99\textwidth]{Figure6.pdf}
     \fi
-    \caption{Beyond influencing the distribution of PFTs, climate only modestly influences biomass partitioning. a) Leaf mass per unit stem cross-sectional area ($M_F/A_S$) for each PFT within three different biomes.  DA: deciduous angiosperms, EA: evergreen angiosperms, EG: evergreen gymnosperms. Error bars are 95\% confidence intervals for the mean, estimated from a linear mixed-effects model using species within study as the random effect. Letters denote significant differences (at $\alpha = 0.05$). b-c) Relationships between climate and $M_F/A_S$ within each PFT. Solid lines are generalised additive model (GAM) fits (with a base dimension of 3); with grey areas indicating the 95\% confidence interval around the GAM.}
-    \label{fig:figclimate}
+    \caption{Histograms (as probability density functions) of leaf mass per area ($M_F/A_F$), leaf area per unit basal stem area ($A_F/A_S$) and the stem mass index ($M_S/(A_S*H)$) grouped by the three PFTs. Arrows indicate means by PFT. Colours as in Fig. \ref{fig:figlmf}.}
+    \label{fig:fighist}
 \end{figure}
 
 
@@ -348,8 +324,10 @@ Additional supporting information may be found in the online version of this art
 
 \textbf{Fig. S1} Global coverage of the climate space by the dataset, labelled by vegetation type.\\
 \textbf{Fig. S2} Leaf area ratio ($A_F/M_T$) by PFT.\\
-\textbf{Fig. S3} Relationship between above-ground biomass and basal stem area.\\
-\textbf{Notes S1} Modelling of biomass partitioning in global vegetation models (GVMs)
+\textbf{Fig. S3} Comparison of three methods for variance partitioning of the four studied variables \\
+\textbf{Fig. S4} Whole-plant leaf mass ($M_F$) and leaf area ($A_F$) as a function of total aboveground biomass. \\ 
+\textbf{Fig. S5} Relationships between leaf - stem biomass distribution ($M_F/M_S$) and mean annual temperature (MAT) (\degree C). \\
+\textbf{Fig. S6} As Fig S5 but with angiosperms split up into evergreen and deciduous. \\
 
 
 \end{document}

@@ -355,8 +355,12 @@ smoothplot <- function(x,y,g=NULL,data,
                             xlab=NULL, ylab=NULL,
                             polycolor=alpha("lightgrey",0.7),
                             plotit=TRUE,
+                            pch=16,
+                            add=FALSE,
+                            plotpoints=TRUE,
                             ...){
 
+  if(add)axes <- FALSE
   fittype <- match.arg(fittype)
   randommethod <- match.arg(randommethod)
 
@@ -411,9 +415,23 @@ smoothplot <- function(x,y,g=NULL,data,
   }
 
   if(plotit){
-    with(data, plot(X, Y, axes=FALSE, pch=16, col=pointcols[G],
-                    xlab=xlab, ylab=ylab, ...))
-  
+    
+    if(!add){
+      if(plotpoints){
+        with(data, plot(X, Y, axes=FALSE, pch=pch, col=pointcols[G],
+                      xlab=xlab, ylab=ylab, ...))
+      } else {
+        with(data, plot(X, Y, axes=FALSE, type='n', 
+                        xlab=xlab, ylab=ylab, ...))
+      }
+    } else {
+      if(plotpoints){
+        with(data, points(X, Y, pch=pch, col=pointcols[G],...))
+      }
+    }
+    
+    
+    
     if(axes){
       if(log=="xy")magaxis(side=1:2, unlog=1:2)
       if(log=="x"){
@@ -464,6 +482,7 @@ histbypft <- function(yvar, pftvar, dataset,
                       xlab=NULL,
                       ylab="Nr. individuals",
                       ylim=NULL,
+                      xlim=NULL,
                       legend.text=NULL,
                       legend.cex=1,
                       xaxis=NULL,
@@ -495,11 +514,13 @@ histbypft <- function(yvar, pftvar, dataset,
 
     h <- hist(Y, breaks=br, plot=FALSE)
     if(is.null(ylim))
-      Ylim <- c(0,max(h[[plotwhat]]))
+      ylim <- c(0,max(h[[plotwhat]]))
     else
       Ylim <- ylim
     
-    if(!overlay || (overlay & i == 1))plot(br, br, ylim=Ylim, axes=FALSE, type='n')
+    if(!overlay || (overlay & i == 1)){
+      plot(br, br, ylim=ylim, xlim=xlim, axes=FALSE, type='n')
+    }
     for(j in 1:length(h[[plotwhat]])){
       n <- h[[plotwhat]][j]
       m <- h$mids[j]
@@ -669,5 +690,3 @@ log10axes <- function(side=1:2, logged=NULL, labels=TRUE){
   }
 }
 
-# with(dataset, plot(llma, lmlf_astba2, pch=16, axes=FALSE, xlim=c(-2,0)))
-# log10axes(2)
