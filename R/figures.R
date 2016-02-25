@@ -200,6 +200,9 @@ figure3 <- function(dataset, KGAM=4){
   set.seed(42) # Set seed to ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
 
+  # Evaluate biomass distribution at mean height
+  xpred <- mean(dataset$lh.t, na.rm=TRUE)
+  
   l <- layout(matrix(c(1,2,1,3), byrow=T, ncol=2),
               widths=c(1,0.67), heights=c(1,1))
   
@@ -214,10 +217,13 @@ figure3 <- function(dataset, KGAM=4){
   box()
   plotlabel("(a)","topright")
   
+  # Arrow indicating where mean biomass distribution was estimaed
+  par(xpd=NA)
+  arrows(x0=xpred, x1=xpred, y0=-3.5, y1=-3.2, length=0.1, lwd=2)
 
   par(mar=c(0.35,4,4,1), pty="m")
   
-  xpred <- mean(dataset$lh.t, na.rm=TRUE)
+  
   plotGamPred(obj1, dataset, xpred=xpred,
               ylab=expression(M[F]/M[S]~(kg~kg^-1)),ylim=c(0,0.5),
               xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
@@ -246,6 +252,7 @@ figure4 <- function(dataset){
                      pch=16, axes=FALSE,
                      pointcols=my_cols_transparent(),
                      linecols=my_cols(),
+                     panel.first=abline(0,1),
                      xlab=expression(A[S]~~(m^2)),
                      ylab=expression(A[F]~~(m^2)))
   log10axes()

@@ -137,6 +137,8 @@ addWorldClimMAPMAT <- function(baad, climate_path) {
   baad
 }
 
+
+# Not used - flagged for deletion.
 addMImgdd0 <- function(baad, MI_mGDDD_path){
 
 

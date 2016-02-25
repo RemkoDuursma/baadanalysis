@@ -358,6 +358,7 @@ smoothplot <- function(x,y,g=NULL,data,
                             pch=16,
                             add=FALSE,
                             plotpoints=TRUE,
+                            panel.first=NULL,
                             ...){
 
   if(add)axes <- FALSE
@@ -419,10 +420,10 @@ smoothplot <- function(x,y,g=NULL,data,
     if(!add){
       if(plotpoints){
         with(data, plot(X, Y, axes=FALSE, pch=pch, col=pointcols[G],
-                      xlab=xlab, ylab=ylab, ...))
+                      xlab=xlab, ylab=ylab, panel.first=panel.first, ...))
       } else {
         with(data, plot(X, Y, axes=FALSE, type='n', 
-                        xlab=xlab, ylab=ylab, ...))
+                        xlab=xlab, ylab=ylab, panel.first=panel.first,  ...))
       }
     } else {
       if(plotpoints){

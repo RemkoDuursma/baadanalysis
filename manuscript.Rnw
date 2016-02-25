@@ -216,13 +216,11 @@ print(xtable(table_samplesize,
 @
 
 
-% In the top row of table 2, it's seems surprising that H,PFT,MAT explains less variance than just H,PFT.
-% Check!!!
 <<results='asis'>>=
 names(table_varpart_gam)[1] <- ""
 print(xtable(table_varpart_gam,
              label="table:varparttable",
-             caption="Explained variance in four plant biomass variables by plant height (H), plant functional type (PFT) and climate. Shown are adjusted $R^2$ estimated with generalized additive models (GAM), with four sets of predictors. All variables except PFT were added as smooth terms to the GAMs, avoiding the need to assume linear partial responses to the predictor variables, or search for best-fitting transformations. Climate variables included were either MAT or aridity index (calculated as the of PET to MAP). P-values not shown because all smooth terms were always highly significant (p < 0.01), with the exception of aridity index in the model for $\\mfms$ (p = 0.057)."),sanitize.text.function=function(x){x},
+             caption="Explained variance in four plant biomass variables by plant height (H), plant functional type (PFT) and climate. Shown are adjusted $R^2$ estimated with generalized additive models (GAM), with four sets of predictors. All variables except PFT were added as smooth terms to the GAMs, avoiding the need to assume linear partial responses to the predictor variables, or search for best-fitting transformations. Climate variables included were either MAT or aridity index (calculated as the of PET to MAP). P-values not shown because all smooth terms were always  significant (p \\textless 0.01), with the exception of aridity index in the model for $\\mfms$ (p = 0.057). In some cases, the $R^2$ decreases after adding variables to the model, which is possible because it is the adjusted $R^2$ which discounts for the number of model parameters."),sanitize.text.function=function(x){x},
       include.rownames=FALSE, caption.placement = "top")
 
 # p-values not added for clarity. For H and PFT, p-values always very, very small.
@@ -258,13 +256,12 @@ print(xtable(table_varpart_gam,
 \end{figure}
 
 
-% Could we add along the x-axis of panel a, a small arrow showing the common height where we sued to generate panels b-c?
 \begin{figure}[h!]
     \centering
     \ifincludefigs
     \includegraphics[width=0.99\textwidth]{Figure3.pdf}
     \fi
-    \caption{Dominant woody PFTs differ in above-ground biomass distribution due to underlying differences in leaf mass per area. (a) Leaf mass per unit woody above-ground biomass ($\mfms$) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. (b) and (c) $\mfms$ and leaf area ratio ($\afms$) at the average plant height in the dataset, estimated from fitted models in panel (a). Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
+    \caption{Dominant woody PFTs differ in above-ground biomass distribution due to underlying differences in leaf mass per area. (a) Leaf mass per unit woody above-ground biomass ($\mfms$) by PFT. Each symbol is an individual plant. Lines are generalised additive model fits. The arrow indicates the average plant height in the dataset. (b) and (c) $\mfms$ and leaf area ratio ($\afms$) at the average plant height in the dataset, estimated from fitted models in panel (a). Error bars are 95\% confidence intervals. Letters denote significant differences (at $\alpha = 0.05$).}
     \label{fig:figlmf}
 \end{figure}
 
@@ -274,8 +271,7 @@ print(xtable(table_varpart_gam,
     \ifincludefigs
     \includegraphics[width=0.99\textwidth]{Figure4.pdf}
     \fi
-    % proportional implies slope of ~1, should we add 1:1 line in background?
-    \caption{Total plant leaf area ($\af$) is approximately proportional to basal stem area ($\as$), and this relationship is similar between PFTs. Lines are generalised additive model fits, with grey areas approximate 95\% confidence intervals.}
+    \caption{Total plant leaf area ($\af$) is approximately proportional to basal stem area ($\as$), and this relationship is similar between PFTs. Coloured lines are generalised additive model fits, with grey areas approximate 95\% confidence intervals. Black solid line is a 1:1 line.}
     \label{fig:alas}
 \end{figure}
 
