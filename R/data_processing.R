@@ -265,9 +265,11 @@ prepare_dataset_1 <- function(baad, plantations=TRUE){
 BasalA_fit <- function(baad){
 
   # Predicted basal diameter. See R/predict_dba...R
-  test <- subset(baad$data, !is.na(d.ba) & !is.na(d.bh) & !is.na(h.t) & !is.na(h.bh) & h.t > h.bh)
+  test <- subset(baad$data, !is.na(a.stba) & !is.na(a.stbh) & !is.na(h.t) & !is.na(h.bh) & h.t > h.bh)
   nls(d.ba ~ d.bh * h.t^(c0*h.t^c1) /(h.t - h.bh)^(c0*h.t^c1), start=list(c0=0.9, c1=0.7),
-             data=test)
+      data=test)
+  # Fit on diameter not cross-sectional area because a much better fit is obtained this way (not sure why!),
+  # and more homogenous error variance (because large cross-sectional area outliers)
 }
 
 predictBasalA <- function(dat, baad){
