@@ -2,6 +2,7 @@
 
 \usepackage{amssymb,amsmath}
 \usepackage{palatino}
+\usepackage[default,osfigures,scale=0.95]{opensans}
 \usepackage{geometry}
 \usepackage{authblk}
 \usepackage{gensymb}
@@ -31,14 +32,14 @@
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS2.pdf}
-    \caption{Leaf area ratio ($\afmt$) by plant height (H) and PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
+    \caption{Leaf area ratio ($\afms$) by plant height (H) and PFT. Each symbol is an individual plant. Lines are generalized additive model fits using species/dataset as a random effect. Shaded areas are approximate 95\% confidence intervals.}
     \label{fig:figureS2}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS3.pdf}
-    \caption{Comparison of three methods for variance partitioning of the four studied variables (see legend) by total plant height, plant functional type and climate (MAP, MAT and interaction). \textbf{GAM}: variance component as estimated with a generalized additive model, as the reduction in $R^2$ when the independent variable (i.e. PFT, climate or height) was excluded from a model. Note that a GAM does not include interactions. \textbf{LMM}: linear mixed model with all interactions, and squared terms for the continuous variables, where the variance component was again estimated as the reduction in $R^2$ when the independent variable (and all its interactions) were removed from the model. $R^2$ was calculated following \citet{nakagawa2013} using the `MuMIn` R package (excluding random effects) \citep{barton2015}. Note that LMM and GAM give very similar ranking, and even absolute variance components, for nearly all variables. Both methods identified AF/AS and MF/AF as the only variables with a practically significant dependence on climate (variance component \textgreater{} 0.1), see Fig S4. \textbf{IEA}: independent effects analysis (aka hierarchical partitioning), using the algorithm by \citet{chevan1991}, as implemented in the `hier.part` package for R \citep{walsh2013}. Note that this method does not include interactions or squared terms, yet gave similar results to GAM and LMM (except for variables that explained little variation).}
+    \caption{Comparison of three methods for variance partitioning of the four studied variables (see legend) by total plant height, plant functional type and climate (MAP, MAT and interaction). \textbf{GAM}: variance component as estimated with a generalized additive model, as the reduction in $R^2$ when the independent variable (i.e. PFT, climate or height) was excluded from a model. Note that a GAM does not include interactions. \textbf{LMM}: linear mixed model with all interactions, and squared terms for the continuous variables, where the variance component was again estimated as the reduction in $R^2$ when the independent variable (and all its interactions) were removed from the model. $R^2$ was calculated following \citet{nakagawa2013} using the `MuMIn` R package (excluding random effects) \citep{barton2015}. Note that LMM and GAM give very similar ranking, and even absolute variance components, for nearly all variables. Both methods identified $\afas$ and LMA as the only variables with a practically significant dependence on climate (variance component \textgreater{} 0.1). \textbf{IEA}: independent effects analysis (aka hierarchical partitioning), using the algorithm by \citet{chevan1991}, as implemented in the `hier.part` package for R \citep{walsh2013}. Note that this method does not include interactions or squared terms, yet gave similar results to GAM and LMM (except for variables that explained little variation).}
     \label{fig:figureS4}
 \end{figure}
 
@@ -53,7 +54,7 @@
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{Relationships between leaf - stem biomass distribution ($\mfms$) and mean annual temperature (MAT) (\degree C). Similar to Reich et al. (2014), we divided the data into five bins of plant size (bins were chosen so that each bin had equal sample size), and used only evergreen vs. deciduous plant functional types. Lines are fits from mixed-effects models (with species within study as random effect, and only MAT and evergreen/deciduous classification as fixed effects). Solid lines are significant (p \textless{} 0.05), dashed lines are not (p \textgreater{} 0.05). Symbols are partial residuals as calculated with the `visreg` package in R \citep{breheny2015}.}
+    \caption{Relationships between leaf - stem biomass distribution ($\mfms$) and mean annual temperature (MAT) (\degree C). Similar to Reich et al. (2014), we divided the data into five bins of plant size (bins were chosen so that each bin had equal sample size), and used only evergreen vs. deciduous plant functional types. Lines are simple linear regression fits across averages by species within dataset, but symbols are individual plant observations. Solid lines are significant (p \textless{} 0.05), dashed lines are not (p \textgreater{} 0.05).
     \label{fig:figreichclimate}
 \end{figure}
 
