@@ -70,7 +70,7 @@ targets:
       - table_samplesize
       - afas
       - msas
-    command: latex_build("manuscript.tex", bibliography = "references.bib")
+    command: latex_build("manuscript.tex", bibliography = "references.bib", clean=TRUE)
 
   manuscript.tex:
     depends:
@@ -95,7 +95,7 @@ targets:
       - table_varpart_gam_old
       - table_varpart_lmer
       - table_hierpart
-    command: latex_build ("manuscript_suppinfo.tex")
+    command: latex_build ("manuscript_suppinfo.tex", bibliography = "references.bib", clean=TRUE)
 
   manuscript_suppinfo.tex:
     depends:

@@ -212,7 +212,7 @@ tabFun <- function(x, vars, pftvar="pft"){
 make_samplesize_table <- function(dataset){
   tb <- t(sapply(c("lmlf_mst","lalf_astba2","llma","lastba2_mst"),function(x)tabFun(dataset,x)))
   rownames(tb) <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
-  colnames(tb) <- c("Decid. Angio.","Evergr. Angio.","Evergr. Gymno.","Total")
+  colnames(tb) <- c("Deciduous Angiosperm","Evergreen Angiosperm","Evergreen Gymnosperm","Total")
   tb
 }
 

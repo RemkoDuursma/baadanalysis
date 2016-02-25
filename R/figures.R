@@ -187,7 +187,7 @@ figure2 <- function(dataset){
   }
   
   mtext(side=1, text="H (m)", line=3, outer=TRUE, las=0, cex=1.2)
-  mtext(side=2, text=expression(M[F]~or~M[S]~~(kg)), line=3, outer=TRUE, las=0, cex=1.2)
+  mtext(side=2, text="Biomass (kg)", line=3, outer=TRUE, las=0, cex=1.2)
 }
 
 
@@ -241,7 +241,7 @@ figure4 <- function(dataset){
   set.seed(12) # Ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
   
-  par(mar=c(5,5,1,1), cex.lab=1.2)
+  par(mar=c(5,5,1,1), cex.lab=1.2, las=1)
   smoothplot(lastba2, lalf, pft, data=dataset, R="Group",
                      pch=16, axes=FALSE,
                      pointcols=my_cols_transparent(),
@@ -260,7 +260,7 @@ figure5 <- function(dataset){
   xl <- c(-3, log10(0.8))
   yl <- c(0.1,4)
   
-  par(mfrow=c(1,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1)
+  par(mfrow=c(1,2), mar=c(4,4,0.5,0.5), mgp=c(2,0.5,0), tcl=0.1, las=1)
 
   # randomly reorder rows, so that colours shown in proportion to abundance
   set.seed(1) # Set seed to ensure plot looks same each time
@@ -383,7 +383,7 @@ figureS2 <- function(dataset, KGAM=4){
                   ylab=expression(A[F]/M[S]~~(m^2~kg^-1)))
   log10axes()
   box()
-  my_legend("bottomleft")
+  my_legend("bottomleft", labels="long")
 }
 
 
@@ -440,7 +440,7 @@ figureS4 <- function(dataset){
   set.seed(100) # Set seed to ensure plot looks same each time
   dataset <- dataset[sample(nrow(dataset)),]
   
-  par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2))
+  par(mar=c(5,5,1,1), cex.lab=1.1, mfrow=c(1,2), las=1)
   smoothplot(lmso, lmlf, pft, data=dataset, linecols=my_cols(),R="Group",
              pointcols=my_cols_transparent(),
              xlab=expression(M[F]+M[S]~~(kg)),
@@ -491,13 +491,13 @@ figureS5 <- function(dataset){
     fa <- lm(lmlf_mst ~ MAT, data=df, subset=pft2=="Angiosperm")
     
     with(x, plot(MAT, lmlf_mst, pch=16, cex=0.8, col=my_cols_transparent()[as.factor(pft)], 
-                 axes=FALSE, ylim=c(-3,1), xlim=c(0,30),...))
+                 axes=FALSE, ylim=c(-3,1), xlim=c(0,30), ...))
     predline(fa, polycolor=alpha("blue",0.4), col="blue", lwd=2, lty=if(pv(fa) < 0.05)1 else 2)
     predline(fg, polycolor=alpha("red",0.4), col="red", lwd=2, lty=if(pv(fg) < 0.05)1 else 2)
     
   }
   
-  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2))
+  par(mfrow=c(1,5), mar=c(0,0,0,0), oma=c(5,5,4,2), las=1)
   for(i in seq_along(data_ht)){
     
     plotpanel(data_ht[[i]])
@@ -507,7 +507,7 @@ figureS5 <- function(dataset){
     
   }
   mtext(side=1, at=0.5, outer=TRUE, line=3, text=expression(MAT~~(degree*C)))
-  mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)))
+  mtext(side=2, at=0.5, outer=TRUE, line=3, text=expression(M[F]/M[S]~~(kg~kg^-1)), las=0)
   for(i in seq_along(data_ht)){
     mtext(side=3, at=i/5-0.1, line=1, text=labs[i], outer=TRUE, cex=0.9)
   }
