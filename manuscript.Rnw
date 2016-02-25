@@ -141,7 +141,7 @@ Because, similar to \citet{poorter2015}, none of the studied relationships were 
 
 The amount of variance explained by quantitative climate variables (MAP and MAT) was assessed with GAMs, with variables were sequentially added to the model and the explained variance ($R^2$) calculated. We compared this approach when using linear mixed-effects models instead of GAMs \citep[calculating the $R^2$ for linear mixed-effects models for the fixed effects only following][]{nakagawa2013}, as well as another method, independent effects analysis. The three methods generally agreed on the ranking of variable importance (see Fig. S5 and S6).
 
-All analyses were conducted in R 3.2.3 \citep{R-2015}, using the packages `mgcv` \citep{wood2006}, `hier.part` \citep{walsh2013}, `MuMIn` \citep{barton2015},  and `remake` \citep{fitzjohn2015}. In addition, the code replicating this analysis (and all figures) is available at \url{http://github.com/RemkoDuursma/baadanalysis} (doi: \emph{to be added}).
+All analyses were conducted in R 3.2.3 \citep{R-2015}, using the packages `mgcv` \citep{wood2006}, `hier.part` \citep{walsh2013}, `MuMIn` \citep{barton2015}, re and `remake` \citep{fitzjohn2015}. In addition, the code replicating this analysis (and all figures) is available at \url{http://github.com/RemkoDuursma/baadanalysis} (doi: \emph{to be added}).
 
 \section*{Results}
 

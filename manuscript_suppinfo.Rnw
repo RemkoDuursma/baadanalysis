@@ -54,7 +54,7 @@
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS5.pdf}
-    \caption{Relationships between leaf - stem biomass distribution ($\mfms$) and mean annual temperature (MAT) (\degree C). Similar to Reich et al. (2014), we divided the data into five bins of plant size (bins were chosen so that each bin had equal sample size), and used only evergreen vs. deciduous plant functional types. Lines are simple linear regression fits across averages by species within dataset, but symbols are individual plant observations. Solid lines are significant (p \textless{} 0.05), dashed lines are not (p \textgreater{} 0.05).
+    \caption{Relationships between leaf - stem biomass distribution ($\mfms$) and mean annual temperature (MAT) (\degree C). Similar to \citet{reich2014}, we divided the data into five bins of plant size (bins were chosen so that each bin had equal sample size), and used only evergreen vs. deciduous plant functional types. Lines are simple linear regression fits across averages by species within dataset, but symbols are individual plant observations. Solid lines are significant (p \textless{} 0.05), dashed lines are not (p \textgreater{} 0.05).}
     \label{fig:figreichclimate}
 \end{figure}
 
