@@ -1,9 +1,9 @@
-Leaf traits drive differences in biomass partitioning among major plant functional types
-============
+# Leaf mass per area and plant size drive differences in above-ground biomass distribution among woody plant functional types
+
 
 This code repository contains code needed to reproduce the article:
 
-Duursma RA & Falster DS, "Leaf traits drive differences in biomass partitioning among major plant functional types". doi: [10.1101/025361](http://dx.doi.org/10.1101/025361)
+Duursma RA & Falster DS, "Leaf mass per area and plant size drive differences in above-ground biomass distribution among woody plant functional types", in review.
 
 All analyses were done in `R`. To compile the paper, including figures and supplementary material we use the [remake](https://github.com/richfitz/remake) package for R. You can install remake using the `devtools` package:
 
