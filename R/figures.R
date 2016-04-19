@@ -69,27 +69,26 @@ fig.tree <- function(filename) {
   x0 <- 0.35
   gp0 <- gpar(cex=0.8)
   img <- readPNG(filename)
-  grid.raster(img, unit(x0, "npc"),  y = unit(0.4, "npc"), just=c("centre"), height=unit(0.80, "npc"))
+  grid.raster(img, unit(x0, "npc"),  y = unit(0.4, "npc"), 
+              just=c("centre"), height=unit(0.80, "npc"))
 
   # height
-  grid.lines(x = c(0.02, 0.02), y = c(0.0, 0.8),arrow = arrow(ends = "last", length=unit(0.15, "inches")),
+  grid.lines(x = c(0.02, 0.02), y = c(0.0, 0.8),
+             arrow = arrow(ends = "last", length=unit(0.15, "inches")),
              gp=gpar(lwd=2))
   grid.text("H, height of plant", x = 0.05 , y = 0.85, just="left", gp=gp0)
 
   # stems areas
-  grid.draw(ellipseGrob(x0 - 0.023, 0.024, size=1.8,rho=1/3,angle=0, def="npc"))
+  grid.draw(ellipseGrob(x0 - 0.023, 0.024, size=1.8,ar=3,angle=0, def="npc"))
   grid.text(expression(paste(A[S],", stem area at base")),
     x = x0 + 0.03 , y = 0.03, just="left", gp=gp0)
 
-  grid.draw(ellipseGrob(x0 - 0.03, 0.08, size=1.1,rho=1/3,angle=0, def="npc"))
+  grid.draw(ellipseGrob(x0 - 0.03, 0.08, size=1.1,ar=3,angle=0, def="npc"))
   grid.text(expression(paste(A[Sbh],", stem area at breast height")),
     x = x0 +0.023 , y = 0.08, just="left", gp=gp0)
 
-  grid.text(expression(paste(M[S],", Mass of stem")),
+  grid.text(expression(paste(M[S],", woody mass")),
     x = x0 + 0.03 , y = 0.18, just="left", gp=gp0)
-
-#   grid.text(expression(paste(M[T],", total aboveground mass (", M[F]+M[S],")")),
-#     x = x0 - 0.03 , y = -0.1, just="left", gp=gp0)
 
   # leaf
   x1 <- x0 + 0.25
@@ -217,7 +216,7 @@ figure3 <- function(dataset, KGAM=4){
   box()
   plotlabel("(a)","topright")
   
-  # Arrow indicating where mean biomass distribution was estimaed
+  # Arrow indicating where mean biomass distribution was estimated
   par(xpd=NA)
   arrows(x0=xpred, x1=xpred, y0=-3.5, y1=-3.2, length=0.1, lwd=2)
 
