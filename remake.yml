@@ -142,7 +142,7 @@ targets:
   baad_climate3:
     command: addPET(baad_climate2, "data/zomerpet.rds")
   baad_all:
-    command: baad_data(I("0.9.0"))
+    command: baad_data(I("1.0.0"))
   downloads/baad.rds:
     command: download_baad(target_name)
     cleanup_level: purge
