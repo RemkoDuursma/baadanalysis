@@ -2,6 +2,7 @@ packages:
   # dataset construction
   - downloader
   - stringr
+  - baad.data
   # statistics
   - multcomp  #cld
   - doBy      #summaryBy
@@ -141,7 +142,7 @@ targets:
   baad_climate3:
     command: addPET(baad_climate2, "data/zomerpet.rds")
   baad_all:
-    command: readRDS("downloads/baad.rds")
+    command: baad_data(I("0.9.0"))
   downloads/baad.rds:
     command: download_baad(target_name)
     cleanup_level: purge

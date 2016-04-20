@@ -1,12 +1,3 @@
-
-download_baad <- function(destination_filename) {
-  url <-
-    "https://github.com/dfalster/baad/releases/download/v0.9.0/baad.rds"
-  download(url, destination_filename, mode="wb")
-  # download function from package downloader provides wrapper
-  # to download file so that works for https and across platforms
-}
-
 download_tree_png <- function(destination_filename) {
   url <-
     "http://ian.umces.edu/imagelibrary/albums/userpics/12789/normal_ian-symbol-eucalyptus-spp-1.png"
