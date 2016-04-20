@@ -163,17 +163,9 @@ make_table_gamr2MATMAP_old <- function(dataset) {
   g0 <- gamr2old(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
   g0$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
   
-  
   g0
 }
 
-make_table_gamr2MATMAP <- function(dataset) {
-  g0 <- gamr2(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
-  g0$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
-
-  
-  g0
-}
 
 make_table_gamr2MATARID <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4, ranef=TRUE, climvar1="MAT", climvar2="aridity")
@@ -181,14 +173,7 @@ make_table_gamr2MATARID <- function(dataset) {
   r2table <- g0$r2table
   r2table$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
 
-  # AIC does not seem to be compatible with R2 results  
-  # aicf <- function(x){
-  #   aic <- sapply(x, function(x)AIC(x$lme))
-  #   aic - aic[1]
-  # }
-  # aictable <- t(sapply(g0$fits, aicf))
-  
-r2table
+  r2table
 }
 
 
