@@ -1,4 +1,11 @@
 
+get_variables <- function() {
+  list(
+    vars = c("lmlf_mst","lalf_astba2","llma","lastba2_mst"),
+    labels = c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+    )
+}
+
 # Independent effects analysis (IEA)
 do_hierpart <- function(dep, indep, data, ...){
   
@@ -20,7 +27,7 @@ make_table_hierpart <- function(dataset){
   # interaction
   dataset$MATMAP <- with(dataset, MAT*MAP)
   
-  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  vars <- get_variables()[["vars"]]
   indep_vars <- c("lh.t","pft","MAT","MAP","MATMAP")
   hp <- lapply(vars, function(x){
     do_hierpart(x, indep_vars, dataset, gof="Rsqu", barplot=FALSE)
@@ -37,7 +44,7 @@ make_table_hierpart <- function(dataset){
   
   tab <- as.data.frame(t(sapply(hp, hp_maketablerow)))
   
-  tab <- cbind(c("$M_F/M_S$", "$A_F/A_S$","$M_F/A_F$","$M_S/A_S$"), tab)
+  tab <- cbind(get_variables()[["labels"]], tab)
   colnames(tab) <- c("Variable","$H_T$","PFT","Climate","$R^2$ total")
   tab <- as.data.frame(tab)
   return(tab)
@@ -62,8 +69,8 @@ mixedr2 <- function(data, returnfit=FALSE){
     return(g)
   }
   
-  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
-  varlabel <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+  vars <- get_variables()[["vars"]]
+  varlabel <- get_variables()[["labels"]]
   
   mods <- lapply(vars, runmixmodels, dat=data)
   if(returnfit){
@@ -109,7 +116,7 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
     return(g)
   }
 
-  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  vars <- get_variables()[["vars"]]
   gams <- lapply(vars, testmapmatgam2)
 
   r2g <- do.call(rbind,lapply(1:length(vars),
@@ -145,7 +152,7 @@ gamr2old <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4)
     return(g)
   }
   
-  vars <- c("lmlf_mst","lalf_astba2","llma","lastba2_mst")
+  vars <- get_variables()[["vars"]]
   gams <- lapply(vars, testmapmatgam2)
   
   r2g <- do.call(rbind,lapply(1:length(vars),
@@ -161,7 +168,7 @@ gamr2old <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4)
 
 make_table_gamr2MATMAP_old <- function(dataset) {
   g0 <- gamr2old(dataset, kgam=4, climvar1="MAT", climvar2="MAP")$r2table
-  g0$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$M_S/A_S$")
+  g0$Variable <- get_variables()[["labels"]]
   
   g0
 }
@@ -171,7 +178,7 @@ make_table_gamr2MATARID <- function(dataset) {
   g0 <- gamr2(dataset, kgam=4, ranef=TRUE, climvar1="MAT", climvar2="aridity")
   
   r2table <- g0$r2table
-  r2table$Variable <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+  r2table$Variable <- get_variables()[["labels"]]
 
   r2table
 }
@@ -198,8 +205,8 @@ tabFun <- function(x, vars, pftvar="pft"){
 }
 
 make_samplesize_table <- function(dataset){
-  tb <- t(sapply(c("lmlf_mst","lalf_astba2","llma","lastba2_mst"),function(x)tabFun(dataset,x)))
-  rownames(tb) <- c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+  tb <- t(sapply(get_variables()[["vars"]],function(x)tabFun(dataset,x)))
+  rownames(tb) <- get_variables()[["labels"]]
   colnames(tb) <- c("Deciduous Angiosperm","Evergreen Angiosperm","Evergreen Gymnosperm","Total")
   tb
 }
