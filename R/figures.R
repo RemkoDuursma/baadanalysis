@@ -202,39 +202,51 @@ figure3 <- function(dataset, KGAM=4){
   # Evaluate biomass distribution at mean height
   xpred <- mean(dataset$lh.t, na.rm=TRUE)
   
-  l <- layout(matrix(c(1,2,1,3), byrow=T, ncol=2),
+  l <- layout(matrix(c(1,2,3,4), byrow=F, ncol=2),
               widths=c(1,0.67), heights=c(1,1))
   
-  par(mar=c(4,4,4,1), cex.axis=0.9, cex.lab=1.2, mgp=c(2.3,0.5,0), tcl=-0.35, las=1)
+  par(mar=c(0.35,4,4,1), cex.axis=0.9, cex.lab=1.2, tcl=-0.35, las=1, mgp=c(2.3,0.5,0))
   obj1 <- smoothplot(lh.t, lmlf_mst, pft, dataset, R="Group",linecols=my_linecols(),
                      pointcols=my_cols_transparent(),axes=FALSE, ylim=c(-3,1),
-                     xlab="H (m)",kgam=KGAM,
+                     xlab="",kgam=KGAM,
                      ylab=expression(M[F]/M[S]~(kg~kg^-1)),
                      cex=0.6)
-  log10axes()
-  my_legend("bottomleft", "long")
+  log10axes(1, labels=FALSE)
+  log10axes(2)
+
   box()
   plotlabel("(a)","topright")
   
+  par(mar=c(4,4,0.35,1), cex.axis=0.9, cex.lab=1.2, tcl=-0.35, las=1, mgp=c(2.3,0.5,0))
+
+  x <- smoothplot(lh.t, lalf_mst, pft, dataset,  R="Group",
+                  linecols=my_linecols(), pointcols=my_cols_transparent(),
+                  xlab="H (m)",kgam=KGAM,axes=FALSE, cex=0.6,
+                  ylab=expression(A[F]/M[S]~~(m^2~kg^-1)))
+  plotlabel("(c)","topright")
+  log10axes()
+  box()
+  my_legend("bottomleft", labels="long")
+
   # Arrow indicating where mean biomass distribution was estimated
   par(xpd=NA)
-  arrows(x0=xpred, x1=xpred, y0=-3.5, y1=-3.2, length=0.1, lwd=2)
+  arrows(x0=xpred, x1=xpred, y0=-2.75, y1=-2.45, length=0.1, lwd=2)
 
-  par(mar=c(0.35,4,4,1), pty="m")
-  
+
+  par(mar=c(0.35,3,4,1), pty="m")
   
   plotGamPred(obj1, dataset, xpred=xpred,
-              ylab=expression(M[F]/M[S]~(kg~kg^-1)),ylim=c(0,0.5),
+              ylab="",ylim=c(0,0.5),
               xlim=c(0,0.2), xlab="", xaxislabels=FALSE)
   plotlabel("(b)","topright")
   
-  par(mar=c(4,4,0.35,1))
+  par(mar=c(4,3,0.35,1), pty="m")
   
   obj2 <- smoothplot(lh.t, lalf_mst, pft, dataset, R="Group",plotit=FALSE)
   plotGamPred(obj2, dataset, xpred=xpred,
-              ylab=expression(A[F]/M[S]~(m^2~kg^-1)),ylim=c(0,4),
+              ylab="",ylim=c(0,4),
               xlim=c(0,0.2), xlab=lmaLabel_short())
-  plotlabel("(c)","topright")
+  plotlabel("(d)","topright")
 
 }
 
@@ -359,31 +371,7 @@ figureS1 <- function(baad_mapmat, world_mapmat){
 }
 
 
-
-
-
-# SI2
-# Leaf area ratio; raw data.
-figureS2 <- function(dataset, KGAM=4){
-  
-  # randomly reorder rows, so that colours shown in proportion to abundance
-  set.seed(1) # Set seed to ensure plot looks same each time
-  dataset <- dataset[sample(nrow(dataset)),]
-  
-  par(mar=c(5,5,2,2), cex.axis=0.9, cex.lab=1.1, las=1, mgp=c(2.3,0.5,0))
-
-  x <- smoothplot(lh.t, lalf_mst, pft, dataset,  R="Group",
-                  linecols=my_linecols(), pointcols=my_cols_transparent(),
-                  xlab="H (m)",kgam=KGAM,axes=FALSE,
-                  ylab=expression(A[F]/M[S]~~(m^2~kg^-1)))
-  log10axes()
-  box()
-  my_legend("bottomleft", labels="long")
-}
-
-
-
-figureS3 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
+figureS2 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
   
   # compare three methods variance partitioning
   convertm <- function(tab){
@@ -429,7 +417,7 @@ figureS3 <- function(table_hierpart,table_varpart_gam,table_varpart_lmer){
 }
 
 
-figureS4 <- function(dataset){
+figureS3 <- function(dataset){
   
   # randomly reorder rows, so that colours shown in proportion to abundance
   set.seed(100) # Set seed to ensure plot looks same each time
@@ -457,7 +445,7 @@ figureS4 <- function(dataset){
 
 
 # new climate figure, cf. Reich
-figureS5 <- function(dataset){
+figureS4 <- function(dataset){
   
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   dataset$pft2 <- ifelse(dataset$pft == "EG", "Gymnosperm", "Angiosperm")
@@ -511,7 +499,7 @@ figureS5 <- function(dataset){
 }
 
 
-figureS6 <- function(dataset){
+figureS5 <- function(dataset){
   
   dataset$lhtclass <- quantcut(dataset$lh.t, 5)
   data_ht <- split(dataset, dataset$lhtclass)

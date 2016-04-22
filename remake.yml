@@ -43,6 +43,9 @@ plot_options:
   wide:
     width: 8
     height: 4
+  wide2:
+    width: 8
+    height: 6
   small_square:
     width: 4
     height: 4
@@ -92,7 +95,6 @@ targets:
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
-      - figures/FigureS6.pdf
       - table_varpart_gam_old
       - table_varpart_lmer
       - table_hierpart
@@ -118,7 +120,6 @@ targets:
       - figures/FigureS3.pdf
       - figures/FigureS4.pdf
       - figures/FigureS5.pdf
-      - figures/FigureS6.pdf
 
   data:
     depends:
@@ -178,7 +179,7 @@ targets:
     plot: wide
   figures/Figure3.pdf:
     command: figure3(dataset)
-    plot: wide
+    plot: wide2
   figures/Figure4.pdf:
     command: figure4(dataset, nbin=75)
     plot: wide
@@ -192,19 +193,16 @@ targets:
     command: figureS1(baad_mapmat, world_mapmat)
     plot: med_square
   figures/FigureS2.pdf:
-    command: figureS2(dataset)
-    plot: med_square
+    command: figureS2(table_hierpart,table_varpart_gam_old,table_varpart_lmer)
+    plot: wide
   figures/FigureS3.pdf:
-    command: figureS3(table_hierpart,table_varpart_gam_old,table_varpart_lmer)
+    command: figureS3(dataset)
     plot: wide
   figures/FigureS4.pdf:
     command: figureS4(dataset)
     plot: wide
   figures/FigureS5.pdf:
     command: figureS5(dataset)
-    plot: wide
-  figures/FigureS6.pdf:
-    command: figureS6(dataset)
     plot: wide
 
 
