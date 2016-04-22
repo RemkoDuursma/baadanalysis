@@ -180,13 +180,13 @@ targets:
     command: figure3(dataset)
     plot: wide
   figures/Figure4.pdf:
-    command: figure4(dataset)
+    command: figure4(dataset, nbin=75)
     plot: wide
   figures/Figure5.pdf:
     command: figure5(dataset)
     plot: wide
   figures/Figure6.pdf:
-    command: figure6(dataset, nbin=75)
+    command: figure6(dataset)
     plot: wide
   figures/FigureS1.pdf:
     command: figureS1(baad_mapmat, world_mapmat)

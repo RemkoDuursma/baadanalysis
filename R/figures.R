@@ -240,7 +240,7 @@ figure3 <- function(dataset, KGAM=4){
 
 
 # LA vs. AS
-figure4 <- function(dataset){
+figure5 <- function(dataset){
   
   # randomly reorder rows, so that colours shown in proportion to abundance
   set.seed(12) # Ensure plot looks same each time
@@ -260,7 +260,7 @@ figure4 <- function(dataset){
 
 
 # MST vs. AS
-figure5 <- function(dataset){
+figure6 <- function(dataset){
   
   # x and y limits of panel b (zoomed in)
   xl <- c(-3, log10(0.8))
@@ -300,7 +300,7 @@ figure5 <- function(dataset){
 
 
 # Histograms of MF/AS, AF/AS, and MS/(AS*H)
-figure6 <- function(dataset, nbin=100){
+figure4 <- function(dataset, nbin=100){
   
   par(mar=c(0,2,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,2), mgp=c(3,1.5,0))
   
