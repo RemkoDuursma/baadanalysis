@@ -61,7 +61,7 @@
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.99\textwidth]{FigureS6.pdf}
-    \caption{As Fig S5 but with angiosperms split up into evergreen and deciduous. Note how climate effects have all but disappeared, except for evergreen angiosperms in two size class bins.}
+    \caption{As Fig. S5 but with angiosperms split up into evergreen and deciduous. Note how climate effects have all but disappeared, except for evergreen angiosperms in two size class bins.}
     \label{fig:figreichclimate2}
 \end{figure}
 

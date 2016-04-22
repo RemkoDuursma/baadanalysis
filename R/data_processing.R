@@ -229,7 +229,6 @@ prepare_dataset_1 <- function(baad, plantations=TRUE){
     lmso_astba2 <- log10(m.so / a.stba2)
     lastba2_mst <- log10(a.stba2 / m.st)
     lastba2 <- log10(a.stba2)
-    mstastbht <- log10(m.st / (a.stba2 * h.t)) # stem index
     aridity <- PET/MAP
     
     })

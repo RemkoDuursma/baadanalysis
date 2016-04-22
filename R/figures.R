@@ -302,7 +302,7 @@ figure5 <- function(dataset){
 # Histograms of MF/AS, AF/AS, and MS/(AS*H)
 figure6 <- function(dataset, nbin=100){
   
-  par(mar=c(0,0,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,3), mgp=c(3,1.5,0))
+  par(mar=c(0,2,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,2), mgp=c(3,1.5,0))
   
   histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
             xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
@@ -318,21 +318,10 @@ figure6 <- function(dataset, nbin=100){
             legend.text=rep("",3), meanlinecol=my_linecols())
   plotlabel("(b)","topleft")
   
-  histbypft(mstastbht, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
-            nbin=nbin,
-            xlim=c(1,4),
-            Means=mixmean("mstastbht","pft",dataset),cicol=alpha("grey",0.65),
-            legend.text=rep("",3), meanlinecol=my_linecols())
-  plotlabel("(c)","topleft")
-  
-  
   mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
-        outer=TRUE, at=1/6, cex=0.9)
+        outer=TRUE, at=1/4, cex=0.9)
   mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
-        outer=TRUE, at=3/6, cex=0.9)
-  mtext(side=1, line=3, text=expression(M[S]/(A[S]*H)~~(kg~m^-3)),
-        outer=TRUE, at=5/6, cex=0.9)
+        outer=TRUE, at=3/4, cex=0.9)
   
 }
 

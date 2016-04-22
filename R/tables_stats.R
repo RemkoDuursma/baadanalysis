@@ -1,8 +1,8 @@
 
 get_variables <- function() {
   list(
-    vars = c("lmlf_mst","lalf_astba2","llma","lastba2_mst"),
-    labels = c("$M_F/M_S$","$A_F/A_S$","$M_F/A_F$","$A_S/M_S$")
+    vars = c("lmlf_mst", "lalf_mst", "llma","lalf_astba2", "lastba2_mst"),
+    labels = c("$M_F/M_S$","$A_F/M_S$", "$M_F/A_F$", "$A_F/A_S$", "$A_S/M_S$")
     )
 }
 
