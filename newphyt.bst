@@ -1,33 +1,5 @@
 %% This is a modified version of file `ecol_let_raw.bst',
-%% generated with the docstrip utility from file `ecol_let_raw.dbj'.
-%% The following changes have been made to this file:
-
-%in FUNCTION format.names, the line
-	% "{vv~}{ll}{ jj}{ f{.}.}" 
-% must be changed to 
-	% "{vv~}{ll}{ jj}{, f{.}.}" %comma inserted by MK
-
-% In FUNCTION format.names.ed, the line
-	% "{f{.}.~}{vv~}{ll}{ jj}"
-% must be replaced by
-	% "{vv~}{ll}{ jj}{, f{.}.}" % changed by MK
-
-% In FUNCTION incollection, after the line
-	% format.in.ed.booktitle "booktitle" output.check
-% the following line must be added:
-	% new.block % inserted MK
-
-% In function book, after the line 
-	% format.btitle "title" output.check
-% the following lines must be inserted:
-	% new.block 	% added MK
-	% format.edition output	% added MK
-	% new.block	% added MK
-% and the line
-	% format.edition output	% added MK
-% must be deleted at the fourth-to-last line of the function.
-
-
+%% Modified to New Phytologist by RAD.
   
 %% This is file `ecol_let.bst',
 %% generated with the docstrip utility.
@@ -239,6 +211,9 @@ FUNCTION {bbl.and}
 { "and"}
 
 FUNCTION {bbl.etal}
+{ "et~al." }
+
+FUNCTION {bbl.etalnodot}
 { "et~al" }
 
 FUNCTION {bbl.editors}
@@ -471,7 +446,7 @@ FUNCTION {format.names}
               if$
               t "others" =
                 {
-                  " " * bbl.etal emphasize *
+                  " " * bbl.etalnodot emphasize *
                 }
                 {
                   ","
