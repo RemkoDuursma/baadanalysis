@@ -239,7 +239,7 @@ FUNCTION {bbl.and}
 { "and"}
 
 FUNCTION {bbl.etal}
-{ "et~al." }
+{ "et~al" }
 
 FUNCTION {bbl.editors}
 { "eds." }
@@ -888,7 +888,7 @@ FUNCTION {format.journal.pages}
     { swap$ duplicate$ empty$
         { pop$ pop$ format.pages }
         {
-          ", " *
+          ": " *
           swap$
           n.dashify
           "pages" bibinfo.check
