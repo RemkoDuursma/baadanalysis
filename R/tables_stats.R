@@ -94,7 +94,7 @@ return(tabg)
 
 
 
-# Explained variance with GAMS with various combinations of predictors
+# Explained variance with GAMs with various combinations of predictors
 gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
 
   testmapmatgam2 <- function(yvar){
@@ -102,11 +102,12 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
     f <- list()
 
     f[[1]] <- as.formula(paste(yvar,"~ te(lh.t)"))
-    f[[2]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
-    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")"))
-    f[[4]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar2,", k=",kgam,")"))
-    f[[5]] <- as.formula(paste(yvar,"~ pft + te(",climvar1,", k=",kgam,")"))
-    f[[6]] <- as.formula(paste(yvar,"~ pft + te(",climvar2,", k=",kgam,")"))
+    f[[2]] <- as.formula(paste(yvar,"~ pft"))
+    f[[3]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft)"))
+    f[[4]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar1,", k=",kgam,")"))
+    f[[5]] <- as.formula(paste(yvar,"~ pft + te(lh.t, by=pft) + te(",climvar2,", k=",kgam,")"))
+    f[[6]] <- as.formula(paste(yvar,"~ pft + te(",climvar1,", k=",kgam,")"))
+    f[[7]] <- as.formula(paste(yvar,"~ pft + te(",climvar2,", k=",kgam,")"))
 
     if(!ranef)
       g <- lapply(f, function(x)gam(formula=x, data=data))
@@ -125,7 +126,7 @@ gamr2 <- function(data, ranef=FALSE, climvar1="MI", climvar2="mgdd0", kgam=4){
                               }))))
 
   tabg <- cbind(as.data.frame(vars), as.data.frame(r2g))
-  names(tabg) <- c("Variable","H","H, PFT",paste0("H, PFT, ",climvar1),paste0("H, PFT, ",climvar2),
+  names(tabg) <- c("Variable","H","PFT","H, PFT",paste0("H, PFT, ",climvar1),paste0("H, PFT, ",climvar2),
                    paste0("PFT, ",climvar1), paste0("PFT, ",climvar2))
 
   list(r2table=tabg, fits=gams)
