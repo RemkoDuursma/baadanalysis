@@ -1,5 +1,6 @@
 % Notes:
-% - For submission, convert to Word docx using Latex2rtf. 
+% - For submission, convert to Word docx using Latex2rtf:
+%   - set clean=FALSE in call to latex_build() in remake.yml. Then run, 'latex2rt manuscript.tex' (in shell)
 % - Do not include line numbers here, add them in Word. Also do not embed figures. 
 % - Word count can be automatically added on first page; follow instructions further below.
 
@@ -56,18 +57,18 @@ opts_chunk$set(echo=FALSE)
 % After compiling the ms (and no cleanup, so .tex is present), run:
 % shell("texcount manuscript.tex > wordcount.txt")
 % Then uncomment the following:
-%' <<echo=FALSE, eval=FALSE>>=
-%' nrw <- get_wordcount("wordcount.txt")
-%' @
-%' Total number of words: \Sexpr{nrw$Total} \\
-%' Abstract: \Sexpr{nrw$Abstract} \\
-%' Introduction: \Sexpr{nrw$Introduction} \\
-%' Methods and Materials: \Sexpr{nrw$Methods} \\
-%' Results: \Sexpr{nrw$Results} \\
-%' Discussion: \Sexpr{nrw$Discussion} \\
-%' Number of figures: 6 (all in colour) \\
-%' Number of tables: 2 \\
-%' Supporting information : 6 Figures (all in colour).
+<<echo=FALSE, eval=TRUE>>=
+nrw <- get_wordcount("wordcount.txt")
+@
+Total number of words: \Sexpr{nrw$Total} \\
+Abstract: \Sexpr{nrw$Abstract} \\
+Introduction: \Sexpr{nrw$Introduction} \\
+Methods and Materials: \Sexpr{nrw$Methods} \\
+Results: \Sexpr{nrw$Results} \\
+Discussion: \Sexpr{nrw$Discussion} \\
+Number of figures: 6 (all in colour) \\
+Number of tables: 2 \\
+Supporting information : 6 Figures (all in colour).
 
 %--------------------------------------------------------------------------------------------%
 
@@ -121,7 +122,7 @@ These decompositions, combined with ideas from past studies, lead us to test the
   \item That any differences in $\afas$ among PFTs also lead to differences in $\afms$.
 \end{enumerate}
 
-A final aim was to test for shifts in biomass distribution with climate. Little is known about global-scale patterns in biomass distribution in relation to climate, but one might expect biomass distribution to shift with precipitation or mean annual temperature, as small-scale comparisons have shown such responses \citep{berninger1994,callaway1994,delucia2000,poyatos2007}. \citet{reich2014} has also shown that after controlling  for the large size-related variation in biomass distribution, the ratio of leaf to total plant mass (averaged across whole stands, either including or excluding below-ground components) increases with mean annual temperature in both gymnosperms and angiosperms. Thus, we aimed to test for climate-related variation in $\mfms$ and $\afms$, and their component terms with PFTs.
+A final aim was to test for shifts in biomass distribution with climate. Little is known about global-scale patterns in biomass distribution in relation to climate, but one might expect biomass distribution to shift with precipitation or mean annual temperature, as small-scale comparisons have shown such responses \citep{berninger1995,callaway1994,delucia2000,poyatos2007}. \citet{reich2014} has also shown that after controlling  for the large size-related variation in biomass distribution, the ratio of leaf to total plant mass (averaged across whole stands, either including or excluding below-ground components) increases with mean annual temperature in both gymnosperms and angiosperms. Thus, we aimed to test for climate-related variation in $\mfms$ and $\afms$, and their component terms with PFTs.
 
 \section*{Materials and Methods}
 
@@ -148,7 +149,7 @@ The estimated coefficients were $c_0$ = \Sexpr{signif(coef(basalafit)[1],3)}, $c
 
 \subsection*{Data analysis}
 
-Similar to \citet{poorter2015}, we found that none of the studied relationships were linear on a log-log scale. Therefore, we did not use standard allometric equations to study relationships between size and biomass variables. Instead, we used generalised additive models (GAM), a semi-parametric modelling approach that makes no assumption about the shape of the relationships, to visualise the relationships between biomass and plant size variables, and to estimate variables such as $\mfms$ and $\afas$ at a common plant height. In all fitted GAMs, we used a cubic regression spline. For the smoothed term in the model (plant height), we used up to 3 or 4 degrees of freedom, which resulted in biologically realistic smoothed relationships. Within the GAM, we used a penalised regression smoother \citep{wood2006} to allow the final degree of smoothness to be estimated from the data. In all fitted GAMs, we used species-dataset combination as a random effect. To homogenise variance, all variables (except MAP and MAT) were log-transformed prior to analysis.
+Similar to \citet{poorter2015}, we found that none of the studied relationships were linear on a log-log scale. Therefore, we did not use standard allometric equations to study relationships between size and biomass variables. Instead, we used generalised additive models (GAM), a semi-parametric modelling approach that makes no assumption about the shape of the relationships, to visualise the relationships between biomass and plant size variables, and to estimate variables such as $\mfms$ and $\afms$ at a common plant height. In all fitted GAMs, we used a cubic regression spline. For the smoothed term in the model (plant height), we used up to 3 or 4 degrees of freedom, which resulted in biologically realistic smoothed relationships. Within the GAM, we used a penalised regression smoother \citep{wood2006} to allow the final degree of smoothness to be estimated from the data. In all fitted GAMs, we used species-dataset combination as a random effect. To homogenise variance, all variables (except MAP and MAT) were log-transformed prior to analysis.
 
 Using variance partitioning, we quantified the contribution of plant height, plant functional type, and climate to the overall variation in $\mfms$ and for all three component variables. The amount of variance explained by quantitative climate variables (MAP and MAT) was assessed with GAMs, with variables sequentially added to the model and the explained variance ($R^2$) calculated. We also compared this approach to another method using linear mixed-effects models instead of GAMs \citep[calculating the $R^2$ for linear mixed-effects models for the fixed effects only following][]{nakagawa2013}, as well as third method called ``independent effects analysis''. The three methods generally agreed on the ranking of variable importance (see Figs. S4 and S5).
 
@@ -194,6 +195,8 @@ We found that $\mfms$ steeply declined with plant height. It is well known that 
 A significant implication of our results is that the amount of leaf area supported per plant is less variable between PFTs than the amount of leaf mass, at least at the level of individual plants. \citet{poorter2015} hypothesised such a result might arise at the scale of entire stands, because forests would converge to a similar leaf area index (LAI). Yet this idea is inconsistent with results reported by \citet{iio2014}, who found a much higher LAI for evergreen gymnosperms compared to evergreen angiosperms, with deciduous angiosperms having intermediate and more variable LAI. Although we found remarkably similar leaf area per unit above-ground woody biomass ($\afms$) (Fig. 3c), this does not in itself imply that LAI is equally similar. In fact, we would  expect LAI to change with LMA, not because of changes in the amount of leaf area maintained by individual plants, but because LMA correlates with the shade-tolerance of seedlings \citep{poorter2006, falster2011}, and thereby the LAI of the community \citep{falster2011}. The ultimate reason LMA might affect shade tolerance is most likely because is via its correlation with leaf lifespan \citep{wright2004}. For whole stands, we can therefore expect total stand leaf mass to be correlated with LMA \citep[e.g.]{reich1992}, both because of greater leaf mass per plant, and the greater density of plants arising from increased leaf lifespan. Previous interpretations of differences in $\mfms$ between gymnosperms and angiosperms have focussed on differences in leaf life-span (LL) \citep{enquistniklas2002, poorter2012}. We argue that there are in fact two effects occurring simultaneously: differences in LMA cause differences in the $\mfms$ of individual plants, while differences in LL (and thereby LMA) cause differences in the LAI of whole stands.
 
 After accounting for PFT and plant height, we found very weak and inconsistent effects of climate on all variables studied, with some exception for LMA (Table \ref{table:varparttable}). Climate was represented as either mean annual temperature or an aridity index (PET/MAP), however, results were similarly inconclusive when studying other climate variables such as composite drought indices, growing season length, or mean annual precipitation (results not shown). This result appears to contradict \citet{reich2014} who reported consistent increases in foliage biomass ($\mf$) with MAT, when corrected for above-ground woody biomass ($\ms$). We were able to partly reconcile our findings with those of \citet{reich2014}: when we categorised our species as only angiosperms vs gymnosperms (thus grouping deciduous and evergreens, as did Reich \emph{et al.}), $\mfms$ increased consistently with MAT for most size classes within angiosperms (Fig. S4), in line with the findings of \citet{reich2014}; on the other hand we found no comparable relationship for gymnosperms. Moreover, we found that in our dataset, the significant relationships observed for angiosperms as a whole, could be explained via differences between the LMA of deciduous and evergreen species: evergreen angiosperms occurred both at higher MAT (Fig. 1), and had a higher LMA (Fig. 2), resulting in a correlation between $\mfms$ and MAT. We also re-analysed the  data in Reich et al. 2014 (not shown) to determine whether this shift in PFT with climate could also explain their finding of an increase in $\mfms$ with MAT, but found the pattern still held within gymnosperms and deciduous angiosperms.
+
+The result that $\afas$ did not correlate with climate seems to contradict reports, from studies on one or few species, that the ratio of sapwood area to leaf area (the `Huber value`) varies across climate gradients as quantified by summer evaporative demand \citep{delucia2000,poyatos2007}, rainfall and temperature \citep{callaway1994}, and temperature \citep{berninger1995}. Possible reasons for the discrepancy include 1) we studied $\as$ (stem basal area) including the sapwood and heartwood, 2) small-scale climate effects may have been present in our dataset but average out on large climate gradients, and 3) climate effects may be highly species-specific; the majority of reported correlations between the Huber value and climate were for species in the genus \emph{Pinus}.
 
 Although we found no consistent effects of climate on biomass distribution after PFT and plant height were accounted for, effects of climate may also arise by altering the average height of a stand. At a global scale, average plant height is clearly related to climate via water availability \citep{klein2015, simard2011}. Since biomass distribution itself is steeply related to plant height (Figs. 2, 3), we expect correlations between climate variables and observed biomass distribution when plant height is not first accounted for. However, our database did not lend itself well to a direct test of this hypothesis, and indeed we did not find any correlations between any of the studied variables and climate when height was not first accounted for (Table 2).
 
