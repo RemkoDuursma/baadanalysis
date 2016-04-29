@@ -251,6 +251,36 @@ figure3 <- function(dataset, KGAM=4){
 }
 
 
+
+# Histograms of MF/AS, AF/AS, and MS/(AS*H)
+figure4 <- function(dataset, nbin=100){
+  
+  par(mar=c(0,2,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,2), mgp=c(3,1.5,0))
+  
+  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
+            Means=mixmean("llma","pft",dataset),cicol=alpha("grey",0.5),
+            nbin=nbin,
+            legend.text="", meanlinecol=my_linecols())
+  plotlabel("(a)","topleft")
+  
+  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
+            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
+            nbin=nbin,
+            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
+            legend.text=rep("",3), meanlinecol=my_linecols())
+  plotlabel("(b)","topleft")
+  
+  legend("left", c("Decid. Angio.", "Evergr. Angio.", "Evergr. Gymno."),
+         fill=my_cols_transparent(), cex=0.8, bty='n')
+  
+  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
+        outer=TRUE, at=1/4, cex=0.9)
+  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
+        outer=TRUE, at=3/4, cex=0.9)
+  
+}
+
 # LA vs. AS
 figure5 <- function(dataset){
   
@@ -308,34 +338,10 @@ figure6 <- function(dataset){
   box()
   plotlabel("(b)", "topleft")
   
-}
-
-
-# Histograms of MF/AS, AF/AS, and MS/(AS*H)
-figure4 <- function(dataset, nbin=100){
-  
-  par(mar=c(0,2,0,2), oma=c(5,5,1,1), las=1, cex.axis=0.85, mfrow=c(1,2), mgp=c(3,1.5,0))
-  
-  histbypft(llma, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="", overlay=TRUE,plotwhat="density",ylab="Density",
-            Means=mixmean("llma","pft",dataset),cicol=alpha("grey",0.5),
-            nbin=nbin,
-            legend.text="", meanlinecol=my_linecols())
-  plotlabel("(a)","topleft")
-  
-  histbypft(lalf_astba2, pft, dataset, xaxis=3,legend.cex=1,col=my_cols_transparent(),
-            xlab="",overlay=TRUE,plotwhat="density",ylab="Density",
-            nbin=nbin,
-            Means=mixmean("lalf_astba2","pft",dataset),cicol=alpha("grey",0.65),
-            legend.text=rep("",3), meanlinecol=my_linecols())
-  plotlabel("(b)","topleft")
-  
-  mtext(side=1, line=3, text=expression(M[F]/A[F]~~(kg~m^-2)),
-        outer=TRUE, at=1/4, cex=0.9)
-  mtext(side=1, line=3, text=expression(A[F]/A[S]~~(m^2~m^-2)),
-        outer=TRUE, at=3/4, cex=0.9)
+  my_legend("bottomright", labels="short", cex=0.7, pt.cex=0.9)
   
 }
+
 
 
 
@@ -437,7 +443,7 @@ figureS3 <- function(dataset){
   box()
   plotlabel("(b)","topleft")
   
-  
+  my_legend("bottomright", labels="short", cex=0.7, pt.cex=0.9)
 }
 
 
