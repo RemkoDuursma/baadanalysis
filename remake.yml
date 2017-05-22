@@ -22,7 +22,6 @@ packages:
   - grid
   - gridBase  # Fig1a
   - gridExtra # Fig1a
-  - callr     # calling system for latex
 
 sources:
   - R/data_processing.R
